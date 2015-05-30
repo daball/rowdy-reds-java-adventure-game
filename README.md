@@ -10,6 +10,11 @@ If you would like a copy of the presentation slideshow I've prepared, you can ge
 
 - https://onedrive.live.com/redir?resid=ffddbc9c3cbd29c6!242577&authkey=!AHIHLDq8a7Km53k&ithint=file%2cpptx
 
+I uploaded the video of the presentation to both DropBox and YouTube, but there seems to have been a problem with the audio. (No audio.)
+
+- https://www.youtube.com/watch?v=XebUfkk-vYE
+- https://www.dropbox.com/s/sc0v2tkxhg5vfas/Github%20Demo.mkv?dl=0
+
 Thanks,
 David Ball
 
