@@ -1,6 +1,6 @@
 # DAVID A. BALL
 
-david@daball.me. 
+david@daball.me  
 daball@email.radford.edu  
 www.daball.me
 
