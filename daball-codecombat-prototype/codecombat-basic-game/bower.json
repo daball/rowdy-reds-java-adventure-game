@@ -1,0 +1,19 @@
+{
+  "name": "codecombat-map-builder",
+  "version": "0.0.1",
+  "authors": [
+    "David A. Ball <david@daball.me>"
+  ],
+  "description": "Enables game developers to build world maps and level maps.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-ace": "bower"
+  }
+}

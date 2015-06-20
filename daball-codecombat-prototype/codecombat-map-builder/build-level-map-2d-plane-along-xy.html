@@ -1,0 +1,153 @@
+<!doctype html>
+<html ng-app="RUCodeCombatMapBuilder">
+  <head>
+    <title>Level map builder</title>
+    <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="./lib/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="./lib/angular/angular.js"></script>
+    <script type="text/javascript" src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="./lib/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="./js/levelMapController.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/builder.css" />
+    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.css" />
+  </head>
+  <body ng-controller="LevelMapController">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+         <div class="navbar-header">
+           <div class="navbar-brand">
+             Level Map Builder
+           </div>
+         </div>
+         <form ng-show="tool=='innerWall'||tool=='outerWall'" class="navbar-form navbar-left" role="search" ng-submit="generateGrid()">
+           <div class="form-group">
+             <div class="input-group col-xs-3">
+               <div class="input-group-addon input-sm"><label for="rows">Rows</label></div>
+               <input id="rows" type="text" class="form-control input-sm" placeholder="Rows" ng-model="rows" />
+             </div>
+             <div class="input-group col-xs-3">
+               <div class="input-group-addon input-sm"><label for="cols">Cols</label></div>
+               <input id="cols" type="text" class="form-control input-sm" placeholder="Cols" ng-model="cols" />
+             </div>
+           <button type="submit" class="btn btn-default">Update Grid</button>
+           </div>
+         </form>
+         <form ng-show="tool=='spawn'||tool=='exit'" class="navbar-form navbar-left" role="search" ng-submit="generateGrid()">
+           <div class="form-group">
+             <div class="input-group col-lg-12">
+               <div class="input-group-addon input-sm"><label for="goal">Goal</label></div>
+               <textarea id="goal" type="text" class="form-control input-sm" placeholder="Enter the level goal" ng-model="goal"></textarea>
+             </div>
+           </div>
+         </form>
+         <form ng-show="tool=='door'&&selectedRow&&selectedCol" class="navbar-form navbar-left" role="search" ng-submit="generateGrid()">
+           <div class="form-group">
+             <div class="input-group col-lg-12">
+               <div class="input-group-addon input-sm"><label for="password">Door Password</label></div>
+               <input id="password" type="text" class="form-control input-sm" placeholder="Door Password" ng-model="grid[selectedRow][selectedCol].door.password" />
+             </div>
+           </div>
+         </form>
+         <form ng-show="tool=='enemy'" class="navbar-form navbar-left" role="search">
+           <div class="form-group">
+             <div class="input-group col-xs-3">
+               <div class="input-group-addon input-lg"><label for="name">Name</label></div>
+               <input id="name" type="text" class="form-control input-lg" placeholder="Name" ng-model="grid[selectedRow][selectedCol].enemy.name" />
+               <div class="input-group-addon input-lg"><a class="btn btn-default btn-xs" role="button" ng-click="grid[selectedRow][selectedCol].enemy.name=randomName()">RND</a></div>
+             </div>
+             <div class="input-group col-xs-1">
+               <div class="input-group-addon input-xs"><label for="hp">HP</label></div>
+               <input id="xp" type="text" class="form-control input-xs" placeholder="Hit Power" ng-model="grid[selectedRow][selectedCol].enemy.hp" />
+             </div>
+             <div class="input-group col-xs-1">
+               <div class="input-group-addon input-xs"><label for="dp">DP</label></div>
+               <input id="dp" type="text" class="form-control input-xs" placeholder="Defense Power" ng-model="grid[selectedRow][selectedCol].enemy.dp" />
+             </div>
+             <div class="input-group col-xs-1">
+               <div class="input-group-addon input-xs"><label for="prox">Prox.</label></div>
+               <input id="prox" type="text" class="form-control input-xs" placeholder="Fight Proximity" ng-model="grid[selectedRow][selectedCol].enemy.fightProximity" />
+             </div>
+             <div class="input-group col-xs-1">
+               <div class="input-group-addon input-xs"><label for="speed">Speed</label></div>
+               <input id="speed" type="text" class="form-control input-xs" placeholder="Speed" ng-model="grid[selectedRow][selectedCol].enemy.speed" />
+             </div>
+           </div>
+         </form>
+      </div>
+    </nav>
+
+    <div class="container" ng-click="selectCell(null, null, $event)">
+      <div class="row">
+        <div class="map col-md-8">
+          <table class="map">
+            <tbody>
+              <tr class="map-row" ng-repeat="row in grid" ng-init="rowIndex = $index">
+                <td class="map-cell" ng-repeat="cell in row" ng-init="colIndex = $index" ng-click="selectCell(rowIndex, colIndex, $event);applyTool(rowIndex, colIndex)" ng-class="{ 'walking-area': cell.walkingArea, 'map-cell-selected': (rowIndex==selectedRow && colIndex==selectedCol) }">
+                  <span ng-show="cell.spawn">Spawn</span>
+                  <span ng-show="cell.door">Door / {{cell.door.password}}</span>
+                  <span ng-show="cell.enemy">Enemy / {{cell.enemy.name}}</span>
+                  <span ng-show="cell.exit">Exit</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <h2>Map Data</h2>
+          <div ng-model="gridData" ui-ace></div>
+          <button class="btn btn-default" ng-click="importGrid(gridData)">Import data</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-header">
+        <div class="navbar-brand">
+          Toolbox /
+          <span ng-show="tool=='select'">Select</span>
+          <span ng-show="tool=='clear'">Clear</span>
+          <span ng-show="tool=='innerWall'">Draw Inner Wall</span>
+          <span ng-show="tool=='outerWall'">Draw Outer Wall</span>
+          <span ng-show="tool=='spawn'">Draw Avatar Spawn</span>
+          <span ng-show="tool=='exit'">Draw Avatar Exit</span>
+          <span ng-show="tool=='door'">Draw Door Obstacle</span>
+          <span ng-show="tool=='enemy'">Draw Enemy Obstacle</span>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-left">
+          <li class="dropdown">
+            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">General<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a class="btn btn-default" ng-click="ngDialog.open({template: 'importDialog'})">Import JSON</a></li>
+              <li><a class="btn btn-default" ng-click="ngDialog.open({template: 'exportDialog', data: gridData})">Export JSON</a></li>
+              <li><a class="btn btn-default" ng-class="{active: tool=='select'}" ng-click="tool='select'">Select</a></li>
+              <li><a class="btn btn-default" ng-class="{active: tool=='clear'}" ng-click="tool='clear'">Clear</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Walls<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a class="btn btn-default" ng-class="{active: tool=='innerWall'}" ng-click="tool='innerWall'">Inner Wall</a></li>
+              <li><a class="btn btn-default" ng-class="{active: tool=='outerWall'}" ng-click="tool='outerWall'">Outer Wall</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Game<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a class="btn btn-default" ng-class="{active: tool=='spawn'}" ng-click="tool='spawn'">Spawn</a></li>
+              <li><a class="btn btn-default" ng-class="{active: tool=='exit'}" ng-click="tool='exit'">Exit</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Obstacles<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a class="btn btn-default" ng-class="{active: tool=='door'}" ng-click="tool='door'">Door</a></li>
+              <li><a class="btn btn-default" ng-class="{active: tool=='enemy'}" ng-click="tool='enemy'">Enemy</a></li>
+            </ul>
+          </li>
+         </ul>
+      </div>
+    </nav>
+  </body>
+</html>

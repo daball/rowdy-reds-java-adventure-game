@@ -1,0 +1,71 @@
+<!doctype html>
+<html ng-app="RUCodeCombatGame">
+  <head>
+    <title>Code Combat Basic Game Prototype</title>
+    <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="./lib/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="./lib/angular/angular.js"></script>
+    <script type="text/javascript" src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="./lib/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="./js/gameController.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/game.css" />
+    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.css" />
+  </head>
+  <body ng-controller="GameController">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+         <div class="navbar-header">
+           <div class="navbar-brand">
+             Code Combat
+           </div>
+         </div>
+      </div>
+    </nav>
+
+    <div class="container" ng-hide="grid&&grid[0].length>0">
+      <div class="jumbotron">
+        <h2>Setup Level</h2>
+        <p>Give me some map data:</p>
+        <div ng-model="mapData" ui-ace></div>
+        <button class="btn btn-default" ng-click="applyGridAndPlay(mapData)">Let's play!</button>
+      </div>
+    </div>
+
+    <div class="container" ng-show="grid&&grid[0].length>0">
+      <div class="row">
+        <div class="map col-md-8">
+          <table class="map">
+            <tbody>
+              <tr class="map-row" ng-repeat="row in grid" ng-init="rowIndex = $index">
+                <td class="map-cell" ng-repeat="cell in row" ng-init="colIndex = $index" ng-class="{ 'walking-area': cell.walkingArea, 'map-cell-selected': (rowIndex==selectedRow && colIndex==selectedCol) }">
+                  <span class="exit" ng-show="!avatarAt(rowIndex, colIndex) && cell.exit">Exit</span>
+                  <span class="avatar" ng-show="avatarAt(rowIndex, colIndex) && !cell.door"></span>
+                  <span ng-show="cell.door">Door</span>
+                  <span ng-show="cell.enemy">Enemy / {{cell.enemy.name}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <h2>FIGHT!</h2>
+          <p ng-show="gameState.algorithmFailed&&failedAttempts > 0">Your code sucks! Try again...</p>
+          <p ng-show="gameState.playerExiting">AWESOME!!!</p>
+          <p>Give me some action data:</p>
+          <div ng-model="actionData" ui-ace></div>
+          <button class="btn btn-default" ng-click="applyActionData(actionData)">Let's play!</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container-fluid">
+        <p class="navbar-text navbar-left">
+          <span ng-show="!gameState.isPlaying&&!gameState.playerExiting">Game engine has not started.</span>
+          <span ng-show="gameState.isPlaying">FIGHT! TIME {{gameState.time}} SCORE {{gameState.score}} FAILED ATTEMPTS {{gameState.failedAttempts}}</span>
+          <span ng-show="gameState.playerExiting">Player wins! TIME {{gameState.time}} SCORE {{gameState.score}}</span>
+        </p>
+      </div>
+    </nav>
+  </body>
+</html>
