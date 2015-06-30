@@ -47,7 +47,7 @@ public class ConsoleApp {
                       "public class Sample {"
                     + "  public static void main(String args[]) {"
                     + sampleCode
-                    + "    System.out.println(ActionStore.toJSON());"
+                    + "    System.out.println(SessionStore.getAvatarActionsAsJson());"
                     + "  }"
                     + "}");
         } catch (Exception e) {

@@ -29,7 +29,7 @@ public class Avatar {
         object.put("action", "move");
         object.put("direction", "left");
         object.put("steps", steps);
-        ActionStore.actions.put(object);
+        SessionStore.avatarActions.get().put(object);
         return object.toString();
     }
     public String moveRight(int steps) {
@@ -38,7 +38,7 @@ public class Avatar {
         object.put("action", "move");
         object.put("direction", "right");
         object.put("steps", steps);
-        ActionStore.actions.put(object);
+        SessionStore.avatarActions.get().put(object);
         return object.toString();
     }
     public String moveUp(int steps) {
@@ -47,7 +47,7 @@ public class Avatar {
         object.put("action", "move");
         object.put("direction", "up");
         object.put("steps", steps);
-        ActionStore.actions.put(object);
+        SessionStore.avatarActions.get().put(object);
         return object.toString();
     }
     public String moveDown(int steps) {
@@ -56,7 +56,7 @@ public class Avatar {
         object.put("action", "move");
         object.put("direction", "down");
         object.put("steps", steps);
-        ActionStore.actions.put(object);
+        SessionStore.avatarActions.get().put(object);
         return object.toString();
     }
     public String moveLeft() { return moveLeft(1); }

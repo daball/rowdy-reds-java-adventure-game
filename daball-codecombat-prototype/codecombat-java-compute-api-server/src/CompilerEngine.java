@@ -40,12 +40,8 @@ public class CompilerEngine {
         {
             chars[i] = validChars.charAt((int)Math.floor(Math.random()*(double)validChars.length()));
         }
-        return cachePath + "/" + new String(chars);
+        return "./" + cachePath + "/" + new String(chars);
     }
-    
-//    public String saveJavaFile(String javaClassName, String javaSourceCode) {
-//        Path path = Path.get(cachePath, generateFolderName(12), javaClassName + ".java");
-//    }
     
     /**
      * Source http://stackoverflow.com/questions/4463440/compile-java-source-code-from-a-string
@@ -56,6 +52,7 @@ public class CompilerEngine {
      */
     public String compileAndRunJavaAndRenderJson(String javaClassName, String javaSourceCode) throws Exception {
         String compilationPath = generateFolderName(12) + "/";
+        new File(compilationPath).mkdirs();
         
         if (compiler == null) throw new Exception( "Compiler unavailable");
         JavaSourceFromString file = new JavaSourceFromString(javaClassName, javaSourceCode);
@@ -67,11 +64,11 @@ public class CompilerEngine {
         List<String> options = new ArrayList<String>();
         options.add("-d");
         options.add(compilationPath);
-        options.add( "-classpath");
+        //options.add( "-classpath");
         URLClassLoader urlClassLoader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
         
         StringWriter output = new StringWriter();
-        JavaCompiler.CompilationTask task = compiler.getTask(output, fileManager, diagnostics, null, null, compilationUnits);
+        JavaCompiler.CompilationTask task = compiler.getTask(output, fileManager, diagnostics, options, null, compilationUnits);
         
         boolean success = task.call();
         try {
