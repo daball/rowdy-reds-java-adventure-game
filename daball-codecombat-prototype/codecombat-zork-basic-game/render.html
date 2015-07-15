@@ -1,0 +1,52 @@
+<!doctype html>
+<html ng-app="RUCodeCombatGame">
+  <head>
+    <title>RU Code Combat / Zork Basic Game Prototype</title>
+    <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="./lib/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="./lib/angular/angular.js"></script>
+    <script type="text/javascript" src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="./lib/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="./js/gameController.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/game.css" />
+    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.css" />
+  </head>
+  <body ng-controller="GameController">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+         <div class="navbar-header">
+           <div class="navbar-brand">
+             RU Code Combat / Zork Thingy
+           </div>
+         </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="map col-md-6">
+          <img class="col-md-12" ng-src="./img/{{gameState.avatarLocation.image}}" alt="./img/{{gameState.avatarLocation.image}} - {{gameState.avatarLocation.description}}" />
+        </div>
+        <div class="col-md-6">
+          <h2>{{gameState.avatarLocation.heading}}</h2>
+          <div id="history" ng-model="gameState.commandHistory" ui-ace="{
+            useWrapMode: true,
+            showGutter: false,
+            theme: 'twilight',
+            mode: 'text',
+            onLoad: consoleLoaded,
+            onChange: consoleChanged
+          }"></div>
+          <div id="prompt" ng-model="prompt" ui-ace="{
+            useWrapMode: true,
+            showGutter: false,
+            theme: 'twilight',
+            mode: 'text',
+            onLoad: promptLoaded,
+            onChange: promptChanged
+          }"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
