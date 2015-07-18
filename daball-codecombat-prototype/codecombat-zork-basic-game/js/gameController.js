@@ -206,72 +206,42 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
-    $scope.registerCommandHandler("handleNavigateNorth", function handleNavigateNorth(commandLine) {
-      if (commandLine.toLowerCase().startsWith("north") || commandLine.toLowerCase() == "n") {
-        if ($scope.gameState.avatarLocation.directions.north) {
-          if ($scope.gameState.avatarLocation.directions.north.jumpTo) {
-            if ($scope.gameState.avatarLocation.directions.north.isLocked)
+    var handleNavigateDirection = function handleNavigateDirection(direction, commandLine) {
+      if (commandLine.toLowerCase().startsWith(direction) || commandLine.toLowerCase() == direction.substring(0,1)) {
+        if ($scope.gameState.avatarLocation.directions[direction]) {
+          if ($scope.gameState.avatarLocation.directions[direction].jumpTo) {
+            if ($scope.gameState.avatarLocation.directions[direction].isLocked)
               return "This door is locked. Do you have the key?";
             else
-              return $scope.enterRoom($scope.gameState.avatarLocation.directions.north.jumpTo);
+              return $scope.enterRoom($scope.gameState.avatarLocation.directions[direction].jumpTo);
           }
           else
-            return $scope.gameState.avatarLocation.directions.north.description;
+            return $scope.gameState.avatarLocation.directions[direction].description;
         }
         else
-          return "There is nothing to the north.";
+          return "There is nothing to the " + direction + ".";
       }
+    };
+
+    $scope.registerCommandHandler("handleNavigateNorth", function handleNavigateNorth(commandLine) {
+      return handleNavigateDirection("north", commandLine);
     });
 
     $scope.registerCommandHandler("handleNavigateSouth", function handleNavigateSouth(commandLine) {
-      if (commandLine.toLowerCase().startsWith("south") || commandLine.toLowerCase() == "s") {
-        if ($scope.gameState.avatarLocation.directions.south) {
-          if ($scope.gameState.avatarLocation.directions.south.jumpTo) {
-            if ($scope.gameState.avatarLocation.directions.south.isLocked)
-              return "This door is locked. Do you have the key?";
-            else
-              return $scope.enterRoom($scope.gameState.avatarLocation.directions.south.jumpTo);
-          }
-          else
-            return $scope.gameState.avatarLocation.directions.south.description;
-        }
-        else
-          return "There is nothing to the south.";
-      }
+      return handleNavigateDirection("south", commandLine);
     });
 
     $scope.registerCommandHandler("handleNavigateEast", function handleNavigateEast(commandLine) {
-      if (commandLine.toLowerCase().startsWith("east") || commandLine.toLowerCase() == "e") {
-        if ($scope.gameState.avatarLocation.directions.east) {
-          if ($scope.gameState.avatarLocation.directions.east.jumpTo) {
-            if ($scope.gameState.avatarLocation.directions.east.isLocked)
-              return "This door is locked. Do you have the key?";
-            else
-              return $scope.enterRoom($scope.gameState.avatarLocation.directions.east.jumpTo);
-          }
-          else
-            return $scope.gameState.avatarLocation.directions.east.description;
-        }
-        else
-          return "There is nothing to the east.";
-      }
+      return handleNavigateDirection("east", commandLine);
     });
 
     $scope.registerCommandHandler("handleNavigateWest", function handleNavigateWest(commandLine) {
-      if (commandLine.toLowerCase().startsWith("west") || commandLine.toLowerCase() == "w") {
-        if ($scope.gameState.avatarLocation.directions.west) {
-          if ($scope.gameState.avatarLocation.directions.west.jumpTo) {
-            if ($scope.gameState.avatarLocation.directions.west.isLocked)
-              return "This door is locked. Do you have the key?";
-            else
-              return $scope.enterRoom($scope.gameState.avatarLocation.directions.west.jumpTo);
-          }
-          else
-            return $scope.gameState.avatarLocation.directions.west.description;
-        }
-        else
-          return "There is nothing to the west.";
-      }
+      return handleNavigateDirection("west", commandLine);
+    });
+
+    $scope.registerCommandHandler("handleDump", function handleDump(commandLine) {
+      if (commandLine.toLowerCase() == "dump")
+        return "For debugging purposes, this command dumps the game state:\n" + JSON.stringify($scope.gameState, null, 2);
     });
 
     $scope.registerCommandHandler("handleInspect", function handleInspect(commandLine) {
