@@ -22,124 +22,155 @@ if (!String.prototype.endsWith) {
 }
 
 angular.module('RUCodeCombatGame', ['ui.ace'])
-  // .service("GameService", function($service){
-  //   scope = this;
-  //   scope.saveGameState = function (gameState) {
-  //     $service.get()
-  //   };
-  // })
-  .controller('GameController', function($scope) {
-    $scope.gameState = {
-      commandHistory: "",
-      commandsTyped: 0,
-      avatarLocation: "",
-      leftHand: "",
-      rightHand: "",
-      map: []
+
+  //this is the game service, where external data is loaded/saved
+  .service("GameService", function(){
+    var svc = this;
+    svc.getSampleMap = function getSampleMap () {
+      return [
+        {
+          name: "mainEntrance",
+          spawn: true,
+          image: "mainEntrance.jpg",
+          description: "You are standing outside a castle, looking north at a door.",
+          heading: "Chapter 1. Outside the castle",
+          directions: {
+            north: {
+              description: "You are at the main entrance. Have a look around.",
+              door: "door",
+              jumpTo: "mainHall"
+            },
+            south: {
+              description: "You are at the main entrance. Have a look around."
+            },
+            east: {
+              description: "You are at the main entrance. Have a look around."
+            },
+            west: {
+              description: "You are at the main entrance. Have a look around."
+            }
+          },
+          items: [
+            {
+              type: "mainEntrance",
+              name: "door",
+              description: "Enter if you dare. To enter, print something to the console in Java.",
+              isOpen: false
+            }
+          ]
+        },
+        {
+          name: "mainHall",
+          image: "mainHall.png",
+          description: "You are standing in a hallway with rooms. To your south, you have the main entrance. In all other directions, there is nothing but rooms. As you navigate the hall, you wonder what each room looks like.",
+          heading: "Chapter 2. The castle hallway",
+          directions: {
+            south: {
+              description: "The main entrance.",
+              jumpTo: "mainEntrance"
+            },
+            north: {
+              description: "Seems like there should be something to my north, but there isn't. Maybe fix that, kind developer."
+            },
+            east: {
+              description: "Here lies an inscription: Enter if you dare. But the door is locked. You wonder where the key might be.",
+              jumpTo: "treasury",
+              door: "lock"
+            },
+            west: {
+              description: "Seems like there should be something to my west, but there isn't. Maybe fix that, kind developer."
+            }
+          },
+          items: [
+            {
+              type: "lockedDoor",
+              name: "lock",
+              key: "key",
+              description: "This door is locked. You wonder where the key might be.",
+              isOpen: false,
+              isLocked: true
+            }
+          ]
+        },
+        {
+          name: "treasury",
+          image: "treasury.jpg",
+          description: "There is a dragon in the room. Hope you're ready to fight!",
+          heading: "Chapter 3. Fight the dragon!",
+          directions: {
+            west: {
+              jumpTo: "mainHall",
+              description: "main hall"
+            }
+          },
+          items: []
+        }
+      ];
     };
+    return svc;
+  })
+
+  //this is the game controller
+  .controller('GameController', function($scope, GameService) {
+    $scope.gameState = {
+      commandHistory: "", //this is where the command history text is stored
+      moves: 0,           //this is the number of moves it took to solve
+      avatar: {
+        location: "",     //this is a text value that indicates the current avatar location
+        leftHand: "",     //this is the contents of the avatar left hand
+        rightHand: ""     //this is the contents of the avatar right hand
+      },
+      map: []             //this will store the map, once loaded
+    };
+
+    //this is where the prompt input text is stored
     $scope.prompt = "";
 
-    $scope.initialMap = [
-      {
-        name: "mainEntrance",
-        image: "mainEntrance.jpg",
-        description: "You are standing outside a castle, looking at a door.",
-        heading: "Chapter 1. Outside the castle",
-        directions: {
-          north: {
-            description: "You are at the main entrance. Have a look around."
-          },
-          south: {
-            description: "You are at the main entrance. Have a look around."
-          },
-          east: {
-            description: "You are at the main entrance. Have a look around."
-          },
-          west: {
-            description: "You are at the main entrance. Have a look around."
-          }
-        },
-        items: [
-          {
-            type: "mainEntrance",
-            name: "door",
-            description: "Enter if you dare. To enter, print something to the console in Java.",
-            jumpTo: "mainHall"
-          }
-        ]
-      },
-      {
-        name: "mainHall",
-        image: "mainHall.png",
-        description: "You are standing in a hallway with rooms. To your south, you have the main entrance. To your [direction], you have [room]. ...",
-        heading: "Chapter 2. The castle hallway",
-        directions: {
-          south: {
-            description: "The main entrance.",
-            jumpTo: "mainEntrance"
-          },
-          north: {
-            description: "Seems like there should be something to my north, but there isn't. Maybe fix that, kind developer."
-          },
-          east: {
-            description: "Seems like there should be something to my east, but there isn't. Maybe fix that, kind developer.",
-            jumpTo: "treasury",
-            door: "treasuryDoor",
-            isLocked: true
-          },
-          west: {
-            description: "Seems like there should be something to my west, but there isn't. Maybe fix that, kind developer."
-          }
-        },
-        items: [
-          {
-            type: "door",
-            name: "treasuryDoor",
-            key: "treasuryKey"
-          }
-        ]
-      },
-      {
-        name: "treasury",
-        image: "treasury.jpg",
-        description: "There is a dragon in the room. Hope you're ready to fight!",
-        heading: "Chapter 3. Fight the dragon!",
-        directions: {
-          west: {
-            jumpTo: "mainHall",
-            description: "main hall"
-          }
-        },
-        items: []
-      }
-    ];
+    //get map from GameService
+    $scope.initialMap = GameService.getSampleMap();
 
+    //copy initial map to game state map
     $scope.gameState.map = $scope.initialMap;
 
+    //command handlers respond to input commands
     $scope.commandHandlers = {};
 
-    $scope.enterRoom = function enterRoom(roomName) {
+    //getRoom(roomName) gets the room from the map with the name provided
+    //if no name is provided,
+    $scope.getRoom = function getRoom(roomName) {
+      var findSpawn = false;
+      if (!roomName) roomName = $scope.gameState.avatar.location;
+      if (!roomName) findSpawn = true;
       for (var r = 0; r < $scope.gameState.map.length; r++) {
         var room = $scope.gameState.map[r];
-        if (room.name == roomName) {
-          $scope.gameState.avatarLocation = room;
-          return $scope.gameState.avatarLocation.description;
-        }
+        if (findSpawn && room.spawn)
+          return room;
+        else if (roomName && room.name == roomName)
+          return room;
+      }
+    };
+
+    $scope.enterRoom = function enterRoom(roomName) {
+      var room = $scope.getRoom(roomName);
+      if (room) {
+        $scope.gameState.avatar.location = room.name;
+        return room.description;
       }
     }
 
     $scope.roomHasItemLike = function roomHasItemLike(item) {
-      if ($scope.gameState.avatarLocation.items)
-        for (var i = 0; i < $scope.gameState.avatarLocation.items.length; i++) {
-          var found = $scope.gameState.avatarLocation.items[i];
+      var room = $scope.getRoom();
+      if (room.items)
+        for (var i = 0; i < room.items.length; i++) {
+          var found = room.items[i];
           for (var a in item) {
-            if ($scope.gameState.avatarLocation.items[i][a] != item[a]) {
+            if (room.items[i][a] != item[a]) {
               found = false;
               break;
             }
           }
           if (found)
-            return $scope.gameState.avatarLocation.items[i];
+            return room.items[i];
         }
       return false;
     }
@@ -157,20 +188,20 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       return $scope.commandHandlers[name](commandLine);
     };
 
-    $scope.registerCommandHandler("handleClear", function handleClear(commandLine) {
+    $scope.registerCommandHandler("clear", function handleClear(commandLine) {
       if (commandLine.toLowerCase().startsWith("clear")) {
         $scope.gameState.commandHistory = "";
         return "Console cleared.";
       }
     });
 
-    $scope.registerCommandHandler("handleExit", function handleExit(commandLine) {
+    $scope.registerCommandHandler("exit", function handleExit(commandLine) {
       if (commandLine.toLowerCase().startsWith("exit")) {
         return "Ha! Ha! This ain't 1993. Use the close button in your browser.";
       }
     });
 
-    $scope.registerCommandHandler("handleHelp",
+    $scope.registerCommandHandler("help",
      function handleHelp(commandLine) {
       if (commandLine.toLowerCase().startsWith("help") || commandLine.toLowerCase() == "?") {
         return "CODECOMBATZORKTHING HELP\n"
@@ -207,39 +238,59 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     });
 
     var handleNavigateDirection = function handleNavigateDirection(direction, commandLine) {
+      direction = direction.toLowerCase();
       if (commandLine.toLowerCase().startsWith(direction) || commandLine.toLowerCase() == direction.substring(0,1)) {
-        if ($scope.gameState.avatarLocation.directions[direction]) {
-          if ($scope.gameState.avatarLocation.directions[direction].jumpTo) {
-            if ($scope.gameState.avatarLocation.directions[direction].isLocked)
-              return "This door is locked. Do you have the key?";
-            else
-              return $scope.enterRoom($scope.gameState.avatarLocation.directions[direction].jumpTo);
+        $scope.gameState.moves++;
+        var room = $scope.getRoom();
+        if (room.directions[direction]) {
+          if (room.directions[direction].jumpTo) {
+            if (room.directions[direction].door) {
+              var mainEntrance = $scope.roomHasItemLike({type: "mainEntrance"});
+              var lockedDoor = $scope.roomHasItemLike({type: "lockedDoor"});
+              if (mainEntrance) {
+                if (mainEntrance.isOpen)
+                  return $scope.enterRoom(room.directions[direction].jumpTo);
+                else
+                  return room.directions[direction].description || "First you have to open the door.";
+              }
+              else if (lockedDoor) {
+                if (lockedDoor.isLocked)
+                  return room.directions[direction].description || "This door is locked. Do you have the key?";
+                else
+                  return $scope.enterRoom(room.directions[direction].jumpTo);
+              }
+            }
+            else {
+              return $scope.enterRoom(room.directions[direction].jumpTo);
+            }
           }
-          else
-            return $scope.gameState.avatarLocation.directions[direction].description;
+          else {
+            return room.directions[direction].description || "There is nothing to the " + direction + ".";
+          }
         }
-        else
+        else {
           return "There is nothing to the " + direction + ".";
+        }
       }
     };
 
-    $scope.registerCommandHandler("handleNavigateNorth", function handleNavigateNorth(commandLine) {
+    $scope.registerCommandHandler("north", function handleNavigateNorth(commandLine) {
       return handleNavigateDirection("north", commandLine);
     });
 
-    $scope.registerCommandHandler("handleNavigateSouth", function handleNavigateSouth(commandLine) {
+    $scope.registerCommandHandler("south", function handleNavigateSouth(commandLine) {
       return handleNavigateDirection("south", commandLine);
     });
 
-    $scope.registerCommandHandler("handleNavigateEast", function handleNavigateEast(commandLine) {
+    $scope.registerCommandHandler("east", function handleNavigateEast(commandLine) {
       return handleNavigateDirection("east", commandLine);
     });
 
-    $scope.registerCommandHandler("handleNavigateWest", function handleNavigateWest(commandLine) {
+    $scope.registerCommandHandler("west", function handleNavigateWest(commandLine) {
       return handleNavigateDirection("west", commandLine);
     });
 
-    $scope.registerCommandHandler("handleDump", function handleDump(commandLine) {
+    $scope.registerCommandHandler("dump", function handleDump(commandLine) {
       if (commandLine.toLowerCase() == "dump") {
         var jsonDump = JSON.stringify($scope.gameState, null, 2);
         console.log(jsonDump);
@@ -247,16 +298,18 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
-    $scope.registerCommandHandler("handleInject", function handleInject(commandLine) {
+    $scope.registerCommandHandler("inject", function handleInject(commandLine) {
       if (commandLine.toLowerCase().startsWith("inject ")) {
         $scope.gameState = JSON.parse(commandLine.substring(6));
         return "For debugging purposes, this command injects the game state:\n" + JSON.stringify($scope.gameState, null, 2);
       }
     });
 
-    $scope.registerCommandHandler("handleInspect", function handleInspect(commandLine) {
+    $scope.registerCommandHandler("inspect", function handleInspect(commandLine) {
       if (commandLine.toLowerCase().startsWith("inspect") || commandLine.toLowerCase().startsWith("look at") ||
           commandLine.toLowerCase().startsWith("read") || commandLine.toLowerCase().startsWith("look")) {
+            $scope.gameState.moves++;
+            var room = $scope.getRoom();
             var what = "";
             if (commandLine.toLowerCase().startsWith("look at"))
               what = commandLine.substring(7).trim();
@@ -267,45 +320,48 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
             else if (commandLine.toLowerCase().startsWith("read"))
               what = commandLine.substring(5).trim();
             if (what) {
-              if ($scope.gameState.avatarLocation.items)
-                for (var i = 0; i < $scope.gameState.avatarLocation.items.length; i++) {
-                  if ($scope.gameState.avatarLocation.items[i].name.toLowerCase() == what.toLowerCase()) {
-                    return $scope.gameState.avatarLocation.items[i].description;
+              if (room.items)
+                for (var i = 0; i < room.items.length; i++) {
+                  if (room.items[i].name.toLowerCase() == what.toLowerCase()) {
+                    return room.items[i].description;
                   }
                 }
             }
             else {
               var items = "";
-              if ($scope.gameState.avatarLocation.items)
-                for (var i = 0; i < $scope.gameState.avatarLocation.items.length; i++) {
-                  items += "  +  " + $scope.gameState.avatarLocation.items[i].name + "\n"
+              if (room.items)
+                for (var i = 0; i < room.items.length; i++) {
+                  items += "  +  " + room.items[i].name + "\n"
                 }
               if (items)
                 items = "\n" + ("The following items in the room are available for inspection:\n" + items).trim();
-              return $scope.gameState.avatarLocation.description + items;
+              return room.description + items;
             }
       }
     });
 
-    $scope.registerCommandHandler("handlePrint", function handlePrint(commandLine) {
+    $scope.registerCommandHandler("print", function handlePrint(commandLine) {
       if (
             (commandLine.startsWith("System.out.print(") || commandLine.startsWith("System.out.println("))
             && commandLine.endsWith(");")
           ) {
+              $scope.gameState.moves++;
               var what = "";
               if (commandLine.startsWith("System.out.print("))
                 what = commandLine.substring(17, commandLine.length-2).trim();
               else if (commandLine.startsWith("System.out.println("))
                 what = commandLine.substring(19, commandLine.length-2).trim();
+              //if inside of quotes
               if (what.startsWith("\"") && what.endsWith("\"")) {
                 var mainEntrance = $scope.roomHasItemLike({ type: "mainEntrance" });
                 if (mainEntrance) {
-                  return "You speak: " + what.substring(1, what.length-1) + "\n" +
-                         "The door opens.\n" + $scope.enterRoom(mainEntrance.jumpTo);
+                  mainEntrance.isOpen = true;
+                  return "You say " + what.substring(1, what.length-1) + " and the door opens. You wonder what\'s inside.\n";
                 }
                 else
-                  return "You speak, \"" + what.substring(1, what.length-1) + ",\" but nothing happens.";
+                  return "You say " + what.substring(1, what.length-1) + " but nothing happens.";
               }
+              //otherwise look for variables
               switch (what) {
                 case "leftHand":
                   if ($scope.leftHand)
@@ -336,8 +392,6 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
         ret = $scope.invalidCommand(commandLine);
         $scope.prompt = $scope.prompt.trim();
       }
-      else
-        $scope.gameState.commandsTyped++;
       $scope.prompt = "";
       $scope.gameState.commandHistory += "> " + commandLine + "\n" + ret + "\n";
       $scope.promptEditor.focus();

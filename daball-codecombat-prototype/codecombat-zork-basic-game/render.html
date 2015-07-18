@@ -25,10 +25,10 @@
     <div class="container-fluid">
       <div class="row">
         <div class="map col-md-6">
-          <img class="col-md-12" ng-src="./img/{{gameState.avatarLocation.image}}" alt="./img/{{gameState.avatarLocation.image}} - {{gameState.avatarLocation.description}}" />
+          <img class="col-md-12" ng-src="./img/{{getRoom().image}}" alt="./img/{{getRoom().image}} - {{getRoom().description}}" />
         </div>
         <div class="col-md-6">
-          <h2>{{gameState.avatarLocation.heading}}</h2>
+          <h2>{{getRoom().heading}}</h2>
           <div id="history" ng-model="gameState.commandHistory" ui-ace="{
             useWrapMode: true,
             showGutter: false,
@@ -52,7 +52,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="container-fluid">
         <p class="navbar-text navbar-left">
-          <span ng-show="gameState.commandsTyped">You are currently playing the game and have made {{gameState.commandsTyped}} moves.</span>
+          <span ng-show="gameState.moves">You are currently playing the game and have made {{gameState.moves}} moves.</span>
         </p>
       </div>
     </nav>
