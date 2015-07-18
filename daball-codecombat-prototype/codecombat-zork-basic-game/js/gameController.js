@@ -22,16 +22,24 @@ if (!String.prototype.endsWith) {
 }
 
 angular.module('RUCodeCombatGame', ['ui.ace'])
+  // .service("GameService", function($service){
+  //   scope = this;
+  //   scope.saveGameState = function (gameState) {
+  //     $service.get()
+  //   };
+  // })
   .controller('GameController', function($scope) {
     $scope.gameState = {
       commandHistory: "",
+      commandsTyped: 0,
       avatarLocation: "",
       leftHand: "",
-      rightHand: ""
+      rightHand: "",
+      map: []
     };
     $scope.prompt = "";
 
-    $scope.map = [
+    $scope.initialMap = [
       {
         name: "mainEntrance",
         image: "mainEntrance.jpg",
@@ -74,21 +82,45 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
             description: "Seems like there should be something to my north, but there isn't. Maybe fix that, kind developer."
           },
           east: {
-            description: "Seems like there should be something to my east, but there isn't. Maybe fix that, kind developer."
+            description: "Seems like there should be something to my east, but there isn't. Maybe fix that, kind developer.",
+            jumpTo: "treasury",
+            door: "treasuryDoor",
+            isLocked: true
           },
           west: {
             description: "Seems like there should be something to my west, but there isn't. Maybe fix that, kind developer."
+          }
+        },
+        items: [
+          {
+            type: "door",
+            name: "treasuryDoor",
+            key: "treasuryKey"
+          }
+        ]
+      },
+      {
+        name: "treasury",
+        image: "treasury.jpg",
+        description: "There is a dragon in the room. Hope you're ready to fight!",
+        heading: "Chapter 3. Fight the dragon!",
+        directions: {
+          west: {
+            jumpTo: "mainHall",
+            description: "main hall"
           }
         },
         items: []
       }
     ];
 
+    $scope.gameState.map = $scope.initialMap;
+
     $scope.commandHandlers = {};
 
     $scope.enterRoom = function enterRoom(roomName) {
-      for (var r = 0; r < $scope.map.length; r++) {
-        var room = $scope.map[r];
+      for (var r = 0; r < $scope.gameState.map.length; r++) {
+        var room = $scope.gameState.map[r];
         if (room.name == roomName) {
           $scope.gameState.avatarLocation = room;
           return $scope.gameState.avatarLocation.description;
@@ -138,7 +170,8 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
-    $scope.registerCommandHandler("handleHelp", function handleHelp(commandLine) {
+    $scope.registerCommandHandler("handleHelp",
+     function handleHelp(commandLine) {
       if (commandLine.toLowerCase().startsWith("help") || commandLine.toLowerCase() == "?") {
         return "CODECOMBATZORKTHING HELP\n"
              + "===============================================================================\n"
@@ -176,8 +209,12 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.registerCommandHandler("handleNavigateNorth", function handleNavigateNorth(commandLine) {
       if (commandLine.toLowerCase().startsWith("north") || commandLine.toLowerCase() == "n") {
         if ($scope.gameState.avatarLocation.directions.north) {
-          if ($scope.gameState.avatarLocation.directions.north.jumpTo)
-            return $scope.enterRoom($scope.gameState.avatarLocation.directions.north.jumpTo);
+          if ($scope.gameState.avatarLocation.directions.north.jumpTo) {
+            if ($scope.gameState.avatarLocation.directions.north.isLocked)
+              return "This door is locked. Do you have the key?";
+            else
+              return $scope.enterRoom($scope.gameState.avatarLocation.directions.north.jumpTo);
+          }
           else
             return $scope.gameState.avatarLocation.directions.north.description;
         }
@@ -189,8 +226,12 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.registerCommandHandler("handleNavigateSouth", function handleNavigateSouth(commandLine) {
       if (commandLine.toLowerCase().startsWith("south") || commandLine.toLowerCase() == "s") {
         if ($scope.gameState.avatarLocation.directions.south) {
-          if ($scope.gameState.avatarLocation.directions.south.jumpTo)
-            return $scope.enterRoom($scope.gameState.avatarLocation.directions.south.jumpTo);
+          if ($scope.gameState.avatarLocation.directions.south.jumpTo) {
+            if ($scope.gameState.avatarLocation.directions.south.isLocked)
+              return "This door is locked. Do you have the key?";
+            else
+              return $scope.enterRoom($scope.gameState.avatarLocation.directions.south.jumpTo);
+          }
           else
             return $scope.gameState.avatarLocation.directions.south.description;
         }
@@ -202,8 +243,12 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.registerCommandHandler("handleNavigateEast", function handleNavigateEast(commandLine) {
       if (commandLine.toLowerCase().startsWith("east") || commandLine.toLowerCase() == "e") {
         if ($scope.gameState.avatarLocation.directions.east) {
-          if ($scope.gameState.avatarLocation.directions.east.jumpTo)
-            return $scope.enterRoom($scope.gameState.avatarLocation.directions.east.jumpTo);
+          if ($scope.gameState.avatarLocation.directions.east.jumpTo) {
+            if ($scope.gameState.avatarLocation.directions.east.isLocked)
+              return "This door is locked. Do you have the key?";
+            else
+              return $scope.enterRoom($scope.gameState.avatarLocation.directions.east.jumpTo);
+          }
           else
             return $scope.gameState.avatarLocation.directions.east.description;
         }
@@ -215,8 +260,12 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.registerCommandHandler("handleNavigateWest", function handleNavigateWest(commandLine) {
       if (commandLine.toLowerCase().startsWith("west") || commandLine.toLowerCase() == "w") {
         if ($scope.gameState.avatarLocation.directions.west) {
-          if ($scope.gameState.avatarLocation.directions.west.jumpTo)
-            return $scope.enterRoom($scope.gameState.avatarLocation.directions.west.jumpTo);
+          if ($scope.gameState.avatarLocation.directions.west.jumpTo) {
+            if ($scope.gameState.avatarLocation.directions.west.isLocked)
+              return "This door is locked. Do you have the key?";
+            else
+              return $scope.enterRoom($scope.gameState.avatarLocation.directions.west.jumpTo);
+          }
           else
             return $scope.gameState.avatarLocation.directions.west.description;
         }
@@ -307,6 +356,8 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
         ret = $scope.invalidCommand(commandLine);
         $scope.prompt = $scope.prompt.trim();
       }
+      else
+        $scope.gameState.commandsTyped++;
       $scope.prompt = "";
       $scope.gameState.commandHistory += "> " + commandLine + "\n" + ret + "\n";
       $scope.promptEditor.focus();
