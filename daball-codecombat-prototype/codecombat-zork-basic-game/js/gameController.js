@@ -240,8 +240,18 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     });
 
     $scope.registerCommandHandler("handleDump", function handleDump(commandLine) {
-      if (commandLine.toLowerCase() == "dump")
-        return "For debugging purposes, this command dumps the game state:\n" + JSON.stringify($scope.gameState, null, 2);
+      if (commandLine.toLowerCase() == "dump") {
+        var jsonDump = JSON.stringify($scope.gameState, null, 2);
+        console.log(jsonDump);
+        return "For debugging purposes, this command dumps the game state:\n" + jsonDump;
+      }
+    });
+
+    $scope.registerCommandHandler("handleInject", function handleInject(commandLine) {
+      if (commandLine.toLowerCase().startsWith("inject ")) {
+        $scope.gameState = JSON.parse(commandLine.substring(6));
+        return "For debugging purposes, this command injects the game state:\n" + JSON.stringify($scope.gameState, null, 2);
+      }
     });
 
     $scope.registerCommandHandler("handleInspect", function handleInspect(commandLine) {
@@ -365,7 +375,6 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.promptChanged = function (e) {
       evt = (e && e[0] && e[0].data) ? e[0].data :  {};
       promptEditor = (e && e[1]) ? e[1] : {};
-
       if (evt && evt.action && evt.action == "insertText") {
         if (evt.text == "\n") {
           //TODO:if user opens a code block { } then let them close it
