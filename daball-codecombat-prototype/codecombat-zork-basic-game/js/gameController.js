@@ -112,25 +112,24 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
 
   //this is the game controller
   .controller('GameController', function($scope, GameService) {
-    $scope.gameState = {
-      commandHistory: "", //this is where the command history text is stored
-      moves: 0,           //this is the number of moves it took to solve
-      avatar: {
-        location: "",     //this is a text value that indicates the current avatar location
-        leftHand: "",     //this is the contents of the avatar left hand
-        rightHand: ""     //this is the contents of the avatar right hand
-      },
-      map: []             //this will store the map, once loaded
+    $scope.initialGameState = function initialGameState() {
+      return {
+        commandHistory: "", //this is where the command history text is stored
+        moves: 0,           //this is the number of moves it took to solve
+        avatar: {
+          location: "",     //this is a text value that indicates the current avatar location
+          leftHand: "",     //this is the contents of the avatar left hand
+          rightHand: ""     //this is the contents of the avatar right hand
+        },
+        map: GameService.getSampleMap() //this will store the map, once loaded from the game service
+      };
     };
 
     //this is where the prompt input text is stored
     $scope.prompt = "";
 
-    //get map from GameService
-    $scope.initialMap = GameService.getSampleMap();
-
-    //copy initial map to game state map
-    $scope.gameState.map = $scope.initialMap;
+    //setup initial game state
+    $scope.gameState = $scope.initialGameState();
 
     //command handlers respond to input commands
     $scope.commandHandlers = {};
@@ -198,6 +197,13 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.registerCommandHandler("exit", function handleExit(commandLine) {
       if (commandLine.toLowerCase().startsWith("exit")) {
         return "Ha! Ha! This ain't 1993. Use the close button in your browser.";
+      }
+    });
+
+    $scope.registerCommandHandler("reset", function handleReset(commandLine) {
+      if (commandLine.toLowerCase().startsWith("reset") || commandLine.toLowerCase().startsWith("restart")) {
+        $scope.gameState = $scope.initialGameState();
+        return "Game restarted.\n" + $scope.enterRoom("mainEntrance") + "\n";
       }
     });
 
@@ -397,7 +403,7 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       $scope.promptEditor.focus();
     };
 
-    //great the user
+    //greet the user
     $scope.gameState.commandHistory = "Game started.\n" + $scope.enterRoom("mainEntrance") + "\n";
 
     //Setup the two ACE editors
