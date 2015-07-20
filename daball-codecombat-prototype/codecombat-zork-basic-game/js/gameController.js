@@ -21,97 +21,10 @@ if (!String.prototype.endsWith) {
   };
 }
 
-angular.module('RUCodeCombatGame', ['ui.ace'])
-
-  //this is the game service, where external data is loaded/saved
-  .service("GameService", function(){
-    var svc = this;
-    svc.getSampleMap = function getSampleMap () {
-      return [
-        {
-          name: "mainEntrance",
-          spawn: true,
-          image: "mainEntrance.jpg",
-          description: "You are standing outside a castle, looking north at a door.",
-          heading: "Chapter 1. Outside the castle",
-          directions: {
-            north: {
-              description: "You are at the main entrance. Have a look around.",
-              door: "door",
-              jumpTo: "mainHall"
-            },
-            south: {
-              description: "You are at the main entrance. Have a look around."
-            },
-            east: {
-              description: "You are at the main entrance. Have a look around."
-            },
-            west: {
-              description: "You are at the main entrance. Have a look around."
-            }
-          },
-          items: [
-            {
-              type: "mainEntrance",
-              name: "door",
-              description: "Enter if you dare. To enter, print something to the console in Java.",
-              isOpen: false
-            }
-          ]
-        },
-        {
-          name: "mainHall",
-          image: "mainHall.png",
-          description: "You are standing in a hallway with rooms. To your south, you have the main entrance. In all other directions, there is nothing but rooms. As you navigate the hall, you wonder what each room looks like.",
-          heading: "Chapter 2. The castle hallway",
-          directions: {
-            south: {
-              description: "The main entrance.",
-              jumpTo: "mainEntrance"
-            },
-            north: {
-              description: "Seems like there should be something to my north, but there isn't. Maybe fix that, kind developer."
-            },
-            east: {
-              description: "Here lies an inscription: Enter if you dare. But the door is locked. You wonder where the key might be.",
-              jumpTo: "treasury",
-              door: "lock"
-            },
-            west: {
-              description: "Seems like there should be something to my west, but there isn't. Maybe fix that, kind developer."
-            }
-          },
-          items: [
-            {
-              type: "lockedDoor",
-              name: "lock",
-              key: "key",
-              description: "This door is locked. You wonder where the key might be.",
-              isOpen: false,
-              isLocked: true
-            }
-          ]
-        },
-        {
-          name: "treasury",
-          image: "treasury.jpg",
-          description: "There is a dragon in the room. Hope you're ready to fight!",
-          heading: "Chapter 3. Fight the dragon!",
-          directions: {
-            west: {
-              jumpTo: "mainHall",
-              description: "main hall"
-            }
-          },
-          items: []
-        }
-      ];
-    };
-    return svc;
-  })
-
-  //this is the game controller
-  .controller('GameController', function($scope, GameService) {
+//injects ui.ace and MapServiceModule modules
+angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
+  //this is the game controller, injects MapService service
+  .controller('GameController', function($scope, MapService) {
     $scope.initialGameState = function initialGameState() {
       return {
         commandHistory: "", //this is where the command history text is stored
@@ -121,7 +34,7 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
           leftHand: "",     //this is the contents of the avatar left hand
           rightHand: ""     //this is the contents of the avatar right hand
         },
-        map: GameService.getSampleMap() //this will store the map, once loaded from the game service
+        map: MapService.buildSampleMap() //this will store the map, once loaded from the game service
       };
     };
 
@@ -135,7 +48,8 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
     $scope.commandHandlers = {};
 
     //getRoom(roomName) gets the room from the map with the name provided
-    //if no name is provided,
+    //if no name is provided, uses avatar location
+    //if no name is provided and no avatar location, uses spawn point on the map
     $scope.getRoom = function getRoom(roomName) {
       var findSpawn = false;
       if (!roomName) roomName = $scope.gameState.avatar.location;
@@ -149,6 +63,10 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     };
 
+    //enters room provided by roomName, uses getRoom(roomName)
+    //so:
+    //if no name is provided, uses avatar location
+    //if no name is provided and no avatar location, uses spawn point on the map
     $scope.enterRoom = function enterRoom(roomName) {
       var room = $scope.getRoom(roomName);
       if (room) {
@@ -157,6 +75,11 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     }
 
+    //checks current room for item like object in item parameter
+    //uses Boolean AND to determine if all properties match exactly
+    //uses getRoom() so:
+    //uses current avatar location
+    //if no avatar location, uses spawn point on the map
     $scope.roomHasItemLike = function roomHasItemLike(item) {
       var room = $scope.getRoom();
       if (room.items)
@@ -174,19 +97,31 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       return false;
     }
 
+    //called whenever no command handler responds to the command issued
+    //in REPL
     $scope.invalidCommand = function(commandLine) {
       return "I'm sorry. Invalid command. Try HELP.\n";
     };
 
+    //registers a command handler by the name
+    //command handler in fn must be in the format:
+    //function callbackFn(commandLine), where commandLine is the command line
+    //input sent from REPL. note: commandLine is pre-trimmed by REPL.
+    //if the input was valid for the command handler, the function must return
+    //a value other than false
+    //if the input was not valid for the command handler, the function does
+    //not have to return a value, but if it does, then return false
     $scope.registerCommandHandler = function registerCommandHandler(name, fn) {
       $scope.commandHandlers[name] = fn;
       return fn;
     };
 
+    //dispatches a command to command handler by the command handler name
     $scope.dispatchCommandHandler = function dispatchCommandHandler(name, commandLine) {
       return $scope.commandHandlers[name](commandLine);
     };
 
+    //clear: clears the console history
     $scope.registerCommandHandler("clear", function handleClear(commandLine) {
       if (commandLine.toLowerCase().startsWith("clear")) {
         $scope.gameState.commandHistory = "";
@@ -194,12 +129,15 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
+    //exit: should exit the game, but this ain't 1993 anymore
     $scope.registerCommandHandler("exit", function handleExit(commandLine) {
       if (commandLine.toLowerCase().startsWith("exit")) {
         return "Ha! Ha! This ain't 1993. Use the close button in your browser.";
       }
     });
 
+
+    //reset: resets game state back to initial state
     $scope.registerCommandHandler("reset", function handleReset(commandLine) {
       if (commandLine.toLowerCase().startsWith("reset") || commandLine.toLowerCase().startsWith("restart")) {
         $scope.gameState = $scope.initialGameState();
@@ -207,6 +145,7 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
+    //help: prints command line help
     $scope.registerCommandHandler("help",
      function handleHelp(commandLine) {
       if (commandLine.toLowerCase().startsWith("help") || commandLine.toLowerCase() == "?") {
@@ -243,6 +182,9 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
+    //handles navigation in any direction. note: this should not be registered as
+    //a command handler. a command handler should be created in the format:
+    //function (commandLine) { return handleNavigationDirection('direction', commandLine); }
     var handleNavigateDirection = function handleNavigateDirection(direction, commandLine) {
       direction = direction.toLowerCase();
       if (commandLine.toLowerCase().startsWith(direction) || commandLine.toLowerCase() == direction.substring(0,1)) {
@@ -280,22 +222,29 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     };
 
+
+    //north: handles navigation in the northern direction
     $scope.registerCommandHandler("north", function handleNavigateNorth(commandLine) {
       return handleNavigateDirection("north", commandLine);
     });
 
+    //south: handles navigation in the southern direction
     $scope.registerCommandHandler("south", function handleNavigateSouth(commandLine) {
       return handleNavigateDirection("south", commandLine);
     });
 
+    //east: handles navigation in the eastern direction
     $scope.registerCommandHandler("east", function handleNavigateEast(commandLine) {
       return handleNavigateDirection("east", commandLine);
     });
 
+    //west: handles navigation in the western direction
     $scope.registerCommandHandler("west", function handleNavigateWest(commandLine) {
       return handleNavigateDirection("west", commandLine);
     });
 
+    //DEBUG ONLY
+    //dump: dumps current gameState to console (and the browser's console)
     $scope.registerCommandHandler("dump", function handleDump(commandLine) {
       if (commandLine.toLowerCase() == "dump") {
         var jsonDump = JSON.stringify($scope.gameState, null, 2);
@@ -304,6 +253,8 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
+    //DEBUG ONLY
+    //inject: injects gameState provided in commandLine and resumes the game
     $scope.registerCommandHandler("inject", function handleInject(commandLine) {
       if (commandLine.toLowerCase().startsWith("inject ")) {
         $scope.gameState = JSON.parse(commandLine.substring(6));
@@ -311,6 +262,7 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
+    //inspect: inspects the room item specified or the room if no target is specified
     $scope.registerCommandHandler("inspect", function handleInspect(commandLine) {
       if (commandLine.toLowerCase().startsWith("inspect") || commandLine.toLowerCase().startsWith("look at") ||
           commandLine.toLowerCase().startsWith("read") || commandLine.toLowerCase().startsWith("look")) {
@@ -346,6 +298,7 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       }
     });
 
+    //print: causes the avatar to speak; in the case of the mainEntrance item type, it opens the main entrance
     $scope.registerCommandHandler("print", function handlePrint(commandLine) {
       if (
             (commandLine.startsWith("System.out.print(") || commandLine.startsWith("System.out.println("))
@@ -403,35 +356,44 @@ angular.module('RUCodeCombatGame', ['ui.ace'])
       $scope.promptEditor.focus();
     };
 
-    //greet the user
-    $scope.gameState.commandHistory = "Game started.\n" + $scope.enterRoom("mainEntrance") + "\n";
+    //greet the user, entering the room in the map with { spawn: true }
+    $scope.gameState.commandHistory = "Game started.\n" + $scope.enterRoom() + "\n";
 
-    //Setup the two ACE editors
+    //Setup the two ACE editors; #console - command history; #prompt - command input
+    //event handler: Sets up the command console history view, runs once
     $scope.consoleLoaded = function (consoleEditor) {
       $scope.consoleEditor = consoleEditor;
-      consoleEditor.on('focus', $scope.consoleFocused);
-      consoleEditor.setReadOnly(true);
-      consoleEditor.setShowPrintMargin(false);
-      consoleEditor.setHighlightActiveLine(false);
+      consoleEditor.on('focus', $scope.consoleFocused); //onFocus: focus(#prompt)
+      consoleEditor.setReadOnly(true);  //history is read only
+      consoleEditor.setShowPrintMargin(false); //line numbers not desired
+      consoleEditor.setHighlightActiveLine(false); //don't highlight the active line
     };
+    //event handler: Sets focus on the prompt control
     $scope.consoleFocused = function (consoleEditor) {
-      $scope.promptEditor.focus();
+      $scope.promptEditor.focus(); //#console.onFocus: focus(#prompt)
     };
+    //event handler: Scrolls to the end of the console view whenever it changes
     $scope.consoleChanged = function (e) {
       var evt = (e && e[0] && e[0].data) ? e[0].data :  {};
       var consoleEditor = (e && e[1]) ? e[1] : {};
       //scroll down
       $scope.consoleEditor.scrollToLine($scope.gameState.commandHistory.split("\n").length, false, false, function f(x){});
     };
+    //event handler: Sets up the input prompt view, runs once
     $scope.promptLoaded = function (promptEditor) {
       $scope.promptEditor = promptEditor;
-      promptEditor.on('focus', $scope.promptFocused);
+      //promptEditor.on('focus', $scope.promptFocused); //disabled: doesn't add value, seems to work incorrectly
       promptEditor.focus();
       promptEditor.setShowPrintMargin(false);
     };
+    //event handler: disabled, moves cursor to the end of line 1
     $scope.promptFocused = function (promptEditor) {
-      $scope.promptEditor.moveCursorTo(0, $scope.prompt.length);
+      //$scope.promptEditor.moveCursorTo(0, $scope.prompt.length);
     };
+    //event handler: whenever an insertText action occurs with text == "\n"
+    //send the command to REPL() for processing of the input text in
+    //$scope.prompt (provided by the Angular binding in the ui-ace control,
+    //in ng-model)
     $scope.promptChanged = function (e) {
       evt = (e && e[0] && e[0].data) ? e[0].data :  {};
       promptEditor = (e && e[1]) ? e[1] : {};
