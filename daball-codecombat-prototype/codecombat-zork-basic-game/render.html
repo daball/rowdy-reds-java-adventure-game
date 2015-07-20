@@ -2,18 +2,23 @@
 <html ng-app="GameControllerModule">
   <head>
     <title>RU Code Combat / Zork Basic Game Prototype</title>
+
+    <!-- libraries -->
     <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="./lib/ace-builds/src-min-noconflict/ace.js"></script>
     <script type="text/javascript" src="./lib/angular/angular.js"></script>
     <script type="text/javascript" src="./lib/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript" src="./lib/angular-ui-ace/ui-ace.js"></script>
+    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.css" />
+
+    <!-- game code -->
     <script type="text/javascript" src="./js/mapBuilder.js"></script>
     <script type="text/javascript" src="./js/mapService.js"></script>
     <script type="text/javascript" src="./js/gameController.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/game.css" />
-    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.css" />
   </head>
   <body ng-controller="GameController">
+    <!-- top navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
          <div class="navbar-header">
@@ -24,6 +29,7 @@
       </div>
     </nav>
 
+    <!-- center container -->
     <div class="container-fluid">
       <div class="row">
         <div class="map col-md-6">
@@ -51,6 +57,7 @@
       </div>
     </div>
 
+    <!-- bottom navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="container-fluid">
         <p class="navbar-text navbar-left">
