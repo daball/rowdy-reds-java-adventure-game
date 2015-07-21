@@ -23,8 +23,11 @@ if (!String.prototype.endsWith) {
 
 //injects ui.ace and MapServiceModule modules
 angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
+  //set this to true to enable debug features, false to disable
+  .value('debug', true)
+
   //this is the game controller, injects MapService service
-  .controller('GameController', function($scope, MapService) {
+  .controller('GameController', function($scope, debug, MapService) {
     $scope.initialGameState = function initialGameState() {
       return {
         commandHistory: "", //this is where the command history text is stored
@@ -40,6 +43,8 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
 
     //this is where the prompt input text is stored
     $scope.prompt = "";
+    $scope.promptHistory = [];
+    $scope.promptRecall = -1;
 
     //setup initial game state
     $scope.gameState = $scope.initialGameState();
@@ -149,37 +154,39 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
     $scope.registerCommandHandler("help",
      function handleHelp(commandLine) {
       if (commandLine.toLowerCase().startsWith("help") || commandLine.toLowerCase() == "?") {
+        var doubleDash = ""; for (var i = 0; i < 80; i++) doubleDash += "="; doubleDash += "\n";
         return "CODECOMBATZORKTHING HELP\n"
-             + "===============================================================================\n"
+             + doubleDash
              + "Goal: Find and kill the dragon.\n"
-             + "\n"
-             + "HELP - this menu\n"
+             + doubleDash
+             + "HELP - print this help screen\n"
              + "CLEAR - clears the command history\n"
              + "RESET - restarts the game\n"
-             + "DUMP - DEBUG ONLY; dumps the game state (for saving?)\n"
-             + "INJECT - DEBUG ONLY; injects a game state (for resuming/hacking?)\n"
-             + "===============================================================================\n"
+             + (debug ? doubleDash : "")
+             + (debug ? "GOTO {room} - DEBUG ONLY; enters a particular room, ignoring game rules\n" : "")
+             + (debug ? "DUMP - DEBUG ONLY; dumps the game state (for saving?)\n" : "")
+             + (debug ? "INJECT - DEBUG ONLY; injects a game state (for resuming/hacking?)\n" : "")
+             + doubleDash
              + "N - move north\n"
              + "S - move south\n"
              + "W - move west\n"
              + "E - move east\n"
-             + "===============================================================================\n"
-             + "INSPECT (item) - inspects specified item\n"
-             + "===============================================================================\n"
+             + doubleDash
+             + "INSPECT {item} - inspects specified item\n"
+             + doubleDash
              + "System.out.println(\"string\"); - speaks a string of text\n"
              + "System.out.println(variable); - displays output of specified variable\n"
              + "leftHand = item - places item in left hand\n"
              + "rightHand = item - places item in right hand\n"
              + "lock = leftHand - unlocks door lock with key in left hand\n"
              + "lock = rightHand - unlocks door lock with key in right hand\n"
-             + "===============================================================================\n"
+             + doubleDash
             //  + "Item list:\n"
             //  + "-------------------------------------------------------------------------------\n"
             //  + "sword - used for attacking enemies\n"
             //  + "shield - for a knight's protection against enemies\n"
             //  + "key - door key\n"
             //  + "===============================================================================\n"
-             + "\n"
              + "Happy hunting!";
       }
     });
@@ -247,20 +254,30 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
 
     //DEBUG ONLY
     //dump: dumps current gameState to console (and the browser's console)
-    $scope.registerCommandHandler("dump", function handleDump(commandLine) {
+    if (debug) $scope.registerCommandHandler("dump", function handleDump(commandLine) {
       if (commandLine.toLowerCase() == "dump") {
         var jsonDump = JSON.stringify($scope.gameState, null, 2);
         console.log(jsonDump);
-        return "For debugging purposes, this command dumps the game state:\n" + jsonDump;
+        return "For debugging purposes only, this command dumps the game state:\n" + jsonDump;
       }
     });
 
     //DEBUG ONLY
     //inject: injects gameState provided in commandLine and resumes the game
-    $scope.registerCommandHandler("inject", function handleInject(commandLine) {
+    if (debug) $scope.registerCommandHandler("inject", function handleInject(commandLine) {
       if (commandLine.toLowerCase().startsWith("inject ")) {
         $scope.gameState = JSON.parse(commandLine.substring(6));
-        return "For debugging purposes, this command injects the game state:\n" + JSON.stringify($scope.gameState, null, 2);
+        return "For debugging purposes only, this command injects the game state:\n" + JSON.stringify($scope.gameState, null, 2);
+      }
+    });
+
+    //DEBUG ONLY
+    //goto: jumps to a particular room in the game
+    if (debug) $scope.registerCommandHandler("goto", function handleGoto(commandLine) {
+      if (commandLine.toLowerCase().startsWith("goto ")) {
+        var roomName = commandLine.substring(4).trim();
+        console.log('jumping to', roomName);
+        return "For debugging purposes only, this command jumps to a particular room.\n" + $scope.enterRoom(roomName);
       }
     });
 
@@ -387,10 +404,52 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
       //promptEditor.on('focus', $scope.promptFocused); //disabled: doesn't add value, seems to work incorrectly
       promptEditor.focus();
       promptEditor.setShowPrintMargin(false);
+      promptEditor.keyBinding.origOnCommandKey = promptEditor.keyBinding.onCommandKey;
+      promptEditor.keyBinding.onCommandKey = $scope.promptCommandCompletionHandler;
     };
     //event handler: disabled, moves cursor to the end of line 1
     $scope.promptFocused = function (promptEditor) {
       //$scope.promptEditor.moveCursorTo(0, $scope.prompt.length);
+    };
+    //event handler: whenever up or down is pressed, it should navigate through
+    //the prompt command history (command completion)
+    $scope.promptCommandCompletionHandler = function (e, hashId, keyCode) {
+      if (keyCode == 38) {
+        if ($scope.promptHistory.length > 0) {
+          if ($scope.promptRecall == $scope.promptHistory.length) {
+            //store this command
+            $scope.promptHistory.push($scope.prompt);
+          }
+          //move cursor up
+          $scope.promptRecall--;
+          //if cursor went to far, roll around to the end
+          if ($scope.promptRecall < 0)
+            $scope.promptRecall = $scope.promptHistory.length-1;
+          $scope.$apply(function () {
+            $scope.prompt = $scope.promptHistory[$scope.promptRecall].trim();
+          });
+        }
+      }
+      else if (keyCode == 40) {
+        if ($scope.promptHistory.length > 0) {
+          if ($scope.promptRecall == $scope.promptHistory.length) {
+            //store this command
+            $scope.promptHistory.push($scope.prompt);
+          }
+          //move cursor down
+          $scope.promptRecall++;
+          //if cursor went to far, roll around to the start
+          if ($scope.promptRecall > $scope.promptHistory.length-1)
+            $scope.promptRecall = 0;
+          $scope.$apply(function () {
+            $scope.prompt = $scope.promptHistory[$scope.promptRecall].trim();
+          });
+        }
+      }
+      else {
+        //use default handler
+        this.origOnCommandKey(e, hashId, keyCode);
+      }
     };
     //event handler: whenever an insertText action occurs with text == "\n"
     //send the command to REPL() for processing of the input text in
@@ -401,6 +460,12 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
       promptEditor = (e && e[1]) ? e[1] : {};
       if (evt && evt.action && evt.action == "insertText") {
         if (evt.text == "\n") {
+          //if last command was empty (due to command completion) then
+          //pop it off the array
+          if ($scope.promptHistory.length > 0 && $scope.promptHistory[$scope.promptHistory.length-1].trim() == "")
+            $scope.promptHistory.pop();
+          //store the command to command completion history
+          $scope.promptRecall = $scope.promptHistory.push($scope.prompt);
           //TODO:if user opens a code block { } then let them close it
           //TODO:if user opens a "" or '' statement then let them close it
           //attempt read, eval, print on closed statements
