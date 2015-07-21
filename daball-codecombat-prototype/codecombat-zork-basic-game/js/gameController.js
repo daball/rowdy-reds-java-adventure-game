@@ -31,6 +31,7 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
     $scope.initialGameState = function initialGameState() {
       return {
         commandHistory: "", //this is where the command history text is stored
+        promptHistory: [],  //this is where the prompt history text is stored
         moves: 0,           //this is the number of moves it took to solve
         avatar: {
           location: "",     //this is a text value that indicates the current avatar location
@@ -43,7 +44,6 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
 
     //this is where the prompt input text is stored
     $scope.prompt = "";
-    $scope.promptHistory = [];
     $scope.promptRecall = -1;
 
     //setup initial game state
@@ -334,7 +334,7 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
                 var mainEntrance = $scope.roomHasItemLike({ type: "mainEntrance" });
                 if (mainEntrance) {
                   mainEntrance.isOpen = true;
-                  return "You say " + what.substring(1, what.length-1) + " and the door opens. You wonder what\'s inside.\n";
+                  return "You say " + what.substring(1, what.length-1) + " and the door opens. You wonder what\'s inside.";
                 }
                 else
                   return "You say " + what.substring(1, what.length-1) + " but nothing happens.";
@@ -401,79 +401,70 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
     //event handler: Sets up the input prompt view, runs once
     $scope.promptLoaded = function (promptEditor) {
       $scope.promptEditor = promptEditor;
-      //promptEditor.on('focus', $scope.promptFocused); //disabled: doesn't add value, seems to work incorrectly
       promptEditor.focus();
       promptEditor.setShowPrintMargin(false);
       promptEditor.keyBinding.origOnCommandKey = promptEditor.keyBinding.onCommandKey;
       promptEditor.keyBinding.onCommandKey = $scope.promptCommandCompletionHandler;
     };
-    //event handler: disabled, moves cursor to the end of line 1
-    $scope.promptFocused = function (promptEditor) {
-      //$scope.promptEditor.moveCursorTo(0, $scope.prompt.length);
-    };
     //event handler: whenever up or down is pressed, it should navigate through
-    //the prompt command history (command completion)
+    //the prompt command history (command completion), whenever enter is pressed
+    //it should execute the command (via REPL()) and clear the prompt for the next
+    //command, saving the command issued into the prompt history
     $scope.promptCommandCompletionHandler = function (e, hashId, keyCode) {
-      //key up
+      //debugging: console.log(e,hashId,keyCode,$scope.prompt);
+      //up key
       if (keyCode == 38) {
-        if ($scope.promptHistory.length > 0) {
-          if ($scope.promptRecall == $scope.promptHistory.length) {
+        if ($scope.gameState.promptHistory.length > 0) {
+          if ($scope.promptRecall == $scope.gameState.promptHistory.length) {
             //store this command
-            $scope.promptHistory.push($scope.prompt);
+            $scope.gameState.promptHistory.push($scope.prompt);
           }
           //move cursor up
           $scope.promptRecall--;
           //if cursor went to far, roll around to the end
           if ($scope.promptRecall < 0)
-            $scope.promptRecall = $scope.promptHistory.length-1;
+            $scope.promptRecall = $scope.gameState.promptHistory.length-1;
           $scope.$apply(function () {
-            $scope.prompt = $scope.promptHistory[$scope.promptRecall].trim();
+            $scope.prompt = $scope.gameState.promptHistory[$scope.promptRecall].trim();
           });
         }
       }
-      //key down
+      //down key
       else if (keyCode == 40) {
-        if ($scope.promptHistory.length > 0) {
-          if ($scope.promptRecall == $scope.promptHistory.length) {
+        if ($scope.gameState.promptHistory.length > 0) {
+          if ($scope.promptRecall == $scope.gameState.promptHistory.length) {
             //store this command
-            $scope.promptHistory.push($scope.prompt);
+            $scope.gameState.promptHistory.push($scope.prompt);
           }
           //move cursor down
           $scope.promptRecall++;
           //if cursor went to far, roll around to the start
-          if ($scope.promptRecall > $scope.promptHistory.length-1)
+          if ($scope.promptRecall > $scope.gameState.promptHistory.length-1)
             $scope.promptRecall = 0;
           $scope.$apply(function () {
-            $scope.prompt = $scope.promptHistory[$scope.promptRecall].trim();
+            $scope.prompt = $scope.gameState.promptHistory[$scope.promptRecall].trim();
           });
         }
+      }
+      //enter key
+      else if (keyCode == 13) {
+        //if last command was empty (due to command completion) then
+        //pop it off the array
+        if ($scope.gameState.promptHistory.length > 0 && $scope.gameState.promptHistory[$scope.gameState.promptHistory.length-1].trim() == "")
+          $scope.gameState.promptHistory.pop();
+        //store the command to command completion history
+        $scope.promptRecall = $scope.gameState.promptHistory.push($scope.prompt);
+        //TODO:if user opens a code block { } then let them close it
+        //TODO:if user opens a "" or '' statement then let them close it
+        //attempt read, eval, print on closed statements
+        $scope.$apply(function () {
+          $scope.REPL($scope.prompt);
+        });
       }
       //key anything else
       else {
         //use default handler
         this.origOnCommandKey(e, hashId, keyCode);
-      }
-    };
-    //event handler: whenever an insertText action occurs with text == "\n"
-    //send the command to REPL() for processing of the input text in
-    //$scope.prompt (provided by the Angular binding in the ui-ace control,
-    //in ng-model)
-    $scope.promptChanged = function (e) {
-      evt = (e && e[0] && e[0].data) ? e[0].data :  {};
-      promptEditor = (e && e[1]) ? e[1] : {};
-      if (evt && evt.action && evt.action == "insertText") {
-        if (evt.text == "\n") {
-          //if last command was empty (due to command completion) then
-          //pop it off the array
-          if ($scope.promptHistory.length > 0 && $scope.promptHistory[$scope.promptHistory.length-1].trim() == "")
-            $scope.promptHistory.pop();
-          //store the command to command completion history
-          $scope.promptRecall = $scope.promptHistory.push($scope.prompt);
-          //TODO:if user opens a code block { } then let them close it
-          //TODO:if user opens a "" or '' statement then let them close it
-          //attempt read, eval, print on closed statements
-          $scope.REPL($scope.prompt);
-        }
       }
     };
 
