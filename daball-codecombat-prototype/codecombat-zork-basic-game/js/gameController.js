@@ -414,6 +414,7 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
     //event handler: whenever up or down is pressed, it should navigate through
     //the prompt command history (command completion)
     $scope.promptCommandCompletionHandler = function (e, hashId, keyCode) {
+      //key up
       if (keyCode == 38) {
         if ($scope.promptHistory.length > 0) {
           if ($scope.promptRecall == $scope.promptHistory.length) {
@@ -430,6 +431,7 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
           });
         }
       }
+      //key down
       else if (keyCode == 40) {
         if ($scope.promptHistory.length > 0) {
           if ($scope.promptRecall == $scope.promptHistory.length) {
@@ -446,6 +448,7 @@ angular.module('GameControllerModule', ['ui.ace', 'MapServiceModule'])
           });
         }
       }
+      //key anything else
       else {
         //use default handler
         this.origOnCommandKey(e, hashId, keyCode);
