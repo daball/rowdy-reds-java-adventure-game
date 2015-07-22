@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="GameControllerModule">
+<html ng-app="UIControllerModule">
   <head>
     <title>RU Code Combat / Zork Basic Game Prototype</title>
 
@@ -14,10 +14,12 @@
     <!-- game code -->
     <script type="text/javascript" src="./js/mapBuilder.js"></script>
     <script type="text/javascript" src="./js/mapService.js"></script>
-    <script type="text/javascript" src="./js/gameController.js"></script>
+    <script type="text/javascript" src="./js/gameConfiguration.js"></script>
+    <script type="text/javascript" src="./js/gameEngine.js"></script>
+    <script type="text/javascript" src="./js/uiController.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/game.css" />
   </head>
-  <body ng-controller="GameController">
+  <body ng-controller="UIController">
     <!-- top navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
@@ -33,11 +35,11 @@
     <div class="container-fluid">
       <div class="row">
         <div class="map col-md-6">
-          <img class="col-md-12" ng-src="./img/{{getRoom().image}}" alt="./img/{{getRoom().image}} - {{getRoom().description}}" />
+          <img class="col-md-12" ng-src="./img/{{gameEngine.getRoom().image}}" alt="./img/{{gameEngine.getRoom().image}} - {{gameEngine.getRoom().description}}" />
         </div>
         <div class="col-md-6">
-          <h2>{{getRoom().heading}}</h2>
-          <div id="history" ng-model="gameState.commandHistory" ui-ace="{
+          <h2>{{gameEngine.getRoom().heading}}</h2>
+          <div id="history" ng-model="gameEngine.gameState.commandHistory" ui-ace="{
             useWrapMode: true,
             showGutter: false,
             theme: 'twilight',
@@ -60,7 +62,8 @@
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
       <div class="container-fluid">
         <p class="navbar-text navbar-left">
-          <span ng-show="gameState.moves">You are currently playing the game and have made {{gameState.moves}} moves.</span>
+          <span ng-show="debug">DEBUG MODE! </span>
+          <span ng-show="gameEngine.gameState.moves">You are currently playing the game and have made {{gameState.moves}} moves.</span>
         </p>
       </div>
     </nav>
