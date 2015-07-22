@@ -1,4 +1,5 @@
 describe("GameEngineModule unit tests", function() {
+  beforeEach(module('GameConfigurationModule'));
   beforeEach(module('MapServiceModule'));
   beforeEach(module('GameEngineModule'));
 
@@ -95,8 +96,46 @@ describe("GameEngineModule unit tests", function() {
       expect(engine.gameState.avatar.location).toBe(spawn.name);
     });
 
-    describe("GameEngine command handler unit tests", function () {
+    describe("GameEngine command handler unit tests, registration, dispatch, and REPL", function () {
+      beforeEach(function () {
+        engine.registerCommandHandler("noOpTest", function noOpTest(commandLine) {
+          return commandLine;
+        });
+      });
+
+      it("noOpTest should return the commandLine when dispatched", function () {
+        expected = "someArbitraryValue";
+        expect(engine.dispatchCommandHandler("noOpTest", expected)).toBe(expected);
+      });
+
+      it("noOpTest should return the commandLine when REPL dispatches it", function () {
+        expect(engine.REPL("noOpTest param")).toBe("noOpTest param");
+      });
+    });
+
+    describe("GameEngine command handler unit tests, known commands", function () {
       //TODO: Write unit tests for each command handler
+
+      //gets the output from the last command issued through REPL("commandLine")
+      var lastCommandOutput = function () {
+        var commandHistoryLines = engine.gameState.commandHistory.split("\n");
+        var output = "";
+        for (var l = commandHistoryLines.length-1; l >= 0; l--) {
+          if (commandHistoryLines[l].startsWith(">"))
+            break;
+          else
+            output = commandHistoryLines[l] + "\n" + output;
+        }
+        return output.trim();
+      }
+
+      it("help command should print help screen", inject(function (appName) {
+        engine.REPL("help");
+        var lines = lastCommandOutput().split("\n");
+        var line1 = lines[0];
+        var expected = (appName + " Help").toUpperCase();
+        expect(line1).toBe(expected);
+      }));
     });
   });
 });

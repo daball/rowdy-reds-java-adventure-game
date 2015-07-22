@@ -19,3 +19,5 @@ img, h2, .navbar-brand { color: #fff !important; }
 
 .ace_editor#history { height: 400px; background: transparent; }
 .ace_editor#prompt { height: 50px; background: transparent; }
+
+.navbar .breadcrumb { background: transparent; margin: 0 0 0 0; padding: 0 0 0 0;}

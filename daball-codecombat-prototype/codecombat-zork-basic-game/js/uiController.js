@@ -23,8 +23,9 @@ if (!String.prototype.endsWith) {
 
 //injects ui.ace and MapServiceModule modules
 angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapServiceModule', 'GameEngineModule'])
-  //this is the game UI controller, injects MapService, debug, and GameEngine services
-  .controller('UIController', function($scope, debug, MapService, GameEngine) {
+  //this is the game UI controller, injects MapService, debug, appName, and GameEngine services
+  .controller('UIController', function($scope, debug, appName, MapService, GameEngine) {
+    $scope.appName = appName; //GomeConfiguration->appName; used to configure application name
     $scope.debug = debug; //GameConfiguration->debug; used to enable debug mode
     $scope.initialMap = MapService.buildSampleMap(); //MapService->buildSampleMap(); builds sample map
     $scope.gameEngine = GameEngine.startEngine($scope.initialMap); //GameEngine->startEngine(map); starts the game engine

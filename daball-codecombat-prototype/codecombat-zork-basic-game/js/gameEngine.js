@@ -23,7 +23,7 @@ if (!String.prototype.endsWith) {
 
 angular.module('GameEngineModule', ['GameConfigurationModule'])
   //allows developer to programatically generate maps
-  .service("GameEngine", function(debug) {
+  .service("GameEngine", function(debug, appName) {
     var svc = this;
 
     svc.startEngine = function createEngine(initialMap) {
@@ -99,7 +99,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
       //called whenever no command handler responds to the command issued
       //in REPL
       engine.invalidCommand = function(commandLine) {
-        return "I'm sorry. Invalid command. Try HELP.\n";
+        return "I'm sorry. Invalid command. Try HELP.";
       };
 
 
@@ -141,7 +141,8 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
       engine.registerCommandHandler("reset", function handleReset(commandLine) {
         if (commandLine.toLowerCase().startsWith("reset") || commandLine.toLowerCase().startsWith("restart")) {
           engine.gameState = engine.initialGameState();
-          return "Game restarted.\n" + engine.enterRoom("mainEntrance") + "\n";
+          engine.gameState.avatar.location = "";
+          return "Game restarted.\n" + engine.enterRoom() + "\n";
         }
       });
 
@@ -150,7 +151,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
        function handleHelp(commandLine) {
         if (commandLine.toLowerCase().startsWith("help") || commandLine.toLowerCase() == "?") {
           var doubleDash = ""; for (var i = 0; i < 80; i++) doubleDash += "="; doubleDash += "\n";
-          return "CODECOMBATZORKTHING HELP\n"
+          return appName.toUpperCase() + " HELP\n"
                + doubleDash
                + "Goal: Find and kill the dragon.\n"
                + doubleDash
@@ -158,6 +159,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
                + "CLEAR - clears the command history\n"
                + "RESET - restarts the game\n"
                + (debug ? doubleDash : "")
+               + (debug ? "LSROOMS - DEBUG ONLY; lists all rooms available on the map\n" : "")
                + (debug ? "GOTO {room} - DEBUG ONLY; enters a particular room, ignoring game rules\n" : "")
                + (debug ? "DUMP - DEBUG ONLY; dumps the game state (for saving?)\n" : "")
                + (debug ? "INJECT - DEBUG ONLY; injects a game state (for resuming/hacking?)\n" : "")
