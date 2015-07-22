@@ -267,11 +267,22 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
       });
 
       //DEBUG ONLY
+      //goto: prints a list of rooms in the map
+      if (debug) engine.registerCommandHandler("lsrooms", function handleListRooms(commandLine) {
+        if (commandLine.toLowerCase() == "lsrooms") {
+          var roomList = "";
+          for (var r = 0; r < engine.gameState.map.length; r++) {
+            roomList += engine.gameState.map[r].name + "\n";
+          }
+          return "For debugging purposes only, this command lists all rooms in the map.\n" + roomList.trim();
+        }
+      });
+
+      //DEBUG ONLY
       //goto: jumps to a particular room in the game
       if (debug) engine.registerCommandHandler("goto", function handleGoto(commandLine) {
         if (commandLine.toLowerCase().startsWith("goto ")) {
           var roomName = commandLine.substring(4).trim();
-          console.log('jumping to', roomName);
           return "For debugging purposes only, this command jumps to a particular room.\n" + engine.enterRoom(roomName);
         }
       });
@@ -365,7 +376,6 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
         }
         if (ret == undefined) {
           ret = engine.invalidCommand(commandLine);
-          engine.prompt = engine.prompt.trim();
         }
         engine.gameState.commandHistory += "> " + commandLine + "\n" + ret + "\n";
         return ret;

@@ -66,7 +66,8 @@ angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapS
     //it should execute the command (via REPL()) and clear the prompt for the next
     //command, saving the command issued into the prompt history
     $scope.promptCommandCompletionHandler = function (e, hashId, keyCode) {
-      //debugging: console.log(e,hashId,keyCode,$scope.prompt);
+      //debugging:
+      console.log(e,hashId,keyCode,$scope.prompt);
       //up key
       if (keyCode == 38) {
         if ($scope.gameEngine.gameState.promptHistory.length > 0) {
@@ -117,6 +118,10 @@ angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapS
           $scope.prompt = "";
           $scope.promptEditor.focus();
         });
+        //prevent this from moving down the event tree
+        if (e.stopPropagation) e.stopPropagation(); //standard
+        else e.cancelBubble = true; //IE
+        if (e.preventDefault) e.preventDefault();
       }
       //key anything else
       else {
