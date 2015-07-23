@@ -12,8 +12,10 @@ module.exports = function(config){
       'js/gameConfiguration.js',
       'js/mapBuilder.js',
       'js/mapService.js',
+      'js/userService.js',
       'js/gameEngine.js',
-      'js/uiController.js',
+      'js/gameUIController.js',
+      'js/homeUIController.js',
 
       'js/*.spec.js'
     ],

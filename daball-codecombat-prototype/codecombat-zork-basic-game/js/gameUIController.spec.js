@@ -1,10 +1,10 @@
-describe("UIControllerModule unit tests", function() {
-  beforeEach(module('UIControllerModule'));
+describe("GameUIControllerModule unit tests", function() {
+  beforeEach(module('GameUIControllerModule'));
 
   var UIController, $scope;
   beforeEach(inject(function ($rootScope, $controller, $httpBackend) {
     $scope = $rootScope.$new();
-    UIController = $controller('UIController', {
+    UIController = $controller('GameUIController', {
       $scope: $scope
     });
   }));

@@ -23,7 +23,7 @@ if (!String.prototype.endsWith) {
 
 angular.module('GameEngineModule', ['GameConfigurationModule'])
   //allows developer to programatically generate maps
-  .service("GameEngine", function(debug, appName) {
+  .service("GameEngine", function(debug, promptDisplay, appName) {
     var svc = this;
 
     svc.startEngine = function createEngine(initialMap) {
@@ -363,6 +363,24 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
         }
       });
 
+      //print: causes the avatar to speak; in the case of the mainEntrance item type, it opens the main entrance
+      engine.registerCommandHandler("login", function handlePrint(commandLine) {
+        if (commandLine.startsWith("login") || commandLine.startsWith("logon")) {
+          var params = commandLine.split(' ');
+          var output = "LOGIN - logs a user in\n"
+                + "  Syntax: LOGIN userName password";
+          if (params.length == 3) {
+            var userName = params[1];
+            var password = params[2];
+            if (userName == 'test' && password == 'test')
+              output = "User logged in."
+          }
+          return {
+            command: (params.length>0?params[0]:'login') + (params.length>1?' '+params[1]:'') + (params.length>2?' (secret)':''),
+            output: output
+          };
+        }
+      });
 
       //trims the left and right of commandLine input, then dispatches
       //to each command handler until it gets output from the function
@@ -379,7 +397,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
         if (ret == undefined) {
           ret = engine.invalidCommand(commandLine);
         }
-        engine.gameState.commandHistory += "> " + commandLine + "\n" + ret + "\n";
+        engine.gameState.commandHistory += promptDisplay + (ret.command?ret.command:commandLine) + "\n" + (ret.output?ret.output:ret) + "\n";
         return ret;
       };
 

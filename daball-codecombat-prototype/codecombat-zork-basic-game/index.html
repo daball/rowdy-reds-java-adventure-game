@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="UIControllerModule">
+<html ng-app="AppRouterModule">
   <head>
     <title>{{appName}}</title>
 
@@ -8,6 +8,7 @@
     <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="./lib/ace-builds/src-min-noconflict/ace.js"></script>
     <script type="text/javascript" src="./lib/angular/angular.js"></script>
+    <script type="text/javascript" src="./lib/angular-ui-router/release/angular-ui-router.js"></script>
     <script type="text/javascript" src="./lib/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript" src="./lib/angular-ui-ace/ui-ace.js"></script>
 
@@ -15,11 +16,12 @@
     <link rel="stylesheet" type="text/css" href="./css/game.css" />
     <script type="text/javascript" src="./js/mapBuilder.js"></script>
     <script type="text/javascript" src="./js/mapService.js"></script>
+    <script type="text/javascript" src="./js/userService.js"></script>
     <script type="text/javascript" src="./js/gameConfiguration.js"></script>
     <script type="text/javascript" src="./js/gameEngine.js"></script>
-    <script type="text/javascript" src="./js/uiController.js"></script>
+    <script type="text/javascript" src="./js/appRouter.js"></script>
   </head>
-  <body ng-controller="UIController">
+  <body>
     <!-- top navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
@@ -36,28 +38,7 @@
 
     <!-- center container -->
     <div class="container-fluid">
-      <div class="row">
-        <div class="map col-md-6">
-          <img class="col-md-12" ng-src="./img/{{gameEngine.getRoom().image}}" alt="./img/{{gameEngine.getRoom().image}} - {{gameEngine.getRoom().description}}" />
-        </div>
-        <div class="col-md-6">
-          <div id="history" ng-model="gameEngine.gameState.commandHistory" ui-ace="{
-            useWrapMode: true,
-            showGutter: false,
-            theme: 'twilight',
-            mode: 'text',
-            onLoad: consoleLoaded,
-            onChange: consoleChanged
-          }"></div>
-          <div id="prompt" ng-model="prompt" ui-ace="{
-            useWrapMode: true,
-            showGutter: false,
-            theme: 'twilight',
-            mode: 'text',
-            onLoad: promptLoaded
-          }"></div>
-        </div>
-      </div>
+      <div ng-view="main"></div>
     </div>
 
     <!-- bottom navbar -->

@@ -1,30 +1,7 @@
-//available as of ES6, here is a polyfill for backward compatibility
-//source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
-if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(searchString, position) {
-    position = position || 0;
-    return this.indexOf(searchString, position) === position;
-  };
-}
-
-//available as of ES6, here is a polyfill for backward compatibility
-//source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith
-if (!String.prototype.endsWith) {
-  String.prototype.endsWith = function(searchString, position) {
-      var subjectString = this.toString();
-      if (position === undefined || position > subjectString.length) {
-        position = subjectString.length;
-      }
-      position -= searchString.length;
-      var lastIndex = subjectString.indexOf(searchString, position);
-      return lastIndex !== -1 && lastIndex === position;
-  };
-}
-
 //injects ui.ace and MapServiceModule modules
-angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapServiceModule', 'GameEngineModule'])
+angular.module('GameUIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapServiceModule', 'GameEngineModule'])
   //this is the game UI controller, injects MapService, debug, appName, and GameEngine services
-  .controller('UIController', function($scope, debug, appName, MapService, GameEngine) {
+  .controller('GameUIController', function($scope, debug, appName, promptDisplay, secretPromptChar, MapService, GameEngine) {
     $scope.appName = appName; //GomeConfiguration->appName; used to configure application name
     $scope.debug = debug; //GameConfiguration->debug; used to enable debug mode
     $scope.initialMap = MapService.buildSampleMap(); //MapService->buildSampleMap(); builds sample map
@@ -33,6 +10,7 @@ angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapS
     //this is where the prompt input text is stored
     $scope.prompt = "";
     $scope.promptRecall = -1;
+    $scope.promptSecret = "";
 
     //Setup the two ACE editors; #console - command history; #prompt - command input
     //event handler: Sets up the command console history view, runs once
@@ -109,13 +87,13 @@ angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapS
         //pop it off the array
         if ($scope.gameEngine.gameState.promptHistory.length > 0 && $scope.gameEngine.gameState.promptHistory[$scope.gameEngine.gameState.promptHistory.length-1].trim() == "")
           $scope.gameEngine.gameState.promptHistory.pop();
-        //store the command to command completion history
-        $scope.promptRecall = $scope.gameEngine.gameState.promptHistory.push($scope.prompt);
         //TODO:if user opens a code block { } then let them close it
         //TODO:if user opens a "" or '' statement then let them close it
         //attempt read, eval, print on closed statements
         $scope.$apply(function () {
-          $scope.gameEngine.REPL($scope.prompt);
+          var ret = $scope.gameEngine.REPL($scope.prompt);
+          //store the command to command completion history
+          $scope.promptRecall = $scope.gameEngine.gameState.promptHistory.push(ret.command?ret.command:$scope.prompt);
           $scope.prompt = "";
           $scope.promptEditor.focus();
         });
@@ -126,6 +104,12 @@ angular.module('UIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapS
       }
       //key anything else
       else {
+        if ($scope.prompt.trim().startsWith('login') || $scope.prompt.trim().startsWith('register')) {
+          if ($scope.prompt.trim().split(' ') > 2) {
+            this.origOnCommandKey(e, hashId, keyCode);
+          }
+        }
+
         //use default handler
         this.origOnCommandKey(e, hashId, keyCode);
       }

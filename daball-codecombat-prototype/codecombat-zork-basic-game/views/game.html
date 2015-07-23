@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="map col-md-6">
+    <img class="col-md-12" ng-src="./img/{{gameEngine.getRoom().image}}" alt="./img/{{gameEngine.getRoom().image}} - {{gameEngine.getRoom().description}}" />
+  </div>
+  <div class="col-md-6">
+    <div id="history" ng-model="gameEngine.gameState.commandHistory" ui-ace="{
+      useWrapMode: true,
+      showGutter: false,
+      theme: 'twilight',
+      mode: 'text',
+      onLoad: consoleLoaded,
+      onChange: consoleChanged
+    }"></div>
+    <div id="prompt" ng-model="prompt" ui-ace="{
+      useWrapMode: true,
+      showGutter: false,
+      theme: 'twilight',
+      mode: 'text',
+      onLoad: promptLoaded
+    }"></div>
+  </div>
+</div>
