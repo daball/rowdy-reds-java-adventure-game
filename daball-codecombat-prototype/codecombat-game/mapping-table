@@ -1,7 +1,0 @@
-{
-    "version": 1.0,
-    "urnmapping": {
-        "R2Tex.jpg": "textures/R2Tex.jpg",
-        "R2_BUMP.jpg": "textures/R2_BUMP.jpg",
-    },
-}
