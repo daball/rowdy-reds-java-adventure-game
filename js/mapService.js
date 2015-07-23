@@ -1,21 +1,21 @@
-angular.module('MapServiceModule', ['MapBuilderModule'])
+angular.module('gameApp.mapService', ['gameApp.mapBuilder'])
 
   //this is the game service, where external data is obtained for the controller
   //injects MapBuilder service
-  .service("MapService", function(MapBuilder){
+  .service("$mapService", function($mapBuilder){
     var svc = this;
     svc.buildSampleMap = function buildSampleMap () {
       var entrance = "entrance"
         , hall = "hall"
         , treasury = "treasury"
-        , directions = MapBuilder.directions
+        , directions = $mapBuilder.directions
         , n = directions.n
         , s = directions.s
         , w = directions.w
         , e = directions.e
         ;
 
-      return MapBuilder.createMap()
+      return $mapBuilder.createMap()
         //create main entrance
         .createRoom(entrance)
           //describe main entrance

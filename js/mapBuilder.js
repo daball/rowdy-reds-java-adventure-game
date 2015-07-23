@@ -1,6 +1,6 @@
-angular.module('MapBuilderModule', [])
+angular.module('gameApp.mapBuilder', [])
   //allows developer to programatically generate maps
-  .service("MapBuilder", function() {
+  .service("$mapBuilder", function() {
     var svc = this;
 
     svc.directions = {

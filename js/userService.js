@@ -1,9 +1,9 @@
-angular.module('UserServiceModule', ['GameConfigurationModule'])
+angular.module('gameApp.userService', ['gameApp.gameConfig'])
 
   //this is the user service, where user data is obtained for the controller
   //from a remote web service
   //injects $http, and GameConfigurationModule->userServiceAPIUrl
-  .service("UserService", function($http, userServiceAPIUrl){
+  .service("$userService", function($http, $gameConfig){
     var svc = this;
 
     //requests login for user
@@ -16,7 +16,7 @@ angular.module('UserServiceModule', ['GameConfigurationModule'])
         userName: userName,
         password: password
       };
-      $http.post(userServiceAPIUrl, requestData)
+      $http.post($gameConfig.userServiceAPIUrl, requestData)
         .success(function (data, status, headers, config) {
           if (data.ok)
             onFinished(true, false); //server returned { ok: true }

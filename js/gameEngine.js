@@ -21,9 +21,9 @@ if (!String.prototype.endsWith) {
   };
 }
 
-angular.module('GameEngineModule', ['GameConfigurationModule'])
+angular.module('gameApp.gameEngine', ['gameApp.gameConfig'])
   //allows developer to programatically generate maps
-  .service("GameEngine", function(debug, promptDisplay, appName) {
+  .service("$gameEngine", function($gameConfig) {
     var svc = this;
 
     svc.startEngine = function createEngine(initialMap) {
@@ -136,7 +136,6 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
         }
       });
 
-
       //reset: resets game state back to initial state
       engine.registerCommandHandler("reset", function handleReset(commandLine) {
         if (commandLine.toLowerCase().startsWith("reset") || commandLine.toLowerCase().startsWith("restart")) {
@@ -151,18 +150,18 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
        function handleHelp(commandLine) {
         if (commandLine.toLowerCase().startsWith("help") || commandLine.toLowerCase() == "?") {
           var doubleDash = ""; for (var i = 0; i < 80; i++) doubleDash += "="; doubleDash += "\n";
-          return appName.toUpperCase() + " HELP\n"
+          return $gameConfig.appName.toUpperCase() + " HELP\n"
                + doubleDash
                + "Goal: Find and kill the dragon.\n"
                + doubleDash
                + "HELP - print this help screen\n"
                + "CLEAR - clears the command history\n"
                + "RESET - restarts the game\n"
-               + (debug ? doubleDash : "")
-               + (debug ? "LSROOMS - DEBUG ONLY; lists all rooms available on the map\n" : "")
-               + (debug ? "GOTO {room} - DEBUG ONLY; enters a particular room, ignoring game rules\n" : "")
-               + (debug ? "DUMP - DEBUG ONLY; dumps the game state (for saving?)\n" : "")
-               + (debug ? "INJECT - DEBUG ONLY; injects a game state (for resuming/hacking?)\n" : "")
+               + ($gameConfig.debug ? doubleDash : "")
+               + ($gameConfig.debug ? "LSROOMS - DEBUG ONLY; lists all rooms available on the map\n" : "")
+               + ($gameConfig.debug ? "GOTO {room} - DEBUG ONLY; enters a particular room, ignoring game rules\n" : "")
+               + ($gameConfig.debug ? "DUMP - DEBUG ONLY; dumps the game state (for saving?)\n" : "")
+               + ($gameConfig.debug ? "INJECT - DEBUG ONLY; injects a game state (for resuming/hacking?)\n" : "")
                + doubleDash
                + "N - move north\n"
                + "S - move south\n"
@@ -251,7 +250,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
 
       //DEBUG ONLY
       //dump: dumps current gameState to console (and the browser's console)
-      if (debug) engine.registerCommandHandler("dump", function handleDump(commandLine) {
+      if ($gameConfig.debug) engine.registerCommandHandler("dump", function handleDump(commandLine) {
         if (commandLine.toLowerCase() == "dump") {
           var jsonDump = JSON.stringify(engine.gameState, null, 2);
           console.log(jsonDump);
@@ -261,7 +260,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
 
       //DEBUG ONLY
       //inject: injects gameState provided in commandLine and resumes the game
-      if (debug) engine.registerCommandHandler("inject", function handleInject(commandLine) {
+      if ($gameConfig.debug) engine.registerCommandHandler("inject", function handleInject(commandLine) {
         if (commandLine.toLowerCase().startsWith("inject ")) {
           engine.gameState = JSON.parse(commandLine.substring(6));
           return "For debugging purposes only, this command injects the game state:\n" + JSON.stringify(engine.gameState, null, 2);
@@ -270,7 +269,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
 
       //DEBUG ONLY
       //goto: prints a list of rooms in the map
-      if (debug) engine.registerCommandHandler("lsrooms", function handleListRooms(commandLine) {
+      if ($gameConfig.debug) engine.registerCommandHandler("lsrooms", function handleListRooms(commandLine) {
         if (commandLine.toLowerCase() == "lsrooms") {
           var roomList = "";
           for (var r = 0; r < engine.gameState.map.length; r++) {
@@ -282,7 +281,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
 
       //DEBUG ONLY
       //goto: jumps to a particular room in the game
-      if (debug) engine.registerCommandHandler("goto", function handleGoto(commandLine) {
+      if ($gameConfig.debug) engine.registerCommandHandler("goto", function handleGoto(commandLine) {
         if (commandLine.toLowerCase().startsWith("goto ")) {
           var roomName = commandLine.substring(4).trim();
           return "For debugging purposes only, this command jumps to a particular room.\n" + engine.enterRoom(roomName);
@@ -363,25 +362,6 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
         }
       });
 
-      //print: causes the avatar to speak; in the case of the mainEntrance item type, it opens the main entrance
-      engine.registerCommandHandler("login", function handlePrint(commandLine) {
-        if (commandLine.startsWith("login") || commandLine.startsWith("logon")) {
-          var params = commandLine.split(' ');
-          var output = "LOGIN - logs a user in\n"
-                + "  Syntax: LOGIN userName password";
-          if (params.length == 3) {
-            var userName = params[1];
-            var password = params[2];
-            if (userName == 'test' && password == 'test')
-              output = "User logged in."
-          }
-          return {
-            command: (params.length>0?params[0]:'login') + (params.length>1?' '+params[1]:'') + (params.length>2?' (secret)':''),
-            output: output
-          };
-        }
-      });
-
       //trims the left and right of commandLine input, then dispatches
       //to each command handler until it gets output from the function
       //if no output, it calls invalidCommand().
@@ -397,7 +377,7 @@ angular.module('GameEngineModule', ['GameConfigurationModule'])
         if (ret == undefined) {
           ret = engine.invalidCommand(commandLine);
         }
-        engine.gameState.commandHistory += promptDisplay + (ret.command?ret.command:commandLine) + "\n" + (ret.output?ret.output:ret) + "\n";
+        engine.gameState.commandHistory += $gameConfig.promptDisplay + (ret.command?ret.command:commandLine) + "\n" + (ret.output?ret.output:ret) + "\n";
         return ret;
       };
 

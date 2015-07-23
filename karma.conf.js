@@ -6,16 +6,18 @@ module.exports = function(config){
     files : [
       'lib/jquery/dist/jquery.js',
       'lib/angular/angular.js',
+      'lib/angular-route/angular-route.js',
       'lib/angular-mocks/angular-mocks.js',
       'lib/angular-ui-ace/ui-ace.js',
 
-      'js/gameConfiguration.js',
+      'js/gameConfig.js',
       'js/mapBuilder.js',
       'js/mapService.js',
       'js/userService.js',
       'js/gameEngine.js',
-      'js/gameUIController.js',
-      'js/homeUIController.js',
+      'views/game/js/game.js',
+      'views/home/js/home.js',
+      'js/gameApp.js',
 
       'js/*.spec.js'
     ],

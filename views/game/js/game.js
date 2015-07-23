@@ -1,11 +1,14 @@
-//injects ui.ace and MapServiceModule modules
-angular.module('GameUIControllerModule', ['ui.ace', 'GameConfigurationModule', 'MapServiceModule', 'GameEngineModule'])
-  //this is the game UI controller, injects MapService, debug, appName, and GameEngine services
-  .controller('GameUIController', function($scope, debug, appName, promptDisplay, secretPromptChar, MapService, GameEngine) {
-    $scope.appName = appName; //GomeConfiguration->appName; used to configure application name
-    $scope.debug = debug; //GameConfiguration->debug; used to enable debug mode
-    $scope.initialMap = MapService.buildSampleMap(); //MapService->buildSampleMap(); builds sample map
-    $scope.gameEngine = GameEngine.startEngine($scope.initialMap); //GameEngine->startEngine(map); starts the game engine
+angular.module('gameApp.views.game', ['ngRoute', 'ui.ace', 'gameApp.gameConfig', 'gameApp.mapService', 'gameApp.gameEngine'])
+  .config(['$routeProvider', function($routeProvider) {
+    $routeProvider.when('/game', {
+      templateUrl: './views/game/game.html',
+      controller: 'GameController'
+    });
+  }])
+  .controller('GameController', function($scope, $rootScope, $gameConfig, $mapService, $gameEngine) {
+    $rootScope.$gameConfig = $gameConfig;
+    $scope.initialMap = $mapService.buildSampleMap(); //MapService->buildSampleMap(); builds sample map
+    $scope.gameEngine = $gameEngine.startEngine($scope.initialMap); //GameEngine->startEngine(map); starts the game engine
 
     //this is where the prompt input text is stored
     $scope.prompt = "";
@@ -46,7 +49,7 @@ angular.module('GameUIControllerModule', ['ui.ace', 'GameConfigurationModule', '
     //command, saving the command issued into the prompt history
     $scope.promptCommandCompletionHandler = function (e, hashId, keyCode) {
       //debugging:
-      console.log(e,hashId,keyCode,$scope.prompt);
+      //console.log(e,hashId,keyCode,$scope.prompt);
       //up key
       if (keyCode == 38) {
         if ($scope.gameEngine.gameState.promptHistory.length > 0) {

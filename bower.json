@@ -16,11 +16,11 @@
   "dependencies": {
     "ace-builds": "~1.2.0",
     "angular": "~1.4.3",
-    "angular-ui-ace": "bower",
     "angular-mocks": "~1.4.3",
+    "angular-route": "~1.4.3",
+    "angular-ui-ace": "bower",
     "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
-    "jasmine": "~2.3.4",
-    "angular-ui-router": "~0.2.15"
+    "jasmine": "~2.3.4"
   }
 }

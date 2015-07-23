@@ -1,23 +1,23 @@
-describe("GameEngineModule unit tests", function() {
-  beforeEach(module('GameConfigurationModule'));
-  beforeEach(module('MapServiceModule'));
-  beforeEach(module('GameEngineModule'));
+describe("gameApp.gameEngine unit tests", function() {
+  beforeEach(module('gameApp.gameConfig'));
+  beforeEach(module('gameApp.mapService'));
+  beforeEach(module('gameApp.gameEngine'));
 
-  var GameEngine, MapService;
-  beforeEach(inject(function (_GameEngine_, _MapService_) {
-    GameEngine = _GameEngine_;
-    MapService = _MapService_;
+  var $gameEngine, $mapService;
+  beforeEach(inject(function (_$gameEngine_, _$mapService_) {
+    $gameEngine = _$gameEngine_;
+    $mapService = _$mapService_;
   }));
 
   it("should have a startEngine()", function () {
-    expect(GameEngine.startEngine).not.toBe(undefined);
+    expect($gameEngine.startEngine).not.toBe(undefined);
   });
 
-  describe("GameEngine unit tests", function () {
+  describe("$gameEngine unit tests", function () {
     var engine, map;
     beforeEach(function () {
-      map = MapService.buildSampleMap();
-      engine = GameEngine.startEngine(map);
+      map = $mapService.buildSampleMap();
+      engine = $gameEngine.startEngine(map);
     });
 
     var findSpawn = function () {
@@ -96,7 +96,7 @@ describe("GameEngineModule unit tests", function() {
       expect(engine.gameState.avatar.location).toBe(spawn.name);
     });
 
-    describe("GameEngine command handler unit tests, registration, dispatch, and REPL", function () {
+    describe("$gameEngine command handler unit tests, registration, dispatch, and REPL", function () {
       beforeEach(function () {
         engine.registerCommandHandler("noOpTest", function noOpTest(commandLine) {
           return commandLine;
@@ -113,7 +113,7 @@ describe("GameEngineModule unit tests", function() {
       });
     });
 
-    describe("GameEngine command handler unit tests, known commands", function () {
+    describe("$gameEngine command handler unit tests, known commands", function () {
       //TODO: Write unit tests for each command handler
 
       //gets the output from the last command issued through REPL("commandLine")
@@ -129,11 +129,11 @@ describe("GameEngineModule unit tests", function() {
         return output.trim();
       }
 
-      it("help command should print help screen", inject(function (appName) {
+      it("help command should print help screen", inject(function ($gameConfig) {
         engine.REPL("help");
         var lines = lastCommandOutput().split("\n");
         var line1 = lines[0];
-        var expected = (appName + " Help").toUpperCase();
+        var expected = ($gameConfig.appName + " Help").toUpperCase();
         expect(line1).toBe(expected);
       }));
     });

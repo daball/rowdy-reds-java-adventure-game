@@ -1,0 +1,49 @@
+<!-- top navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-brand">
+        <ol class="breadcrumb">
+          <li>{{$gameConfig.appName}}</li>
+          <li>{{gameEngine.getRoom().heading}}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- center container -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="map col-md-6">
+      <img class="col-md-12" ng-src="./img/{{gameEngine.getRoom().image}}" alt="./img/{{gameEngine.getRoom().image}} - {{gameEngine.getRoom().description}}" />
+    </div>
+    <div class="col-md-6">
+      <div id="history" ng-model="gameEngine.gameState.commandHistory" ui-ace="{
+        useWrapMode: true,
+        showGutter: false,
+        theme: 'twilight',
+        mode: 'text',
+        onLoad: consoleLoaded,
+        onChange: consoleChanged
+      }"></div>
+      <div id="prompt" ng-model="prompt" ui-ace="{
+        useWrapMode: true,
+        showGutter: false,
+        theme: 'twilight',
+        mode: 'text',
+        onLoad: promptLoaded
+      }"></div>
+    </div>
+  </div>
+</div>
+
+<!-- bottom navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  <div class="container-fluid">
+    <p class="navbar-text navbar-left">
+      <span ng-show="$gameConfig.debug">DEBUG MODE ENABLED! </span>
+      <span ng-show="gameEngine.gameState.moves">You are currently playing the game and have made {{gameEngine.gameState.moves}} moves.</span>
+    </p>
+  </div>
+</nav>

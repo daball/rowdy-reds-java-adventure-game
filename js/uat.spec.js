@@ -1,15 +1,15 @@
 describe('User Acceptance Tests', function() {
-  beforeEach(module('UIControllerModule'));
+  beforeEach(module('gameApp'));
 
-  var UIController, $scope, gameEngine, gameState;
-  beforeEach(inject(function ($rootScope, $controller, $httpBackend) {
-    $scope = $rootScope.$new();
-    UIController = $controller('UIController', {
-      $scope: $scope
-    });
-    gameEngine = $scope.gameEngine;
-    gameState = gameEngine.gameState;
-  }));
+  // var UIController, $scope, gameEngine, gameState;
+  // beforeEach(inject(function ($rootScope, $controller, $httpBackend) {
+  //   $scope = $rootScope.$new();
+  //   UIController = $controller('UIController', {
+  //     $scope: $scope
+  //   });
+  //   gameEngine = $scope.gameEngine;
+  //   gameState = gameEngine.gameState;
+  // }));
 
   describe("User Navigation User Story", function () {
     describe("Given: Game running on any map, Player is in any room, A room exists in the northern direction", function () {
