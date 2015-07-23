@@ -1,5 +1,9 @@
 # summer-iii-2015-itec-471-group-2
 
+## Thursday, July 23, 2015
+
+Feel free to replace this with a more appropriate README.md. It uses Markdown for the language. It's a Github thing.
+
 ## Friday, May 29, 2015
 
 For the walkthrough of Git/SmartGit presented by David Ball, please use the Google+ Hangout for the screen cast:
