@@ -50,6 +50,11 @@
 				background-image: url('mainHall.jpg');
 			<?php
 				}
+				else if($screen == 3){
+			?>
+				background-image: url('castleRoom.jpg');
+			<?php
+				}
 				else if($screen == 20){
 			?>
 				background-image: url('exitScreen.jpg');
@@ -71,7 +76,8 @@
 							echo $returnAnswer;
 						}
 						else{
-						 echo "> ";
+						 echo "You are standing at a castle door.  A door lies to the north.
+> ";
 						}
 					?></textarea>
 
