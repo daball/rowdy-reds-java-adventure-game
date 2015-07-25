@@ -5,16 +5,16 @@
 	else{
 		$screen = $_POST['screen'];
 	}
-	
+
 	if(isset($_POST['ans'])){
 		$command = trim(substr($_POST['ans'], strrpos($_POST['ans'], '> ') + 1));
 		include 'rules.php';
 	}
-	
+
 	if(!isset($returnAnswer)){
 		$returnAnswer = "> ";
 	}
-	
+
 	$roomImages = Array
 	(
 			1 => "background.jpg",
@@ -27,8 +27,8 @@
 <html>
 	<head>
 		<title>Rowdy Red's Java Adventure</title>
-		<link href="style.css" rel='stylesheet' type='text/css' />
-		<script src="jquery-1.11.0.min.js"></script>
+		<link href="./css/style.css" rel="stylesheet" type="text/css" />
+		<script src="./vendor/components/jquery/jquery.min.js"></script>
 		<script>
 			$(function() {
 			  $("[autofocus]").on("focus", function() {
@@ -52,7 +52,7 @@
 			if(!isset($consoleHidden))
 			{
 				?>
-			
+
 			<div id="holder">
 				<form method="post" id="answerForm" name="answerForm">
 					<input style="display: none;" type="text" name="screen" value="<?php echo $screen; ?>" />
