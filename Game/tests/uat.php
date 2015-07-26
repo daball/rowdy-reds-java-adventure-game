@@ -47,80 +47,124 @@ class UserAcceptanceTests extends PHPUnit_Extensions_Selenium2TestCase
       $this->setBrowserUrl('http://localhost/Game');
   }
 
-  public function testTitle()
+  public function testNavigateNorth()
   {
+    //User Story: User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room exists in the northern direction
+    //Trigger:
+    //      Player navigates north by typing north (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Player enters adjacent room to the northern direction.
+    //      Game displays the description of the room entered.
   }
 
-}
+  public function testNavigateSouth()
+  {
+    //User Story: User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room exists in the southern direction
+    //Trigger:
+    //      Player navigates south by typing south (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Player enters adjacent room to the southern direction.
+    //      Game displays the description of the room entered.
+  }
 
-// IMPORTED: UAT skeleton from Karma tests in prototype-zork-js, will refactor for PHPUnit/Selenium
-// describe('User Acceptance Tests', function() {
-//   beforeEach(module('gameApp'));
-//
-//   // var UIController, $scope, gameEngine, gameState;
-//   // beforeEach(inject(function ($rootScope, $controller, $httpBackend) {
-//   //   $scope = $rootScope.$new();
-//   //   UIController = $controller('UIController', {
-//   //     $scope: $scope
-//   //   });
-//   //   gameEngine = $scope.gameEngine;
-//   //   gameState = gameEngine.gameState;
-//   // }));
-//
-//   describe("User Navigation User Story", function () {
-//     describe("Given: Game running on any map, Player is in any room, A room exists in the northern direction", function () {
-//       it("Player navigates north by typing north (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Player enters adjacent room to the northern direction. Game displays the description of the room entered.
-//       })
-//     });
-//     describe("Given: Game running on any map, Player is in any room, A room exists in the southern direction", function () {
-//       it("Player navigates south by typing south (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Player enters adjacent room to the northern direction. Game displays the description of the room entered.
-//       })
-//     });
-//     describe("Given: Game running on any map, Player is in any room, A room exists in the western direction", function () {
-//       it("Player navigates west by typing west (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Player enters adjacent room to the northern direction. Game displays the description of the room entered.
-//       })
-//     });
-//     describe("Given: Game running on any map, Player is in any room, A room exists in the eastern direction", function () {
-//       it("Player navigates east by typing east (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Player enters adjacent room to the northern direction. Game displays the description of the room entered.
-//       })
-//     });
-//   });
-//
-//   describe("Invalid User Navigation User Story", function () {
-//     describe("Given: Game running on any map, Player is in any room, A room does NOT exist in the northern direction", function () {
-//       it("Player navigates north by typing north (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Games will display a message or an error such as "You cannot go that way"
-//       })
-//     });
-//     describe("Given: Game running on any map, Player is in any room, A room does NOT exist in the southern direction", function () {
-//       it("Player navigates south by typing south (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Games will display a message or an error such as "You cannot go that way"
-//       })
-//     });
-//     describe("Given: Game running on any map, Player is in any room, A room does NOT exist in the western direction", function () {
-//       it("Player navigates west by typing west (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Games will display a message or an error such as "You cannot go that way"
-//       })
-//     });
-//     describe("Given: Game running on any map, Player is in any room, A room does NOT exist in the eastern direction", function () {
-//       it("Player navigates east by typing east (or a valid command alias) and pressing the [Enter] key", function () {
-//         //Verification/Then: Games will display a message or an error such as "You cannot go that way"
-//       })
-//     });
-//   });
-//
-//   describe("Help Verb User Story", function () {
-//     describe("Player is anywhere in the game.", function () {
-//       it("Player requests help by typing help and pressing the [Enter] key.", function () {
-//         //Verification/Then: Game displays help screen to player.
-//       });
-//     });
-//   });
-//
+  public function testNavigateWest()
+  {
+    //User Story: User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room exists in the western direction
+    //Trigger:
+    //      Player navigates west by typing west (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Player enters adjacent room to the western direction.
+    //      Game displays the description of the room entered.
+  }
+
+  public function testNavigateEast()
+  {
+    //User Story: User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room exists in the eastern direction
+    //Trigger:
+    //      Player navigates east by typing east (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Player enters adjacent room to the eastern direction.
+    //      Game displays the description of the room entered.
+  }
+
+  public function testInvalidNavigateNorth()
+  {
+    //User Story: Invalid User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room does NOT exist in the northern direction
+    //Trigger:
+    //      Player navigates north by typing north (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Game will display a message or an error such as "You cannot go that way"
+  }
+
+  public function testInvalidNavigateSouth()
+  {
+    //User Story: Invalid User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room does NOT exist in the southern direction
+    //Trigger:
+    //      Player navigates south by typing south (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Game will display a message or an error such as "You cannot go that way"
+  }
+
+  public function testInvalidNavigateWest()
+  {
+    //User Story: Invalid User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room does NOT exist in the western direction
+    //Trigger:
+    //      Player navigates west by typing west (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Game will display a message or an error such as "You cannot go that way"
+  }
+
+  public function testInvalidNavigateEast()
+  {
+    //User Story: Invalid User Navigation
+    //Given:
+    //      Game running on any map,
+    //      Player is in any room,
+    //      A room does NOT exist in the eastern direction
+    //Trigger:
+    //      Player navigates east by typing east (or a valid command alias)
+    //      and pressing the [Enter] key
+    //Verification/Then:
+    //      Game will display a message or an error such as "You cannot go that way"
+  }
+
+  public function testExit()
+  {
 //   describe("Exit Verb User Story", function () {
 //     describe("Player is anywhere in the game.", function () {
 //       it("Player exits game by typing exit and pressing the [Enter] key.", function () {
@@ -128,7 +172,10 @@ class UserAcceptanceTests extends PHPUnit_Extensions_Selenium2TestCase
 //       });
 //     });
 //   });
-//
+  }
+
+  public function testRestart()
+  {
 //   describe("Restart Verb User Story", function () {
 //     describe("Player is anywhere in the game (except for the initial state).", function () {
 //       it("Player resets the game by typing reset and pressing the [Enter] key.", function () {
@@ -136,8 +183,12 @@ class UserAcceptanceTests extends PHPUnit_Extensions_Selenium2TestCase
 //       });
 //     });
 //   });
-//
+  }
+
+  public function testUnknownCommand()
+  {
 //   describe("Unknown Command User Story", function () {
+
 //     describe("Player is anywhere in the game.", function () {
 //       it("Player types no command and presses the [Enter] key.", function () {
 //         //Verification/Then: Game ignores input, awaits further input from Player.
@@ -147,6 +198,6 @@ class UserAcceptanceTests extends PHPUnit_Extensions_Selenium2TestCase
 //       });
 //     });
 //   });
-
+  }
 
 ?>
