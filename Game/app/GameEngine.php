@@ -1,6 +1,7 @@
 <?php
 
 require_once 'GameState.php';
+require_once 'CommandProcessor.php';
 
 ///GameEngine manages the game state across many page loads
 ///using PHP sessions. Typically sessions work by sending out

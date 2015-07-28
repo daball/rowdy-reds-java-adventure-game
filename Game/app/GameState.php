@@ -61,16 +61,25 @@ class GameState
   {
     $prompt = ">";
     $eol = "\n";
-    $this->commandHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
+    $this->consoleHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
   }
 
-  public function __construct()
+  function __construct()
   {
+    $a = func_get_args();
+    $i = func_num_args();
+    if (method_exists($this,$f='__construct'.$i)) {
+      call_user_func_array(array($this,$f),$a);
+    }
+  }
+  public function __construct0()
+  {
+    $eol = "\n";
     $this->resetGameState();
-    $this->consoleHistory = "Game started.";
+    $this->consoleHistory = "Game started." . $eol . $this->inspectRoom();
   }
 
-  public function __construct($data)
+  public function __construct1($data)
   {
     $this->unserialize($data);
   }

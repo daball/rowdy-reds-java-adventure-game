@@ -3,7 +3,7 @@
 require_once 'CommandHandlerInterface.php';
 
 ///Handles reset command.
-class HelpCommandHandler extends CommandHandlerInterface
+class ResetCommandHandler extends CommandHandlerInterface
 {
   ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.

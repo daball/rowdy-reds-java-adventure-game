@@ -2,7 +2,11 @@
 
 require_once 'CommandHandlerInterface.php';
 
+//TO IMPLEMENTERS: install each of the command handlers
 require_once 'NavigateCommandHandler.php';
+require_once 'ResetCommandHandler.php';
+require_once 'HelpCommandHandler.php';
+require_once 'ExitCommandHandler.php';
 
 class CommandProcessor
 {
@@ -12,21 +16,26 @@ class CommandProcessor
 
   public function dispatchCommandLine($gameState, $commandLine)
   {
+    $this->commandInput = $commandLine;
     $commandLine = trim($commandLine);
     $commandOutput = "";
     if ($commandLine !== "")
     {
       foreach ($this->commandHandlers as $commandHandler)
       {
-        if ($commandHandler->validateCommand($commandLine))
+        if ($commandHandler->validateCommand($gameState, $commandLine))
         {
           $commandOutput = $commandHandler->executeCommand($gameState, $commandLine);
           break; //stop foreach
         }
       }
-      $commandOutput = "I do not understand.";
+      if ($commandOutput === "")
+      {
+        $commandOutput = "I do not understand.";
+      }
     }
-    return trim($commandOutput);
+    $this->commandOutput = trim($commandOutput);
+    return trim($this->commandOutput);
   }
 
   public function __construct($gameState)
@@ -35,12 +44,14 @@ class CommandProcessor
     $this->commandHandlers = array(
       (new NavigateCommandHandler()),
       (new HelpCommandHandler()),
+      (new ResetCommandHandler()),
+      (new ExitCommandHandler()),
     );
     if (isset($_POST['commandLine']))
     {
       $this->commandInput = $_POST['commandLine'];
-      $this->commandOutput = $this->dispatchCommandLine($gameState, $commandInput);
-      $this->gameState->addCommandToHistory($this->commandInput, $this->commandOutput);
+      $this->commandOutput = $this->dispatchCommandLine($gameState, $this->commandInput);
+      $gameState->addCommandToHistory($this->commandInput, $this->commandOutput);
     }
     else
     {

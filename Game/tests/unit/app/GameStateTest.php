@@ -12,7 +12,8 @@ class GameStateTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals($gameState->map->getSpawnPoint(), $gameState->avatarLocation);
     $this->assertEquals($gameState->map->getRoom($gameState->map->getSpawnPoint())->name, $gameState->avatarLocation);
-    $this->assertEquals("Game started.", $gameState->consoleHistory);
+    $this->assertContains("Game started.", $gameState->consoleHistory);
+    $this->assertContains($gameState->inspectRoom(), $gameState->consoleHistory);
 
     //test inspect room
     $this->assertEquals($gameState->inspectRoom(), $gameState->map->getRoom($gameState->avatarLocation)->description);

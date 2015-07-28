@@ -17,7 +17,7 @@ class SampleMap
         ->setRoomImageUrl('hall', 'mainHall.jpg')
       ->createRoom('kitchen')
         ->setRoomDescription('kitchen', 'You are in a kitchen. Someone has been cooking here lately and the smell of mutton still hangs heavy in the air. The hallway lies to the east.')
-        ->setRoomImageUrl('kitchen', 'castleRoom.jpg')
+        ->setRoomImageUrl('kitchen', 'CastleRoom.jpg')
       ->connectRooms('entrance', Direction::$n, 'hall')
       ->connectRooms('hall', Direction::$w, 'kitchen')
       ->setSpawnPoint('entrance')

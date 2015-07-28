@@ -39,7 +39,7 @@ body{
 	float: left;
 }
 
-#ans{
+#ans,#commandLine{
 	height: 35px;
 	width: 480px;
 	padding: 5px;

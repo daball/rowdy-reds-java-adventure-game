@@ -13,6 +13,6 @@ class CommandHandlerInterfaceTest extends PHPUnit_Framework_TestCase
     $commandHandler = new CommandHandlerInterface();
 
     $this->assertFalse($commandHandler->validateCommand(null, $commandLine));
-    $this->assertEquals("", $commandHandler->validateCommand(null, $commandLine));
+    $this->assertEquals("", $commandHandler->executeCommand(null, $commandLine));
   }
 }
