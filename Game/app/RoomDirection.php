@@ -6,4 +6,19 @@ class RoomDirection
 {
   public $description = "";
   public $jumpTo = "";
+
+  public function serialize() {
+    return serialize(
+      array(
+        'description' => $this->description,
+        'jumpTo' => $this->jumpTo
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->description = $data['description'];
+    $this->jumpTo = $data['jumpTo'];
+  }
 }

@@ -7,12 +7,14 @@ class GameState
   public $map;
   public $avatarLocation;
   public $consoleHistory;
+  public $moves;
 
   public function resetGameState()
   {
     $this->map = SampleMap::buildSampleMap();
     $this->avatarLocation = $this->map->getSpawnPoint();
     $this->consoleHistory = "Game restarted.";
+    $this->moves = 0;
   }
 
   public function getAvatarRoom()
@@ -57,5 +59,29 @@ class GameState
   {
     $this->resetGameState();
     $this->consoleHistory = "Game started.";
+  }
+
+  public function __construct($data)
+  {
+    $this->unserialize($data);
+  }
+
+  public function serialize() {
+    return serialize(
+      array(
+        'map' => $this->map,
+        'avatarLocation' => $this->avatarLocation,
+        'consoleHistory' => $this->consoleHistory,
+        'moves' => $this->moves
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->map = $data['map'];
+    $this->avatarLocation = $data['avatarLocation'];
+    $this->consoleHistory = $data['consoleHistory'];
+    $this->moves = $data['moves'];
   }
 }

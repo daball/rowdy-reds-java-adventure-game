@@ -35,4 +35,25 @@ class Room
       $this->directions[$d] = new RoomDirection();
     }
   }
+
+  public function serialize() {
+    return serialize(
+      array(
+        'name' => $this->name,
+        'description' => $this->description,
+        'imageUrl' => $this->imageUrl,
+        'spawn' => $this->spawn,
+        'directions' => $this->directions
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->name = $data['name'];
+    $this->description = $data['description'];
+    $this->imageUrl = $data['imageUrl'];
+    $this->spawn = $data['spawn'];
+    $this->directions = $data['directions'];
+  }
 }

@@ -31,4 +31,17 @@ class Map
         return $room->name;
     }
   }
+
+  public function serialize() {
+    return serialize(
+      array(
+        'rooms' => $this->rooms
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->rooms = $data['rooms'];
+  }
 }
