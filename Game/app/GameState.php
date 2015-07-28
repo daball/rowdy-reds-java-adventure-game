@@ -8,6 +8,7 @@ class GameState
   public $avatarLocation;
   public $consoleHistory;
   public $moves;
+  public $isExiting;
 
   public function resetGameState()
   {
@@ -15,6 +16,7 @@ class GameState
     $this->avatarLocation = $this->map->getSpawnPoint();
     $this->consoleHistory = "Game restarted.";
     $this->moves = 0;
+    $this->isExiting = false;
   }
 
   public function getAvatarRoom()
@@ -55,6 +57,13 @@ class GameState
     return $this->getAvatarRoom()->description;
   }
 
+  public function addCommandToHistory($commandInput, $commandOutput)
+  {
+    $prompt = ">";
+    $eol = "\n";
+    $this->commandHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
+  }
+
   public function __construct()
   {
     $this->resetGameState();
@@ -72,7 +81,8 @@ class GameState
         'map' => $this->map,
         'avatarLocation' => $this->avatarLocation,
         'consoleHistory' => $this->consoleHistory,
-        'moves' => $this->moves
+        'moves' => $this->moves,
+        'isExiting' => $this->isExiting,
       )
     );
   }
@@ -83,5 +93,6 @@ class GameState
     $this->avatarLocation = $data['avatarLocation'];
     $this->consoleHistory = $data['consoleHistory'];
     $this->moves = $data['moves'];
+    $this->isExiting = $data['isExiting'];
   }
 }

@@ -16,7 +16,7 @@ class SampleMap
         ->setRoomDescription('hall', 'You are in a lavishly decorated hallway. The kitchen lies to the west, and the door to the outside is to the south.')
         ->setRoomImageUrl('hall', 'mainHall.jpg')
       ->createRoom('kitchen')
-        ->setRoomDescription('kitchen', 'You are in a lavishly decorated hallway. The kitchen lies to the west, and the door to the outside is to the south.')
+        ->setRoomDescription('kitchen', 'You are in a kitchen. Someone has been cooking here lately and the smell of mutton still hangs heavy in the air. The hallway lies to the east.')
         ->setRoomImageUrl('kitchen', 'castleRoom.jpg')
       ->connectRooms('entrance', Direction::$n, 'hall')
       ->connectRooms('hall', Direction::$w, 'kitchen')

@@ -31,18 +31,18 @@ class GameEngine
 
   public function __construct()
   {
+    //startup session
     session_start();
+    //check if existing gameState exists in session
     if (isset($_SESSION['gameState']))
+      //if so, restore the gameState session
       $this->restoreSession();
     else
+      //otherwise, create a new gameState session
       $this->createSession();
+    //create command processor, which will execute any command on the $_POST['commandLine']
     $this->commandProcessor = new CommandProcessor($this->gameState);
-  }
-
-  public function __destruct()
-  {
+    //save session
     $this->saveSession();
   }
 }
-
-new GameEngine();

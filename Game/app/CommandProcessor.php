@@ -6,31 +6,46 @@ require_once 'NavigateCommandHandler.php';
 
 class CommandProcessor
 {
-  public $gameState;
   public $commandHandlers;
   public $commandInput;
   public $commandOutput;
 
   public function dispatchCommandLine($gameState, $commandLine)
   {
-    foreach ($this->commandHandlers as $commandHandler)
+    $commandLine = trim($commandLine);
+    $commandOutput = "";
+    if ($commandLine !== "")
     {
-      if ($commandHandler->validateCommand($commandLine))
+      foreach ($this->commandHandlers as $commandHandler)
       {
-        return $commandHandler->executeCommand($commandLine);
+        if ($commandHandler->validateCommand($commandLine))
+        {
+          $commandOutput = $commandHandler->executeCommand($gameState, $commandLine);
+          break; //stop foreach
+        }
       }
+      $commandOutput = "I do not understand.";
+    }
+    return trim($commandOutput);
+  }
+
+  public function __construct($gameState)
+  {
+    //TO IMPLEMENTERS: Please register all command handlers here.
+    $this->commandHandlers = array(
+      (new NavigateCommandHandler()),
+      (new HelpCommandHandler()),
+    );
+    if (isset($_POST['commandLine']))
+    {
+      $this->commandInput = $_POST['commandLine'];
+      $this->commandOutput = $this->dispatchCommandLine($gameState, $commandInput);
+      $this->gameState->addCommandToHistory($this->commandInput, $this->commandOutput);
+    }
+    else
+    {
+      $this->commandInput = "";
+      $this->commandOutput = "";
     }
   }
-
-  public function __construct($gameEngine)
-  {
-    $this->gameEngine = $gameEngine;
-    $this->commandHandlers = array(
-      (new NavigateCommandHandler())
-    );
-    $this->commandInput = $_POST['commandLine'];
-    $this->commandOutput = $this->dispatchCommandLine($commandInput);
-  }
 }
-
-new CommandProcessor(null);

@@ -26,6 +26,7 @@ class NavigateCommandHandler extends CommandHandlerInterface
   ///end of the output.
   public function executeCommand($gameState, $commandLine)
   {
+    $gameState->moves++;
     return $gameState->navigate($commandLine);
   }
 }

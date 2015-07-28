@@ -56,7 +56,7 @@
 			<div id="holder">
 				<form method="post" id="answerForm" name="answerForm">
 					<input style="display: none;" type="text" name="screen" value="<?php echo $screen; ?>" />
-					<textarea autofocus id="ans" name="ans" style="color: #eee; background-color: black; height: 535px;" onkeydown="if (event.keyCode == 13) {document.getElementById('button').click();} if (event.keyCode == 8 ) {var id = document.getElementById('ans').value; var check = id.substr(id.length - 2) + id.substr(id.length - 1); if(check == '>  '){ return false;} } if(event.keyCode == 46 || event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 ) { return false;} "><?php
+					<textarea autofocus id="ans" name="ans" style="color: #eee; background-color: black; height: 535px;" spellcheck="false" autocorrect="false" autocapitalize="false" onkeydown="if (event.keyCode == 13) {document.getElementById('button').click();} if (event.keyCode == 8 ) {var id = document.getElementById('ans').value; var check = id.substr(id.length - 2) + id.substr(id.length - 1); if(check == '>  '){ return false;} } if(event.keyCode == 46 || event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 ) { return false;} "><?php
 						if(isset($_POST['ans'])){
 							echo $returnAnswer;
 						}
