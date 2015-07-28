@@ -5,7 +5,7 @@ require_once 'CommandHandlerInterface.php';
 ///Handles reset command.
 class HelpCommandHandler extends CommandHandlerInterface
 {
-  ///Validates the incoming command line for help commands.
+  ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
   public function validateCommand($gameState, $commandLine)
