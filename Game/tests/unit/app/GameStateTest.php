@@ -29,6 +29,6 @@ class GameStateTest extends PHPUnit_Framework_TestCase
     $gameState->resetGameState();
     $this->assertEquals($gameState->map->getSpawnPoint(), $gameState->avatarLocation);
     $this->assertEquals($gameState->map->getRoom($gameState->map->getSpawnPoint())->name, $gameState->avatarLocation);
-    $this->assertEquals("Game restarted.", $gameState->consoleHistory);
+    $this->assertContains("Game restarted.", $gameState->consoleHistory);
   }
 }
