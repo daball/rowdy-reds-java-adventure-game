@@ -22,7 +22,25 @@ body{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=1 );
 }
 
+.container {
+	width: 1350px;
+	height: auto;
+	margin-top: 25px;
+}
+
+.light-left {
+	margin-left: 0px;
+	float: left;
+}
+
+.light-right {
+	margin-left: 230px;
+	float: left;
+}
+
 #screen{
+	background-size:100%;
+	background-repeat: no-repeat;
 	width: 700px;
 	height: 590px;
 	border-style: solid;
@@ -33,14 +51,16 @@ body{
 	margin-top: 10px;
 }
 
-#holder{
+#holder, .form-container {
 	width: 300px;
 	height: auto;
 	float: left;
 }
 
-#ans,#commandLine{
-	height: 35px;
+#ans, #commandHistory {
+	color: #eee;
+	background-color: black;
+	height: 535px;
 	width: 480px;
 	padding: 5px;
 	margin-top: 25px;
@@ -57,4 +77,8 @@ body{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+#button {
+	display: none;
 }

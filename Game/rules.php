@@ -57,12 +57,13 @@
   else if($command == ""){
     $returnAnswer = $_POST['ans'];
   }
-  else if(strtolower(strtolower($command)) == "restart" || strtolower(strtolower($command)) == "reset"){
+  else if(strtolower($command) == "restart" || strtolower($command) == "reset"){
     $screen = 1;
-    $returnAnswer =  "Game Restarted. You are standing at a castle door.  A door lies to the north." . lineBreak(1, 1);
+    $returnAnswer =  "Game restarted." . lineBreak(1, 0) . "You are standing at a castle door. A door lies to the north." . lineBreak(1, 1);
   }
-  else if(strtolower($command) == "help"){
-    $returnAnswer =  $_POST['ans'] . lineBreak(5, 0). "********* HELP MENU *********" . lineBreak(2, 0)
+  else if(strtolower($command) == "help" || $command == "?"){
+    $returnAnswer =  $_POST['ans'] . lineBreak(1, 0)
+    . "********* HELP MENU *********" . lineBreak(2, 0)
     . "Goal: Explore our tiny castle." . lineBreak(2, 0)
     . "HELP displays this help screen." . lineBreak(2, 0)
     . "Restart the game by typing:" . lineBreak(1, 0)
@@ -76,7 +77,8 @@
     . "Move west by typing:" . lineBreak(1, 0)
     . "west, w, moveWest();" . lineBreak(2, 0)
     . "Move east by typing:" . lineBreak(1, 0)
-    . "east, e, moveEast();" . lineBreak(2, 0) . "********** END HELP **********" .  lineBreak(1, 1);
+    . "east, e, moveEast();" . lineBreak(2, 0)
+    . "********** END HELP **********" .  lineBreak(1, 1);
   }
   else if(strtolower($command) == "exit" || $command == "System.exit(0);"){
     $screen = 20;

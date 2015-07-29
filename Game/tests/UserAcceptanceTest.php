@@ -3,8 +3,14 @@
 require_once '../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumTestCase.php';
 require_once __DIR__.'/../app/GameEngine.php';
 
+//UAT tests index.php
 class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
 {
+  public $commandHistoryLocator = "id=ans";
+  public $formLocator = "id=answerForm";
+  public $buttonLocator = "id=button";
+  public $url = "http://localhost/Game/index.php";
+
   // public static $browsers = array(
   //     array(
   //       'name'    => 'Firefox',
@@ -45,9 +51,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
 
   protected function getBrowserCommandLine()
   {
-    //$locator = "id=ans";
-    $locator = "id=commandLine";
-    $commandLine = trim($this->getValue($locator));
+    $commandLine = trim($this->getValue($this->commandHistoryLocator));
     //echo "getBrowserCommandLine()=>".$commandLine."\n";
     return $commandLine;
   }
@@ -63,22 +67,22 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
   protected function sendBrowserCommand($command)
   {
     $eol = "\n";
-    //$locator = "id=ans";
-    $locator = "id=commandLine";
-    $formLocator = "id=answerForm";
     $existingCommandLinesCount = sizeof($this->getBrowserCommandLines());
-    $this->type($locator, $command);
-    $this->keyPress($locator, 13);
-    $this->submit($formLocator);
-    $this->waitForPageToLoad();
-    if ($this->isElementPresent($locator))
+    $this->getEval('selenium.browserbot.findElement("'.$this->commandHistoryLocator.'").value+='.json_encode($command));
+    $this->clickAndWait($this->buttonLocator);
+    //$this->keyDown($this->commandHistoryLocator, 13);
+    //$this->keyUp($this->commandHistoryLocator, 13);
+    //$this->getBrowserCommandLine();
+    //$this->submit($this->formLocator);
+    //$this->waitForPageToLoad();
+    if ($this->isElementPresent($this->commandHistoryLocator))
     {
       $commandLines = $this->getBrowserCommandLines();
       $lastCommandOutputStart = $existingCommandLinesCount-1;
       $lastCommandOutputEnd = sizeof($commandLines)-2;
       if ($lastCommandOutputEnd < $lastCommandOutputStart
-        || stristr($command, 'reset')
-        || stristr($command, 'restart')) {
+        || trim(strtolower($command)) == 'reset'
+        || trim(strtolower($command)) == 'restart') {
         $lastCommandOutputStart = 0;
       }
       $commandOutput = '';
@@ -105,8 +109,8 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
     $commandLines = explode($eol, $consoleHistory);
     $lastCommandOutputEnd = sizeof($commandLines);
     if ($lastCommandOutputEnd < $lastCommandOutputStart
-      || stristr($command, 'reset')
-      || stristr($command, 'restart')) {
+      || trim(strtolower($command)) == 'reset'
+      || trim(strtolower($command)) == 'restart') {
       $lastCommandOutputStart = 0;
     }
     $commandOutput = '';
@@ -121,22 +125,25 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
   {
     $serverOutput = $this->sendServerCommand($gameEngine, $command);
     $browserOutput = $this->sendBrowserCommand($command);
-    if (!$gameEngine->gameState->isExiting)
+    if (!$gameEngine->gameState->isExiting && trim($command) != "") {
+      // if ($serverOutput != $browserOutput)
+      //   echo "serveroutput=$serverOutput\nbrowseroutput=$browserOutput\n";
       $this->assertEquals($serverOutput, $browserOutput);
+    }
   }
 
   protected function setUp()
   {
     $this->setBrowser("*firefox");
     $this->setBrowserUrl("http://localhost/Game/");
+    $this->shareSession(true);
   }
 
   public function testTitle()
   {
     $this->deleteAllVisibleCookies();
-    $this->open("http://localhost/Game/index.php");
+    $this->open($this->url);
     $this->assertEquals("Rowdy Red's Java Adventure", $this->getTitle());
-    $this->shareSession(true);
   }
 
   public function testNavigateNorth()
@@ -162,7 +169,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -199,7 +206,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -236,7 +243,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -273,7 +280,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -309,7 +316,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -345,7 +352,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -381,7 +388,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -417,7 +424,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -451,7 +458,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -483,7 +490,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -518,7 +525,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -550,7 +557,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {
@@ -591,7 +598,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
       $gameEngine = new GameEngine();
       //run client-side setup (test variable)
       $this->deleteAllVisibleCookies();
-      $this->open("http://localhost/Game/index.php");
+      $this->open($this->url);
       //run setup commands
       foreach ($setupCommands as $sCommand)
       {

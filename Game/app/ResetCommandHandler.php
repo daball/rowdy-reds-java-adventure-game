@@ -21,7 +21,6 @@ class ResetCommandHandler extends CommandHandlerInterface
   public function executeCommand($gameState, $commandLine)
   {
     $message = $gameState->resetGameState();
-    $gameState->commandHistory = "";
     return $message;
   }
 }

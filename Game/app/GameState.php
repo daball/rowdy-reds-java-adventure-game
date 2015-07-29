@@ -62,7 +62,14 @@ class GameState
   {
     $prompt = "> ";
     $eol = "\n";
-    $this->consoleHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
+    //in order to be functionally compatible with the prior app, we need to ignore empty inputs
+    //rather than let the console drop an empty line, like consoles do
+    if (trim($commandInput) != '' && $commandOutput != '') {
+      if (strtolower($commandInput) == "restart" || strtolower($commandInput) == "reset")
+        $this->consoleHistory .= $commandOutput;
+      else
+        $this->consoleHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
+    }
   }
 
   function __construct()
