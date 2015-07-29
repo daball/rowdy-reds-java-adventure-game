@@ -10,8 +10,7 @@ class ExitCommandHandler extends CommandHandlerInterface
   ///Return false if command line is not valid for this command handler.
   public function validateCommand($gameState, $commandLine)
   {
-    $commandLine = strtolower($commandLine);
-    return  $commandLine == 'exit' ||
+    return  strtolower($commandLine) == 'exit' ||
             $commandLine == 'System.exit(0);';
   }
 

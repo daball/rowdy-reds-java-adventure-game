@@ -12,7 +12,7 @@ The `GameEngine` class contains these instance methods:
 
 - `createSession()` : creates a new `$gameState` and `$_SESSION['gameState']` (do not call directly)
 - `restoreSession()` : restores `$_SESSION['gameState']` to `$gameState` (do not call directly)
-- `saveSession()` : saves $gameState to `$_SESSION['gameState']` (do not call directly)
+- `saveSession()` : saves $gameState to `$_SESSION['gameState']` (be sure to call before ending the request)
 
 The `GameEngine` class contains these constructors:
 

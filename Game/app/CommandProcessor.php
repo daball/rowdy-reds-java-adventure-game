@@ -14,7 +14,7 @@ class CommandProcessor
   public $commandInput;
   public $commandOutput;
 
-  public function dispatchCommandLine($gameState, $commandLine)
+  public function dispatchCommand($gameState, $commandLine)
   {
     $this->commandInput = $commandLine;
     $commandLine = trim($commandLine);
@@ -50,7 +50,7 @@ class CommandProcessor
     if (isset($_POST['commandLine']))
     {
       $this->commandInput = $_POST['commandLine'];
-      $this->commandOutput = $this->dispatchCommandLine($gameState, $this->commandInput);
+      $this->commandOutput = $this->dispatchCommand($gameState, $this->commandInput);
       $gameState->addCommandToHistory($this->commandInput, $this->commandOutput);
     }
     else

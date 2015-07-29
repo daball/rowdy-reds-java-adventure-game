@@ -12,9 +12,10 @@ class GameState
 
   public function resetGameState()
   {
+    $eol = "\n";
     $this->map = SampleMap::buildSampleMap();
     $this->avatarLocation = $this->map->getSpawnPoint();
-    $this->consoleHistory = "Game restarted.";
+    $this->consoleHistory = "Game restarted." . $eol . $this->inspectRoom();;
     $this->moves = 0;
     $this->isExiting = false;
   }
@@ -59,7 +60,7 @@ class GameState
 
   public function addCommandToHistory($commandInput, $commandOutput)
   {
-    $prompt = ">";
+    $prompt = "> ";
     $eol = "\n";
     $this->consoleHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
   }
