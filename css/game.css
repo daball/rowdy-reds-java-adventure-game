@@ -1,0 +1,28 @@
+@font-face {
+	font-family: BelweBold;
+	src: url(../font/BelweBold.woff);
+}
+
+body {
+  padding-top: 70px;
+  padding-bottom: 70px;
+
+  color: #fff;
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#adadad+0,0e0e0e+100 */
+  background: #adadad; /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover,  #adadad 0%, #0e0e0e 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#adadad), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover,  #adadad 0%,#0e0e0e 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover,  #adadad 0%,#0e0e0e 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover,  #adadad 0%,#0e0e0e 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center,  #adadad 0%,#0e0e0e 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#adadad', endColorstr='#0e0e0e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+img, h2, .navbar-brand { color: #fff !important; }
+
+.ace_editor#history { font-family: BelweBold; height: 400px; background: transparent; }
+.ace_editor#prompt { font-family: BelweBold; height: 50px; background: transparent; }
+
+.navbar .breadcrumb { background: transparent; margin: 0 0 0 0; padding: 0 0 0 0;}

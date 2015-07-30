@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app="gameApp">
+  <head>
+    <title>{{$gameConfig.appName}}</title>
+
+    <!-- libraries -->
+    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.css" />
+    <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="./lib/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="./lib/angular/angular.js"></script>
+    <script type="text/javascript" src="./lib/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="./lib/angular-ui-ace/ui-ace.js"></script>
+
+    <!-- game code -->
+    <link rel="stylesheet" type="text/css" href="./css/game.css" />
+    <script type="text/javascript" src="./js/gameConfig.js"></script>
+    <script type="text/javascript" src="./js/userService.js"></script>
+    <script type="text/javascript" src="./js/gameStateService.js"></script>
+    <script type="text/javascript" src="./views/home/js/home.js"></script>
+    <script type="text/javascript" src="./views/game/js/game.js"></script>
+    <script type="text/javascript" src="./js/gameApp.js"></script>
+  </head>
+  <body>
+    <div ng-view></div>
+  </body>
+</html>

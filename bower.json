@@ -1,0 +1,26 @@
+{
+  "name": "codecombat-zork-basic-game",
+  "version": "0.0.1",
+  "authors": [
+    "David A. Ball <daball@email.radford.edu>"
+  ],
+  "description": "",
+  "license": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ace-builds": "~1.2.0",
+    "angular": "~1.4.3",
+    "angular-mocks": "~1.4.3",
+    "angular-route": "~1.4.3",
+    "angular-ui-ace": "bower",
+    "bootstrap": "~3.3.5",
+    "jquery": "~2.1.4",
+    "jasmine": "~2.3.4"
+  }
+}
