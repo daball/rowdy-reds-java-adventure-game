@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>20</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>SampleMap
+--
+_+buildSampleMap(): Map_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>100</x>
+      <y>80</y>
+      <w>840</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>MapBuilder
+--
+-map: Map = new Map()
+--
++createRoom(roomName: string): MapBuilder = this
++setRoomDescription(roomName: string, roomDescription: string): MapBuilder = this
++setRoomImageUrl(roomName: string, roomImageUrl: string): MapBuilder = this
++setRoomDirectionDescription(roomName: string, roomDirection: string, roomDirectionDescription: string): MapBuilder = this
++connectRooms(roomName1: string, room1Direction: string, roomName2: string): MapBuilder = this
++setSpawnPoint(roomName: string): MapBuilder = this
++getMap(): Map</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>170</x>
+      <y>30</y>
+      <w>240</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0;220.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>340</y>
+      <w>270</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Map
+--
++rooms: Room[]
+--
++addRoom(room: Room): void
++getRoom(roomName: string): Room
++getSpawnPoint(): string
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>20</x>
+      <y>60</y>
+      <w>180</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+
+
+
+
+
+
+
+
+
+
+&lt; contructs
+     a particular</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;320.0;160.0;320.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>240</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+&lt; builds</panel_attributes>
+    <additional_attributes>280.0;10.0;280.0;80.0;10.0;80.0;10.0;100.0</additional_attributes>
+  </element>
+</diagram>

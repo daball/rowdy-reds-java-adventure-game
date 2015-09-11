@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>30</y>
+      <w>270</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Map
+--
++rooms: Room[]
+--
++addRoom(room: Room): void
++getRoom(roomName: string): Room
++getSpawnPoint(): string
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>30</y>
+      <w>400</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Room
+--
++name: string = ""
++description: string = ""
++imageUrl: string = ""
++spawn: bool = false
++directions: array[string=&gt;RoomDirections]
+--
++directions["n"]: RoomDirection = new RoomDirection()
++directions["s"]: RoomDirection = new RoomDirection()
++directions["e"]: RoomDirection = new RoomDirection()
++directions["w"]: RoomDirection = new RoomDirection()
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>80</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+&lt; composed of</panel_attributes>
+    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+  </element>
+</diagram>

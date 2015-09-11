@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.SequenceDiagram</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>2130</w>
+      <h>1280</h>
+    </coordinates>
+    <panel_attributes>title: index0.php Activity
+
+Player~player|Web Browser~browser|Apache+PHP~php|PHP Session~session|Game Engine~engine|Game State~state|Command Processor~cmdproc|Command Handler~cmdhandler
+
+iframe{:Initial Activity
+player-&gt;browser:Navigate index0.php
+browser-&gt;php:GET index0.php
+php-&gt;session:Initialize session
+iframe}
+
+iframe{:Initial GameEngine Activity
+php-&gt;engine:Create GameEngine
+engine-&gt;state:Create GameState
+state-&gt;state:Build sample map
+engine-&gt;cmdproc:Create CommandProcessor
+state-&gt;cmdproc:Pass GameState to CommandProcessor
+cmdproc-&gt;cmdproc:Initialize command handlers
+php-&gt;cmdproc:No post back
+engine-&gt;session:Save GameState to $_SESSION
+state-&gt;php:Render state
+iframe}
+
+iframe{:Player Activity (Continuous Until Game Over)
+php-&gt;browser:Return web page
+browser-&gt;player:Wait for next command
+player-&gt;browser:Type command followed by [Enter] key
+browser-&gt;php:POST index0.php with commandLine
+iframe}
+
+iframe{:GameEngine Activity (Continuous Until Game Over)
+php-&gt;engine:Create GameEngine
+session-&gt;state:Restore $gameState from $_SESSION
+state-&gt;state:Deserialize GameState
+engine-&gt;cmdproc:Create CommandProcessor
+state-&gt;cmdproc:Pass GameState to CommandProcessor
+cmdproc-&gt;cmdproc:Initialize command handlers
+php-&gt;cmdproc:$_POST['commandLine']
+cmdproc-&gt;cmdproc:dispatchCommand()
+cmdproc-&gt;cmdproc:loop each validateCommand() until true
+cmdproc-&gt;cmdhandler:validateCommand()
+cmdhandler-&gt;cmdproc:true
+cmdproc-&gt;cmdhandler:executeCommand()
+cmdhandler-&gt;state:query/update GameState
+engine-&gt;session:Save GameState to $_SESSION
+state-&gt;php:Render state
+iframe}</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

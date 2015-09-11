@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>0</y>
+      <w>500</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>CommandProcessor
+--
++commandHandlers: CommandHandlerInterface[] = [
+  new NavigateCommandHandler(),
+  new HelpCommandHandler(),
+  new ResetCommandHandler(),
+  new ExitCommandHandler()
+]
+--
+CommandProcessor(gameState: GameState)
+--
++dispatchCommand(gameState: GameState, commandLine: string): string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>650</x>
+      <y>200</y>
+      <w>540</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>GameState
+--
++map: Map = SampleMap::buildSampleMap()
++avatarLocation: string = this.map.getSpawnPoint()
++consoleHistory: string = "Game started.\n" + this.inspectRoom()
++moves: int = 0
++isExiting: bool = false
+--
++GameState(): GameState
++GameState($data): GameState
+--
++resetGameState(): void
++getAvatarRoom(): Room
++navigate(direction: string): string
++inspectRoom(): string
++addCommandToHistory(commandInput: string, commandOutput: string): void
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>90</y>
+      <w>420</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=)-
+m1=initialized with GameState
+</panel_attributes>
+    <additional_attributes>20.0;20.0;240.0;20.0;400.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>460</x>
+      <y>560</y>
+      <w>220</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+CommandHandlerInterface
+--
+NavigationCommandHandler
+HelpCommandHandler
+ResetCommandHandler
+ExitCommandHandler</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>490</y>
+      <w>510</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+CommandHandlerInterface
+--
++validateCommand(gameState: GameState, commandLine: string): bool
++executeCommand(gameState: GameState, commandLine: string): string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>90</x>
+      <y>190</y>
+      <w>400</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes>lt=-()
+instantiates, provides, and dispatches to each
+</panel_attributes>
+    <additional_attributes>380.0;490.0;10.0;490.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>220</x>
+      <y>390</y>
+      <w>200</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=.
+each command handler
+for validation (and
+when valid, for execution)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>190</y>
+      <w>280</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=.()
+m2=during dispatch
+
+
+passes instance of</panel_attributes>
+    <additional_attributes>260.0;140.0;10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>320</y>
+      <w>260</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=.
+m2=    into</panel_attributes>
+    <additional_attributes>240.0;10.0;90.0;110.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>230</x>
+      <y>510</y>
+      <w>240</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+until successfully dispatched</panel_attributes>
+    <additional_attributes>220.0;130.0;10.0;130.0;70.0;10.0</additional_attributes>
+  </element>
+</diagram>

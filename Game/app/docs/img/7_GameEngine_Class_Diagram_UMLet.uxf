@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>0</y>
+      <w>590</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>GameEngine
+--
++gameState: GameState = new GameState()
++commandProcessor: CommandProcessor = new CommandProcessor(this.gameState)
+--
++createSession(): void
++restoreSession(): void
++saveSession(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>610</x>
+      <y>300</y>
+      <w>500</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>CommandProcessor
+--
++commandHandlers: CommandHandlerInterface[] = [
+  new NavigateCommandHandler(),
+  new HelpCommandHandler(),
+  new ResetCommandHandler(),
+  new ExitCommandHandler()
+]
+--
+CommandProcessor(gameState: GameState)
+--
++dispatchCommand(gameState: GameState, commandLine: string): string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>300</y>
+      <w>540</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>GameState
+--
++map: Map = SampleMap::buildSampleMap()
++avatarLocation: string = this.map.getSpawnPoint()
++consoleHistory: string = "Game started.\n" + this.inspectRoom()
++moves: int = 0
++isExiting: bool = false
+--
++GameState(): GameState
++GameState($data): GameState
+--
++resetGameState(): void
++getAvatarRoom(): Room
++navigate(direction: string): string
++inspectRoom(): string
++addCommandToHistory(commandInput: string, commandOutput: string): void
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>110</y>
+      <w>290</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=contains, saves, and restores</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>470</x>
+      <y>110</y>
+      <w>500</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=     creates, passing GameState, which begins command execution chain _</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;190.0</additional_attributes>
+  </element>
+</diagram>

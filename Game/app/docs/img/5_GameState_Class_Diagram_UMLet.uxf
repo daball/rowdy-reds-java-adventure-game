@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>540</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>GameState
+--
++map: Map = SampleMap::buildSampleMap()
++avatarLocation: string = this.map.getSpawnPoint()
++consoleHistory: string = "Game started.\n" + this.inspectRoom()
++moves: int = 0
++isExiting: bool = false
+--
++GameState(): GameState
++GameState($data): GameState
+--
++resetGameState(): void
++getAvatarRoom(): Room
++navigate(direction: string): string
++inspectRoom(): string
++addCommandToHistory(commandInput: string, commandOutput: string): void
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>690</x>
+      <y>170</y>
+      <w>270</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Map
+--
++rooms: Room[]
+--
++addRoom(room: Room): void
++getRoom(roomName: string): Room
++getSpawnPoint(): string
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>20</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>SampleMap
+--
+_+buildSampleMap(): Map_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>40</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
+uses as default map</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>60</y>
+      <w>100</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+&lt; contructs
+ a particular</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>20</x>
+      <y>310</y>
+      <w>180</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*Serialization Note*
+--
+GameState &gt;&gt; Map &gt;&gt; Room &gt;&gt; RoomDirection are each serializable. This allows the entire GameState to be saved and restored.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>70</y>
+      <w>210</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+contains</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0;190.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>330</y>
+      <w>400</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Room
+--
++name: string = ""
++description: string = ""
++imageUrl: string = ""
++spawn: bool = false
++directions: array[string=&gt;RoomDirections]
+--
++directions["n"]: RoomDirection = new RoomDirection()
++directions["s"]: RoomDirection = new RoomDirection()
++directions["e"]: RoomDirection = new RoomDirection()
++directions["w"]: RoomDirection = new RoomDirection()
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>200</y>
+      <w>200</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+composed of</panel_attributes>
+    <additional_attributes>180.0;10.0;130.0;10.0;130.0;110.0;10.0;110.0;10.0;170.0;50.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>390</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>RoomDirection
+--
++description: string = ""
++jumpTo: string = ""
+--
++serialize(): string
++unserialize(data: string): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>430</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+contains</panel_attributes>
+    <additional_attributes>140.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+</diagram>
