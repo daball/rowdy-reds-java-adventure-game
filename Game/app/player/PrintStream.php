@@ -1,0 +1,22 @@
+<?php
+
+require_once 'OutputStream.php';
+
+class PrintStream
+{
+
+  /**
+   * @param OutputStream $outputStream
+   **/
+  public function __construct($outputStream)
+  {
+
+  }
+
+  /**
+   * @param Object $x
+   * @return void
+   **/
+  public static function println($x = "\n") {
+  }
+}

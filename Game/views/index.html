@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{title}}</title>
+		<link type="text/css" href="./css/style.css" rel="stylesheet" />
+		<script type="text/javascript" src="./vendor/components/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="./js/game.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<img class="light-left" src="./images/light.png" />
+			<div id="screen" style="background-image: url('images/{{imageUrl}}');"></div>
+			{% if not isExiting %}
+				<div class="form-container">
+					<form method="post" id="answerForm" name="answerForm">
+						<input type="hidden" id="commandLine" name="commandLine" value="" />
+						<textarea autofocus id="commandHistory" spellcheck="false" autocorrect="false" autocapitalize="false">{{consoleHistory}}{{eol}}{{prompt}}</textarea>
+						<input id="button" hidden type="submit" value="Enter Command" />
+					</form>
+				</div>
+			{% endif %}
+			<img class="light-right" src="./images/light.png" />
+		</div>
+	</body>
+</html>
