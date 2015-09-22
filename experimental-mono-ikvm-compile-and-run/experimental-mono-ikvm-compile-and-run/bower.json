@@ -1,0 +1,19 @@
+{
+  "name": "experimental-mono-ikvm-compile-and-run",
+  "version": "0.0.1",
+  "dependencies": {
+    "ace": "~1.2.0",
+    "angular": "~1.4.6",
+    "angular-bootstrap": "~0.13.4",
+    "angular-cookies": "~v1.2.15",
+    "angular-resource": "~v1.2.15",
+    "angular-route": "~v1.2.15",
+    "angular-ui-ace": "~0.2.3",
+    "angularAMD": "~0.2.1",
+    "bootstrap": "~3.3.5",
+    "jquery": "~1.11.0",
+    "requirejs": "~2.1.20",
+    "underscore": "~1.6.0"
+  },
+  "private": true
+}
