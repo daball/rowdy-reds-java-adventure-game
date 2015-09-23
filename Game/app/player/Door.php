@@ -16,7 +16,7 @@ class Door implements Openable
    * @return boolean
    */
   public function isOpen() {
-
+    return $this->isOpen;
   }
 
   /**
@@ -24,6 +24,7 @@ class Door implements Openable
    * @return String
    **/
   public function open() {
-
+    $this->isOpen = true;
+    return "The door swings open.";
   }
 }
