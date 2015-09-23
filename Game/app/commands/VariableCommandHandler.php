@@ -39,7 +39,7 @@ function EcscapeSequence($arg) {
     \ \ (backslash \, Unicode \u005c)
     OctalEscape (octal value, Unicode \u0000 to \u00ff)
  */
- $vp = new ValidateParse();
+ /*$vp = new ValidateParse();
  switch ($arg)
  {
    case '\b': case '\t': case '\n': case '\f': case '\r': case '\"': case: "\\'": case '\\':
@@ -50,7 +50,7 @@ function EcscapeSequence($arg) {
  if (!$vp->isValid)
  {
    return OctalEscape($arg);
- }
+ }*/
 }
 
 function OctalEscape($arg) {
@@ -61,10 +61,10 @@ function OctalEscape($arg) {
     \ ZeroToThree OctalDigit OctalDigit
   */
   $output = "";
-  switch(strlen($arg)) {
+  /*switch(strlen($arg)) {
     case 3:
 
-  }
+  }*/
 }
 
 function OctalDigit() {
