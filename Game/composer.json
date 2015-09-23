@@ -2,7 +2,9 @@
   "name": "radford.edu/game",
   "description": "Game description",
   "require": {
-    "components/jquery": "1.11"
+    "components/jquery": "1.11",
+    "php-di/phpdoc-reader": "^2.0",
+    "twig/twig": "^1.22"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.7",

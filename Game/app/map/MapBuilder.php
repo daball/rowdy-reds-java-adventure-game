@@ -77,4 +77,11 @@ class MapBuilder
   {
     return $this->map;
   }
+
+  public function addItemToRoom($roomName, $item)
+  {
+    $room = $this->map->getRoom($roomName);
+    array_push($room->items, $item);
+    return $this;
+  }
 }
