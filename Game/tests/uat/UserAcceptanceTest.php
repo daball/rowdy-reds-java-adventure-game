@@ -1,7 +1,7 @@
 <?php
 
-require_once '../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumTestCase.php';
-require_once __DIR__.'/../app/GameEngine.php';
+require_once __DIR__.'/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumTestCase.php';
+require_once __DIR__.'/../../app/GameEngine.php';
 
 //UAT tests index.php
 class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
