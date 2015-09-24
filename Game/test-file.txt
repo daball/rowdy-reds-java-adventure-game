@@ -5,3 +5,4 @@
 @test5 still debugging arguments
 @test6 may be onto the error with $GIT_DIR set, try to unset
 @test7 I'm pretty sure this script is production ready.
+@test8 Still fighting over permissions.
