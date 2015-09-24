@@ -13,4 +13,6 @@ composer:
 phpunit:
   stage: test
   script:
+    - docker run -v $(pwd):/app composer/composer --working-dir=Game update
+    - docker run -v $(pwd):/app composer/composer --working-dir=Game install
     - docker run -v $(pwd):/app phpunit/phpunit --colors --verbose --configuration Game/phpunit.xml --testsuite unit --coverage-html Game/test-results/unit
