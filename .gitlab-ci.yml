@@ -7,9 +7,10 @@ stages:
 composer:
   stage: build
   script:
-    - docker run composer/composer -d Game install
+    - docker run -v $(pwd):/app composer/composer --working-dir=Game update
+    - docker run -v $(pwd):/app composer/composer --working-dir=Game install
 
 phpunit:
   stage: test
   script:
-    - docker run phpunit/phpunit --colors --verbose --configuration Game/phpunit.xml --testsuite unit --coverage-html Game/test-results/unit
+    - docker run -v $(pwd):/app phpunit/phpunit --colors --verbose --configuration Game/phpunit.xml --testsuite unit --coverage-html Game/test-results/unit
