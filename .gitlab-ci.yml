@@ -1,0 +1,19 @@
+image: ruby:2.1
+
+services:
+  - composer
+  - phpunit
+  
+stages:
+  - build
+  - test
+
+composer:
+  stage: build
+  script:
+    - composer -d Game install
+
+phpunit:
+  stage: test
+  script:
+    - phpunit --colors --verbose --configuration Game/phpunit.xml --testsuite unit --coverage-html Game/test-results/unit
