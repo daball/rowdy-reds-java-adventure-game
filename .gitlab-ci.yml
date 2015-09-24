@@ -1,8 +1,4 @@
 image: ruby:2.1
-
-services:
-  - composer/composer
-  - phpunit/phpunit
   
 stages:
   - build
@@ -11,9 +7,9 @@ stages:
 composer:
   stage: build
   script:
-    - composer/composer -d Game install
+    - docker run composer/composer -d Game install
 
 phpunit:
   stage: test
   script:
-    - phpunit/phpunit --colors --verbose --configuration Game/phpunit.xml --testsuite unit --coverage-html Game/test-results/unit
+    - docker run phpunit/phpunit --colors --verbose --configuration Game/phpunit.xml --testsuite unit --coverage-html Game/test-results/unit
