@@ -1,3 +1,4 @@
 @test file to check for automatic push to development environment
 @test2 try again
 @test3 a third attempt
+@test4 to check the arguments passed into the hook script
