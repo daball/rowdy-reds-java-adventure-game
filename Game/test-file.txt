@@ -1,8 +1,0 @@
-@test file to check for automatic push to development environment
-@test2 try again
-@test3 a third attempt
-@test4 to check the arguments passed into the hook script
-@test5 still debugging arguments
-@test6 may be onto the error with $GIT_DIR set, try to unset
-@test7 I'm pretty sure this script is production ready.
-@test8 Still fighting over permissions.
