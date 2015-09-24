@@ -3,3 +3,4 @@
 @test3 a third attempt
 @test4 to check the arguments passed into the hook script
 @test5 still debugging arguments
+@test6 may be onto the error with $GIT_DIR set, try to unset
