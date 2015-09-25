@@ -20,12 +20,12 @@ class SampleMapTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('kitchen', $map->getRoom('kitchen')->name);
 
     //test forward direction
-    $this->assertEquals('hall', $map->getRoom('entrance')->directions['n']->nextRoom);
-    $this->assertEquals('kitchen', $map->getRoom('hall')->directions['w']->nextRoom);
+    $this->assertEquals('hall', $map->getRoom('entrance')->directions->getDirection('n')->nextRoom);
+    $this->assertEquals('kitchen', $map->getRoom('hall')->directions->getDirection('w')->nextRoom);
 
     //test reverse direction
-    $this->assertEquals('entrance', $map->getRoom('hall')->directions['s']->nextRoom);
-    $this->assertEquals('hall', $map->getRoom('kitchen')->directions['e']->nextRoom);
+    $this->assertEquals('entrance', $map->getRoom('hall')->directions->getDirection('s')->nextRoom);
+    $this->assertEquals('hall', $map->getRoom('kitchen')->directions->getDirection('e')->nextRoom);
 
     //test spawn point
     $this->assertEquals('entrance', $map->getSpawnPoint());
