@@ -1,19 +1,10 @@
 image: ruby:2.1
-  
+
 stages:
-  - build
   - test
 
 composer:
-  stage: build
-  script:
-#    - docker run -v $(pwd):/app composer/composer --working-dir=Game update
-#    - docker run -v $(pwd):/app composer/composer --working-dir=Game install
+  stage: test
     - composer --working-dir=Game update
     - composer --working-dir=Game install
-
-phpunit:
-  stage: test
-  script:
-#    - docker run -v $(pwd):/app phpunit/phpunit --colors --verbose --configuration=Game/phpunit.xml --testsuite=unit --coverage-html=xGame/test-results/unit
     - phpunit --colors --verbose --configuration=Game/phpunit.xml --testsuite=unit --coverage-html=Game/test-results/unit
