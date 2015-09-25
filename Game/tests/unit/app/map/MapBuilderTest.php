@@ -86,27 +86,27 @@ class MapBuilderTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($room3['imageUrl'], $map->getRoom($room3['name'])->imageUrl);
     $this->assertEquals($room4['imageUrl'], $map->getRoom($room4['name'])->imageUrl);
 
-    $this->assertEquals($room2['description'], $map->getRoom($room1['name'])->directions['n']->description);
-    $this->assertEquals($room3['description'], $map->getRoom($room1['name'])->directions['s']->description);
-    $this->assertEquals($room4['description'], $map->getRoom($room1['name'])->directions['e']->description);
-    $this->assertEquals($room5['description'], $map->getRoom($room1['name'])->directions['w']->description);
+    $this->assertEquals($room2['description'], $map->getRoom($room1['name'])->directions->getDirection('n')->description);
+    $this->assertEquals($room3['description'], $map->getRoom($room1['name'])->directions->getDirection('s')->description);
+    $this->assertEquals($room4['description'], $map->getRoom($room1['name'])->directions->getDirection('e')->description);
+    $this->assertEquals($room5['description'], $map->getRoom($room1['name'])->directions->getDirection('w')->description);
 
-    $this->assertEquals($room1['description'], $map->getRoom($room2['name'])->directions['s']->description);
-    $this->assertEquals($room1['description'], $map->getRoom($room3['name'])->directions['n']->description);
-    $this->assertEquals($room1['description'], $map->getRoom($room4['name'])->directions['w']->description);
-    $this->assertEquals($room1['description'], $map->getRoom($room5['name'])->directions['e']->description);
+    $this->assertEquals($room1['description'], $map->getRoom($room2['name'])->directions->getDirection('s')->description);
+    $this->assertEquals($room1['description'], $map->getRoom($room3['name'])->directions->getDirection('n')->description);
+    $this->assertEquals($room1['description'], $map->getRoom($room4['name'])->directions->getDirection('w')->description);
+    $this->assertEquals($room1['description'], $map->getRoom($room5['name'])->directions->getDirection('e')->description);
 
     //test forward direction
-    $this->assertEquals($room2['name'], $map->getRoom($room1['name'])->directions['n']->jumpTo);
-    $this->assertEquals($room3['name'], $map->getRoom($room1['name'])->directions['s']->jumpTo);
-    $this->assertEquals($room4['name'], $map->getRoom($room1['name'])->directions['e']->jumpTo);
-    $this->assertEquals($room5['name'], $map->getRoom($room1['name'])->directions['w']->jumpTo);
+    $this->assertEquals($room2['name'], $map->getRoom($room1['name'])->directions->getDirection('n')->nextRoom);
+    $this->assertEquals($room3['name'], $map->getRoom($room1['name'])->directions->getDirection('s')->nextRoom);
+    $this->assertEquals($room4['name'], $map->getRoom($room1['name'])->directions->getDirection('e')->nextRoom);
+    $this->assertEquals($room5['name'], $map->getRoom($room1['name'])->directions->getDirection('w')->nextRoom);
 
     //test reverse direction
-    $this->assertEquals($room1['name'], $map->getRoom($room2['name'])->directions['s']->jumpTo);
-    $this->assertEquals($room1['name'], $map->getRoom($room3['name'])->directions['n']->jumpTo);
-    $this->assertEquals($room1['name'], $map->getRoom($room4['name'])->directions['w']->jumpTo);
-    $this->assertEquals($room1['name'], $map->getRoom($room5['name'])->directions['e']->jumpTo);
+    $this->assertEquals($room1['name'], $map->getRoom($room2['name'])->directions->getDirection('s')->nextRoom);
+    $this->assertEquals($room1['name'], $map->getRoom($room3['name'])->directions->getDirection('n')->nextRoom);
+    $this->assertEquals($room1['name'], $map->getRoom($room4['name'])->directions->getDirection('w')->nextRoom);
+    $this->assertEquals($room1['name'], $map->getRoom($room5['name'])->directions->getDirection('e')->nextRoom);
 
     //test spawn location
     $this->assertTrue($map->getRoom($room1['name'])->spawn);
