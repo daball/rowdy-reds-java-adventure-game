@@ -1,16 +1,16 @@
 <?php
 
 require_once __DIR__.'/../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../app/CommandHandlerInterface.php';
+require_once __DIR__.'/../../../app/commands/BaseCommandHandler.php';
 
 ///Unit tests CommandHandlerInterface class
-class CommandHandlerInterfaceTest extends PHPUnit_Framework_TestCase
+class BaseCommandHandler extends PHPUnit_Framework_TestCase
 {
   public function testCommandHandlerInterface()
   {
     $commandLine = "any arbitrary input";
 
-    $commandHandler = new CommandHandlerInterface();
+    $commandHandler = new BaseCommandHandler();
 
     $this->assertFalse($commandHandler->validateCommand(null, $commandLine));
     $this->assertEquals("", $commandHandler->executeCommand(null, $commandLine));
