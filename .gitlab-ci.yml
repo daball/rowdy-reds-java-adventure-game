@@ -9,3 +9,5 @@ composer:
     - composer --working-dir=Game update
     - composer --working-dir=Game install
     - phpunit --colors --verbose --configuration=Game/phpunit.xml --testsuite=unit --coverage-html=Game/test-results/unit
+    - phpunit --colors --verbose --configuration=Game/phpunit.xml --testsuite=unit --testdox
+    - phpunit --colors --verbose --configuration=Game/phpunit.xml --testsuite=unit --tap
