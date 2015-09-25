@@ -4,8 +4,8 @@ namespace game;
 use \map\Map;
 use \playable\Player;
 
-require_once __DIR__.'/../playable/index.php';
 require_once 'SampleMap.php';
+require_once __DIR__.'/../playable/index.php';
 require_once __DIR__.'/../util/ISerializable.php';
 
 class GameState implements \util\ISerializable, \Serializable
