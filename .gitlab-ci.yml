@@ -5,6 +5,7 @@ stages:
 
 composer:
   stage: test
+  script:
     - composer --working-dir=Game update
     - composer --working-dir=Game install
     - phpunit --colors --verbose --configuration=Game/phpunit.xml --testsuite=unit --coverage-html=Game/test-results/unit
