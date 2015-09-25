@@ -10,7 +10,8 @@ class CommandProcessor
 
   public static function init()
   {
-    self::$commandHandlers = array();
+    if (!self::$commandHandlers)
+      self::$commandHandlers = array();
   }
 
   public static function addCommandHandler($commandHandler)
