@@ -1,8 +1,6 @@
 <?php
 
 namespace java;
-use \ReflectionClass;
-use \ReflectionMethod;
 
 require_once __DIR__.'/MyPhpDocReader.php';
 
@@ -99,7 +97,7 @@ class JavaReflection
   }
 
   public static function javadoc($argument) {
-    $class = new ReflectionClass($argument);
+    $class = new \ReflectionClass($argument);
     $docs = self::getDocReader()->getDocText($class);
     $classType = $class->isInterface()?"interface":"class";
     $classType = ($class->isFinal()?"final $classType":$classType);
