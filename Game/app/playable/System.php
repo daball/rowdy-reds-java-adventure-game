@@ -2,8 +2,12 @@
 
 namespace playable;
 
+use \commands\ExitCommandHandler;
+
 require_once 'OutputStream.php';
 require_once 'PrintStream.php';
+require_once __DIR__.'/../game/CommandProcessor.php';
+require_once __DIR__.'/../commands/ExitCommandHandler.php';
 
 class System
 {
