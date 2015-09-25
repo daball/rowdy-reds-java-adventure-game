@@ -9,7 +9,7 @@ require_once __DIR__.'/../../../../app/map/Room.php';
 require_once __DIR__.'/../../../../app/map/Map.php';
 
 ///Unit tests Map class
-class MapTest extends PHPUnit_Framework_TestCase
+class MapTest extends \PHPUnit_Framework_TestCase
 {
   public function testMap()
   {

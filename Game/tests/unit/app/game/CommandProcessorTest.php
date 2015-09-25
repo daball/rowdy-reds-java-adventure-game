@@ -10,7 +10,7 @@ require_once __DIR__.'/../../../../app/commands/index.php';
 require_once __DIR__.'/../../../../app/game/GameState.php';
 
 ///Unit tests CommandProcessor class
-class CommandProcessorTest extends PHPUnit_Framework_TestCase
+class CommandProcessorTest extends \PHPUnit_Framework_TestCase
 {
   public function testCommandProcessor()
   {

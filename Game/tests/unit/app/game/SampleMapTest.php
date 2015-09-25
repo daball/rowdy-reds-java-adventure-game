@@ -7,7 +7,7 @@ require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase
 require_once __DIR__.'/../../../../app/game/SampleMap.php';
 
 ///Unit tests SampleMap class
-class SampleMapTest extends PHPUnit_Framework_TestCase
+class SampleMapTest extends \PHPUnit_Framework_TestCase
 {
   public function testSampleMap()
   {

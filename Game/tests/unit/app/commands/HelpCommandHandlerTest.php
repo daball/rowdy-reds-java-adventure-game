@@ -7,7 +7,7 @@ require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase
 require_once __DIR__.'/../../../../app/commands/HelpCommandHandler.php';
 
 ///Unit tests HelpCommandHandler class
-class HelpCommandHandlerTest extends PHPUnit_Framework_TestCase
+class HelpCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
   public function testHelpCommand()
   {

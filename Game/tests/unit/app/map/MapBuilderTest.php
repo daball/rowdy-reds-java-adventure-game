@@ -7,7 +7,7 @@ require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase
 require_once __DIR__.'/../../../../app/map/MapBuilder.php';
 
 ///Unit tests MapBuilder class
-class MapBuilderTest extends PHPUnit_Framework_TestCase
+class MapBuilderTest extends \PHPUnit_Framework_TestCase
 {
   public function testMapBuilder()
   {

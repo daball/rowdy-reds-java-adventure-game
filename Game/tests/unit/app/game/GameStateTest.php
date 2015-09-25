@@ -7,7 +7,7 @@ require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase
 require_once __DIR__.'/../../../../app/game/GameState.php';
 
 ///Unit tests GameState class
-class GameStateTest extends PHPUnit_Framework_TestCase
+class GameStateTest extends \PHPUnit_Framework_TestCase
 {
   public function testGameState()
   {
