@@ -1,9 +1,10 @@
 <?php
 
-require_once 'Room.php';
+require_once __DIR__.'/../playable/Room.php';
+require_once __DIR__.'/../util/ISerializable.php';
 
 ///Defines a Map which contains multiple Rooms
-class Map
+class Map implements ISerializable
 {
   //Do yourself a favor and don't manipulate this manually.
   //It is manipulated by the app framework, but you shouldn't change it

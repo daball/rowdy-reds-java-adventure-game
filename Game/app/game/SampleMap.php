@@ -20,6 +20,7 @@ class SampleMap
         ->setRoomImageUrl('kitchen', 'CastleRoom.jpg')
       ->connectRooms('entrance', Direction::$n, 'hall')
       ->connectRooms('hall', Direction::$w, 'kitchen')
+      ->insertDoorObstacle('hall', Direction::$w, 'door')
       ->setSpawnPoint('entrance')
       ->getMap();
   }

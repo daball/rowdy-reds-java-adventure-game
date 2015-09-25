@@ -46,7 +46,7 @@ class NavigateCommandHandler extends BaseCommandHandler
         break;
     }
     $gameState->moves++;
-    return $gameState->navigate($commandLine);
+    return $gameState->getPlayer()->navigate($commandLine);
   }
 }
 

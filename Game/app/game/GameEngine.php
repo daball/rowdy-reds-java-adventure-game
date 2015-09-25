@@ -4,9 +4,6 @@ require_once 'GameState.php';
 require_once 'CommandProcessor.php';
 require_once __DIR__.'/../commands/index.php';
 
-//TODO:remove:
-require_once __DIR__.'/../player/Door.php';
-
 ///GameEngine manages the game state across many page loads
 ///using PHP sessions. Typically sessions work by sending out
 ///a session cookie, which restores the session from the PHP

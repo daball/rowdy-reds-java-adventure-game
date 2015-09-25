@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Assignable.php';
+require_once 'IAssignable.php';
 
 /**
  * Player represents the player's avatar throughout the game.
@@ -15,19 +15,19 @@ class Player
 
   /**
    * Player's left hand.
-   * @var Assignable
+   * @var IAssignable
    **/
   public $leftHand = null;
 
   /**
    * Player's right hand.
-   * @var Assignable
+   * @var IAssignable
    **/
   public $rightHand = null;
 
   /**
    * Player's location in the game.
-   * @var Assignable
+   * @var IAssignable
    * @ignore
    **/
   public $location = null;
@@ -68,6 +68,31 @@ class Player
     return self::$gameState->navigate(Direction::$west);
   }
 
+  private function validateCollision($direction) {
+    if ($direction->obstacleItem == null)
+      return false;
+    else
+    {
+      $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
+      if (is_a($item, "ICollidable"))
+        return $item->isInTheWay();
+      else
+        return false;
+    }
+  }
+
+  private function explainCollision($d, $direction) {
+    $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
+    $d = ($d == Direction::$n ? 'north' : '') .
+         ($d == Direction::$s ? 'south' : '') .
+         ($d == Direction::$e ? 'east' : '') .
+         ($d == Direction::$w ? 'west' : '') . '';
+    if (is_a($item, "Door"))
+      return "There is a door blocking you from going $d.";
+    else
+      return "There is an ICollidable object in the way, but I don't know what it is. Ask your friendly developer to update Player->explainCollision() so that you can play the game. In fact, this is a good time for a bug report.";
+  }
+
   /**
     * Navigates West.
     * @return String
@@ -75,19 +100,26 @@ class Player
   public function navigate($direction)
   {
     //sanitize direction
-    $direction = Direction::getDirection($direction);
+    $direction = Direction::cardinalDirection($direction);
     //get adjacent room
-    $nextRoom = self::$gameState->getPlayerRoom()->directions[$direction]->jumpTo;
+    $directionInfo = self::$gameState->getPlayerRoom()->directions->getDirection($direction);
+    $nextRoom = $directionInfo->nextRoom;
     //make sure this is valid
     if ($nextRoom !== '') {
-      //put the avatar in the next room
-      $this->location = self::$gameState->map->getRoom($nextRoom)->name;
-      //return next room description
-      return $this->inspectRoom();
+      if ($this->validateCollision($directionInfo))
+      {
+        return $this->explainCollision($direction, $directionInfo);
+      }
+      else {
+        //put the avatar in the next room
+        $this->location = self::$gameState->map->getRoom($nextRoom)->name;
+        //return next room description
+        return self::$gameState->getPlayerRoom()->inspect();
+      }
     }
     else {
       //room didn't exist, check if direction has a description
-      $nextDirection = $this->getPlayerRoom()->directions[$direction]->description;
+      $nextDirection = self::$gameState->getPlayerRoom()->directions->getDirection($direction)->description;
       if ($nextDirection !== '')
         //return description of the direction
         return $nextDirection;

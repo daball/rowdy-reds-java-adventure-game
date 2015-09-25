@@ -1,10 +1,11 @@
 <?php
 
 require_once 'SampleMap.php';
-require_once __DIR__.'/../player/Player.php';
-require_once __DIR__.'/../player/System.php';
+require_once __DIR__.'/../util/ISerializable.php';
+require_once __DIR__.'/../playable/Player.php';
+require_once __DIR__.'/../playable/System.php';
 
-class GameState
+class GameState implements ISerializable, Serializable
 {
   public $map;
   public $consoleHistory;
@@ -39,47 +40,14 @@ class GameState
     $player->location = $this->map->getSpawnPoint();
     $this->globals = array('player' => $player);
     $this->locals = array();
-    $this->consoleHistory = "Game restarted." . $eol . $this->inspectRoom();;
+    $this->consoleHistory = "Game restarted." . $eol . $this->getPlayerRoom()->inspect();
     $this->moves = 0;
     $this->isExiting = false;
   }
 
-  public function getAvatarRoom()
+  public function getPlayerRoom()
   {
     return $this->map->getRoom($this->getPlayer()->location);
-  }
-
-  public function navigate($direction)
-  {
-    //sanitize direction
-    $direction = Direction::getDirection($direction);
-    //get adjacent room
-    $nextRoom = $this->getAvatarRoom()->directions[$direction]->jumpTo;
-    //make sure this is valid
-    if ($nextRoom !== '') {
-      //put the avatar in the next room
-      $this->globals['player']->location = $this->map->getRoom($nextRoom)->name;
-      //return next room description
-      return $this->inspectRoom();
-    }
-    else {
-      //room didn't exist, check if direction has a description
-      $nextDirection = $this->getAvatarRoom()->directions[$direction]->description;
-      if ($nextDirection !== '')
-        //return description of the direction
-        return $nextDirection;
-      //direction did not have a description, return generic error
-      return "You cannot go " .
-        ($direction == Direction::$n ? 'north' : '') .
-        ($direction == Direction::$s ? 'south' : '') .
-        ($direction == Direction::$e ? 'east' : '') .
-        ($direction == Direction::$w ? 'west' : '') . '.';
-    }
-  }
-
-  public function inspectRoom()
-  {
-    return $this->getAvatarRoom()->description;
   }
 
   public function getPlayer()
@@ -117,12 +85,14 @@ class GameState
   {
     $eol = "\n";
     $this->resetGameState();
-    $this->consoleHistory = "Game started." . $eol . $this->inspectRoom();
+    $this->consoleHistory = "Game started." . $eol . $this->getPlayerRoom()->inspect();
   }
   public function __construct1($data)
   {
     $this->unserialize($data);
   }
+
+  /* ISerializable interface implementation */
 
   public function serialize() {
     return serialize(
@@ -139,6 +109,9 @@ class GameState
   }
 
   public function unserialize($data) {
+    //call static constructors, passing in the GameState
+    Player::init($this);
+    System::init($this);
     $data = unserialize($data);
     $this->map = $data['map'];
     $this->consoleHistory = $data['consoleHistory'];

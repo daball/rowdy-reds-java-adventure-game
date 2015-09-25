@@ -9,18 +9,18 @@ class RoomDirectionTest extends PHPUnit_Framework_TestCase
   public function testRoomDirection()
   {
     //define values
-    $jumpTo = "roomName";
+    $nextRoom = "roomName";
     $description = "There is a room in this direction called roomName.";
 
     //create room direction
     $roomDirection = new RoomDirection();
 
     //set room direction properties
-    $roomDirection->jumpTo = $jumpTo;
+    $roomDirection->nextRoom = $nextRoom;
     $roomDirection->description = $description;
 
     //test room direction properties
-    $this->assertEquals($jumpTo, $roomDirection->jumpTo);
+    $this->assertEquals($nextRoom, $roomDirection->nextRoom);
     $this->assertEquals($description, $roomDirection->description);
   }
 }

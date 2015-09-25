@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Represents an Openable game item.
+ * Represents an IOpenable game item.
  */
-interface Openable
+interface IOpenable
 {
   /**
    * @return boolean
    */
-  public function isOpen();
+  public function isOpened();
 
   /**
    * Opens an Openable item.

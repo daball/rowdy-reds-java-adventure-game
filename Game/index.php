@@ -15,7 +15,7 @@ $prompt = "> ";
 $gameState = $gameEngine->gameState;
 $map = $gameState->map;
 
-$avatarRoom = $gameState->getAvatarRoom();
+$avatarRoom = $gameState->getPlayerRoom();
 $moves = $gameState->moves;
 $isExiting = $gameState->isExiting;
 
