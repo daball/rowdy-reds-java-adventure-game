@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__.'/../../vendor/autoload.php';
+namespace java;
+use \PhpDocReader\PhpDocReader;
 
-use PhpDocReader\PhpDocReader;
+require_once __DIR__.'/../../vendor/autoload.php';
 
 /**
  * MyPhpDocReader is an extremely simplified version of php-di/php-docreader.

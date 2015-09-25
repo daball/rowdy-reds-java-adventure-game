@@ -1,5 +1,7 @@
 <?php
 
+namespace java;
+
 require_once __DIR__.'/MyPhpDocReader.php';
 
 class JavaReflection

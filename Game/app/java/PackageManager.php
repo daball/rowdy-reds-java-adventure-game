@@ -1,5 +1,7 @@
 <?php
 
+use \java\JavaReflection;
+
 require_once 'JavaReflection.php';
 require_once __DIR__.'/../player/Assignable.php';
 require_once __DIR__.'/../player/System.php';
