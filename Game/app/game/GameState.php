@@ -1,9 +1,8 @@
 <?php
 
+require_once __DIR__.'/../playable/index.php';
 require_once 'SampleMap.php';
 require_once __DIR__.'/../util/ISerializable.php';
-require_once __DIR__.'/../playable/Player.php';
-require_once __DIR__.'/../playable/System.php';
 
 class GameState implements ISerializable, Serializable
 {
