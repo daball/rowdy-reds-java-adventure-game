@@ -1,5 +1,8 @@
 <?php
 
+namespace commands\tests;
+use \commands\BaseCommandHandler;
+
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/commands/BaseCommandHandler.php';
 

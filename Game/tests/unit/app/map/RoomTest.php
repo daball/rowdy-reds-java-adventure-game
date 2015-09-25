@@ -1,5 +1,8 @@
 <?php
 
+namespace map;
+use \map\Room;
+
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/map/Room.php';
 

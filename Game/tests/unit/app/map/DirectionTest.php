@@ -1,11 +1,31 @@
 <?php
 
+namespace map\tests;
+use \map\Direction;
+
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/map/Direction.php';
 
 ///Unit tests Direction class
 class DirectionTest extends PHPUnit_Framework_TestCase
 {
+  public function testRoomDirection()
+  {
+    //define values
+    $nextRoom = "roomName";
+    $description = "There is a room in this direction called roomName.";
+
+    //create room direction
+    $roomDirection = new Direction();
+
+    //set room direction properties
+    $roomDirection->nextRoom = $nextRoom;
+    $roomDirection->description = $description;
+
+    //test room direction properties
+    $this->assertEquals($nextRoom, $roomDirection->nextRoom);
+    $this->assertEquals($description, $roomDirection->description);
+  }
   public function testNorth()
   {
     $this->assertEquals("n", Direction::$n);
