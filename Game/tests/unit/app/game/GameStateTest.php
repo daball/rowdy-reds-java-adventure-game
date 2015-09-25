@@ -20,8 +20,8 @@ class GameStateTest extends \PHPUnit_Framework_TestCase
 
     //test inspect room
     $this->assertEquals($gameState->getPlayerRoom()->inspect(), $gameState->map->getRoom($gameState->getPlayer()->location)->description);
-    $this->assertEquals($gameState->getPlayer()->location, $gameState->getAvatarRoom()->name);
-    $this->assertEquals($gameState->getPlayerRoom()->inspect(), $gameState->getAvatarRoom()->description);
+    $this->assertEquals($gameState->getPlayer()->location, $gameState->getPlayerRoom()->name);
+    $this->assertEquals($gameState->getPlayerRoom()->inspect(), $gameState->getPlayerRoom()->description);
 
     //move the character's location, one room to the north
     $initialRoom = $gameState->getPlayer()->location;
