@@ -24,7 +24,7 @@ class ExitCommandHandler extends BaseCommandHandler
   {
     $gameState->resetGameState();
     $eol = "\n";
-    $this->consoleHistory = "Game started." . $eol . $gameState->inspectRoom();
+    $this->consoleHistory = "Game started." . $eol . $gameState->getPlayerRoom()->inspect();
     $gameState->isExiting = true;
   }
 }
