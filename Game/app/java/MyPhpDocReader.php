@@ -56,7 +56,7 @@ class MyPhpDocReader extends PhpDocReader {
     *
     * @return string|null Type of the property (content of var annotation)
     */
-   public function getPropertyClass(ReflectionProperty $property) {
+   public function getPropertyClass(\ReflectionProperty $property) {
      // Get the content of the @var annotation
      if (preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches)) {
        list(, $type) = $matches;
@@ -74,7 +74,7 @@ class MyPhpDocReader extends PhpDocReader {
     *
     * @return string|null Type of the property (content of var annotation)
     */
-   public function getParameterClass(ReflectionParameter $parameter) {
+   public function getParameterClass(\ReflectionParameter $parameter) {
      // Use reflection
      $parameterClass = $parameter->getClass();
      if ($parameterClass !== null) {
@@ -99,7 +99,7 @@ class MyPhpDocReader extends PhpDocReader {
     *
     * @return string|null Type of the property (content of var annotation)
     */
-   public function getMethodReturnClass(ReflectionMethod $method) {
+   public function getMethodReturnClass(\ReflectionMethod $method) {
      // Get the content of the @param annotation
      if (preg_match('/@return\s+([^\s]+)/', $method->getDocComment(), $matches)) {
          list(, $type) = $matches;
