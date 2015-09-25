@@ -1,8 +1,8 @@
 <?php
 
 require_once __DIR__.'/../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../app/CommandProcessor.php';
-require_once __DIR__.'/../../../app/GameState.php';
+require_once __DIR__.'/../../../app/commands/CommandProcessor.php';
+require_once __DIR__.'/../../../app/game/GameState.php';
 
 ///Unit tests CommandProcessor class
 class CommandProcessorTest extends PHPUnit_Framework_TestCase
