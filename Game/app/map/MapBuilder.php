@@ -48,7 +48,7 @@ class MapBuilder
   public function setRoomDirectionDescription($roomName, $roomDirection, $roomDirectionDescription)
   {
     $room = $this->map->getRoom($roomName);
-    $roomDirection = $room->directions[Direction::getDirection($roomDirection)];
+    $roomDirection = $room->directions[Direction::cardinalDirection($roomDirection)];
     $roomDirection->description = $roomDirectionDescription;
     return $this;
   }
