@@ -1,10 +1,10 @@
 <?php
 
 namespace map;
-use \map\Room;
+use \playable\Room;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../../app/map/Room.php';
+require_once __DIR__.'/../../../../app/playable/Room.php';
 
 ///Unit tests Room class
 class RoomTest extends \PHPUnit_Framework_TestCase
