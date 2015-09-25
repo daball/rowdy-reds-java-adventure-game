@@ -1,5 +1,7 @@
 <?php
 
+namespace playable;
+
 /**
  * Represents an IUnlockable game item.
  */

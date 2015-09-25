@@ -1,5 +1,7 @@
 <?php
 
+namespace playable;
+
 require_once "Door.php";
 require_once "ILockable.php";
 require_once "IUnlockable.php";
@@ -80,7 +82,7 @@ class LockedDoor extends Door implements ILockable, IUnlockable
    **/
   public function unlock($key)
   {
-    if (is_a($key, "Key")) {
+    if (is_a($key, "\playable\Key")) {
       if ($this->key->getKeyID() == $key->getKeyID()) {
         return "You have unlocked the door. The door swings open.";
       }

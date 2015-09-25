@@ -1,6 +1,11 @@
 <?php
 
+namespace playable;
+
+use \map\Direction;
+
 require_once 'IAssignable.php';
+require_once __DIR__.'/../map/Direction.php';
 
 /**
  * Player represents the player's avatar throughout the game.
@@ -74,7 +79,7 @@ class Player
     else
     {
       $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
-      if (is_a($item, "ICollidable"))
+      if (is_a($item, "\playable\ICollidable"))
         return $item->isInTheWay();
       else
         return false;
@@ -87,7 +92,7 @@ class Player
          ($d == Direction::$s ? 'south' : '') .
          ($d == Direction::$e ? 'east' : '') .
          ($d == Direction::$w ? 'west' : '') . '';
-    if (is_a($item, "Door"))
+    if (is_a($item, "\playable\Door"))
       return "There is a door blocking you from going $d.";
     else
       return "There is an ICollidable object in the way, but I don't know what it is. Ask your friendly developer to update Player->explainCollision() so that you can play the game. In fact, this is a good time for a bug report.";

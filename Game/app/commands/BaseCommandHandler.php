@@ -1,5 +1,8 @@
 <?php
 
+namespace commands;
+use game\CommandProcessor;
+
 ///Extend this class and override the base functionality for
 ///each command handler.
 abstract class BaseCommandHandler

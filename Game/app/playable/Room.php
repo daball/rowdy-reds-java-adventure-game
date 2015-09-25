@@ -1,12 +1,16 @@
 <?php
 
+namespace playable;
+
+use \map\RoomDirections;
+
 require_once __DIR__.'/../map/RoomDirections.php';
 require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * Defines a Room in the Game
  **/
-class Room implements ISerializable
+class Room implements \util\ISerializable
 {
   /**
    * Name of the room (used internally as a reference)

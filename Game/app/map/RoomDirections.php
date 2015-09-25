@@ -1,5 +1,7 @@
 <?php
 
+namespace map;
+
 require_once "Direction.php";
 require_once __DIR__.'/../util/ISerializable.php';
 

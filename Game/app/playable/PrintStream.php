@@ -1,5 +1,7 @@
 <?php
 
+namespace playable;
+
 require_once 'OutputStream.php';
 
 class PrintStream

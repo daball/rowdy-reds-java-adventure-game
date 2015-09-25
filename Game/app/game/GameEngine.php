@@ -1,5 +1,7 @@
 <?php
 
+namespace game;
+
 require_once 'GameState.php';
 require_once 'CommandProcessor.php';
 require_once __DIR__.'/../commands/index.php';

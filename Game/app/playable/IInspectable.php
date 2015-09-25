@@ -1,5 +1,7 @@
 <?php
 
+namespace playable;
+
 interface IInspectable {
 
   /**

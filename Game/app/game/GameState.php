@@ -1,10 +1,14 @@
 <?php
 
+namespace game;
+use \map\Map;
+use \playable\Player;
+
 require_once __DIR__.'/../playable/index.php';
 require_once 'SampleMap.php';
 require_once __DIR__.'/../util/ISerializable.php';
 
-class GameState implements ISerializable, Serializable
+class GameState implements \util\ISerializable, \Serializable
 {
   public $map;
   public $consoleHistory;
@@ -71,8 +75,8 @@ class GameState implements ISerializable, Serializable
   function __construct()
   {
     //call static constructors, passing in the GameState
-    Player::init($this);
-    System::init($this);
+    \playable\Player::init($this);
+    \playable\System::init($this);
     //split off to the correct constructor
     $a = func_get_args();
     $i = func_num_args();
@@ -109,8 +113,8 @@ class GameState implements ISerializable, Serializable
 
   public function unserialize($data) {
     //call static constructors, passing in the GameState
-    Player::init($this);
-    System::init($this);
+    \playable\Player::init($this);
+    \playable\System::init($this);
     $data = unserialize($data);
     $this->map = $data['map'];
     $this->consoleHistory = $data['consoleHistory'];

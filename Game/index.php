@@ -6,7 +6,7 @@ require_once __DIR__.'/app/game/GameEngine.php';
 session_start();
 
 //start the game engine
-$gameEngine = new GameEngine();
+$gameEngine = new \game\GameEngine();
 
 //install shortcut variables, for easier to read code
 $eol = "\n";

@@ -1,5 +1,7 @@
 <?php
 
+namespace playable;
+
 /**
  * ICollidable objects represent obstacles in the way of navigation.
  **/

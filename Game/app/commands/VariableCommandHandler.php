@@ -1,5 +1,8 @@
 <?php
 
+namespace commands;
+use game\CommandProcessor;
+
 // LEFT HAND RULES:
 // Specify ClassType varName
 // Terminate with ; or extend with = initial value (RIGHT HAND)

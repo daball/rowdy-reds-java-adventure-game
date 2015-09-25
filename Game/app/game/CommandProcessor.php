@@ -1,5 +1,7 @@
 <?php
 
+namespace game;
+
 class CommandProcessor
 {
   public static $commandHandlers;

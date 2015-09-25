@@ -1,11 +1,13 @@
 <?php
 
+namespace playable;
+
 require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * A Key item must be used to open an Unlockable item.
  */
-class Key implements ISerializable
+class Key implements \util\ISerializable
 {
   /**
    * @ignore

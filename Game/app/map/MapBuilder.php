@@ -1,5 +1,9 @@
 <?php
 
+namespace map;
+
+use \playable\Room;
+
 require_once 'Map.php';
 require_once 'Direction.php';
 require_once __DIR__.'/../playable/index.php';
@@ -88,7 +92,7 @@ class MapBuilder
   public function insertDoorObstacle($roomName, $roomDirection, $doorName)
   {
     $room = $this->map->getRoom($roomName);
-    $door = new Door();
+    $door = new \playable\Door();
     $door->close();
     $room->directions->getDirection($roomDirection)->obstacleItem = $doorName;
     $room->items[$doorName] = $door;
