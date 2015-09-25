@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__.'/../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../app/map/RoomDirection.php';
+require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
+require_once __DIR__.'/../../../../app/map/RoomDirection.php';
 
 ///Unit tests RoomDirection class
 class RoomDirectionTest extends PHPUnit_Framework_TestCase
