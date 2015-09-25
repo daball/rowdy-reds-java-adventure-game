@@ -39,7 +39,7 @@ class JavadocCommandHandler extends BaseCommandHandler
       $className = $this->getClassName($commandLine);
       if ($gameState->isKnownAPIClass($className))
       {
-        $javadoc = JavaReflection::javadoc($className);
+        $javadoc = JavaReflection::javadoc("\\playable\\".$className);
         return $javadoc;
       }
       else

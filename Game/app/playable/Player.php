@@ -73,6 +73,9 @@ class Player
     return self::$gameState->navigate(Direction::$west);
   }
 
+  /**
+   * @ignore
+   **/
   private function validateCollision($direction) {
     if ($direction->obstacleItem == null)
       return false;
@@ -86,6 +89,9 @@ class Player
     }
   }
 
+  /**
+   * @ignore
+   **/
   private function explainCollision($d, $direction) {
     $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
     $d = ($d == Direction::$n ? 'north' : '') .
@@ -99,8 +105,9 @@ class Player
   }
 
   /**
-    * Navigates West.
+    * Navigates in the given direction.
     * @return String
+    * @ignore
     **/
   public function navigate($direction)
   {
