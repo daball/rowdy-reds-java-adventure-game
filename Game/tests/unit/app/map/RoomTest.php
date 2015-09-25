@@ -36,29 +36,29 @@ class RoomTest extends \PHPUnit_Framework_TestCase
     $room->description = $roomDescription;
     $room->imageUrl = $roomImageUrl;
 
-    $room->directions['n']->jumpTo = $N;
-    $room->directions['s']->jumpTo = $S;
-    $room->directions['e']->jumpTo = $E;
-    $room->directions['w']->jumpTo = $W;
+    $room->directions->getDirection('n')->nextRoom = $N;
+    $room->directions->getDirection('s')->nextRoom = $S;
+    $room->directions->getDirection('e')->nextRoom = $E;
+    $room->directions->getDirection('w')->nextRoom = $W;
 
-    $room->directions['n']->description = $Nd;
-    $room->directions['s']->description = $Sd;
-    $room->directions['e']->description = $Ed;
-    $room->directions['w']->description = $Wd;
+    $room->directions->getDirection('n')->description = $Nd;
+    $room->directions->getDirection('s')->description = $Sd;
+    $room->directions->getDirection('e')->description = $Ed;
+    $room->directions->getDirection('w')->description = $Wd;
 
     //test room properties
     $this->assertEquals($roomName, $room->name);
     $this->assertEquals($roomDescription, $room->description);
     $this->assertEquals($roomImageUrl, $room->imageUrl);
 
-    $this->assertEquals($N, $room->directions['n']->jumpTo);
-    $this->assertEquals($S, $room->directions['s']->jumpTo);
-    $this->assertEquals($E, $room->directions['e']->jumpTo);
-    $this->assertEquals($W, $room->directions['w']->jumpTo);
+    $this->assertEquals($N, $room->directions->getDirection('n')->nextRoom);
+    $this->assertEquals($S, $room->directions->getDirection('s')->nextRoom);
+    $this->assertEquals($E, $room->directions->getDirection('e')->nextRoom);
+    $this->assertEquals($W, $room->directions->getDirection('w')->nextRoom);
 
-    $this->assertEquals($Nd, $room->directions['n']->description);
-    $this->assertEquals($Sd, $room->directions['s']->description);
-    $this->assertEquals($Ed, $room->directions['e']->description);
-    $this->assertEquals($Wd, $room->directions['w']->description);
+    $this->assertEquals($Nd, $room->directions->getDirection('n')->description);
+    $this->assertEquals($Sd, $room->directions->getDirection('s')->description);
+    $this->assertEquals($Ed, $room->directions->getDirection('e')->description);
+    $this->assertEquals($Wd, $room->directions->getDirection('w')->description);
   }
 }

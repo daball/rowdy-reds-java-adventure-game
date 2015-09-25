@@ -25,7 +25,7 @@ class GameStateTest extends \PHPUnit_Framework_TestCase
 
     //move the character's location, one room to the north
     $initialRoom = $gameState->getPlayer()->location;
-    $gameState->navigate('north');
+    $gameState->getPlayer()->navigate('north');
     $this->assertNotEquals($initialRoom, $gameState->getPlayer()->location);
 
     //reset the game state
