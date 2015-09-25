@@ -4,7 +4,7 @@ require_once __DIR__.'/../../../vendor/phpunit/phpunit/src/Framework/TestCase.ph
 require_once __DIR__.'/../../../app/commands/BaseCommandHandler.php';
 
 ///Unit tests CommandHandlerInterface class
-class BaseCommandHandlerTest extends PHPUnit_Framework_TestCase
+class BaseCommandHandler extends PHPUnit_Framework_TestCase
 {
   public function testCommandHandlerInterface()
   {
