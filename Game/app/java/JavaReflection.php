@@ -2,6 +2,7 @@
 
 namespace java;
 use \ReflectionClass;
+use \ReflectionMethod;
 
 require_once __DIR__.'/MyPhpDocReader.php';
 
