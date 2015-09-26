@@ -4,7 +4,7 @@ namespace commands\tests;
 use \commands\HelpCommandHandler;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../../app/commands/HelpCommandHandler.php';
+require_once __DIR__.'/../../../../app/commands/Help.php';
 
 ///Unit tests HelpCommandHandler class
 class HelpCommandHandlerTest extends \PHPUnit_Framework_TestCase
