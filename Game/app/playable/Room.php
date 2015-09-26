@@ -62,10 +62,10 @@ class Room implements \playable\IInspectable, \util\ISerializable
   public function inspect()
   {
     $obviousExits = [];
-    if ($this->directions->n && $this->directions->n->obvious) array_push($obviousExits, "NORTH");
-    if ($this->directions->e && $this->directions->e->obvious) array_push($obviousExits, "EAST");
-    if ($this->directions->s && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
-    if ($this->directions->w && $this->directions->w->obvious) array_push($obviousExits, "WEST");
+    if ($this->directions->n->nextRoom && $this->directions->n->obvious) array_push($obviousExits, "NORTH");
+    if ($this->directions->e->nextRoom && $this->directions->e->obvious) array_push($obviousExits, "EAST");
+    if ($this->directions->s->nextRoom && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
+    if ($this->directions->w->nextRoom && $this->directions->w->obvious) array_push($obviousExits, "WEST");
     $obviousExits = implode(', ', $obviousExits);
     return $this->description . "\n\nThe obvious exits are: $obviousExits";
   }
