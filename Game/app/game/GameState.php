@@ -10,7 +10,7 @@ require_once __DIR__.'/../commands/index.php';
 require_once __DIR__.'/../playable/index.php';
 require_once __DIR__.'/../playable/System.php';
 require_once __DIR__.'/../util/ISerializable.php';
-require_once 'SampleMap.php';
+require_once 'RowdyRedMap.php';
 
 class GameState implements \util\ISerializable, \Serializable
 {
@@ -42,7 +42,7 @@ class GameState implements \util\ISerializable, \Serializable
       //Player classes
       'Player', 'Assignable', 'Door', 'Openable'
     );
-    $this->map = SampleMap::buildSampleMap();
+    $this->map = RowdyRedMap::buildMap();
     $player = new Player();
     $player->location = $this->map->getSpawnPoint();
     $this->globals = array('player' => $player);
