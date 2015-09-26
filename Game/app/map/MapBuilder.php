@@ -17,9 +17,10 @@ class MapBuilder
 {
   private $map = null;
 
-  public function __construct()
+  public function __construct($map = null)
   {
-    $this->map = new Map();
+    if ($map == null) $map = new Map();
+    $this->map = $map;
   }
 
   public function createRoom($roomName)
@@ -109,6 +110,24 @@ class MapBuilder
   {
     $room = $this->map->getRoom($roomName);
     $door = new \playable\Door();
+    $door->close();
+    $room->directions->getDirection($roomDirection)->obstacleItem = $doorName;
+    $room->items[$doorName] = $door;
+    if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
+      $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);
+      //copy item to room2
+      $room2->items[$doorName] = $door;
+      $room2Direction = Direction::oppositeDirection($roomDirection);
+      //assign collision object to other room
+      $room2->directions->getDirection($room2Direction)->obstacleItem = $doorName;
+    }
+    return $this;
+  }
+
+  public function insertLockedDoorObstacle($roomName, $roomDirection, $doorName, $key)
+  {
+    $room = $this->map->getRoom($roomName);
+    $door = new \playable\LockedDoor($key);
     $door->close();
     $room->directions->getDirection($roomDirection)->obstacleItem = $doorName;
     $room->items[$doorName] = $door;

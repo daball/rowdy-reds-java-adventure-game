@@ -69,7 +69,7 @@ class RowdyRedMap
       ->createRoom('darkRoom')
         ->setRoomDescription('darkRoom', "This room is pirch black.  You can't see anything.")
         ->setRoomImageUrl('darkRoom', 'darkRoom.jpg')
-        
+
       ->connectRooms('forest', Direction::$n,'castleEntrance')
       ->connectRooms('castleEntrance', Direction::$n, 'foyer')
       ->connectRooms('foyer', Direction::$n, 'tapestryE')
@@ -88,8 +88,11 @@ class RowdyRedMap
       ->connectRooms('hallwayS', Direction::$e, 'servantsQuarters')
       ->connectRooms('tapestryW', Direction::$n, 'taxidermyRoom')
       ->connectRooms('taxidermyRoom', Direction::$n, 'darkRoom')
+
       ->insertDoorObstacle('lounge', Direction::$e, 'door')
+      
       ->setSpawnPoint('castleEntrance')
+
       ->getMap();
   }
 }
