@@ -62,6 +62,22 @@ class MapBuilder
     $room2Direction = Direction::oppositeDirection($room1Direction);
     $room1->directions->getDirection($room1Direction)->nextRoom = $room2->name;
     $room2->directions->getDirection($room2Direction)->nextRoom = $room1->name;
+    if ($room1->directions->getDirection($room1Direction)->obstacleItem !== null) {
+      $itemName = $room1->directions->getDirection($room1Direction)->obstacleItem;
+      $item = $room1->items[$itemName];
+      //copy item to $room2
+      $room2->items[$itemName] = $item;
+      //assign obstacle to $room2
+      $room2->directions->getDirection($room2Direction)->obstacleItem = $itemName;
+    }
+    else if ($room2->directions->getDirection($room2Direction)->obstacleItem !== null) {
+      $itemName = $room2->directions->getDirection($room2Direction)->obstacleItem;
+      $item = $room2->items[$itemName];
+      //copy item to $room1
+      $room1->items[$itemName] = $item;
+      //assign obstacle to $room1
+      $room1->directions->getDirection($room1Direction)->obstacleItem = $itemName;
+    }
     return $this;
   }
 
@@ -96,6 +112,14 @@ class MapBuilder
     $door->close();
     $room->directions->getDirection($roomDirection)->obstacleItem = $doorName;
     $room->items[$doorName] = $door;
+    if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
+      $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);
+      //copy item to room2
+      $room2->items[$doorName] = $door;
+      $room2Direction = Direction::oppositeDirection($roomDirection);
+      //assign collision object to other room
+      $room2->directions->getDirection($room2Direction)->obstacleItem = $doorName;
+    }
     return $this;
   }
 }
