@@ -98,10 +98,7 @@ class Player
          ($d == Direction::$s ? 'south' : '') .
          ($d == Direction::$e ? 'east' : '') .
          ($d == Direction::$w ? 'west' : '') . '';
-    if (is_a($item, "\playable\Door"))
-      return "There is a door blocking you from going $d.";
-    else
-      return "There is an ICollidable object in the way, but I don't know what it is. Ask your friendly developer to update Player->explainCollision() so that you can play the game. In fact, this is a good time for a bug report.";
+    return $item->explainCollision();
   }
 
   /**

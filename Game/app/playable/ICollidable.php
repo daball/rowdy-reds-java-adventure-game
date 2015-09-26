@@ -12,4 +12,6 @@ interface ICollidable
    * @return boolean
    **/
   public function isInTheWay();
+
+  public function explainCollision();
 }
