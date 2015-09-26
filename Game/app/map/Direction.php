@@ -55,6 +55,7 @@ class Direction implements \util\ISerializable
   public $description = "";
   public $nextRoom = "";
   public $obstacleItem = null;
+  public $obvious = true;
 
   public function serialize() {
     return serialize(
