@@ -29,7 +29,7 @@ class RowdyRedMap
         ->setRoomImageUrl('tapestryE', 'null.png')
       ->createRoom('tapestryW')
         ->setRoomDescription('tapestryW', "You are in the west end of a long hall lined with ornate tapestries.  The room continues to the east.\n\nThe obvious exits are: NORTH, EAST, SOUTH, WEST.")
-        ->setRoomImageUrl('tapestryW', 'null.png')        
+        ->setRoomImageUrl('tapestryW', 'null.png')
       ->connectRooms('forest', Direction::$n,'castleEntrance')
       ->connectRooms('castleEntrance', Direction::$n, 'foyer')
       ->connectRooms('foyer', Direction::$n, 'tapestryE')
