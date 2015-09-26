@@ -67,7 +67,7 @@ class Room implements \playable\IInspectable, \util\ISerializable
     if ($this->directions->s->nextRoom && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
     if ($this->directions->w->nextRoom && $this->directions->w->obvious) array_push($obviousExits, "WEST");
     $obviousExits = implode(', ', $obviousExits);
-    return $this->description . "\n\nThe obvious exits are: $obviousExits";
+    return "\n$this->description\nThe obvious exits are: $obviousExits";
   }
 
   /* ISerializable interface implementation */
