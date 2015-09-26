@@ -37,12 +37,12 @@ class VariableBagContentsHandler extends BaseCommandHandler
     $output = "You have the following variables in your local variable bag:$eol";
     foreach($gameState->locals as $local => $value)
     {
-      $output .= JavaReflection::inspectInstance($gameState->locals[$local], $local) . $eol;
+      $output .= \java\JavaReflection::inspectInstance($gameState->locals[$local], $local) . $eol;
     }
     $output .= "The following variables are available to you because of where you are standing:$eol";
     foreach($gameState->getPlayerRoom()->items as $item => $value)
     {
-      $output .= JavaReflection::inspectInstance($gameState->getPlayerRoom()->items[$item], $item) . $eol;
+      $output .= \java\JavaReflection::inspectInstance($gameState->getPlayerRoom()->items[$item], $item) . $eol;
     }
     return $output;
   }
@@ -53,7 +53,7 @@ class VariableBagContentsHandler extends BaseCommandHandler
     $output = "The following variables are available anywhere in the game:$eol";
     foreach($gameState->globals as $global => $value)
     {
-      $output .= JavaReflection::inspectInstance($gameState->globals[$global], $global) . $eol;
+      $output .= \java\JavaReflection::inspectInstance($gameState->globals[$global], $global) . $eol;
     }
     return $output;
   }
