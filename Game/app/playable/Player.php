@@ -45,7 +45,7 @@ class Player
     * Navigates North.
     * @return String
     **/
-  public function navigateNorth() {
+  public function moveNorth() {
     return self::$gameState->navigate(Direction::$north);
   }
 
@@ -53,7 +53,7 @@ class Player
     * Navigates South.
     * @return String
     **/
-  public function navigateSouth() {
+  public function moveSouth() {
     return self::$gameState->navigate(Direction::$south);
   }
 
@@ -61,7 +61,7 @@ class Player
     * Navigates East.
     * @return String
     **/
-  public function navigateEast() {
+  public function moveEast() {
     return self::$gameState->navigate(Direction::$east);
   }
 
@@ -69,7 +69,7 @@ class Player
     * Navigates West.
     * @return String
     **/
-  public function navigateWest() {
+  public function moveWest() {
     return self::$gameState->navigate(Direction::$west);
   }
 

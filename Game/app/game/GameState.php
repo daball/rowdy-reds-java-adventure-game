@@ -45,7 +45,7 @@ class GameState implements \util\ISerializable, \Serializable
     $this->map = RowdyRedMap::buildMap();
     $player = new Player();
     $player->location = $this->map->getSpawnPoint();
-    $this->globals = array('player' => $player);
+    $this->globals = array('me' => $player);
     $this->locals = array();
     $this->consoleHistory = "Game restarted." . $eol . $this->getPlayerRoom()->inspect();
     $this->moves = 0;
@@ -59,7 +59,7 @@ class GameState implements \util\ISerializable, \Serializable
 
   public function getPlayer()
   {
-    return $this->globals['player'];
+    return $this->globals['me'];
   }
 
   public function addCommandToHistory($commandInput, $commandOutput)

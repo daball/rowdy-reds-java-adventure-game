@@ -16,15 +16,19 @@ class NavigateCommandHandler extends BaseCommandHandler
   {
     return  strtolower($commandLine) == 'north' ||
             $commandLine == 'moveNorth();' ||
+            $commandLine == 'me.moveNorth();' ||
             strtolower($commandLine) == 'n' ||
             strtolower($commandLine) == 'south' ||
             $commandLine == 'moveSouth();' ||
+            $commandLine == 'me.moveSouth();' ||
             strtolower($commandLine) == 's' ||
             strtolower($commandLine) == 'east' ||
             $commandLine == 'moveEast();' ||
+            $commandLine == 'me.moveEast();' ||
             strtolower($commandLine) == 'e' ||
             strtolower($commandLine) == 'west' ||
             $commandLine == 'moveWest();' ||
+            $commandLine == 'me.moveWest();' ||
             strtolower($commandLine) == 'w';
   }
 
@@ -36,15 +40,19 @@ class NavigateCommandHandler extends BaseCommandHandler
     switch ($commandLine)
     {
       case 'moveNorth();':
+      case 'me.moveNorth();':
         $commandLine = 'n';
         break;
       case 'moveSouth();':
+      case 'me.moveSouth();':
         $commandLine = 's';
         break;
       case 'moveEast();':
+      case 'me.moveEast();':
         $commandLine = 'e';
         break;
       case 'moveWest();':
+      case 'me.moveWest();':
         $commandLine = 'w';
         break;
     }
