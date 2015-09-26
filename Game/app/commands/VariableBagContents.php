@@ -42,7 +42,7 @@ class VariableBagContentsHandler extends BaseCommandHandler
     $output .= "The following variables are available to you because of where you are standing:$eol";
     foreach($gameState->getAvatarRoom()->items as $item => $value)
     {
-      $output .= JavaReflection::inspectInstance($gameState->getAvatarRoom()->items[$item], $item) . $eol;
+      $output .= JavaReflection::inspectInstance($gameState->getPlayerRoom()->items[$item], $item) . $eol;
     }
     return $output;
   }
