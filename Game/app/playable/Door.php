@@ -75,6 +75,9 @@ class Door implements IOpenable, ICloseable, ICollidable
     return $this->isClosed();
   }
 
+  /**
+   * @ignore
+   **/
   public function explainCollision($direction) {
     return "There is a door blocking you from going $direction.";
   }
