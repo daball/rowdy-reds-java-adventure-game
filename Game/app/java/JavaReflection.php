@@ -185,7 +185,7 @@ class JavaReflection
       foreach ($class->getProperties() as $property) {
         if (!self::getDocReader()->isIgnored($property))
         {
-          $name = $property->getName();
+          $name = $property->getShortName();
           $value = $property->getValue($instance);
           if (is_null($value)) $value = "null";
           array_push($properties, "    .$name=$value;\n");
