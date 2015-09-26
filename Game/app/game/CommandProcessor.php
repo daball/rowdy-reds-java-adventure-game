@@ -41,7 +41,7 @@ class CommandProcessor
         $commandOutput = "I do not understand.";
       }
     }
-    //disabled:$this->commandOutput = trim($commandOutput);
+    $this->commandOutput = trim($commandOutput);
     return $this->commandOutput;
   }
 
