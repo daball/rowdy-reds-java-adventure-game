@@ -43,6 +43,10 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
           return "You can't do that. $itemName is not openable.";
         }
       }
+      else
+      {
+        return "You can't do that. I don't see a $itemName here.";
+      }
     }
   }
 
