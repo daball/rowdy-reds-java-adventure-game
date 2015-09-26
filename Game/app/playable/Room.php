@@ -6,11 +6,12 @@ use \map\RoomDirections;
 
 require_once __DIR__.'/../map/RoomDirections.php';
 require_once __DIR__.'/../util/ISerializable.php';
+require_once __DIR__.'/../playable/IInspectable.php';
 
 /**
  * Defines a Room in the Game
  **/
-class Room implements \util\ISerializable
+class Room implements \playable\IInspectable, \util\ISerializable
 {
   /**
    * Name of the room (used internally as a reference)
@@ -56,11 +57,17 @@ class Room implements \util\ISerializable
   }
 
   /**
-   *
+   * Inspects the contents of the room.
    **/
   public function inspect()
   {
-    return $this->description;
+    $obviousExits = [];
+    if ($directions->n && $directions->n->obvious) array_push($obviousExits, "NORTH");
+    if ($directions->e && $directions->e->obvious) array_push($obviousExits, "EAST");
+    if ($directions->s && $directions->s->obvious) array_push($obviousExits, "SOUTH");
+    if ($directions->w && $directions->w->obvious) array_push($obviousExits, "WEST");
+    $obviousExits = implode(', ', $obviousExits);
+    return $this->description . "\n\nThe obvious exits are: $obviousExits";
   }
 
   /* ISerializable interface implementation */
