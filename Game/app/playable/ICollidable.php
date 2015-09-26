@@ -13,5 +13,5 @@ interface ICollidable
    **/
   public function isInTheWay();
 
-  public function explainCollision();
+  public function explainCollision($direction);
 }
