@@ -12,7 +12,7 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
   public function validateCommand($gameState, $commandLine)
   {
     $matches = array();
-    if (preg_match($commandLine, '/([\w$_]+[\w\d$_]*)\.open\(\)/', $matches))
+    if (preg_match('/([\w$_]+[\w\d$_]*)\.open\(\)/', $commandLine, $matches))
     {
       $itemName = $matches[1];
       $item = $gameState->getPlayerRoom()->items[$itemName];
@@ -24,7 +24,7 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
   public function executeCommand($gameState, $commandLine)
   {
     $matches = array();
-    if (preg_match($commandLine, '/([\w$_]+[\w\d$_]*)\.open\(\)/', $matches))
+    if (preg_match('/([\w$_]+[\w\d$_]*)\.open\(\)/', $commandLine, $matches))
     {
       $itemName = $matches[1];
       $item = $gameState->getPlayerRoom()->items[$itemName];
