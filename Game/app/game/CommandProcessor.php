@@ -41,8 +41,8 @@ class CommandProcessor
         $commandOutput = "I do not understand.";
       }
     }
-    $this->commandOutput = trim($commandOutput);
-    return trim($this->commandOutput);
+    //disabled:$this->commandOutput = trim($commandOutput);
+    return $this->commandOutput;
   }
 
   public function __construct($gameState)
