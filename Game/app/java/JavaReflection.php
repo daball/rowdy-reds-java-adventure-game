@@ -178,14 +178,14 @@ class JavaReflection
   {
     $class = new ReflectionClass($instance);
     $eol = "\n";
-    $className = $class->getName();
+    $className = $class->getShortName();
     $doc = "$className $variableName$eol";
     if (self::hasProperty($class)) {
       $properties = array();
       foreach ($class->getProperties() as $property) {
         if (!self::getDocReader()->isIgnored($property))
         {
-          $name = $property->getShortName();
+          $name = $property->getName();
           $value = $property->getValue($instance);
           if (is_null($value)) $value = "null";
           array_push($properties, "    .$name=$value;\n");
