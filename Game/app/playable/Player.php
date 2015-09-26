@@ -92,13 +92,13 @@ class Player
   /**
    * @ignore
    **/
-  private function explainCollision($d, $direction) {
+  private function explainCollision($d, Direction $direction) {
     $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
     $d = ($d == Direction::$n ? 'north' : '') .
          ($d == Direction::$s ? 'south' : '') .
          ($d == Direction::$e ? 'east' : '') .
          ($d == Direction::$w ? 'west' : '') . '';
-    return $item->explainCollision();
+    return $item->explainCollision($d);
   }
 
   /**
