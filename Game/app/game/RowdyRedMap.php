@@ -23,7 +23,7 @@ class RowdyRedMap
         ->setRoomImageUrl('castleEntrance', 'castleEntrance.png')
       ->createRoom('foyer')
         ->setRoomDescription('foyer', "You are in the castle foyer.")
-        ->setRoomImageUrl('foyer', 'null.png')
+        ->setRoomImageUrl('foyer', 'foyer.jpg')
       ->createRoom('tapestryE')
         ->setRoomDescription('tapestryE', "You are in the east end of a long hall lined with ornate tapestries.  The room continues to the west.")
         ->setRoomImageUrl('tapestryE', 'null.png')
@@ -50,7 +50,7 @@ class RowdyRedMap
         ->setRoomImageUrl('kitchen', 'kitchen.jpg')
       ->createRoom('pantry')
         ->setRoomDescription('pantry', "You are in the pantry.")
-        ->setRoomImageUrl('pantry', 'null.png')
+        ->setRoomImageUrl('pantry', 'pantry.png')
       ->createRoom('banquetHall')
         ->setRoomDescription('banquetHall', "You are in the banquet hall.")
         ->setRoomImageUrl('banquetHall', 'banquetHall.jpg')
@@ -67,9 +67,9 @@ class RowdyRedMap
         ->setRoomDescription('taxidermyRoom', "You are a trophy room.  There is a bowl on the floor and a dog laying in front of a doorway leading north.")
         ->setRoomImageUrl('taxidermyRoom', 'taxidermyRoom.jpg')
       ->createRoom('darkRoom')
-        ->setRoomDescription('darkRoom', "This room is pirch black.  You can't see anything.")
+        ->setRoomDescription('darkRoom', "This room is pitch black.  You can't see anything.")
         ->setRoomImageUrl('darkRoom', 'darkRoom.jpg')
-
+        
       ->connectRooms('forest', Direction::$n,'castleEntrance')
       ->connectRooms('castleEntrance', Direction::$n, 'foyer')
       ->connectRooms('foyer', Direction::$n, 'tapestryE')
@@ -88,11 +88,18 @@ class RowdyRedMap
       ->connectRooms('hallwayS', Direction::$e, 'servantsQuarters')
       ->connectRooms('tapestryW', Direction::$n, 'taxidermyRoom')
       ->connectRooms('taxidermyRoom', Direction::$n, 'darkRoom')
-
-      ->insertDoorObstacle('lounge', Direction::$e, 'door')
+      
+      
+      ->insertObjectInRoom('library', 'rustyKey', $rustyKey = Key::create('rustyKey')->setDescription("It's a dingy rusty key."))
+      ->insertObjectInRoom('pantry', 'brassKey', $brassKey = Key::create('brassKey')->setDescription("It's a nice and shiny brass key."))
+      ->insertObjectInRoom('taxidermyRoom','dog', Dog::create()->setDescription("A dog is sitting by the northern door and is staring at yoo intensely.")->setObstacleText("The dog growls at you, and will not let you pass by."))
+      ->insertObjectInRoom('taxidermyRoom','bowl', Bowl::create('bowl')->setDescription("It's an empty bowl, and it's sitting on the floor."))
+      ->insertObjectInRoom('servantsQuarters','footLocker', $footLocker = FootLocker::create($brassKey)->setDescription("A footlocker is sitting on the floor."))
+      ->insertObjectInObject($footLocker, 'lamp', Lamp::create())
+      ->insertObstacleObjectInRoom('lounge', Direction::$e, 'door', LockedDoor::create($rustyKey)->setDescription("It's a door.  What do you want me to say."))
+      ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', Door::create())
       
       ->setSpawnPoint('castleEntrance')
-
       ->getMap();
   }
 }
