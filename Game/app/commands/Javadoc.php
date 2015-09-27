@@ -4,6 +4,7 @@ namespace commands;
 use game\CommandProcessor;
 use java\JavaReflection;
 
+require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 require_once __DIR__.'/../java/JavaReflection.php';

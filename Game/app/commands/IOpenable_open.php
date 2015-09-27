@@ -3,6 +3,7 @@
 namespace commands;
 use game\CommandProcessor;
 
+require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 

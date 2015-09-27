@@ -3,6 +3,7 @@
 namespace commands;
 use game\CommandProcessor;
 
+require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 
@@ -36,7 +37,10 @@ class InspectCommandHandler extends BaseCommandHandler
   {
     $gameState = GameState::getGameState();
     $inspectWhat = $this->getTargetName($commandLine);
-    $message = $gameState->getPlayerRoom()->inspect();
+    if ($inspectWhat === "")
+      $message = $gameState->getPlayerRoom()->inspect();
+    else
+
     return $message;
   }
 }
