@@ -3,7 +3,7 @@
 namespace playable;
 
 require_once __DIR__.'/../util/ISerializable.php';
-require_once __DIR__.'/../util/IInspectable.php';
+require_once 'IInspectable.php';
 
 /**
  * A Key item must be used to open an Unlockable item.
