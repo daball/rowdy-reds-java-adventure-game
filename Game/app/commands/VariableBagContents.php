@@ -12,7 +12,7 @@ class VariableBagContentsHandler extends BaseCommandHandler
   ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($gameState, $commandLine)
+  public function validateCommand($commandLine)
   {
     $commandLine = strtolower($commandLine);
     return  $commandLine == 'globals' ||
@@ -22,7 +22,7 @@ class VariableBagContentsHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($gameState, $commandLine)
+  public function executeCommand($commandLine)
   {
     $commandLine = strtolower($commandLine);
     if ($commandLine == 'globals')
@@ -31,8 +31,9 @@ class VariableBagContentsHandler extends BaseCommandHandler
       return $this->inspectLocals($gameState);
   }
 
-  public function inspectLocals($gameState)
+  public function inspectLocals()
   {
+    $gameState = GameState::getGameState();
     $eol = "\n";
     $output = "You have the following variables in your local variable bag:$eol";
     foreach($gameState->locals as $local => $value)
@@ -47,8 +48,9 @@ class VariableBagContentsHandler extends BaseCommandHandler
     return $output;
   }
 
-  public function inspectGlobals($gameState)
+  public function inspectGlobals()
   {
+    $gameState = GameState::getGameState();
     $eol = "\n";
     $output = "The following variables are available anywhere in the game:$eol";
     foreach($gameState->globals as $global => $value)

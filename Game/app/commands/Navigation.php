@@ -12,7 +12,7 @@ class NavigateCommandHandler extends BaseCommandHandler
   ///Validates the incoming command line for navigation commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($gameState, $commandLine)
+  public function validateCommand($commandLine)
   {
     return  strtolower($commandLine) == 'north' ||
             $commandLine == 'moveNorth();' ||
@@ -35,8 +35,9 @@ class NavigateCommandHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($gameState, $commandLine)
+  public function executeCommand($commandLine)
   {
+    $gameState = GameState::getGameState();
     switch ($commandLine)
     {
       case 'moveNorth();':

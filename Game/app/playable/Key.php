@@ -7,12 +7,14 @@ require_once __DIR__.'/../util/ISerializable.php';
 /**
  * A Key item must be used to open an Unlockable item.
  */
-class Key implements \util\ISerializable
+class Key implements IInspectable, \util\ISerializable
 {
   /**
    * @ignore
    */
   private $keyID;
+
+  public $description = "You have found a key.";
 
   public function __construct($keyID) {
     $this->keyID = $keyID;
@@ -36,5 +38,9 @@ class Key implements \util\ISerializable
   public function unserialize($data) {
     $data = unserialize($data);
     $this->keyID = $data['keyID'];
+  }
+
+  public function inspect() {
+    return "Here lies a key.";
   }
 }

@@ -17,21 +17,17 @@ class System
   public static $out = null;
 
   /**
-   * @ignore
-   **/
-  public static $gameState = null;
-
-  /**
    * @param int $exitCode
    * @return void
    **/
   public static function JAVA_exit($exitCode)
   {
-    new ExitCommandHandler($gameState, 'exit');
+    new ExitCommandHandler('exit');
   }
 
-  public static function init($gameState) {
-    self::$gameState = $gameState;
-    self::$out = new PrintStream(self::$gameState);
+  public static function init() {
+    self::$out = new PrintStream();
   }
 }
+
+System::init();

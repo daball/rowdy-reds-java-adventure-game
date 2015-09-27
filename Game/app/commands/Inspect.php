@@ -6,15 +6,17 @@ use game\CommandProcessor;
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 
-///Handles exit command.
-class ExitCommandHandler extends BaseCommandHandler
+///Handles reset command.
+class ResetCommandHandler extends BaseCommandHandler
 {
-  ///Validates the incoming command line for exit commands.
+  ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
   public function validateCommand($commandLine)
   {
-    return strtolower($commandLine) == 'exit' || $commandLine == "System.exit(0);";
+    $commandLine = strtolower($commandLine);
+    return  $commandLine == 'reset' ||
+            $commandLine == 'restart';
   }
 
   ///Executes the incoming command line.
@@ -23,11 +25,9 @@ class ExitCommandHandler extends BaseCommandHandler
   public function executeCommand($commandLine)
   {
     $gameState = GameState::getGameState();
-    $gameState->resetGameState();
-    $eol = "\n";
-    $this->consoleHistory = "Game started." . $eol . $gameState->getPlayerRoom()->inspect();
-    $gameState->isExiting = true;
+    $message = $gameState->resetGameState();
+    return $message;
   }
 }
 
-CommandProcessor::addCommandHandler(new ExitCommandHandler());
+CommandProcessor::addCommandHandler(new ResetCommandHandler());

@@ -12,7 +12,7 @@ class HelpCommandHandler extends BaseCommandHandler
   ///Validates the incoming command line for help commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($gameState, $commandLine)
+  public function validateCommand($commandLine)
   {
     $commandLine = strtolower($commandLine);
     return  $commandLine == 'help' ||
@@ -22,7 +22,7 @@ class HelpCommandHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($gameState, $commandLine)
+  public function executeCommand($commandLine)
   {
     $eol = "\n";
     return  "********* HELP MENU *********" . $eol

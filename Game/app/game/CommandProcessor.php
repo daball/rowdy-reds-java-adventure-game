@@ -21,7 +21,7 @@ class CommandProcessor
     array_push(self::$commandHandlers, $commandHandler);
   }
 
-  public function dispatchCommand($gameState, $commandLine)
+  public function dispatchCommand($commandLine)
   {
     $this->commandInput = $commandLine;
     $commandLine = trim($commandLine);
@@ -30,9 +30,9 @@ class CommandProcessor
     {
       foreach (self::$commandHandlers as $commandHandler)
       {
-        if ($commandHandler->validateCommand($gameState, $commandLine))
+        if ($commandHandler->validateCommand($commandLine))
         {
-          $commandOutput = $commandHandler->executeCommand($gameState, $commandLine);
+          $commandOutput = $commandHandler->executeCommand($commandLine);
           break; //stop foreach
         }
       }
@@ -45,13 +45,13 @@ class CommandProcessor
     return $this->commandOutput;
   }
 
-  public function __construct($gameState)
+  public function __construct()
   {
     if (isset($_POST['commandLine']))
     {
       $this->commandInput = $_POST['commandLine'];
-      $this->commandOutput = $this->dispatchCommand($gameState, $this->commandInput);
-      $gameState->addCommandToHistory($this->commandInput, $this->commandOutput);
+      $this->commandOutput = $this->dispatchCommand($this->commandInput);
+      GameState::getGameState()->addCommandToHistory($this->commandInput, $this->commandOutput);
     }
     else
     {

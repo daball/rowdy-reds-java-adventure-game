@@ -9,8 +9,9 @@ require_once 'BaseCommandHandler.php';
 class ICloseable_closeCommandHandler extends BaseCommandHandler
 {
 
-  public function validateCommand($gameState, $commandLine)
+  public function validateCommand($commandLine)
   {
+    $gameState = GameState::getGameState();
     $matches = array();
     if (preg_match('/([\w$_]+[\w\d$_]*)\.close\(\)/', $commandLine, $matches))
     {
@@ -26,8 +27,9 @@ class ICloseable_closeCommandHandler extends BaseCommandHandler
     return false;
   }
 
-  public function executeCommand($gameState, $commandLine)
+  public function executeCommand($commandLine)
   {
+    $gameState = GameState::getGameState();
     $matches = array();
     if (preg_match('/([\w$_]+[\w\d$_]*)\.close\(\)/', $commandLine, $matches))
     {

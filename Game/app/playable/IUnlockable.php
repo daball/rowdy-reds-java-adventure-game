@@ -17,4 +17,10 @@ interface IUnlockable
    * @return String
    **/
   public function unlock($key);
+
+  /**
+   * Set a callback for the successful unlock() call.
+   * Callback should be in the format function($success: boolean)
+   **/
+  public function onUnlock($fn);
 }

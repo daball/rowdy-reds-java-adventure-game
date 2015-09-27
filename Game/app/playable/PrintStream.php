@@ -10,7 +10,7 @@ class PrintStream
   /**
    * @param OutputStream $outputStream
    **/
-  public function __construct($outputStream)
+  public function __construct($outputStream = null)
   {
 
   }

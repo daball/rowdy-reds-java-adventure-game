@@ -17,6 +17,7 @@ class LockedDoor extends Door implements ILockable, IUnlockable
    */
   private $unlocked = false;
   private $key = null;
+  private $callback = null;
 
   public function __construct($key) {
     $this->key = $key;
@@ -84,11 +85,17 @@ class LockedDoor extends Door implements ILockable, IUnlockable
   {
     if (is_a($key, "\playable\Key")) {
       if ($this->key->getKeyID() == $key->getKeyID()) {
-        return "You have unlocked the door. The door swings open.";
+        if ($this->fn !== null)
+          $this->fn(true);
+        else
+          return "You have unlocked the door. The door swings open.";
       }
     }
     else {
-      return "You must use a key to unlock a locked door.";
+      if ($this->fn !== null)
+        return $this->fn(true);
+      else
+        return "You must use a key to unlock a locked door.";
     }
   }
 
@@ -98,5 +105,10 @@ class LockedDoor extends Door implements ILockable, IUnlockable
   public function isUnlocked()
   {
     return $this->unlocked;
+  }
+
+  public function onUnlock($fn)
+  {
+    $this->callback = $fn;
   }
 }

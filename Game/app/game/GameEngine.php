@@ -19,13 +19,13 @@ class GameEngine
 
   public function createSession()
   {
-    $this->gameState = new GameState();
+    $this->gameState = GameState::getGameState();
     $_SESSION['gameState'] = $this->gameState->serialize();
   }
 
   public function restoreSession()
   {
-    $this->gameState = new GameState($_SESSION['gameState']);
+    $this->gameState = GameState::getGameState($_SESSION['gameState']);
   }
 
   public function saveSession()
@@ -43,6 +43,6 @@ class GameEngine
       //otherwise, create a new gameState session
       $this->createSession();
     //create command processor, which will execute any command on the $_POST['commandLine']
-    $this->commandProcessor = new CommandProcessor($this->gameState);
+    $this->commandProcessor = new CommandProcessor();
   }
 }

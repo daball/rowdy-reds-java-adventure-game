@@ -8,9 +8,8 @@ class CommandOutputStream extends OutputStream
 {
   private $gameEngine;
 
-  public function __construct($gameEngine)
+  public function __construct()
   {
-    $this->gameEngine = $gameEngine;
   }
 
   public function write_any($value)

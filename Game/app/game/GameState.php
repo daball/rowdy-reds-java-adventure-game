@@ -12,7 +12,7 @@ require_once __DIR__.'/../playable/System.php';
 require_once __DIR__.'/../util/ISerializable.php';
 require_once 'RowdyRedMap.php';
 
-class GameState implements \util\ISerializable, \Serializable
+final class GameState implements \util\ISerializable, \Serializable
 {
   public $map;
   public $consoleHistory;
@@ -76,11 +76,33 @@ class GameState implements \util\ISerializable, \Serializable
     }
   }
 
-  function __construct()
+  protected static $instance = null;
+
+  /**
+   * Gets the GameState singleton object.
+   */
+  public static function getGameState($data = null)
   {
-    //call static constructors, passing in the GameState
-    Player::init($this);
-    System::init($this);
+    if (!isset(static::$instance))
+      static::init($data);
+    else if (isset($data))
+      static::$instance->unserialize($data);
+    return static::$instance;
+  }
+
+  /**
+   * Reinitializes the GameState.
+   */
+  public static function init($data = null) {
+    if (isset($data))
+      static::$instance = new GameState($data);
+    else
+      static::$instance = new GameState();
+    return static::$instance;
+  }
+
+  protected function __construct()
+  {
     //split off to the correct constructor
     $a = func_get_args();
     $i = func_num_args();
@@ -88,13 +110,15 @@ class GameState implements \util\ISerializable, \Serializable
       call_user_func_array(array($this,$f),$a);
     }
   }
-  public function __construct0()
+
+  protected function __construct0()
   {
     $eol = "\n";
     $this->resetGameState();
     $this->consoleHistory = "Game started." . $eol . $this->getPlayerRoom()->inspect();
   }
-  public function __construct1($data)
+
+  protected function __construct1($data)
   {
     $this->unserialize($data);
   }
@@ -117,8 +141,6 @@ class GameState implements \util\ISerializable, \Serializable
 
   public function unserialize($data) {
     //call static constructors, passing in the GameState
-    Player::init($this);
-    System::init($this);
     $data = unserialize($data);
     $this->map = $data['map'];
     $this->consoleHistory = $data['consoleHistory'];
