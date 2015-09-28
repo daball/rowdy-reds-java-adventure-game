@@ -18,8 +18,8 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
     if (preg_match('/([\w$_]+[\w\d$_]*)\.open\(\);/', $commandLine, $matches))
     {
       $itemName = $matches[1];
-      if (array_key_exists($itemName, $gameState->getPlayerRoom()->items)) {
-        $item = $gameState->getPlayerRoom()->items[$itemName];
+      if ($gameState->getPlayerRoom()->keyExists($itemName)) {
+        $item = $gameState->getPlayerRoom()->getItem($itemName);
         return is_a($item, "\playable\IOpenable");
       }
       else {
@@ -36,8 +36,8 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
     if (preg_match('/([\w$_]+[\w\d$_]*)\.open\(\);/', $commandLine, $matches))
     {
       $itemName = $matches[1];
-      if (array_key_exists($itemName, $gameState->getPlayerRoom()->items)) {
-        $item = $gameState->getPlayerRoom()->items[$itemName];
+      if ($gameState->getPlayerRoom()->keyExists($itemName)) {
+        $item = $gameState->getPlayerRoom()->getItem($itemName);
         if (is_a($item, "\playable\IOpenable"))
         {
           return $item->open();

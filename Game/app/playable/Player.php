@@ -80,7 +80,7 @@ class Player implements \util\ISerializable, \Serializable
       return false;
     else
     {
-      $item = GameState::getGameState()->getPlayerRoom()->items[$direction->obstacleItem];
+      $item = GameState::getGameState()->getPlayerRoom()->getItem($direction->obstacleItem);
       if (is_a($item, "\playable\ICollidable"))
         return $item->isInTheWay();
       else
@@ -92,7 +92,7 @@ class Player implements \util\ISerializable, \Serializable
    * @ignore
    **/
   private function explainCollision($d, Direction $direction) {
-    $item = GameState::getGameState()->getPlayerRoom()->items[$direction->obstacleItem];
+    $item = GameState::getGameState()->getPlayerRoom()->getItem($direction->obstacleItem);
     $d = ($d == Direction::$n ? 'north' : '') .
          ($d == Direction::$s ? 'south' : '') .
          ($d == Direction::$e ? 'east' : '') .

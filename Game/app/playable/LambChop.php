@@ -5,49 +5,35 @@ namespace playable;
 require_once __DIR__.'/../util/ISerializable.php';
 require_once 'GameObject.php';
 require_once 'IAssignable.php';
+require_once 'IEdidable.php';
 require_once 'IInspectable.php';
-require_once 'TCreateWithKey.php';
+require_once 'TCreate.php';
 require_once 'TInspectable.php';
 require_once __DIR__.'/../util/ISerializable.php';
 
 /**
- * A Key item must be used to open an Unlockable item.
+ * A LambChop item is used to feed a hungy Dog obstacle.
  */
-class Key extends GameObject implements IInspectable, IAssignable, \util\ISerializable, \Serializable
+class LambChop extends GameObject implements IInspectable, IAssignable, IEdidable, \util\ISerializable, \Serializable
 {
-  use TCreateWithKey;
+  use TCreate;
   use TInspectable;
 
-  /**
-   * @ignore
-   */
-  private $key;
-
-  public function __construct($key) {
-    $this->key = $key;
-    $this->setDescription("You have found a key.");
-  }
-
-  /**
-   * @ignore
-   **/
-  public function getKey() {
-    return $this->key;
+  public function __construct() {
+    $this->setDescription("You have found a lambchop.");
   }
 
   public function serialize() {
     return serialize(
       array(
         'description' => $this->description,
-        'key' => $this->key,
       )
     );
   }
 
   public function unserialize($data) {
     $data = unserialize($data);
-    $this->key = $data['key'];
-    $this->__construct($this->key);
+    $this->__construct();
     $this->description = $data['description'];
   }
 }

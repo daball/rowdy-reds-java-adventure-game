@@ -10,7 +10,7 @@ require_once __DIR__.'/../map/MapBuilder.php';
 require_once __DIR__.'/../map/Direction.php';
 require_once __DIR__.'/../playable/index.php';
 
-///SampleMap builds a sample map for Iteration 1 using MapBuilder
+///RowdyRedMap builds a map for Iteration 1 using MapBuilder
 class RowdyRedMap
 {
   public static function buildMap()
@@ -96,28 +96,30 @@ class RowdyRedMap
       ->insertObjectInRoom('pantry', 'brassKey', $brassKey = \playable\Key::create('brassKey')
                                                           ->setDescription("It's a nice and shiny brass key.")
                           )
-/*      ->insertObjectInRoom('kitchen', 'lambChop', \playable\Food::create()
-                                                          ->setDescription("It's a tasty looking lambChop.")
+      ->insertObjectInRoom('kitchen', 'lambChop', \playable\LambChop::create())
+      ->insertObstacleObjectInRoom('taxidermyRoom', Direction::$n, 'dog', $dog = \playable\Dog::create()
+                                                          ->onInspect(function () {
+                                                            if ($this->hungry) {
+                                                              return "It's a sizeable looking dog is sitting by the northern door, watching you alertly.";
+                                                            }
+                                                            else {
+                                                              return "The dog growls at you menacingly, and will not let you pass by.";
+                                                            }
+                                                          })
                           )
-      ->insertObjectInRoom('taxidermyRoom','dog', \playable\Dog::create()
-                                                          ->setDescription("It's a sizeable looking dog is sitting by the northern door, watching you alertly.")
-                                                          ->setObstacleText("The dog growls at you menacingly, and will not let you pass by.")
-                          )
-*/
+      ->insertObjectInRoom('kitchen', 'dogBowl', \playable\DogBowl::create($dog))
+
       ->insertObjectInRoom('taxidermyRoom','bowl', \playable\Container::create('bowl')
                                                           ->setDescription("It's an empty bowl sitting on the floor.")
                           )
       ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
                                                           ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
+                                                          ->setItem('lamp', \playable\Lamp::create())
                           )
-//      ->insertObjectInContainerInRoom($footLocker, 'lamp', \playable\Lamp::create())
       ->insertObstacleObjectInRoom('lounge', Direction::$e, 'door', \playable\LockedDoor::create($rustyKey)
                                                           ->setDescription("The door seems to be locked.")
                                   )
-//      ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', Door::create())
-
-      // I was thinking it would be handy to be able to define events here that would be called by the callback.  What do you think?  for example:
-//      ->insertEventInRoom('roomName',Event::create())   // probably need some ways to identify the event, and what triggers it.
+      ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', \playable\Door::create())
 
       ->setSpawnPoint('castleEntrance')
       ->getMap();

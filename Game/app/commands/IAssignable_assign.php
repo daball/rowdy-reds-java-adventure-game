@@ -33,7 +33,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
    **/
   private function isRoomItem($itemInQuestion) {
     $room = GameState::getGameState()->getPlayerRoom();
-    foreach ($room->items as $itemName => $item)
+    foreach ($room->getAllItems() as $itemName => $item)
     {
       if ($itemName == $itemInQuestion)
         return $item;
@@ -46,13 +46,13 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
    **/
   private function isItemInContainerInRoom($itemInQuestion) {
     $room = GameState::getGameState()->getPlayerRoom();
-    foreach ($room->items as $itemName => $item)
+    foreach ($room->getAllItems() as $itemName => $item)
     {
       if (is_a($item, "\playable\IContainer"))
       {
         if (!is_a($item, "\playable\IOpenable") || $item->isOpened())
         {
-          foreach ($item->items as $containedItemName => $containedItem) {
+          foreach ($item->getAllItems() as $containedItemName => $containedItem) {
             if ($containerItemName == $itemInQuestion)
               return $containedItem;
           }
@@ -84,7 +84,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
       $left = $matches[1];
       //where is left at? Player, Room, Locker, etc.?
       $leftContainer = "";
-      if ( !(($leftContainer = $this->isPlayerItem($left)) === NULL)
+      if ( !(($leftContainer = $this->isPlayerItem($left)) !== FALSE)
         && !(($leftContainer = $this->isRoomItem($left)) !== FALSE)
         && !(($leftContainer = $this->isItemInContainerInRoom($left)) !== FALSE)
         )
@@ -95,7 +95,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
       $right = $matches[2];
       //where is right at? Player, Room, Locker, etc.?
       $rightContainer = "";
-      if ( !(($rightContainer = $this->isPlayerItem($right)) === NULL)
+      if ( !(($rightContainer = $this->isPlayerItem($right)) !== FALSE)
         && !(($rightContainer = $this->isRoomItem($right)) !== FALSE)
         && !(($rightContainer = $this->isItemInContainerInRoom($right)) !== FALSE)
         )
@@ -137,13 +137,13 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
         else if ($this->isItemInContainerInRoom($right) !== FALSE)
         {
           $room = GameState::getGameState()->getPlayerRoom();
-          foreach ($room->items as $itemName => $item)
+          foreach ($room->getAllItems() as $itemName => $item)
           {
             if (is_a($item, "\playable\IContainer"))
             {
               if (!is_a($item, "\playable\IOpenable") || $item->isOpened())
               {
-                foreach ($item->items as $containedItemName => $containedItem) {
+                foreach ($item->getAllItems() as $containedItemName => $containedItem) {
                   if ($containerItemName == $itemInQuestion) {
                     $leftContainer = $rightContainer;
                     $item->removeItem($right);
@@ -156,9 +156,27 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
           }
         }
       }
-      else if ($this->isPlayerItem($right) !== FALSE)
+      else if ($this->isRoomItem($left) !== FALSE)
       {
-        //TODO: Implement later
+        $room = GameState::getGameState()->getPlayerRoom();
+        if (is_a($room->getItem($left), "\playable\IContainer")) {
+          if ($this->isPlayerItem($right) !== FALSE)
+          {
+            $output = "";
+            if (substr($right, -8) === "leftHand")
+            {
+              $output = $room->setItem($left, $gameState->getPlayer()->leftHand);
+              $gameState->getPlayer()->leftHand = null;
+            }
+            else if (substr($right, -9) === "rightHand")
+            {
+              $output = $room->setItem($left, $gameState->getPlayer()->rightHand);
+              $gameState->getPlayer()->rightHand = null;
+            }
+            var_dump($output);
+            return $output;
+          }
+        }
       }
     }
   }

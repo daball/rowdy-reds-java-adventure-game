@@ -16,7 +16,7 @@ class IUnlockable_unlockCommandHandler extends BaseCommandHandler
    **/
   private function isRoomItem($itemInQuestion) {
     $room = GameState::getGameState()->getPlayerRoom();
-    foreach ($room->items as $itemName => $item)
+    foreach ($room->getAllItems() as $itemName => $item)
     {
       if ($itemName == $itemInQuestion)
         return $item;

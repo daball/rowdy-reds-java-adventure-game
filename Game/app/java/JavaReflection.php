@@ -121,7 +121,7 @@ class JavaReflection
       $properties = array();
       foreach ($class->getProperties() as $property) {
         if (!self::getDocReader()->isIgnored($property))
-          array_push($properties, "    " . self::propertyAsString($property) . ";\n");
+          array_push($properties, "    " . self::propertyAsString($property) . "\n");
       }
       $doc .= implode('', $properties);
     }
@@ -131,7 +131,7 @@ class JavaReflection
       foreach ($class->getMethods() as $method) {
         if (!self::getDocReader()->isIgnored($method))
           if ($method->getName() != "init" && $method->getName() != "__construct")
-          array_push($methods, "    " . self::methodAsString($method) . ";\n");
+          array_push($methods, "    " . self::methodAsString($method) . "\n");
       }
       $doc .= implode('', $methods);
     }

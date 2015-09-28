@@ -102,7 +102,7 @@ class MapBuilder
   public function insertObjectInRoom($roomName, $itemName, $item)
   {
     $room = $this->map->getRoom($roomName);
-    $room->items[$itemName] = $item;
+    $room->setItem($itemName, $item);
     return $this;
   }
 
@@ -110,11 +110,11 @@ class MapBuilder
   {
     $room = $this->map->getRoom($roomName);
     $room->directions->getDirection($roomDirection)->obstacleItem = $itemName;
-    $room->items[$itemName] = $item;
+    $room->setItem($itemName, $item);
     if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
       $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);
       //copy item to room2
-      $room2->items[$itemName] = $item;
+      $room2->setItem($itemName, $item);
       $room2Direction = Direction::oppositeDirection($roomDirection);
       //assign collision object to other room
       $room2->directions->getDirection($room2Direction)->obstacleItem = $itemName;
