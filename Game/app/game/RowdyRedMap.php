@@ -51,7 +51,7 @@ class RowdyRedMap
         ->setRoomImageUrl('kitchen', 'kitchen.jpg')
       ->createRoom('pantry')
         ->setRoomDescription('pantry', "You are in the pantry.")
-        ->setRoomImageUrl('pantry', 'pantry.png')
+        ->setRoomImageUrl('pantry', 'pantry.jpg')
       ->createRoom('banquetHall')
         ->setRoomDescription('banquetHall', "You are in the banquet hall.")
         ->setRoomImageUrl('banquetHall', 'banquetHall.jpg')
