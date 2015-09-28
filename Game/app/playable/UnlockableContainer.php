@@ -13,7 +13,6 @@ class UnlockableContainer extends Container implements IUnlockable
 {
   use TUnlockable;
   use TCloseable;
-  use TContainer;
   use TCreateWithKey;
 
   protected function __construct($key) {
