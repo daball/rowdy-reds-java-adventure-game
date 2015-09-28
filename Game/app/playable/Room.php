@@ -7,25 +7,23 @@ use \map\RoomDirections;
 require_once __DIR__.'/../map/RoomDirections.php';
 require_once __DIR__.'/../util/ISerializable.php';
 require_once __DIR__.'/../playable/IInspectable.php';
+require_once __DIR__.'/../playable/IContainer.php';
+require_once __DIR__.'/../playable/TInspectable.php';
 
 /**
  * Defines a Room in the Game
  **/
-class Room implements \playable\IInspectable, \util\ISerializable
+class Room implements IInspectable, IContainer, \util\ISerializable
 {
+  use TContainer;
+  use TInspectable;
+
   /**
    * Name of the room (used internally as a reference)
    * @type String
    * @ignore
    **/
   public $name = "";
-
-  /**
-   * Description of the room
-   * @type String
-   * @ignore
-   **/
-  public $description = "";
 
   /**
    * Image path (URL)
@@ -46,28 +44,18 @@ class Room implements \playable\IInspectable, \util\ISerializable
    **/
   public $directions;
 
-  /**
-   * Array of items within the room.
-   **/
-  public $items = array();
-
   public function __construct()
   {
     $this->directions = new RoomDirections();
-  }
-
-  /**
-   * Inspects the contents of the room.
-   **/
-  public function inspect()
-  {
-    $obviousExits = [];
-    if ($this->directions->n->nextRoom && $this->directions->n->obvious) array_push($obviousExits, "NORTH");
-    if ($this->directions->e->nextRoom && $this->directions->e->obvious) array_push($obviousExits, "EAST");
-    if ($this->directions->s->nextRoom && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
-    if ($this->directions->w->nextRoom && $this->directions->w->obvious) array_push($obviousExits, "WEST");
-    $obviousExits = implode(', ', $obviousExits);
-    return "\n$this->description\nThe obvious exits are: $obviousExits";
+    $this->onInspect(function () {
+      $obviousExits = [];
+      if ($this->directions->n->nextRoom && $this->directions->n->obvious) array_push($obviousExits, "NORTH");
+      if ($this->directions->e->nextRoom && $this->directions->e->obvious) array_push($obviousExits, "EAST");
+      if ($this->directions->s->nextRoom && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
+      if ($this->directions->w->nextRoom && $this->directions->w->obvious) array_push($obviousExits, "WEST");
+      $obviousExits = implode(', ', $obviousExits);
+      return "\n$this->description\nThe obvious exits are: $obviousExits";
+    });
   }
 
   /* ISerializable interface implementation */

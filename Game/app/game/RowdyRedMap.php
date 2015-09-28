@@ -1,13 +1,14 @@
 <?php
 
 namespace game;
+
 use map\MapBuilder;
 use map\Direction;
 use map\Map;
 
-
 require_once __DIR__.'/../map/MapBuilder.php';
 require_once __DIR__.'/../map/Direction.php';
+require_once __DIR__.'/../playable/index.php';
 
 ///SampleMap builds a sample map for Iteration 1 using MapBuilder
 class RowdyRedMap
@@ -69,7 +70,7 @@ class RowdyRedMap
       ->createRoom('darkRoom')
         ->setRoomDescription('darkRoom', "This room is pitch black.  You can't see anything.")
         ->setRoomImageUrl('darkRoom', 'darkRoom.jpg')
-        
+
       ->connectRooms('forest', Direction::$n,'castleEntrance')
       ->connectRooms('castleEntrance', Direction::$n, 'foyer')
       ->connectRooms('foyer', Direction::$n, 'tapestryE')
@@ -88,20 +89,36 @@ class RowdyRedMap
       ->connectRooms('hallwayS', Direction::$e, 'servantsQuarters')
       ->connectRooms('tapestryW', Direction::$n, 'taxidermyRoom')
       ->connectRooms('taxidermyRoom', Direction::$n, 'darkRoom')
-      
-      ->insertObjectInRoom('library', 'rustyKey', $rustyKey = Key::create('rustyKey')->setDescription("It's a dingy rusty key."))
-      ->insertObjectInRoom('pantry', 'brassKey', $brassKey = Key::create('brassKey')->setDescription("It's a nice and shiny brass key."))
-      ->insertObjectInRoom('kitchen', 'lambChop', Food::create()->setDescription("It's a tasty looking lambChop."))
-      ->insertObjectInRoom('taxidermyRoom','dog', Dog::create()->setDescription("It's a sizeable looking dog is sitting by the northern door, watching you alertly.")->setObstacleText("The dog growls at you menacingly, and will not let you pass by."))
-      ->insertObjectInRoom('taxidermyRoom','bowl', Container::create('bowl')->setDescription("It's an empty bowl sitting on the floor."))
-      ->insertObjectInRoom('servantsQuarters','footLocker', $footLocker = FootLocker::create($brassKey)->setDescription("It's a servant's simple footLocker chest that is sitting on the floor."))
-      ->insertObjectInObject($footLocker, 'lamp', Lamp::create())
-      ->insertObstacleObjectInRoom('lounge', Direction::$e, 'door', LockedDoor::create($rustyKey)->setDescription("The door seems to be locked."))
+
+      ->insertObjectInRoom('library', 'rustyKey', $rustyKey = \playable\Key::create('rustyKey')
+                                                          ->setDescription("It's a dingy rusty key.")
+                          )
+      ->insertObjectInRoom('pantry', 'brassKey', $brassKey = \playable\Key::create('brassKey')
+                                                          ->setDescription("It's a nice and shiny brass key.")
+                          )
+/*      ->insertObjectInRoom('kitchen', 'lambChop', \playable\Food::create()
+                                                          ->setDescription("It's a tasty looking lambChop.")
+                          )
+      ->insertObjectInRoom('taxidermyRoom','dog', \playable\Dog::create()
+                                                          ->setDescription("It's a sizeable looking dog is sitting by the northern door, watching you alertly.")
+                                                          ->setObstacleText("The dog growls at you menacingly, and will not let you pass by.")
+                          )
+*/
+      ->insertObjectInRoom('taxidermyRoom','bowl', \playable\Container::create('bowl')
+                                                          ->setDescription("It's an empty bowl sitting on the floor.")
+                          )
+      ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
+                                                          ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
+                          )
+//      ->insertObjectInContainerInRoom($footLocker, 'lamp', \playable\Lamp::create())
+      ->insertObstacleObjectInRoom('lounge', Direction::$e, 'door', \playable\LockedDoor::create($rustyKey)
+                                                          ->setDescription("The door seems to be locked.")
+                                  )
 //      ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', Door::create())
 
       // I was thinking it would be handy to be able to define events here that would be called by the callback.  What do you think?  for example:
 //      ->insertEventInRoom('roomName',Event::create())   // probably need some ways to identify the event, and what triggers it.
-      
+
       ->setSpawnPoint('castleEntrance')
       ->getMap();
   }

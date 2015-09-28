@@ -16,7 +16,7 @@ interface IUnlockable
    * Unlocks an IUnlockable item.
    * @return String
    **/
-  public function unlock($key);
+  public function unlock(Key $key);
 
   /**
    * Set a callback for the successful unlock() call.

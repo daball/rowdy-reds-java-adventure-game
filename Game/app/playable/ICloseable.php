@@ -17,4 +17,6 @@ interface ICloseable
    * @return String
    **/
   public function close();
+
+  public function onClose($fn);
 }

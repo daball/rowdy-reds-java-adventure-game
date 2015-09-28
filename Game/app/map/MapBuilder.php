@@ -36,7 +36,7 @@ class MapBuilder
   public function setRoomDescription($roomName, $roomDescription)
   {
     $room = $this->map->getRoom($roomName);
-    $room->description = $roomDescription;
+    $room->setDescription($roomDescription);
     return $this;
   }
 
@@ -99,45 +99,25 @@ class MapBuilder
     return $this->map;
   }
 
-  public function addItemToRoom($roomName, $item)
+  public function insertObjectInRoom($roomName, $itemName, $item)
   {
     $room = $this->map->getRoom($roomName);
-    array_push($room->items, $item);
+    $room->items[$itemName] = $item;
     return $this;
   }
 
-  public function insertDoorObstacle($roomName, $roomDirection, $doorName)
+  public function insertObstacleObjectInRoom($roomName, $roomDirection, $itemName, $item)
   {
     $room = $this->map->getRoom($roomName);
-    $door = new \playable\Door();
-    $door->close();
-    $room->directions->getDirection($roomDirection)->obstacleItem = $doorName;
-    $room->items[$doorName] = $door;
+    $room->directions->getDirection($roomDirection)->obstacleItem = $item;
+    $room->items[$itemName] = $item;
     if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
       $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);
       //copy item to room2
-      $room2->items[$doorName] = $door;
+      $room2->items[$itemName] = $item;
       $room2Direction = Direction::oppositeDirection($roomDirection);
       //assign collision object to other room
-      $room2->directions->getDirection($room2Direction)->obstacleItem = $doorName;
-    }
-    return $this;
-  }
-
-  public function insertLockedDoorObstacle($roomName, $roomDirection, $doorName, $key)
-  {
-    $room = $this->map->getRoom($roomName);
-    $door = new \playable\LockedDoor($key);
-    $door->close();
-    $room->directions->getDirection($roomDirection)->obstacleItem = $doorName;
-    $room->items[$doorName] = $door;
-    if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
-      $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);
-      //copy item to room2
-      $room2->items[$doorName] = $door;
-      $room2Direction = Direction::oppositeDirection($roomDirection);
-      //assign collision object to other room
-      $room2->directions->getDirection($room2Direction)->obstacleItem = $doorName;
+      $room2->directions->getDirection($room2Direction)->obstacleItem = $itemName;
     }
     return $this;
   }

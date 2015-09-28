@@ -17,4 +17,6 @@ interface IOpenable
    * @return String
    **/
   public function open();
+
+  public function onOpen($fn);
 }

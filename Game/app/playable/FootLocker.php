@@ -2,123 +2,52 @@
 
 namespace playable;
 
+require_once 'GameObject.php';
 require_once 'IOpenable.php';
 require_once 'ICloseable.php';
 require_once 'ICollidable.php';
 
 /**
- * A Door game item must be opened in order to pass to the next room.
+ * A foot locker game item must be opened in order to pass to the next room.
  */
-class FootLocker implements IOpenable, ICloseable, IUnlockable, ICollidable //, IVandalisable
+class FootLocker extends UnlockableContainer
 {
-  /**
-   * @ignore
-   */
-  private $opened = false;
-  private $locked = false;
-  private $callback = null;
-
-  /* IOpenable interface implementation */
-
-  /**
-   * @return boolean
-   * @ignore
-   */
-  public function isOpened() {
-    return $this->opened;
-  }
-
-  /**
-   * Opens the door.
-   * @return String
-   **/
-  public function open() {
-    if (!$this->opened) {
-      $this->opened = true;
-      return "The door swings open.";
-    }
-    else {
-      return "This door has already been opened.";
-    }
-  }
-
-  /* ICloseable interface implementation */
-
-  /**
-   * @return boolean
-   * @ignore
-   */
-  public function isClosed() {
-    return !$this->opened;
-  }
-
-  /**
-   * Closes the door.
-   * @return String
-   **/
-  public function close() {
-    if ($this->opened) {
-      $this->opened = false;
-      return "The door slams shut.";
-    }
-    else {
-      return "This door has already been closed.";
-    }
-  }
-
-  /* ICollidable interface implementation. */
-
-  /**
-   * Returns a boolean indicating if the Player can proceed past the obstacle.
-   * @return boolean
-   * @ignore
-   **/
-  public function isInTheWay() {
-    return $this->isClosed();
-  }
-
-  /**
-   * @ignore
-   **/
-  public function explainCollision($direction) {
-    return "There is a door blocking you from going $direction.";
-  }
-
-  /* IUnlockable interface implementation */
-
-  /**
-   * Unlocks an Unlockable item.
-   * @return String
-   **/
-  public function unlock($key)
-  {
-    if (is_a($key, "\playable\Key")) {
-      if ($this->key->getKeyID() == $key->getKeyID()) {
-        if ($this->fn !== null)
-          return $this->fn(true);
-        else
-          return "You have unlocked the foot locker.";
+  protected function __construct($key) {
+    parent();
+    $this->key = $key;
+    $this->onOpen(function () {
+      if ($this->unlocked) {
+        if (!$this->opened) {
+          $this->opened = true;
+          return "The foot locker swings open.";
+        }
+        else {
+          return "This foot locker has already been opened.";
+        }
       }
-    }
-    else {
-      if ($this->fn !== null)
-        return $this->fn(true);
+      else {
+        if ($this->opened)
+          return "This foot locker has already been opened.";
+        else
+          return "You try to open the foot locker, but this foot locker is locked.";
+      }
+    });
+    $this->onLock(function ($success) {
+      if ($this->unlocked) {
+        if ($success)
+          return "The key turns and the foot locker is locked. The foot locker remains opened.";
+        else
+          return "The key turns and the foot locker is locked. The foot locker remains closed.";
+      }
+      else {
+        return "This foot locker has already been locked.";
+      }
+    });
+    $this->onUnlock(function ($success) {
+      if ($success)
+        return "You have unlocked the foot locker. The foot locker swings open.";
       else
-        return "You must use a key to unlock the foot locker.";
-    }
+        return "You must use a key to unlock a locked foot locker.";
+    });
   }
-
-  /**
-   * @return boolean
-   */
-  public function isUnlocked()
-  {
-    return $this->unlocked;
-  }
-
-  public function onUnlock($fn)
-  {
-    $this->callback = $fn;
-  }
-
 }
