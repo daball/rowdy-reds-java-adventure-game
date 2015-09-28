@@ -23,10 +23,11 @@ trait TCloseable
    * @return String
    **/
   public function close() {
+    $cb = $this->closeCallback;
     if ($this->opened)
       $this->opened = false;
-    if ($this->closeCallback)
-      return $this->closeCallback(!$this->opened);
+    if ($cb)
+      return $cb(!$this->opened);
     else {
       if (!$this->opened)
         return "The item was closed.";

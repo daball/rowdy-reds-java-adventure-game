@@ -71,6 +71,7 @@ class Door extends GameObject implements IOpenable, ICloseable, ICollidable, \ut
 
   public function unserialize($data) {
     $data = unserialize($data);
+    $this->__construct();
     $this->description = $data['description'];
     $this->opened = $data['opened'];
   }

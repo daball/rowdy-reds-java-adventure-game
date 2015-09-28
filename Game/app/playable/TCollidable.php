@@ -17,8 +17,9 @@ trait TCollidable
 
   public function explainCollision($direction)
   {
+    $cb = $this->explainCollisionCallback;
     if ($this->explainCollisionCallback)
-      return $this->explainCollisionCallback($direction);
+      return $cb($direction);
     else
       return "There is something blocking you from going $direction. (Developer, please override this.)";
   }
@@ -27,7 +28,7 @@ trait TCollidable
    * @ignore
    **/
   public function setExplainCollision($fn) {
-    $this->explainCollision = $fn;
+    $this->explainCollisionCallback = $fn;
     return $this;
   }
 }

@@ -109,7 +109,7 @@ class MapBuilder
   public function insertObstacleObjectInRoom($roomName, $roomDirection, $itemName, $item)
   {
     $room = $this->map->getRoom($roomName);
-    $room->directions->getDirection($roomDirection)->obstacleItem = $item;
+    $room->directions->getDirection($roomDirection)->obstacleItem = $itemName;
     $room->items[$itemName] = $item;
     if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
       $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);

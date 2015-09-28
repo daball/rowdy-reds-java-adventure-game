@@ -26,7 +26,7 @@ trait TContainer
   }
   public function removeItem($itemName)
   {
-    unset($this->items[$item]);
+    unset($this->items[$itemName]);
     return $this;
   }
 }

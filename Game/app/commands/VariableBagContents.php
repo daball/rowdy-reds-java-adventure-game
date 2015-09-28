@@ -28,9 +28,9 @@ class VariableBagContentsHandler extends BaseCommandHandler
   {
     $commandLine = strtolower($commandLine);
     if ($commandLine == 'globals')
-      return $this->inspectGlobals($gameState);
+      return $this->inspectGlobals();
     else if ($commandLine == 'locals')
-      return $this->inspectLocals($gameState);
+      return $this->inspectLocals();
   }
 
   public function inspectLocals()

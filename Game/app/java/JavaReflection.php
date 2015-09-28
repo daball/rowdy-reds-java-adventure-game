@@ -186,9 +186,14 @@ class JavaReflection
         if (!self::getDocReader()->isIgnored($property))
         {
           $name = $property->getName();
-          $value = $property->getValue($instance);
-          if (is_null($value)) $value = "null";
-          array_push($properties, "    .$name=$value;\n");
+          try {
+            $value = $property->getValue($instance);
+            if (is_null($value)) $value = "null";
+            array_push($properties, "    .$name=$value;\n");
+          }
+          catch (\ReflectionException $ex) {
+            //this occurs due to closures, no need to panic
+          }
         }
       }
       $doc .= implode('', $properties);

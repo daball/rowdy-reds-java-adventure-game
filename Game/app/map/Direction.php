@@ -62,7 +62,8 @@ class Direction implements \util\ISerializable
       array(
         'description' => $this->description,
         'nextRoom' => $this->nextRoom,
-        'obstacleItem' => $this->obstacleItem
+        'obstacleItem' => $this->obstacleItem,
+        'obvious' => $this->obvious,
       )
     );
   }
@@ -72,6 +73,7 @@ class Direction implements \util\ISerializable
     $this->description = $data['description'];
     $this->nextRoom = $data['nextRoom'];
     $this->obstacleItem = $data['obstacleItem'];
+    $this->obvious = $data['obvious'];
   }
 
 }

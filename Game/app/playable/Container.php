@@ -50,6 +50,7 @@ class Container extends GameObject implements IContainer, \util\ISerializable, \
 
   public function unserialize($data) {
     $data = unserialize($data);
+    $this->__construct();
     $this->description = $data['description'];
     $this->items = $data['items'];
     $this->opened = $data['opened'];

@@ -76,6 +76,7 @@ class Room implements IInspectable, IContainer, \util\ISerializable, \Serializab
 
   public function unserialize($data) {
     $data = unserialize($data);
+    $this->__construct();
     $this->name = $data['name'];
     $this->description = $data['description'];
     $this->imageUrl = $data['imageUrl'];

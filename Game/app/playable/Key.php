@@ -46,8 +46,9 @@ class Key extends GameObject implements IInspectable, IAssignable, \util\ISerial
 
   public function unserialize($data) {
     $data = unserialize($data);
-    $this->description = $data['description'];
     $this->key = $data['key'];
+    $this->__construct($this->key);
+    $this->description = $data['description'];
   }
 
   public function inspect() {

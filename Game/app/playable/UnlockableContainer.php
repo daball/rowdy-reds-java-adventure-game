@@ -71,10 +71,11 @@ class UnlockableContainer extends Container implements IUnlockable, \util\ISeria
 
   public function unserialize($data) {
     $data = unserialize($data);
+    $this->key = $data['key'];
+    $this->__construct($this->key);
     $this->description = $data['description'];
     $this->items = $data['items'];
     $this->opened = $data['opened'];
     $this->unlocked = $data['unlocked'];
-    $this->key = $data['key'];
   }
 }

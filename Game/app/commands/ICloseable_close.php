@@ -15,7 +15,7 @@ class ICloseable_closeCommandHandler extends BaseCommandHandler
   {
     $gameState = GameState::getGameState();
     $matches = array();
-    if (preg_match('/([\w$_]+[\w\d$_]*)\.close\(\)/', $commandLine, $matches))
+    if (preg_match('/([\w$_]+[\w\d$_]*)\.close\(\);/', $commandLine, $matches))
     {
       $itemName = $matches[1];
       if (array_key_exists($itemName, $gameState->getPlayerRoom()->items)) {
@@ -33,7 +33,7 @@ class ICloseable_closeCommandHandler extends BaseCommandHandler
   {
     $gameState = GameState::getGameState();
     $matches = array();
-    if (preg_match('/([\w$_]+[\w\d$_]*)\.close\(\)/', $commandLine, $matches))
+    if (preg_match('/([\w$_]+[\w\d$_]*)\.close\(\);/', $commandLine, $matches))
     {
       $itemName = $matches[1];
       if (array_key_exists($itemName, $gameState->getPlayerRoom()->items)) {

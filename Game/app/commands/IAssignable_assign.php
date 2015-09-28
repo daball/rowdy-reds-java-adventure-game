@@ -21,8 +21,11 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
    * Is this an object assigned to the player?
    **/
   private function isPlayerItem($itemInQuestion) {
-    return ($itemInQuestion == "me.leftHand" || $itemInQuestion == "me.rightHand")
-        || ($itemInQuestion == "leftHand" || $itemInQuestion == "rightHand");
+    if ($itemInQuestion == "me.leftHand" || $itemInQuestion == "leftHand")
+      return GameState::getGameState()->getPlayer()->leftHand;
+    else if ($itemInQuestion == "me.rightHand" || $itemInQuestion == "rightHand")
+      return GameState::getGameState()->getPlayer()->rightHand;
+    else return false;
   }
 
   /**
@@ -81,9 +84,9 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
       $left = $matches[1];
       //where is left at? Player, Room, Locker, etc.?
       $leftContainer = "";
-      if ( !($leftContainer = $this->isPlayerItem($left) !== FALSE)
-        || !($leftContainer = $this->isRoomItem($left) !== FALSE)
-        || !($leftContainer = $this->isItemInContainerInRoom($left) !== FALSE)
+      if ( !(($leftContainer = $this->isPlayerItem($left)) === NULL)
+        && !(($leftContainer = $this->isRoomItem($left)) !== FALSE)
+        && !(($leftContainer = $this->isItemInContainerInRoom($left)) !== FALSE)
         )
       {
         return "I don't know what a $left is.";
@@ -92,15 +95,73 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
       $right = $matches[2];
       //where is right at? Player, Room, Locker, etc.?
       $rightContainer = "";
-      if ( !($rightContainer = $this->isPlayerItem($right) !== FALSE)
-        || !($rightContainer = $this->isRoomItem($right) !== FALSE)
-        || !($rightContainer = $this->isItemInContainerInRoom($right) !== FALSE)
+      var_dump( $this->isPlayerItem($right));
+      if ( !(($rightContainer = $this->isPlayerItem($right)) === NULL)
+        && !(($rightContainer = $this->isRoomItem($right)) !== FALSE)
+        && !(($rightContainer = $this->isItemInContainerInRoom($right)) !== FALSE)
         )
       {
         return "I don't know what a $right is.";
       }
-      //assign item right to left
-      //remove from origin
+      if ($this->isPlayerItem($left) !== FALSE)
+      {
+        if ($this->isPlayerItem($right) !== FALSE)
+        {
+          if ($left == $right) {
+            return "Your $left is already in your hand.";
+          }
+          else if (substr($left, -8) === "leftHand") {
+            $gameState->getPlayer()->leftHand = $rightContainer;
+            $gameState->getPlayer()->rightHand = $leftContainer;
+            return "You swapped the contents of your hands.";
+          }
+          else if (substr($left, -9) === "rightHand") {
+            $gameState->getPlayer()->rightHand = $rightContainer;
+            $gameState->getPlayer()->leftHand = $leftContainer;
+            return "You swapped the contents of your hands.";
+          }
+        }
+        else if ($this->isRoomItem($right) !== FALSE)
+        {
+          if (substr($left, -8) === "leftHand")
+          {
+            $gameState->getPlayer()->leftHand = $rightContainer;
+          }
+          else if (substr($left, -9) === "rightHand")
+          {
+            $gameState->getPlayer()->rightHand = $rightContainer;
+          }
+          $gameState->getPlayerRoom()->removeItem($right);
+          $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
+          var_dump(($gameState->getPlayer()));
+          return "You grabbed the $right and put it in your $whichHand.";
+        }
+        else if ($this->isItemInContainerInRoom($right) !== FALSE)
+        {
+          $room = GameState::getGameState()->getPlayerRoom();
+          foreach ($room->items as $itemName => $item)
+          {
+            if (is_a($item, "\playable\IContainer"))
+            {
+              if (!is_a($item, "\playable\IOpenable") || $item->isOpened())
+              {
+                foreach ($item->items as $containedItemName => $containedItem) {
+                  if ($containerItemName == $itemInQuestion) {
+                    $leftContainer = $rightContainer;
+                    $item->removeItem($right);
+                    $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
+                    return "You grabbed the $right from the $item and put it in your $whichHand.";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      else if ($this->isPlayerItem($right) !== FALSE)
+      {
+        //TODO: Implement later
+      }
     }
   }
 

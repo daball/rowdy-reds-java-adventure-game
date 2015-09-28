@@ -25,9 +25,9 @@ class LockedDoor extends Door implements /*ILockable,*/ IUnlockable, \util\ISeri
   protected function __construct($key) {
     parent::__construct();
     $this->key = $key;
-    $this->onOpen(function () {
+    $this->onOpen(function ($success) {
       if ($this->unlocked) {
-        if (!$this->opened) {
+        if ($success) {
           $this->opened = true;
           return "The door swings open.";
         }
@@ -36,7 +36,7 @@ class LockedDoor extends Door implements /*ILockable,*/ IUnlockable, \util\ISeri
         }
       }
       else {
-        if ($this->opened)
+        if ($success)
           return "This door has already been opened.";
         else
           return "You try to open the door, but this door is locked.";
@@ -76,9 +76,10 @@ class LockedDoor extends Door implements /*ILockable,*/ IUnlockable, \util\ISeri
 
   public function unserialize($data) {
     $data = unserialize($data);
+    $this->key = $data['key'];
+    $this->__construct($this->key);
     $this->description = $data['description'];
     $this->opened = $data['opened'];
     $this->unlocked = $data['unlocked'];
-    $this->key = $data['key'];
   }
 }

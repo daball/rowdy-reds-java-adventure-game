@@ -23,10 +23,11 @@ trait TOpenable
    * @return String
    **/
   public function open() {
+    $cb = $this->openCallback;
     if (!$this->opened)
       $this->opened = true;
     if ($this->openCallback)
-     return $this->openCallback($this->opened);
+     return $cb($this->opened);
     else
      return "This item has already been opened.";
   }

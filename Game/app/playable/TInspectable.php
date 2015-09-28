@@ -12,9 +12,9 @@ trait TInspectable
    **/
   public function inspect()
   {
+    $cb = $this->inspectCallback;
     if ($this->inspectCallback)
     {
-      $cb = $this->inspectCallback;
       return $cb();
     }
     else
