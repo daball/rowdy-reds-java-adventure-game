@@ -2,6 +2,7 @@
 
 namespace commands;
 use game\CommandProcessor;
+use game\GameState;
 
 require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
@@ -28,7 +29,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
    * Is this an object contained in the room?
    **/
   private function isRoomItem($itemInQuestion) {
-    $room = GameState::getPlayerRoom();
+    $room = GameState::getGameState()->getPlayerRoom();
     foreach ($room->items as $itemName => $item)
     {
       if ($itemName == $itemInQuestion)
@@ -41,7 +42,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
    * Is this an object contained in a container in the room?
    **/
   private function isItemInContainerInRoom($itemInQuestion) {
-    $room = GameState::getPlayerRoom();
+    $room = GameState::getGameState()->getPlayerRoom();
     foreach ($room->items as $itemName => $item)
     {
       if (is_a($item, "\playable\IContainer"))
@@ -61,7 +62,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
 
   public function validateCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getGameState()->getGameState();
     $matches = array();
     if (preg_match('/\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;/', $commandLine, $matches))
     {
@@ -72,7 +73,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
 
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getGameState()->getGameState();
     $matches = array();
     if (preg_match('/\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;/', $commandLine, $matches))
     {

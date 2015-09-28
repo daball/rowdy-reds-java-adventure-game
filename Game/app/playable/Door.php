@@ -6,6 +6,7 @@ require_once 'GameObject.php';
 require_once 'IOpenable.php';
 require_once 'ICloseable.php';
 require_once 'ICollidable.php';
+require_once 'TCreate.php';
 require_once 'TOpenable.php';
 require_once 'TCloseable.php';
 require_once 'TCollidable.php';

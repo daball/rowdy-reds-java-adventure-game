@@ -2,6 +2,7 @@
 
 namespace commands;
 use game\CommandProcessor;
+use game\GameState;
 use java\JavaReflection;
 
 require_once __DIR__.'/../game/GameState.php';

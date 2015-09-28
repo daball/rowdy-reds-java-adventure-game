@@ -3,9 +3,11 @@
 namespace playable;
 
 use \map\Direction;
+use game\GameState;
 
 require_once 'IAssignable.php';
 require_once __DIR__.'/../map/Direction.php';
+require_once __DIR__.'/../game/GameState.php';
 
 /**
  * Player represents the player's avatar throughout the game.
@@ -37,16 +39,12 @@ class Player
    **/
   public $location = null;
 
-  public static function init($gameState) {
-    self::$gameState =  $gameState;
-  }
-
   /**
     * Navigates North.
     * @return String
     **/
   public function moveNorth() {
-    return self::$gameState->navigate(Direction::$north);
+    return GameState::getGameState()->navigate(Direction::$north);
   }
 
   /**
@@ -54,7 +52,7 @@ class Player
     * @return String
     **/
   public function moveSouth() {
-    return self::$gameState->navigate(Direction::$south);
+    return GameState::getGameState()->navigate(Direction::$south);
   }
 
   /**
@@ -62,7 +60,7 @@ class Player
     * @return String
     **/
   public function moveEast() {
-    return self::$gameState->navigate(Direction::$east);
+    return GameState::getGameState()->navigate(Direction::$east);
   }
 
   /**
@@ -70,7 +68,7 @@ class Player
     * @return String
     **/
   public function moveWest() {
-    return self::$gameState->navigate(Direction::$west);
+    return GameState::getGameState()->navigate(Direction::$west);
   }
 
   /**
@@ -81,7 +79,7 @@ class Player
       return false;
     else
     {
-      $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
+      $item = GameState::getGameState()->getPlayerRoom()->items[$direction->obstacleItem];
       if (is_a($item, "\playable\ICollidable"))
         return $item->isInTheWay();
       else
@@ -93,7 +91,7 @@ class Player
    * @ignore
    **/
   private function explainCollision($d, Direction $direction) {
-    $item = self::$gameState->getPlayerRoom()->items[$direction->obstacleItem];
+    $item = GameState::getGameState()->getPlayerRoom()->items[$direction->obstacleItem];
     $d = ($d == Direction::$n ? 'north' : '') .
          ($d == Direction::$s ? 'south' : '') .
          ($d == Direction::$e ? 'east' : '') .
@@ -111,7 +109,7 @@ class Player
     //sanitize direction
     $direction = Direction::cardinalDirection($direction);
     //get adjacent room
-    $directionInfo = self::$gameState->getPlayerRoom()->directions->getDirection($direction);
+    $directionInfo = GameState::getGameState()->getPlayerRoom()->directions->getDirection($direction);
     $nextRoom = $directionInfo->nextRoom;
     //make sure this is valid
     if ($nextRoom !== '') {
@@ -121,14 +119,14 @@ class Player
       }
       else {
         //put the avatar in the next room
-        $this->location = self::$gameState->map->getRoom($nextRoom)->name;
+        $this->location = GameState::getGameState()->map->getRoom($nextRoom)->name;
         //return next room description
-        return self::$gameState->getPlayerRoom()->inspect();
+        return GameState::getGameState()->getPlayerRoom()->inspect();
       }
     }
     else {
       //room didn't exist, check if direction has a description
-      $nextDirection = self::$gameState->getPlayerRoom()->directions->getDirection($direction)->description;
+      $nextDirection = GameState::getGameState()->getPlayerRoom()->directions->getDirection($direction)->description;
       if ($nextDirection !== '')
         //return description of the direction
         return $nextDirection;

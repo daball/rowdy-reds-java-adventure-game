@@ -2,6 +2,7 @@
 
 namespace commands;
 use game\CommandProcessor;
+use game\GameState;
 
 // LEFT HAND RULES:
 // Specify ClassType varName
