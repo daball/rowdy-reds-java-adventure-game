@@ -19,69 +19,69 @@ class ValidateParse
 {
   public $isValid = false;
   public $output = null;
-}
 
-function NullLiteral($arg)
-{
-  $vp = new ValidateParse();
-  $vp->isValid = $arg === "null";
-  $vp->output = ($vp->isValid ? $arg : null);
-  return $vp;
-}
-
-function EcscapeSequence($arg) {
-  /*
-    EscapeSequence:
-    \ b (backspace BS, Unicode \u0008)
-    \ t (horizontal tab HT, Unicode \u0009)
-    \ n (linefeed LF, Unicode \u000a)
-    \ f (form feed FF, Unicode \u000c)
-    \ r (carriage return CR, Unicode \u000d)
-    \ " (double quote ", Unicode \u0022)
-    \ ' (single quote ', Unicode \u0027)
-    \ \ (backslash \, Unicode \u005c)
-    OctalEscape (octal value, Unicode \u0000 to \u00ff)
- */
- /*$vp = new ValidateParse();
- switch ($arg)
- {
-   case '\b': case '\t': case '\n': case '\f': case '\r': case '\"': case: "\\'": case '\\':
-    $vp->isValid = true;
-    $vp->output = $arg;
+  function NullLiteral($arg)
+  {
+    $vp = new ValidateParse();
+    $vp->isValid = $arg === "null";
+    $vp->output = ($vp->isValid ? $arg : null);
     return $vp;
- }
- if (!$vp->isValid)
- {
-   return OctalEscape($arg);
- }*/
-}
+  }
 
-function OctalEscape($arg) {
-  /*
-      OctalEscape:
-    \ OctalDigit
-    \ OctalDigit OctalDigit
-    \ ZeroToThree OctalDigit OctalDigit
-  */
-  $output = "";
-  /*switch(strlen($arg)) {
-    case 3:
+  function EcscapeSequence($arg) {
+    /*
+      EscapeSequence:
+      \ b (backspace BS, Unicode \u0008)
+      \ t (horizontal tab HT, Unicode \u0009)
+      \ n (linefeed LF, Unicode \u000a)
+      \ f (form feed FF, Unicode \u000c)
+      \ r (carriage return CR, Unicode \u000d)
+      \ " (double quote ", Unicode \u0022)
+      \ ' (single quote ', Unicode \u0027)
+      \ \ (backslash \, Unicode \u005c)
+      OctalEscape (octal value, Unicode \u0000 to \u00ff)
+   */
+   /*$vp = new ValidateParse();
+   switch ($arg)
+   {
+     case '\b': case '\t': case '\n': case '\f': case '\r': case '\"': case: "\\'": case '\\':
+      $vp->isValid = true;
+      $vp->output = $arg;
+      return $vp;
+   }
+   if (!$vp->isValid)
+   {
+     return OctalEscape($arg);
+   }*/
+  }
 
-  }*/
-}
+  function OctalEscape($arg) {
+    /*
+        OctalEscape:
+      \ OctalDigit
+      \ OctalDigit OctalDigit
+      \ ZeroToThree OctalDigit OctalDigit
+    */
+    $output = "";
+    /*switch(strlen($arg)) {
+      case 3:
 
-function OctalDigit() {
-  /*
-    OctalDigit:
-    (one of)
-    0 1 2 3 4 5 6 7
-  */
-}
+    }*/
+  }
 
-function ZeroToThree() {
-  /*
-    ZeroToThree:
-    (one of)
-    0 1 2 3
-  */
+  function OctalDigit() {
+    /*
+      OctalDigit:
+      (one of)
+      0 1 2 3 4 5 6 7
+    */
+  }
+
+  function ZeroToThree() {
+    /*
+      ZeroToThree:
+      (one of)
+      0 1 2 3
+    */
+  }
 }

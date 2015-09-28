@@ -2,9 +2,9 @@
 
 namespace game;
 
+require_once 'GameState.php';
 require_once 'CommandProcessor.php';
 require_once __DIR__.'/../commands/index.php';
-require_once 'GameState.php';
 
 ///GameEngine manages the game state across many page loads
 ///using PHP sessions. Typically sessions work by sending out

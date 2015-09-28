@@ -6,7 +6,6 @@ use \playable\Player;
 use \playable\System;
 
 require_once 'CommandProcessor.php';
-require_once __DIR__.'/../commands/index.php';
 require_once __DIR__.'/../playable/index.php';
 require_once __DIR__.'/../playable/System.php';
 require_once __DIR__.'/../util/ISerializable.php';
