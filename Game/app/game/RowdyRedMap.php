@@ -26,10 +26,10 @@ class RowdyRedMap
         ->setRoomImageUrl('foyer', 'foyer.jpg')
       ->createRoom('tapestryE')
         ->setRoomDescription('tapestryE', "You are in the east end of a long hall lined with ornate tapestries.  The room continues to the west.")
-        ->setRoomImageUrl('tapestryE', 'null.png')
+        ->setRoomImageUrl('tapestryE', 'tapestryE.jpg')
       ->createRoom('tapestryW')
         ->setRoomDescription('tapestryW', "You are in the west end of a long hall lined with ornate tapestries.  The room continues to the east.")
-        ->setRoomImageUrl('tapestryW', 'null.png')
+        ->setRoomImageUrl('tapestryW', 'tapestryW.jpg')
       ->createRoom('study')
         ->setRoomDescription('study', "You are in a private study lined with stained glass windows, and an ornately carved desk.  A small note rests on the desk.")
         ->setRoomImageUrl('study', 'study.jpg')
@@ -41,7 +41,7 @@ class RowdyRedMap
         ->setRoomImageUrl('conservatory', 'conservatory.jpg')
       ->createRoom('lounge')
         ->setRoomDescription('lounge', "You are in a lounge.  There is a door to the east.")
-        ->setRoomImageUrl('lounge', 'null.png')
+        ->setRoomImageUrl('lounge', 'lounge.jpg')
       ->createRoom('butlersQuarters')
         ->setRoomDescription('butlersQuarters', "You are in the butler's quarters.")
         ->setRoomImageUrl('butlersQuarters', 'butlersQuarters.jpg')
@@ -64,8 +64,8 @@ class RowdyRedMap
         ->setRoomDescription('servantsQuarters', "You are a servant's quarters.")
         ->setRoomImageUrl('servantsQuarters', 'servantsQuarters.jpg')
       ->createRoom('taxidermyRoom')
-        ->setRoomDescription('taxidermyRoom', "You are a trophy room.  There is a bowl on the floor and a dog laying in front of a doorway leading north.")
-        ->setRoomImageUrl('taxidermyRoom', 'taxidermyRoom.jpg')
+        ->setRoomDescription('taxidermyRoom', "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.")
+        ->setRoomImageUrl('taxidermyRoom', 'taxidermyRoom_dog.jpg')
       ->createRoom('darkRoom')
         ->setRoomDescription('darkRoom', "This room is pitch black.  You can't see anything.")
         ->setRoomImageUrl('darkRoom', 'darkRoom.jpg')
@@ -81,7 +81,7 @@ class RowdyRedMap
       ->connectRooms('lounge', Direction::$e, 'butlersQuarters')
       ->connectRooms('butlersQuarters', Direction::$n, 'kitchen')
       ->connectRooms('kitchen', Direction::$n, 'pantry')
-      ->connectRooms('kitchen', Direction::$w, 'banquetHall')
+//      ->connectRooms('kitchen', Direction::$w, 'banquetHall')  // remarked out to eliminate the one way door
       ->connectRooms('banquetHall', Direction::$s, 'lounge')
       ->connectRooms('banquetHall', Direction::$n, 'hallwayS')
       ->connectRooms('hallwayS', Direction::$n, 'hallwayN')
@@ -89,15 +89,18 @@ class RowdyRedMap
       ->connectRooms('tapestryW', Direction::$n, 'taxidermyRoom')
       ->connectRooms('taxidermyRoom', Direction::$n, 'darkRoom')
       
-      
       ->insertObjectInRoom('library', 'rustyKey', $rustyKey = Key::create('rustyKey')->setDescription("It's a dingy rusty key."))
       ->insertObjectInRoom('pantry', 'brassKey', $brassKey = Key::create('brassKey')->setDescription("It's a nice and shiny brass key."))
-      ->insertObjectInRoom('taxidermyRoom','dog', Dog::create()->setDescription("A dog is sitting by the northern door and is staring at yoo intensely.")->setObstacleText("The dog growls at you, and will not let you pass by."))
-      ->insertObjectInRoom('taxidermyRoom','bowl', Bowl::create('bowl')->setDescription("It's an empty bowl, and it's sitting on the floor."))
-      ->insertObjectInRoom('servantsQuarters','footLocker', $footLocker = FootLocker::create($brassKey)->setDescription("A footlocker is sitting on the floor."))
+      ->insertObjectInRoom('kitchen', 'lambChop', Food::create()->setDescription("It's a tasty looking lambChop."))
+      ->insertObjectInRoom('taxidermyRoom','dog', Dog::create()->setDescription("It's a sizeable looking dog is sitting by the northern door, watching you alertly.")->setObstacleText("The dog growls at you menacingly, and will not let you pass by."))
+      ->insertObjectInRoom('taxidermyRoom','bowl', Container::create('bowl')->setDescription("It's an empty bowl sitting on the floor."))
+      ->insertObjectInRoom('servantsQuarters','footLocker', $footLocker = FootLocker::create($brassKey)->setDescription("It's a servant's simple footLocker chest that is sitting on the floor."))
       ->insertObjectInObject($footLocker, 'lamp', Lamp::create())
-      ->insertObstacleObjectInRoom('lounge', Direction::$e, 'door', LockedDoor::create($rustyKey)->setDescription("It's a door.  What do you want me to say."))
-      ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', Door::create())
+      ->insertObstacleObjectInRoom('lounge', Direction::$e, 'door', LockedDoor::create($rustyKey)->setDescription("The door seems to be locked."))
+//      ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', Door::create())
+
+      // I was thinking it would be handy to be able to define events here that would be called by the callback.  What do you think?  for example:
+//      ->insertEventInRoom('roomName',Event::create())   // probably need some ways to identify the event, and what triggers it.
       
       ->setSpawnPoint('castleEntrance')
       ->getMap();
