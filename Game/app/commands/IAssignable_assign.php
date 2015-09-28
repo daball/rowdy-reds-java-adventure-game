@@ -95,7 +95,6 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
       $right = $matches[2];
       //where is right at? Player, Room, Locker, etc.?
       $rightContainer = "";
-      var_dump( $this->isPlayerItem($right));
       if ( !(($rightContainer = $this->isPlayerItem($right)) === NULL)
         && !(($rightContainer = $this->isRoomItem($right)) !== FALSE)
         && !(($rightContainer = $this->isItemInContainerInRoom($right)) !== FALSE)
@@ -133,7 +132,6 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
           }
           $gameState->getPlayerRoom()->removeItem($right);
           $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
-          var_dump(($gameState->getPlayer()));
           return "You grabbed the $right and put it in your $whichHand.";
         }
         else if ($this->isItemInContainerInRoom($right) !== FALSE)

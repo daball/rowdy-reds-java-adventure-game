@@ -8,17 +8,27 @@ require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 
-///Handles reset command.
-class ResetCommandHandler extends BaseCommandHandler
+///Handles inspect command.
+class InspectCommandHandler extends BaseCommandHandler
 {
+  private function getTargetName($commandLine)
+  {
+    if (stripos($commandLine, 'inspect') === 0)
+      return trim(substr($commandLine, 8));
+    else if (stripos($commandLine, 'look') === 0)
+      return trim(substr($commandLine, 5));
+    else
+      return "";
+  }
+
   ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
   public function validateCommand($commandLine)
   {
     $commandLine = strtolower($commandLine);
-    return  $commandLine == 'reset' ||
-            $commandLine == 'restart';
+    return  stripos($commandLine, 'inspect') === 0 ||
+            stripos($commandLine, 'look') === 0;
   }
 
   ///Executes the incoming command line.
@@ -27,9 +37,13 @@ class ResetCommandHandler extends BaseCommandHandler
   public function executeCommand($commandLine)
   {
     $gameState = GameState::getGameState();
-    $message = $gameState->resetGameState();
+    $inspectWhat = $this->getTargetName($commandLine);
+    if ($inspectWhat === "")
+      $message = $gameState->getPlayerRoom()->inspect();
+    else
+
     return $message;
   }
 }
 
-CommandProcessor::addCommandHandler(new ResetCommandHandler());
+CommandProcessor::addCommandHandler(new InspectCommandHandler());
