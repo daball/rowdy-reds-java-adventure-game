@@ -8,8 +8,9 @@ require_once "TUnlockable.php";
 require_once "TCloseable.php";
 require_once "TContainer.php";
 require_once "TCreateWithKey.php";
+require_once __DIR__.'/../util/ISerializable.php';
 
-class UnlockableContainer extends Container implements IUnlockable
+class UnlockableContainer extends Container implements IUnlockable, \util\ISerializable, \Serializable
 {
   use TUnlockable;
   use TCloseable;
@@ -52,5 +53,28 @@ class UnlockableContainer extends Container implements IUnlockable
       else
         return "You must use a key to unlock a locked container.";
     });
+  }
+
+  /* ISerializable interface implementation */
+
+  public function serialize() {
+    return serialize(
+      array(
+        'description' => $this->description,
+        'items' => $this->items,
+        'opened' => $this->opened,
+        'unlocked' => $this->unlocked,
+        'key' => $this->key,
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->description = $data['description'];
+    $this->items = $data['items'];
+    $this->opened = $data['opened'];
+    $this->unlocked = $data['unlocked'];
+    $this->key = $data['key'];
   }
 }

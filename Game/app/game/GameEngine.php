@@ -20,7 +20,7 @@ class GameEngine
   public function createSession()
   {
     $this->gameState = GameState::getGameState();
-    //$_SESSION['gameState'] = $this->gameState->serialize();
+    $_SESSION['gameState'] = $this->gameState->serialize();
   }
 
   public function restoreSession()
@@ -30,7 +30,7 @@ class GameEngine
 
   public function saveSession()
   {
-    //$_SESSION['gameState'] = $this->gameState->serialize();
+    $_SESSION['gameState'] = $this->gameState->serialize();
   }
 
   public function __construct()

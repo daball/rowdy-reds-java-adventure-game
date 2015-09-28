@@ -8,12 +8,13 @@ use game\GameState;
 require_once 'IAssignable.php';
 require_once __DIR__.'/../map/Direction.php';
 require_once __DIR__.'/../game/GameState.php';
+require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * Player represents the player's avatar throughout the game.
  * @author David Ball
  */
-class Player
+class Player implements \util\ISerializable, \Serializable
 {
   /**
    * @ignore

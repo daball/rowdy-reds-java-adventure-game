@@ -8,6 +8,7 @@ trait TOpenable
    * @ignore
    */
   private $opened = false;
+  private $openCallback = null;
 
   /**
    * @return boolean

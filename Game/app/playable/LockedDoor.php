@@ -10,11 +10,12 @@ require_once "TUnlockable.php";
 require_once "TCloseable.php";
 require_once "TCollidable.php";
 require_once "TCreateWithKey.php";
+require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * A Door game item must be opened in order to pass to the next room.
  */
-class LockedDoor extends Door implements /*ILockable,*/ IUnlockable
+class LockedDoor extends Door implements /*ILockable,*/ IUnlockable, \util\ISerializable, \Serializable
 {
   use TUnlockable;
   use TCloseable;
@@ -58,5 +59,26 @@ class LockedDoor extends Door implements /*ILockable,*/ IUnlockable
       else
         return "You must use a key to unlock a locked door.";
     });
+  }
+
+  /* ISerializable interface implementation */
+
+  public function serialize() {
+    return serialize(
+      array(
+        'description' => $this->description,
+        'opened' => $this->opened,
+        'unlocked' => $this->unlocked,
+        'key' => $this->key,
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->description = $data['description'];
+    $this->opened = $data['opened'];
+    $this->unlocked = $data['unlocked'];
+    $this->key = $data['key'];
   }
 }

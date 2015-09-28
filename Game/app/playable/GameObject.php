@@ -4,8 +4,9 @@ namespace playable;
 
 require_once "IInspectable.php";
 require_once "TInspectable.php";
+require_once __DIR__.'/../util/ISerializable.php';
 
-class GameObject implements IInspectable {
+abstract class GameObject implements IInspectable {
   use TInspectable;
 
   protected function __construct()

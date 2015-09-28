@@ -8,8 +8,9 @@ require_once "TCreate.php";
 require_once "TContainer.php";
 require_once "TOpenable.php";
 require_once "TCloseable.php";
+require_once __DIR__.'/../util/ISerializable.php';
 
-class Container extends GameObject implements IContainer
+class Container extends GameObject implements IContainer, \util\ISerializable, \Serializable
 {
   use TCreate;
   use TContainer;
@@ -33,5 +34,24 @@ class Container extends GameObject implements IContainer
       else
         return "The container does not close.";
     });
+  }
+
+  /* ISerializable interface implementation */
+
+  public function serialize() {
+    return serialize(
+      array(
+        'description' => $this->description,
+        'items' => $this->items,
+        'opened' => $this->opened,
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->description = $data['description'];
+    $this->items = $data['items'];
+    $this->opened = $data['opened'];
   }
 }

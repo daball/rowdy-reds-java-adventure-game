@@ -9,11 +9,12 @@ require_once __DIR__.'/../util/ISerializable.php';
 require_once __DIR__.'/../playable/IInspectable.php';
 require_once __DIR__.'/../playable/IContainer.php';
 require_once __DIR__.'/../playable/TInspectable.php';
+require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * Defines a Room in the Game
  **/
-class Room implements IInspectable, IContainer, \util\ISerializable
+class Room implements IInspectable, IContainer, \util\ISerializable, \Serializable
 {
   use TContainer;
   use TInspectable;
