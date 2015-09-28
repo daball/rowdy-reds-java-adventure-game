@@ -6,6 +6,7 @@ require_once 'GameObject.php';
 require_once 'IOpenable.php';
 require_once 'ICloseable.php';
 require_once 'ICollidable.php';
+require_once 'UnlockableContainer.php';
 
 /**
  * A foot locker game item must be opened in order to pass to the next room.
