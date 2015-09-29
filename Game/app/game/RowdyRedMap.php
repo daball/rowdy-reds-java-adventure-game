@@ -83,7 +83,7 @@ class RowdyRedMap
       ->connectRooms('butlersQuarters', Direction::$n, 'kitchen')
       ->connectRooms('kitchen', Direction::$n, 'pantry')
 //      ->connectRooms('kitchen', Direction::$w, 'banquetHall')  // remarked out to eliminate the one way door
-      ->connectRooms('banquetHall', Direction::$s, 'lounge')
+      ->connectRooms('banquetHall', Direction::$s, 'conservatory')
       ->connectRooms('banquetHall', Direction::$n, 'hallwayS')
       ->connectRooms('hallwayS', Direction::$n, 'hallwayN')
       ->connectRooms('hallwayS', Direction::$e, 'servantsQuarters')
