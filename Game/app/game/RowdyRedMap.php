@@ -62,7 +62,7 @@ class RowdyRedMap
         ->setRoomDescription('hallwayN', "You are in the north end of a hallway.")
         ->setRoomImageUrl('hallwayN', 'null.png')
       ->createRoom('servantsQuarters')
-        ->setRoomDescription('servantsQuarters', "You are a servant's quarters.")
+        ->setRoomDescription('servantsQuarters', "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.")
         ->setRoomImageUrl('servantsQuarters', 'servantsQuarters.jpg')
       ->createRoom('taxidermyRoom')
         ->setRoomDescription('taxidermyRoom', "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.")
