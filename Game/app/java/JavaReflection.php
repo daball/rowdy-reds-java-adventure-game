@@ -112,7 +112,7 @@ class JavaReflection
       foreach ($class->getMethods() as $method) {
         if (!self::getDocReader()->isIgnored($method))
           if (strstr($method->getName(), "__construct") !== FALSE)
-            array_push($constructors, "    " . self::methodAsString($method) . ";\n");
+            array_push($constructors, "    " . self::methodAsString($method) . "\n");
       }
       $doc .= implode('', array_unique($constructors));
     }
@@ -189,7 +189,7 @@ class JavaReflection
           try {
             $value = $property->getValue($instance);
             if (is_null($value)) $value = "null";
-            array_push($properties, "    .$name=$value;\n");
+            array_push($properties, "    .$name=$value\n");
           }
           catch (\ReflectionException $ex) {
             //this occurs due to closures, no need to panic

@@ -7,22 +7,12 @@ use game\GameState;
 require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
+require_once 'TUsesItems.php';
 
 class IUnlockable_unlockCommandHandler extends BaseCommandHandler
 {
 
-  /**
-   * Is this an object contained in the room?
-   **/
-  private function isRoomItem($itemInQuestion) {
-    $room = GameState::getGameState()->getPlayerRoom();
-    foreach ($room->getAllItems() as $itemName => $item)
-    {
-      if ($itemName == $itemInQuestion)
-        return $item;
-    }
-    return false;
-  }
+  use TUsesItems;
 
   public function validateCommand($commandLine)
   {

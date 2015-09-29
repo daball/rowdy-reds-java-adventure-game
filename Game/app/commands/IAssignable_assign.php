@@ -7,61 +7,11 @@ use game\GameState;
 require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
+require_once 'TUsesItems.php';
 
 class IAssignable_assignCommandHandler extends BaseCommandHandler
 {
-
-  // /**
-  //  * Is this a player defined object in variable bag?
-  //  **/
-  // private function isLocal($itemInQuestion) {
-  // }
-
-  /**
-   * Is this an object assigned to the player?
-   **/
-  private function isPlayerItem($itemInQuestion) {
-    if ($itemInQuestion == "me.leftHand" || $itemInQuestion == "leftHand")
-      return GameState::getGameState()->getPlayer()->leftHand;
-    else if ($itemInQuestion == "me.rightHand" || $itemInQuestion == "rightHand")
-      return GameState::getGameState()->getPlayer()->rightHand;
-    else return false;
-  }
-
-  /**
-   * Is this an object contained in the room?
-   **/
-  private function isRoomItem($itemInQuestion) {
-    $room = GameState::getGameState()->getPlayerRoom();
-    foreach ($room->getAllItems() as $itemName => $item)
-    {
-      if ($itemName == $itemInQuestion)
-        return $item;
-    }
-    return false;
-  }
-
-  /**
-   * Is this an object contained in a container in the room?
-   **/
-  private function isItemInContainerInRoom($itemInQuestion) {
-    $room = GameState::getGameState()->getPlayerRoom();
-    foreach ($room->getAllItems() as $itemName => $item)
-    {
-      if (is_a($item, "\playable\IContainer"))
-      {
-        if (!is_a($item, "\playable\IOpenable") || $item->isOpened())
-        {
-          foreach ($item->getAllItems() as $containedItemName => $containedItem) {
-            if ($containerItemName == $itemInQuestion)
-              return $containedItem;
-          }
-        }
-      }
-    }
-    return false;
-  }
-
+  use TUsesItems;
 
   public function validateCommand($commandLine)
   {

@@ -7,10 +7,13 @@ use game\GameState;
 require_once __DIR__.'/../game/GameState.php';
 require_once __DIR__.'/../game/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
+require_once 'TUsesItems.php';
 
 ///Handles reset command.
 class VariableBagContentsHandler extends BaseCommandHandler
 {
+  use TUsesItems;
+
   ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
@@ -30,36 +33,7 @@ class VariableBagContentsHandler extends BaseCommandHandler
     if ($commandLine == 'globals')
       return $this->inspectGlobals();
     else if ($commandLine == 'locals')
-      return $this->inspectLocals();
-  }
-
-  public function inspectLocals()
-  {
-    $gameState = GameState::getGameState();
-    $eol = "\n";
-    $output = "You have the following variables in your local variable bag:$eol";
-    foreach($gameState->locals as $local => $value)
-    {
-      $output .= \java\JavaReflection::inspectInstance($gameState->locals[$local], $local) . $eol;
-    }
-    $output .= "The following variables are available to you because of where you are standing:$eol";
-    foreach($gameState->getPlayerRoom()->getAllItems() as $item => $value)
-    {
-      $output .= \java\JavaReflection::inspectInstance($value, $item) . $eol;
-    }
-    return $output;
-  }
-
-  public function inspectGlobals()
-  {
-    $gameState = GameState::getGameState();
-    $eol = "\n";
-    $output = "The following variables are available anywhere in the game:$eol";
-    foreach($gameState->globals as $global => $value)
-    {
-      $output .= \java\JavaReflection::inspectInstance($gameState->globals[$global], $global) . $eol;
-    }
-    return $output;
+      return $this->inspectLocals() . "\n" . $this->inspectRoomContents();
   }
 
 }
