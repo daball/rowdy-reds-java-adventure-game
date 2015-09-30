@@ -8,6 +8,7 @@ require_once 'IAssignable.php';
 require_once 'IEdidable.php';
 require_once 'IInspectable.php';
 require_once 'TCreate.php';
+require_once 'TAssignable.php';
 require_once 'TInspectable.php';
 require_once __DIR__.'/../util/ISerializable.php';
 
@@ -18,6 +19,7 @@ class LambChop extends GameObject implements IInspectable, IAssignable, IEdidabl
 {
   use TCreate;
   use TInspectable;
+  use TAssignable;
 
   public function __construct() {
     $this->setDescription("You have found a lambchop.");

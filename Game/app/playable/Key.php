@@ -8,6 +8,7 @@ require_once 'IAssignable.php';
 require_once 'IInspectable.php';
 require_once 'TCreateWithKey.php';
 require_once 'TInspectable.php';
+require_once 'TAssignable.php';
 require_once __DIR__.'/../util/ISerializable.php';
 
 /**
@@ -17,6 +18,7 @@ class Key extends GameObject implements IInspectable, IAssignable, \util\ISerial
 {
   use TCreateWithKey;
   use TInspectable;
+  use TAssignable;
 
   /**
    * @ignore

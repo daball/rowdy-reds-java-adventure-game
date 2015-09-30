@@ -72,39 +72,48 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
         }
         else if ($this->isRoomItem($right) !== FALSE)
         {
-          if (substr($left, -8) === "leftHand")
-          {
-            $gameState->getPlayer()->leftHand = $rightContainer;
+          if (is_a($rightContainer, "\playable\IAssignable")) {
+            if (substr($left, -8) === "leftHand")
+            {
+              $rightContainer->assign($right, $this->getPlayerRoom(), $gameState->getPlayer()->leftHand);
+            }
+            else if (substr($left, -9) === "rightHand")
+            {
+              $rightContainer->assign($right, $this->getPlayerRoom(), $gameState->getPlayer()->leftHand);
+            }
+            //this should be done in TAssignable::assign() now:
+            //$gameState->getPlayerRoom()->removeItem($right);
+            $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
+            return "You grabbed the $right and put it in your $whichHand.";
           }
-          else if (substr($left, -9) === "rightHand")
-          {
-            $gameState->getPlayer()->rightHand = $rightContainer;
-          }
-          $gameState->getPlayerRoom()->removeItem($right);
-          $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
-          return "You grabbed the $right and put it in your $whichHand.";
+          else
+            return "You can't pick up the $right.";
         }
         else if ($this->isItemInContainerInRoom($right) !== FALSE)
         {
           $room = GameState::getGameState()->getPlayerRoom();
           foreach ($room->getAllItems() as $itemName => $item)
           {
-            if (is_a($item, "\playable\IContainer"))
+            if (is_a($item, "\playable\IContainer") && (!is_a($item, "\playable\IOpenable") || $item->isOpened()))
             {
-              if (!is_a($item, "\playable\IOpenable") || $item->isOpened())
-              {
-                foreach ($item->getAllItems() as $containedItemName => $containedItem) {
-                  if ($containerItemName == $itemInQuestion) {
+              foreach ($item->getAllItems() as $containedItemName => $containedItem) {
+                if ($containerItemName == $itemInQuestion) {
+                  if (is_a($rightContainer, "\playable\IAssignable"))
+                  {
                     $leftContainer = $rightContainer;
                     $item->removeItem($right);
                     $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
                     return "You grabbed the $right from the $item and put it in your $whichHand.";
                   }
+                  else
+                    return "You can't pick up the $right.";
                 }
               }
             }
           }
         }
+        else
+          return "I don't know what a $right is.";
       }
       else if ($this->isRoomItem($left) !== FALSE)
       {
@@ -126,7 +135,13 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
             var_dump($output);
             return $output;
           }
+          else {
+            return "You must pick it up first.";
+          }
         }
+      }
+      else {
+        return "I don't know what to do.";
       }
     }
   }

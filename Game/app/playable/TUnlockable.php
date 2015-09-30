@@ -19,7 +19,6 @@ trait TUnlockable
   private $opened = false;
   private $unlocked = false;
   private $key = null;
-  private $onUnlock = null;
   private $openCallback = null;
   private $unlockCallback = null;
 
