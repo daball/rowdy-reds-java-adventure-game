@@ -11,7 +11,7 @@ $gameEngine = new \game\GameEngine();
 //install shortcut variables, for easier to read code
 $eol = "\n";
 $prompt = "> ";
-
+// random comment
 $gameState = $gameEngine->gameState;
 $map = $gameState->map;
 
