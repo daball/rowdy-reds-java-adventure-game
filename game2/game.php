@@ -14,11 +14,10 @@
 		  "kitchen" => "You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.",
 		  "pantry" => "You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods.",
 		  "banquetHall" => "You are in the banquet hall.",
-		  "hallwayS" => "You are in the south end of a hallway.",
-		  "hallwayN" => "You are in the north end of a hallway.",
+		  "hallway1" => "You are in a hallway.",
 		  "servantsQuarters" => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
 		  "taxidermyRoom" => "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.",
-		  "chessRoom" => "This room is pitch black.  You can't see anything." ,
+		  "chessRoom" => "This room is pitch black.  You can't see anything."
 	);
 	
 	// Room Image Array
@@ -36,24 +35,74 @@
 		  "kitchen" => "kitchen.jpg",
 		  "pantry" => "pantry_key.jpg",
 		  "banquetHall" => "banquetHall.jpg",
-		  "hallwayS" => "null.png",
-		  "hallwayN" => "null.png",
+		  "hallway1" => "null.png",
 		  "servantsQuarters" => "servantsQuarters.jpg",
 		  "taxidermyRoom" => "taxidermyRoom_dog.jpg",
-		  "darkRoom" => "darkRoom.jpg",
+		  "chessRoom" => "darkRoom.jpg"
 	);
 	
 	// Directions Array
 	$roomConnections = array(
-		"castleEntranceNorth" => "foyer",
-		"castleEntranceSouth" => "forest",
-		"forestNorth" => "castleEntrance",
 		
-		"foyerSouth" => "castleEntrance",
-		"foyerNorth" => "tapestryE",
-		"foyerEast" => "conservatory",
+        "forestNorth"          => "castleEntrance",
+	    
+    	"castleEntranceNorth"  => "foyer",
+		"castleEntranceSouth"  => "forest",
 		
-		
+		"foyerSouth"           => "castleEntrance",
+		"foyerNorth"           => "tapestryE",
+		"foyerEast"            => "conservatory",
+//        "foyerWest"            => "vestibule",      // i2
+        	
+		"tapestryESouth"       => "foyer",
+        "tapestryEWest"        => "tapestryW",
+        
+        "tapestryWEast"        => "tapestryE",
+        "tapestryWWest"        => "study",
+        "tapestryWNorth"       => "taxidermyRoom",
+//        "tapestryWSouth"       => "cloakRoom",      // i3
+        
+        "taxidermyRoomSouth"   => "tapestryW",
+        "taxidermyRoomNorth"   => "chessRoom",
+        
+        "chessRoomSouth"       => "taxidermyRoom",
+
+        "studyEast"            => "tapestryW",
+        "studySouth"           => "library",
+        
+        "libraryNorth"         => "study",
+
+        "conservatoryWest"     => "foyer",       
+        "conservatoryEast"     => "lounge",
+        "conservatoryNorth"    => "banquetHall",
+        
+        "loungeEast"           => "butlersQuarters",
+        "loungeWest"           => "conservatory",
+        
+        "butlersQuartersWest"  => "lounge",
+        "butlersQuartersNorth" => "kitchen",
+        
+        "kitchenSouth"         => "butlersQuarters",
+        "kitchenWest"          => "banquetHall",
+        "kitchenNorth"         => "pantry",
+//        "kitchenEast"          => "courtyard",      // i2
+
+        "pantrySouth"          => "kitchen",
+//        "pantryWest"           => "storage1",       // i3
+
+//        "storage1East"         => "pantry",         // i3
+
+        "banquetHallSouth"     => "conservatory",
+        "banquetHallNorth"     => "hallway1",
+        "banquetHallEast"      => "kitchen",
+//        "banquetHallWest"      => "grandHall",      // i2
+        
+        "hallway1South"        => "banquetHall",
+//        "hallway1West"         => "infirmary",      // i3
+        "hallway1East"         => "servantsQuarters",
+
+        "servantsQuartersWest" => "hallway1",
+//        "servantsQuartersNorth" => "eastTower1",    // i2
 	
 	);
 	
