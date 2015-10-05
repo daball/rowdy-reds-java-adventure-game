@@ -106,11 +106,40 @@
 	
 	);
 	
-	// Room Objects
-	$roomObjects = array(
-		"entrance" => "rustyKey",
-	);
 	
+    $objectDescriptions = array(
+
+        // Iteration 1 Object Descriptions:
+        "rustyKey" => "It's a dingy rusty key.",
+        "brassKey" => "It's a nice and shiny brass key.",
+        "lambChop" => "It's a tasty looking lamb chop.",
+        "dog" => "It's a sizeable looking dog is sitting by the northern door, watching you alertly.",
+        "bowl" => "It's an empty bowl sitting on the floor.",
+        "footLocker" => "It's a servant's simple footLocker chest that is sitting on the floor.",
+        "lamp" => "It's an old brass lamp."
+      
+        // Iteration 2 Object Descriptions:
+      
+    );
+
+    $roomObjects = array(
+    
+      // Iteration 1 Room Objects:
+      "library" => "rustyKey",
+      "pantry" => "brassKey",
+      "kitchen" => "lambChop",
+      "taxidermyRoom" => "dog",
+      //"The dog growls at you menacingly, and will not let you pass by.";
+      "taxidermyRoom" => "bowl",
+      "servantsQuarters" => "footLocker",
+      "footLocker" => "lamp",  // This is an object inside an object
+    
+     // Iteration 2 Room Objects:
+    
+    );
+    
+    
+    
 	// User Items
 	$usersItems = array(
 		"backPack" => "no",
