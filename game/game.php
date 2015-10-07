@@ -73,27 +73,27 @@
         
         // Iteration 2 Rooms:
         // Main Floor:
-        "vestibule"         => "",
-        "artGallery"        => "",
-        "westTower1"        => "",
-        "grandHall"         => "",
-        "grandStaircase"    => "",
-        "eastTower1"        => "",
-        "courtyard"         => "",
-        "stables"           => "",
-        "smithery"          => "",
+        "vestibule"         => "vestibule.jpg",
+        "artGallery"        => "artGallery.jpg",
+        "westTower1"        => "westTower1.jpg",
+        "grandHall"         => "grandHall.jpg",
+        "grandStaircase"    => "grandStaircase.jpg",
+        "eastTower1"        => "eastTower1.jpg",
+        "courtyard"         => "courtyard.jpg",
+        "stables"           => "stables.jpg",
+        "smithery"          => "smithery.jpg",
         // upper floor:
-        "grandBalcony"      => "",
-        "billiardsRoom"     => "",
-        "mapRoom"           => "",
-        "drawingRoom"       => "",
+        "grandBalcony"      => "grandBalcony.jpg",
+        "billiardsRoom"     => "billiardsRoom.jpg",
+        "mapRoom"           => "mapRoom.jpg",
+        "drawingRoom"       => "drawingRoom.jpg",
         "observatory"       => "observatory.jpg",
-        "masterBedroom"     => "",
-        "masterWashroom"    => "",
-        "bedroom1"          => "",
+        "masterBedroom"     => "masterBedroom.jpg",
+        "masterWashroom"    => "masterWashroom.jpg",
+        "bedroom1"          => "bedroom1.jpg",
         // tower tops:
-        "westTowerTop"      => "",
-        "eastTowerTop"      => "",
+        "westTowerTop"      => "westTowerTop.jpg",
+        "eastTowerTop"      => "eastTowerTop.jpg",
         
 	);
 	
