@@ -142,6 +142,12 @@
         "kitchenWest"          => "banquetHall",
         "kitchenNorth"         => "pantry",
 //        "kitchenEast"          => "courtyard",      // i2
+//      "courtyardWest"          => "kitchen",       // i2
+//      "courtyardEast"          => "stables",       // i2
+//      "stablesWest"          => "courtyard",       // i2
+
+
+//      "courtyardEast"          => "stables",       // i2
 
         "pantrySouth"          => "kitchen",
 //        "pantryWest"           => "storage1",       // i3
