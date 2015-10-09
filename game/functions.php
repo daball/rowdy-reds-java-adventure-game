@@ -70,6 +70,7 @@
 	function moveCharacter($command)
 	{
 		global $definition;
+		global $obstacles;
 		global $roomConnections;
 		global $roomDescriptions;
 		
@@ -82,13 +83,27 @@
 		
 		if($nextRoom != "")
 		{
-			$_SESSION['CurrentRoom'] = $nextRoom;
-			$_SESSION['console'] = $_SESSION['console'] . "\n" . getJunk($_SESSION['CurrentRoom'], $roomDescriptions) . ".";
+			// insert obstacle detection code here
+			$obstacle = getJunk($lookup, $obstacles);
+			if($obstacle != "")
+			{
+				appendConsole("There's an $obstacle in the way!");
+			}
+			else
+			{
+				$_SESSION['CurrentRoom'] = $nextRoom;
+				$_SESSION['console'] = $_SESSION['console'] . "\n" . getJunk($_SESSION['CurrentRoom'], $roomDescriptions) . ".";
+			}
 		}
 		else
 		{
-			$_SESSION['console'] = $_SESSION['console'] . "\n" . "You cannot go " . $direction;
+			appendConsole("You cannot go $direction.");
 		}
+	}
+	
+	function appendConsole($text)
+	{
+		$_SESSION['console'] = $_SESSION['console'] . "\n" . $text;
 	}
 
 	// Reset The Game To Start Point

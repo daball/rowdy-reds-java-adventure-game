@@ -69,7 +69,7 @@
         "hallway1" => "null.png",
         "servantsQuarters" => "servantsQuarters.jpg",
         "taxidermyRoom" => "taxidermyRoom_dog.jpg",
-        "chessRoom" => "darkRoom.jpg"
+        "chessRoom" => "darkRoom.jpg",
         
         // Iteration 2 Rooms:
         // Main Floor:
@@ -249,4 +249,11 @@
 		"west" => "west",
 		"w" => "west",
 	);
+    
+    $obstacles = array(
+         "loungeEast" => "door",
+         "taxidermyRoomNorth" => "damn dawg"
+    );
 ?>
+
+
