@@ -50,52 +50,54 @@
 	);
 	
 	// Room Image Array
-	$roomImage = array(
-        
-        // Iteration 1 Room Images:
-        "forest" => "forest.jpg",
-        "castleEntrance" => "castleEntrance.png",
-        "foyer" => "foyer.jpg",
-        "tapestryE" => "tapestryE.jpg",
-        "tapestryW" => "tapestryW.jpg",
-        "study" => "study.jpg",
-        "library" => "library_key.jpg",
-        "conservatory" => "conservatory.jpg",
-        "lounge" => "lounge.jpg",
-        "butlersQuarters" => "butlersQuarters.jpg",
-        "kitchen" => "kitchen.jpg",
-        "pantry" => "pantry_key.jpg",
-        "banquetHall" => "banquetHall.jpg",
-        "hallway1" => "hallway1.jpg",
-        "servantsQuarters" => "servantsQuarters.jpg",
-        "taxidermyRoom" => "taxidermyRoom_dog.jpg",
-        "chessRoom" => "darkRoom.jpg",
-        
-        // Iteration 2 Rooms:
-        // Main Floor:
-        "vestibule"         => "vestibule.jpg",
-        "artGallery"        => "artGallery.jpg",
-        "westTower1"        => "westTower1.jpg",
-        "grandHall"         => "grandHall.jpg",
-        "grandStaircase"    => "grandStaircase.jpg",
-        "eastTower1"        => "eastTower1.jpg",
-        "courtyard"         => "courtyard.jpg",
-        "stables"           => "stables.jpg",
-        "smithery"          => "smithery.jpg",
-        // upper floor:
-        "grandBalcony"      => "grandBalcony.jpg",
-        "billiardsRoom"     => "billiardsRoom.jpg",
-        "mapRoom"           => "mapRoom.jpg",
-        "drawingRoom"       => "drawingRoom.jpg",
-        "observatory"       => "observatory.jpg",
-        "masterBedroom"     => "masterBedroom.jpg",
-        "masterWashroom"    => "masterWashroom.jpg",
-        "bedroom1"          => "bedroom1.jpg",
-        // tower tops:
-        "westTowerTop"      => "westTowerTop.jpg",
-        "eastTowerTop"      => "eastTowerTop.jpg",
-        
-	);
+	if(!isset($_SESSION['roomImage']))
+	{
+		$_SESSION['roomImage'] = array(
+			// Iteration 1 Room Images:
+			"forest" => "forest.jpg",
+			"castleEntrance" => "castleEntrance.png",
+			"foyer" => "foyer.jpg",
+			"tapestryE" => "tapestryE.jpg",
+			"tapestryW" => "tapestryW.jpg",
+			"study" => "study.jpg",
+			"library" => "library_key.jpg",
+			"conservatory" => "conservatory.jpg",
+			"lounge" => "lounge.jpg",
+			"butlersQuarters" => "butlersQuarters.jpg",
+			"kitchen" => "kitchen.jpg",
+			"pantry" => "pantry_key.jpg",
+			"banquetHall" => "banquetHall.jpg",
+			"hallway1" => "hallway1.jpg",
+			"servantsQuarters" => "servantsQuarters.jpg",
+			"taxidermyRoom" => "taxidermyRoom_dog.jpg",
+			"chessRoom" => "darkRoom.jpg",
+			
+			// Iteration 2 Rooms:
+			// Main Floor:
+			"vestibule"         => "vestibule.jpg",
+			"artGallery"        => "artGallery.jpg",
+			"westTower1"        => "westTower1.jpg",
+			"grandHall"         => "grandHall.jpg",
+			"grandStaircase"    => "grandStaircase.jpg",
+			"eastTower1"        => "eastTower1.jpg",
+			"courtyard"         => "courtyard.jpg",
+			"stables"           => "stables.jpg",
+			"smithery"          => "smithery.jpg",
+			// upper floor:
+			"grandBalcony"      => "grandBalcony.jpg",
+			"billiardsRoom"     => "billiardsRoom.jpg",
+			"mapRoom"           => "mapRoom.jpg",
+			"drawingRoom"       => "drawingRoom.jpg",
+			"observatory"       => "observatory.jpg",
+			"masterBedroom"     => "masterBedroom.jpg",
+			"masterWashroom"    => "masterWashroom.jpg",
+			"bedroom1"          => "bedroom1.jpg",
+			// tower tops:
+			"westTowerTop"      => "westTowerTop.jpg",
+			"eastTowerTop"      => "eastTowerTop.jpg",
+			
+		);
+	}
 	
 	// Directions Array
 	$roomConnections = array(
@@ -216,33 +218,39 @@
         // Iteration 2 Object Descriptions:
       
     );
-
-    $roomObjects = array(
-    
-      // Iteration 1 Room Objects:
-      "library" => "rustyKey",
-      "pantry" => "brassKey",
-      "kitchen" => "lambChop",
-      "taxidermyRoom" => "dog",
-      //"The dog growls at you menacingly, and will not let you pass by.";
-      "taxidermyRoom" => "bowl",
-      "servantsQuarters" => "footLocker",
-      "footLocker" => "lamp",  // This is an object inside an object
-    
-     // Iteration 2 Room Objects:
-    
-    );
+	if(!isset($_SESSION['roomObjects']))
+	{
+		$_SESSION['roomObjects'] = array(
+		
+		  // Iteration 1 Room Objects:
+		  "library" => "rustyKey",
+		  "pantry" => "brassKey",
+		  "kitchen" => "lambChop",
+		  "taxidermyRoom" => "dog",
+		  //"The dog growls at you menacingly, and will not let you pass by.";
+		  "taxidermyRoom" => "bowl",
+		  "servantsQuarters" => "footLocker",
+		  "footLocker" => "lamp",  // This is an object inside an object
+		
+		 // Iteration 2 Room Objects:
+		
+		);
+	}
     
 	// User Items
 	$usersItems = array(
 		"backPack" => "no",
 	);
 	
-	// Hands Array
-	$handsArray = array(
-		"leftHand" => "",
-		"rightHand" => "",
-	);
+	if(!isset($_SESSION['handsArray']))
+	{
+		// Hands Array
+		$_SESSION['handsArray'] = array(
+			"leftHand" => "",
+			"rightHand" => "",
+		);
+	}
+
 
 	// Back Pack Array
 	$backPackArray = array(
@@ -254,8 +262,17 @@
 		"itermSix" => "",
 	);
 	
+	// Back Pack Array
+	$newImages = array(
+		"rustyKey" => "library.jpg",
+	);
+	
 	// Commands Array
 	$commandsArray = array(
+		"door.unlock(rightHand);" => "unlockDoor",
+		"door.unlock(leftHand);" => "unlockDoor",
+		"System.out.println(leftHand);" => "displayHand",
+		"System.out.println(rightHand);" => "displayHand",
 		"moveNorth();" => "moveCharacter",
 		"north" => "moveCharacter",
 		"n" => "moveCharacter",
@@ -275,6 +292,9 @@
         "moveDown();" => "moveCharacter",
         "d" => "moveCharacter",
 		"reset" => "resetGame",
+		"leftHand =" => "assignToHand",
+		"rightHand =" => "assignToHand",
+
 	);
 	
 	// Short Hand Definition Array
@@ -299,11 +319,16 @@
         "d" => "down",
 	);
     
-    $obstacles = array(
+	if(!isset($_SESSION['obstacles']))
+	{
+		// obstacles Array
+		$_SESSION['obstacles'] = array(
          "loungeEast" => "door",
+		 "loungeEastKey" => "rustyKey",
          "taxidermyRoomNorth" => "dog",
          "banquetHallEast" => "door",
-    );
+		);
+	}
 ?>
 
 

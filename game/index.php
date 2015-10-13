@@ -12,7 +12,7 @@
 	<body>
 		<div class="container">
 			<img class="light-left" src="images/light.png" />
-			<div id="screen" style="background-image: url('images/<?php echo getJunk($_SESSION['CurrentRoom'], $roomImage); ?>');"></div>
+			<div id="screen" style="background-image: url('images/<?php echo getJunk($_SESSION['CurrentRoom'], $_SESSION['roomImage']); ?>');"></div>
 			<?php if(!isset($_SESSION['ExitGame'])){ ?>
 				<div class="form-container">
 					<form method="Post" id="answerForm" name="answerForm" action="commands.php">
