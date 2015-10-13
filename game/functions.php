@@ -83,27 +83,27 @@
 		
 		if($nextRoom != "")
 		{
-			// insert obstacle detection code here
-			$obstacle = getJunk($lookup, $obstacles);
+			// obstacle detection
+			$obstacle = getJunk($lookUp, $obstacles);
 			if($obstacle != "")
 			{
-				appendConsole("There's an $obstacle in the way!");
+				consoleAppend("There's a $obstacle in the way!");
 			}
 			else
 			{
 				$_SESSION['CurrentRoom'] = $nextRoom;
-				$_SESSION['console'] = $_SESSION['console'] . "\n" . getJunk($_SESSION['CurrentRoom'], $roomDescriptions) . ".";
+				consoleAppend(getJunk($_SESSION['CurrentRoom'], $roomDescriptions) . ".");
 			}
 		}
 		else
 		{
-			appendConsole("You cannot go $direction.");
+			consoleAppend("You cannot go $direction.");
 		}
 	}
 	
-	function appendConsole($text)
+	function consoleAppend($text)
 	{
-		$_SESSION['console'] = $_SESSION['console'] . "\n" . $text;
+		$_SESSION['console'] .= "\n" . $text;
 	}
 
 	// Reset The Game To Start Point

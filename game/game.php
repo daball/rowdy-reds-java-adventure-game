@@ -43,7 +43,7 @@
         "bedroom1"          => "You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.  You see a rocking chair, and a vanity with a mirror.",
         // tower tops:
         "westTowerTop"      => "You are in the top of a tower.",
-        "eastTowerTop"      => "You are in the top of a tower."
+        "eastTowerTop"      => "You are in the top of a tower.",
         
         //Iteration 3 Rooms:
     
@@ -100,72 +100,102 @@
 	// Directions Array
 	$roomConnections = array(
 		
-        "forestNorth"          => "castleEntrance",
+        // Iteration 1 Room Directions
+        "forestNorth"           => "castleEntrance",
 	    
-    	"castleEntranceNorth"  => "foyer",
-		"castleEntranceSouth"  => "forest",
+    	"castleEntranceNorth"   => "foyer",
+		"castleEntranceSouth"   => "forest",
 		
-		"foyerSouth"           => "castleEntrance",
-		"foyerNorth"           => "tapestryE",
-		"foyerEast"            => "conservatory",
-//        "foyerWest"            => "vestibule",      // i2
+		"foyerSouth"            => "castleEntrance",
+		"foyerNorth"            => "tapestryE",
+		"foyerEast"             => "conservatory",
+        "foyerWest"             => "vestibule",            // connection to i2 room
         	
-		"tapestryESouth"       => "foyer",
-        "tapestryEWest"        => "tapestryW",
+		"tapestryESouth"        => "foyer",
+        "tapestryEWest"         => "tapestryW",
+        "tapestryENorth"        => "grandHall",            // connection to i2 room
         
-        "tapestryWEast"        => "tapestryE",
-        "tapestryWWest"        => "study",
-        "tapestryWNorth"       => "taxidermyRoom",
-//        "tapestryWSouth"       => "cloakRoom",      // i3
+        "tapestryWEast"         => "tapestryE",
+        "tapestryWWest"         => "study",
+        "tapestryWNorth"        => "taxidermyRoom",
         
-        "taxidermyRoomSouth"   => "tapestryW",
-        "taxidermyRoomNorth"   => "chessRoom",
+        "taxidermyRoomSouth"    => "tapestryW",
+        "taxidermyRoomNorth"    => "chessRoom",
         
-        "chessRoomSouth"       => "taxidermyRoom",
+        "chessRoomSouth"        => "taxidermyRoom",
 
-        "studyEast"            => "tapestryW",
-        "studySouth"           => "library",
+        "studyEast"             => "tapestryW",
+        "studySouth"            => "library",
+        "studyNorth"            => "artGallery",           // connection to i2 room
         
-        "libraryNorth"         => "study",
+        "libraryNorth"          => "study",
 
-        "conservatoryWest"     => "foyer",       
-        "conservatoryEast"     => "lounge",
-        "conservatoryNorth"    => "banquetHall",
+        "conservatoryWest"      => "foyer",       
+        "conservatoryEast"      => "lounge",
+        "conservatoryNorth"     => "banquetHall",
         
-        "loungeEast"           => "butlersQuarters",
-        "loungeWest"           => "conservatory",
+        "loungeEast"            => "butlersQuarters",
+        "loungeWest"            => "conservatory",
         
-        "butlersQuartersWest"  => "lounge",
-        "butlersQuartersNorth" => "kitchen",
+        "butlersQuartersWest"   => "lounge",
+        "butlersQuartersNorth"  => "kitchen",
         
-        "kitchenSouth"         => "butlersQuarters",
-        "kitchenWest"          => "banquetHall",
-        "kitchenNorth"         => "pantry",
-//        "kitchenEast"          => "courtyard",      // i2
-//      "courtyardWest"          => "kitchen",       // i2
-//      "courtyardEast"          => "stables",       // i2
-//      "stablesWest"          => "courtyard",       // i2
-
-
-//      "courtyardEast"          => "stables",       // i2
-
-        "pantrySouth"          => "kitchen",
-//        "pantryWest"           => "storage1",       // i3
-
-//        "storage1East"         => "pantry",         // i3
-
-        "banquetHallSouth"     => "conservatory",
-        "banquetHallNorth"     => "hallway1",
-        "banquetHallEast"      => "kitchen",
-//        "banquetHallWest"      => "grandHall",      // i2
+        "kitchenSouth"          => "butlersQuarters",
+        "kitchenWest"           => "banquetHall",
+        "kitchenNorth"          => "pantry",
+        "kitchenEast"           => "courtyard",            // connection to i2 room
         
-        "hallway1South"        => "banquetHall",
-//        "hallway1West"         => "infirmary",      // i3
-        "hallway1East"         => "servantsQuarters",
+        "pantrySouth"           => "kitchen",
 
-        "servantsQuartersWest" => "hallway1",
-//        "servantsQuartersNorth" => "eastTower1",    // i2
+        "banquetHallSouth"      => "conservatory",
+        "banquetHallNorth"      => "hallway1",
+        "banquetHallEast"       => "kitchen",
+        "banquetHallWest"       => "grandHall",            // connection to i2 room
+
+        "hallway1South"         => "banquetHall",
+
+        "hallway1East"          => "servantsQuarters",
+
+        "servantsQuartersWest"  => "hallway1",
+        "servantsQuartersNorth" => "eastTower1",           // connection to i2 room
+
+        
+        // Iteration 2 Room Directions
+        "vestibuleEast"         => "foyer",
+        "vestibuleWest"         => "westTower1",
+        
+        "westTower1East"        => "vestibule",
+        "westTower1Up"          => "westTowerTop",         // connection to tower top
+        
+        "westTowerTopDown"      => "westTower1",
+        
+        "artGallerySouth"       => "study",
+        
+        "courtyardWest"         => "kitchen",
+        "courtyardEast"         => "stables",
+
+        "stablesWest"           => "courtyard",
+        "stablesSouth"          => "smithery",
+
+        "smitheryNorth"         => "stables",
+        
+        "grandHallSouth"        => "tapestryE",
+        "grandHallEast"         => "banquetHall",
+        "grandHallNorth"        => "grandStaircase",
+        
+        "grandStaircaseSouth"   => "grandHall",
+        "grandStaircaseUp"      => "grandBalcony",         // connection to upper floor i2 room
+        
+        "eastTower1South"       => "servantsQuarters",
+        "eastTower1Up"          => "eastTowerTop",         // connection to tower top
+        
+        "eastTowerTopDown"      => "eastTower1",
+
 	
+//        "tapestryWSouth"       => "cloakRoom",             // i3
+//        "pantryWest"           => "storage1",              // i3
+//        "storage1East"         => "pantry",                // i3
+//        "hallway1West"         => "infirmary",             // i3
 	);
 	
 	
@@ -199,8 +229,6 @@
      // Iteration 2 Room Objects:
     
     );
-    
-    
     
 	// User Items
 	$usersItems = array(
@@ -237,6 +265,12 @@
 		"moveWest();" => "moveCharacter",
 		"west" => "moveCharacter",
 		"w" => "moveCharacter",
+        "up" => "moveCharacter",
+        "moveUp();" => "moveCharacter",
+        "u" => "moveCharacter",
+        "down" => "moveCharacter",
+        "moveDown();" => "moveCharacter",
+        "d" => "moveCharacter",
 		"reset" => "resetGame",
 	);
 	
@@ -254,11 +288,17 @@
 		"moveWest();" => "west",
 		"west" => "west",
 		"w" => "west",
+        "moveUp();" => "up",
+        "up" => "up",
+        "u" => "up",
+        "moveDown();" => "down",
+        "down" => "down",
+        "d" => "down",
 	);
     
     $obstacles = array(
          "loungeEast" => "door",
-         "taxidermyRoomNorth" => "damn dawg"
+         "taxidermyRoomNorth" => "dog",
     );
 ?>
 
