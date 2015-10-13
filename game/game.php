@@ -53,7 +53,7 @@
 	$roomImage = array(
         
         // Iteration 1 Room Images:
-        "forest" => "null.png",
+        "forest" => "forest.jpg",
         "castleEntrance" => "castleEntrance.png",
         "foyer" => "foyer.jpg",
         "tapestryE" => "tapestryE.jpg",
@@ -66,7 +66,7 @@
         "kitchen" => "kitchen.jpg",
         "pantry" => "pantry_key.jpg",
         "banquetHall" => "banquetHall.jpg",
-        "hallway1" => "null.png",
+        "hallway1" => "hallway1.jpg",
         "servantsQuarters" => "servantsQuarters.jpg",
         "taxidermyRoom" => "taxidermyRoom_dog.jpg",
         "chessRoom" => "darkRoom.jpg",
@@ -161,6 +161,7 @@
 
         
         // Iteration 2 Room Directions
+        // main floor
         "vestibuleEast"         => "foyer",
         "vestibuleWest"         => "westTower1",
         
@@ -191,6 +192,8 @@
         
         "eastTowerTopDown"      => "eastTower1",
 
+        // upper floor
+        "grandBalconyDown"      => "grandStaircase",
 	
 //        "tapestryWSouth"       => "cloakRoom",             // i3
 //        "pantryWest"           => "storage1",              // i3
@@ -299,6 +302,7 @@
     $obstacles = array(
          "loungeEast" => "door",
          "taxidermyRoomNorth" => "dog",
+         "banquetHallEast" => "door",
     );
 ?>
 
