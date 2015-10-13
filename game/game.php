@@ -265,6 +265,7 @@
 	// Back Pack Array
 	$newImages = array(
 		"rustyKey" => "library.jpg",
+		"lambChop" => "kitchen.jpg",
 	);
 	
 	// Commands Array

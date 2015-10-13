@@ -28,6 +28,52 @@
 	function loadState(){
 	}
 	
+	function exitAppend()
+	{
+		global $roomConnections;
+		$isEast = getJunk($_SESSION['CurrentRoom'] . "East", $roomConnections);
+		$isWest = getJunk($_SESSION['CurrentRoom']. "West", $roomConnections);
+		$isSouth = getJunk($_SESSION['CurrentRoom']. "South", $roomConnections);
+		$isNorth = getJunk($_SESSION['CurrentRoom']. "North", $roomConnections);
+		
+		$oExits = "The obvious exits are ";
+		
+		if ($isEast != "") {
+			$oExits = $oExits . "east, ";
+		}
+		if ($isWest != "") {
+			$oExits = $oExits . "west, ";
+		}
+		if ($isSouth != "") {
+			$oExits = $oExits . "south, ";
+		}
+		if ($isNorth != "") {
+			$oExits = $oExits . "north, ";
+		}
+		
+		$oExits = substr($oExits, 0, -2);
+		$pieces = explode(" ", $oExits);
+		$oExits = "";
+		
+		for($i = 0; $i <= count($pieces); $i++) {
+			if($i == (count($pieces) - 1) && count($pieces) > 5)
+			{
+				$oExits = $oExits . "and " . $pieces[$i];
+			}
+			else
+			{
+				if(isset($pieces[$i]))
+				{
+					$oExits = $oExits . $pieces[$i] . " ";
+				}
+				
+			}
+		}
+		
+		
+		consoleAppend($oExits);
+	}
+	
 	// Start New Game
 	function startNewGame($roomDescriptions){
 		// Set Current Room To The Entrance
@@ -35,6 +81,7 @@
 		
 		// Set The Console Text
 		$_SESSION['console'] = getJunk("castleEntrance", $roomDescriptions);
+		exitAppend();
 	}
 	
 	// Run the Current Command That The User Input
@@ -91,8 +138,6 @@
 				unset($_SESSION['obstacles'][$unsetTwo]);
 				
 				consoleAppend("The door to the " . $direction . " was unlocked and opened with the " . $keyToUnlock . ".");
-				consoleAppend("You no longer have the " . $itemInHand . ".");
-				unset($_SESSION['handsArray'][$whichHand]);
 			}
 			else
 			{
@@ -139,7 +184,9 @@
 		$arr = explode(' ',trim($command));
 		$checkThis = $arr[0];
 		
-		if(count($arr) != 3)
+		$semiThere = substr(trim($command), -1);
+		
+		if(count($arr) != 3 || $semiThere != ";")
 		{
 			consoleAppend("I do not understand.");
 		}
@@ -238,6 +285,7 @@
 			{
 				$_SESSION['CurrentRoom'] = $nextRoom;
 				consoleAppend(getJunk($_SESSION['CurrentRoom'], $roomDescriptions) . ".");
+				exitAppend();
 			}
 		}
 		else
@@ -277,6 +325,9 @@
 	// Reset The Game To Start Point
 	function resetGame($command)
 	{
-		startNewGame();
+		Global $roomDescriptions;
+		session_destroy();
+		session_start();
+		startNewGame($roomDescriptions);
 	}
 ?>
