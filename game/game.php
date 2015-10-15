@@ -38,7 +38,7 @@
         "mapRoom"           => "You are in a strange room with several globes.  The walls are all covered with maps.",
         "drawingRoom"       => "You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.",
         "observatory"       => "You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.",
-        "masterBedroom"     => "You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.",
+        "masterBedchambers"     => "You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.",
         "masterWashroom"    => "You are in some sort of bathroom that is off the master suite.",
         "bedroom1"          => "You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.  You see a rocking chair, and a vanity with a mirror.",
         // tower tops:
@@ -89,9 +89,13 @@
 			"mapRoom"           => "mapRoom.jpg",
 			"drawingRoom"       => "drawingRoom.jpg",
 			"observatory"       => "observatory.jpg",
-			"masterBedroom"     => "masterBedroom.jpg",
-			"masterWashroom"    => "masterWashroom.jpg",
+			"masterBedchambers" => "masterBedchambers.jpg",
+			"gerderobe"         => "gerderobe.jpg",
 			"bedroom1"          => "bedroom1.jpg",
+			"corridor2fn"       => "corridor2fn",
+			"corridor2fs"       => "corridor2fs",
+			"goldilocksRoom"    => "goldilocksRoom",
+			
 			// tower tops:
 			"westTowerTop"      => "westTowerTop.jpg",
 			"eastTowerTop"      => "eastTowerTop.jpg",
@@ -196,7 +200,25 @@
 
         // upper floor
         "grandBalconyDown"      => "grandStaircase",
-	
+		"drawingRoomEast"       => "grandBalcony",
+		"grandBalconyWest"      => "drawingRoom",
+		"grandBalconyEast"      => "observatory",
+		"observatoryWest"       => "grandBalcony",
+		"observatorySouth"      => "mapRoom",
+		"mapRoomNorth"          => "observatory",
+		"grandBalconySouth"     => "corridor2fn",
+		"corridor2fnNorth"      => "grandBalcony",
+		"corridor2fnEast"       => "mapRoom",
+		"mapRoomWest"           => "corridor2fn",
+		"corridor2fnWest"       => "billiardsRoom",
+		"billiardsRoomEast"     => "corridor2fn",
+		"corridor2fsEast"       => "goldilocksRoom",
+		"goldilocksRoomWest"    => "corridor2fs",
+		"corridor2fsWest"       => "masterBedchambers",
+		"masterBedchambersEast" => "corridor2fs",
+		"masterBedchambersNorth"=> "gerderobe",
+		"gerderobeSouth"        => "masterBedchambers",
+		
 //        "tapestryWSouth"       => "cloakRoom",             // i3
 //        "pantryWest"           => "storage1",              // i3
 //        "storage1East"         => "pantry",                // i3
