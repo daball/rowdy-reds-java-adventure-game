@@ -16,7 +16,15 @@
 		}
 		return $return; 
 	}
+	
+	function getElement($name, $myArray){
+		if (array_key_exists($name, $myArray))
+		{
+			return $myArray[$name];
+		}
+		return "";
 		
+	}
 	function getState(){
 		return false;
 	}
@@ -31,10 +39,10 @@
 	function exitAppend()
 	{
 		global $roomConnections;
-		$isEast = getJunk($_SESSION['CurrentRoom'] . "East", $roomConnections);
-		$isWest = getJunk($_SESSION['CurrentRoom']. "West", $roomConnections);
-		$isSouth = getJunk($_SESSION['CurrentRoom']. "South", $roomConnections);
-		$isNorth = getJunk($_SESSION['CurrentRoom']. "North", $roomConnections);
+		$isEast = getElement($_SESSION['CurrentRoom'] . "East", $roomConnections);
+		$isWest = getElement($_SESSION['CurrentRoom']. "West", $roomConnections);
+		$isSouth = getElement($_SESSION['CurrentRoom']. "South", $roomConnections);
+		$isNorth = getElement($_SESSION['CurrentRoom']. "North", $roomConnections);
 		
 		$oExits = "The obvious exits are ";
 		
@@ -80,7 +88,7 @@
 		$_SESSION['CurrentRoom'] = "castleEntrance";
 		
 		// Set The Console Text
-		$_SESSION['console'] = getJunk("castleEntrance", $roomDescriptions);
+		$_SESSION['console'] = getElement("castleEntrance", $roomDescriptions);
 		exitAppend();
 	}
 	
@@ -99,7 +107,7 @@
 		}
 				
 		// Get the Function for the Command
-		$returnCommand = getJunk($checkThis, $commandsArray);
+		$returnCommand = getElement($checkThis, $commandsArray);
 
 		// If the the Commands Array Returned a Function Run the Function
 		if($returnCommand != ""){
@@ -108,7 +116,7 @@
 		}
 		else {
 			// Try to Get the Function for the Command again but in Lower Case
-			$returnCommand = getJunk(strtolower($command), $commandsArray);
+			$returnCommand = getElement(strtolower($command), $commandsArray);
 			
 			// If the the Commands Array Returned a Function Run the Function
 			if($returnCommand != ""){
@@ -126,8 +134,8 @@
 	{
 			$whatToGet = $_SESSION['CurrentRoom'] . $direction . "Key";
 			
-			$keyToUnlock = getJunk($whatToGet, $_SESSION['obstacles']);
-			$itemInHand = getJunk($whichHand, $_SESSION['handsArray']);
+			$keyToUnlock = getElement($whatToGet, $_SESSION['obstacles']);
+			$itemInHand = getElement($whichHand, $_SESSION['handsArray']);
 			
 			if($keyToUnlock == $itemInHand)
 			{
@@ -150,10 +158,10 @@
 		preg_match('#\((.*?)\)#', $command, $match);
 		$whichHand = $match[1];
 		
-		$isDoorEast = getJunk($_SESSION['CurrentRoom'] . "East", $_SESSION['obstacles']);
-		$isDoorNorth = getJunk($_SESSION['CurrentRoom'] . "North", $_SESSION['obstacles']);
-		$isDoorWest = getJunk($_SESSION['CurrentRoom'] . "West", $_SESSION['obstacles']);
-		$isDoorSouth = getJunk($_SESSION['CurrentRoom'] . "South", $_SESSION['obstacles']);
+		$isDoorEast = getElement($_SESSION['CurrentRoom'] . "East", $_SESSION['obstacles']);
+		$isDoorNorth = getElement($_SESSION['CurrentRoom'] . "North", $_SESSION['obstacles']);
+		$isDoorWest = getElement($_SESSION['CurrentRoom'] . "West", $_SESSION['obstacles']);
+		$isDoorSouth = getElement($_SESSION['CurrentRoom'] . "South", $_SESSION['obstacles']);
 		
 		if($isDoorEast == "door")
 		{
@@ -194,7 +202,7 @@
 		{
 			$findInArray = str_replace(";","",$arr[2]);
 			
-			$isThere = getJunk($_SESSION['CurrentRoom'], $_SESSION['roomObjects']);
+			$isThere = getElement($_SESSION['CurrentRoom'], $_SESSION['roomObjects']);
 			
 			if($isThere == $findInArray)
 			{
@@ -266,17 +274,17 @@
 		global $roomConnections;
 		global $roomDescriptions;
 		
-		$direction = getJunk($command, $definition);
+		$direction = getElement($command, $definition);
 		$lookUp = $_SESSION['CurrentRoom'] . ucfirst($direction);
 		
 		echo $lookUp;
 		
-		$nextRoom = getJunk($lookUp, $roomConnections);
+		$nextRoom = getElement($lookUp, $roomConnections);
 		
 		if($nextRoom != "")
 		{
 			// obstacle detection
-			$obstacle = getJunk($lookUp, $_SESSION['obstacles']);
+			$obstacle = getElement($lookUp, $_SESSION['obstacles']);
 			if($obstacle != "")
 			{
 				consoleAppend("There's a $obstacle in the way!");
@@ -284,7 +292,7 @@
 			else
 			{
 				$_SESSION['CurrentRoom'] = $nextRoom;
-				consoleAppend(getJunk($_SESSION['CurrentRoom'], $roomDescriptions) . ".");
+				consoleAppend(getElement($_SESSION['CurrentRoom'], $roomDescriptions) . ".");
 				exitAppend();
 			}
 		}
