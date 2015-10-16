@@ -39,7 +39,7 @@
         "drawingRoom"       => "You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.",
         "observatory"       => "You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.",
         "masterBedchambers" => "You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.",
-        "gerderobe"         => "You are in some sort of bathroom that is off the master suite.",
+        "gerderobe"         => "You are in master bathroom that is off the master bed chambers.",
         "bedroom1"          => "You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.  You see a rocking chair, and a vanity with a mirror.",
 		"corridor2fn"       => "You are in the North End of the corridor. Corridor is a stupid name but Sean wanted to use it.",
 		"corridor2fs"       => "You are in the South End of the corridor. Corridor is a stupid name but Sean wanted to use it.",
@@ -91,16 +91,16 @@
 			"smithery"          => "smithery.jpg",
 			// upper floor:
 			"grandBalcony"      => "grandBalcony.jpg",
-			"billiardsRoom"     => "billiardsRoom.jpg",
-			"mapRoom"           => "mapRoom.jpg",
-			"drawingRoom"       => "drawingRoom.jpg",
 			"observatory"       => "observatory.jpg",
+			"drawingRoom"       => "drawingRoom.jpg",
+			"corridor2fn"       => "corridor2fn.jpg",
+			"corridor2fs"       => "corridor2fs.jpg",
+			"mapRoom"           => "mapRoom.jpg",
+			"billiardsRoom"     => "billiardsRoom.jpg",
+			"goldilocksRoom"    => "goldilocksRoom.jpg",
 			"masterBedchambers" => "masterBedchambers.jpg",
 			"gerderobe"         => "gerderobe.jpg",
-			"bedroom1"          => "bedroom1.jpg",
-			"corridor2fn"       => "corridor2fn",
-			"corridor2fs"       => "corridor2fs",
-			"goldilocksRoom"    => "goldilocksRoom",
+			
 			
 			// tower tops:
 			"westTowerTop"      => "westTowerTop.jpg",
@@ -206,8 +206,8 @@
 
         // upper floor
         "grandBalconyDown"      => "grandStaircase",
-		"drawingRoomEast"       => "grandBalcony",
-		"grandBalconyWest"      => "drawingRoom",
+		"grandBalconyEast"      => "drawingRoom",
+		"drawingRoomWest"       => "grandBalcony",
 		"grandBalconyWest"      => "observatory",
 		"observatoryEast"       => "grandBalcony",
 		"observatorySouth"      => "mapRoom",
@@ -216,7 +216,8 @@
 		"corridor2fnNorth"      => "grandBalcony",
 		"corridor2fnWest"       => "mapRoom",
 		"mapRoomEast"           => "corridor2fn",
-		"corridor2fnEast"       => "billiardsRoom",
+		"corridor2fnSouth"       => "corridor2fs",
+		"corridor2fsNorth"       => "corridor2fn",
 		"billiardsRoomWest"     => "corridor2fn",
 		"corridor2fsWest"       => "goldilocksRoom",
 		"goldilocksRoomEast"    => "corridor2fs",
