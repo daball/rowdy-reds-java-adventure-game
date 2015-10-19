@@ -28,8 +28,8 @@ trait TAssignable
     return true;
   }
 
-  public function onUnlock($fn)
+  public function onAssign($fn)
   {
-    $this->unlockCallback = $fn;
+    $this->assignCallback = $fn;
   }
 }
