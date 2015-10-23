@@ -218,7 +218,7 @@
 		"mapRoomEast"           => "corridor2fn",
 		"corridor2fnSouth"      => "corridor2fs",
 		"corridor2fsNorth"      => "corridor2fn",
-		"corridor2fsNorth"      => "billiardsRoom",
+		"corridor2fnEast"       => "billiardsRoom",
 		"billiardsRoomWest"     => "corridor2fn",
 		"corridor2fsWest"       => "goldilocksRoom",
 		"goldilocksRoomEast"    => "corridor2fs",
