@@ -9,7 +9,7 @@
 		define('HOST_STUNNEL', '127.0.0.1');
 		define('DB_HOST', HOST_STUNNEL);
 		define('DB_USER', 'root');
-		define('DB_PASS', '');
+		define('DB_PASS', 'Goo1mei2Tho9ahze');
 		define('DB_NAME', 'codecombat');
 		$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);	
 	}
