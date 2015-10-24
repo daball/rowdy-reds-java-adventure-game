@@ -76,7 +76,7 @@
 			<?php if(!isset($_SESSION['ExitGame'])){ ?>
 				<div class="form-container">
 					<form action="commands.php" method="post" id="answerForm" name="answerForm">
-						<textarea autofocus id="commandHistory" name="commandHistory" style="color: #eee; background-color: black; height: 535px;" onkeydown="val(event)"><?php echo printConsole(); ?></textarea>
+						<textarea autocomplete="off" autofocus id="commandHistory" name="commandHistory" style="color: #eee; background-color: black; height: 535px;" onkeydown="val(event)"><?php echo printConsole(); ?></textarea>
 						<input id="button" hidden type="submit" value="Enter Command" />
 					</form>
 				</div>
@@ -86,7 +86,7 @@
 		</div>
 		<?php if(isset($_SESSION['showTablet']) && $_SESSION['showTablet'] == true){ ?>
 			<form action="tablet.php" method="post" id="tablet" name="tablet">
-				<textarea autofocus id="tabHistory" name="tabHistory" style="color: green; background-color: #eee; height: 335px; width: 1150px; margin-top: 20px; margin-left: 80px; margin-bottom: 30px;"></textarea>
+				<textarea autocomplete="off" autofocus id="tabHistory" name="tabHistory" style="color: green; background-color: #eee; height: 335px; width: 1150px; margin-top: 20px; margin-left: 80px; margin-bottom: 30px;"></textarea>
 				<input id="tabButton" hidden type="submit" value="Enter Command" />
 			</form>
 		<?php } ?>
