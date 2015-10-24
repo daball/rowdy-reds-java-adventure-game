@@ -37,12 +37,12 @@ CREATE TABLE IF NOT EXISTS `back_pack_array` (
 --
 
 INSERT INTO `back_pack_array` (`Space`, `Item`, `int`) VALUES
-('itermOne', '', 1),
-('itermTwo', '', 2),
-('itermThree', '', 3),
-('itermFour', '', 4),
-('itermFive', '', 5),
-('itermSix', '', 6);
+('itemOne', '', 1),
+('itemTwo', '', 2),
+('itemThree', '', 3),
+('itemFour', '', 4),
+('itemFive', '', 5),
+('itemSix', '', 6);
 
 -- --------------------------------------------------------
 
