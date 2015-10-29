@@ -9,7 +9,7 @@
 		define('HOST_STUNNEL', '127.0.0.1');
 		define('DB_HOST', HOST_STUNNEL);
 		define('DB_USER', 'root');
-		define('DB_PASS', 'Goo1mei2Tho9ahze');
+		define('DB_PASS', '');
 		define('DB_NAME', 'codecombat');
 		$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);	
 	}
@@ -60,6 +60,7 @@
 		buildArray('Command', 'Definition', 'definition_array', 'definition');
 		buildArray('Room', 'Obstacle', 'obstacles_array', 'obstacles');
 		buildArray('variable', 'assign', 'variable_objects', 'vObjects');
+		buildArray('room', 'text', 'tabtext', 'tabText');
 	}
 	
 	function buildArray($col1, $col2, $table, $arrayName){

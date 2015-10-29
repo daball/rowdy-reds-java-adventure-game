@@ -20,6 +20,11 @@
 			  }).focus();
 			});
 			
+			function allow(event){
+				return true;
+			}
+			
+			
 			var isD = false;
 			function val(event){
 				
@@ -64,8 +69,8 @@
 				{
 					event.preventDefault();
 				} 
-				move();
-				return false;
+				
+				return true;
 			}
 		</script>
 	</head>
@@ -76,7 +81,7 @@
 			<?php if(!isset($_SESSION['ExitGame'])){ ?>
 				<div class="form-container">
 					<form action="commands.php" method="post" id="answerForm" name="answerForm">
-						<textarea autocomplete="off" autofocus id="commandHistory" name="commandHistory" style="color: #eee; background-color: black; height: 535px;" onkeydown="val(event)"><?php echo printConsole(); ?></textarea>
+						<textarea autofocus id="commandHistory" name="commandHistory" style="color: #eee; background-color: black; height: 535px;" onkeydown="val(event)"><?php echo printConsole(); ?></textarea>
 						<input id="button" hidden type="submit" value="Enter Command" />
 					</form>
 				</div>
@@ -85,9 +90,10 @@
 			<img class="light-right" src="images/light.png" />
 		</div>
 		<?php if(isset($_SESSION['showTablet']) && $_SESSION['showTablet'] == true){ ?>
-			<form action="tablet.php" method="post" id="tablet" name="tablet">
-				<textarea autocomplete="off" autofocus id="tabHistory" name="tabHistory" style="color: green; background-color: #eee; height: 335px; width: 1150px; margin-top: 20px; margin-left: 80px; margin-bottom: 30px;"></textarea>
-				<input id="tabButton" hidden type="submit" value="Enter Command" />
+			<form action="simpleJava.php" method="post" id="tablet" name="tablet">
+				<textarea id="tabHistory" name="tabHistory" style="color: green; background-color: #eee; height: 335px; width: 1150px; margin-top: 10px; margin-left: 80px; margin-bottom: 30px;" onkeydown="allow(event)"><?php echo $_SESSION['tText']; ?>
+				</textarea>
+				<input style="margin-left: 100px; margin-bottom: 80px; width: 1130px; height: 70px; margin-top: 30px;" id="tabButton" type="submit" value="Execute Code" />
 			</form>
 		<?php } ?>
 	</body>

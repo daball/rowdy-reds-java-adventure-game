@@ -1,0 +1,15 @@
+inspect command works.
+lamp works
+footLocker works
+brassKey works
+object append works
+help command works
+dog, bowl and lambchop works
+extra period in descrition gone.
+tablet starts with basic variables and comments for each room works
+tablet shows works
+tablet hides works
+tablet if statemenr for goldilock puzzle works
+
+tablet found in stable -------------------- DO THIS
+tabler for loop for chess room -------------------- DO THIS

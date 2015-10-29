@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 22, 2015 at 03:05 PM
+-- Generation Time: Oct 30, 2015 at 12:08 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `commands_array` (
   `Command` varchar(500) NOT NULL,
   `Function` varchar(500) NOT NULL,
 `id` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
 
 --
 -- Dumping data for table `commands_array`
@@ -90,7 +90,11 @@ INSERT INTO `commands_array` (`Command`, `Function`, `id`) VALUES
 ('restart', 'resetGame', 27),
 ('help', 'helpJunk', 28),
 ('tablet.show();', 'showTablet', 29),
-('tablet.close();', 'hideTablet', 30);
+('tablet.close();', 'hideTablet', 30),
+('footLocker.unlock(leftHand);', 'unlockFootLocker', 31),
+('footLocker.unlock(rightHand);', 'unlockFootLocker', 32),
+('lamp.wind();', 'windLmap', 33),
+('inspect', 'inspect', 34);
 
 -- --------------------------------------------------------
 
@@ -158,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `new_images` (
   `Item` varchar(300) NOT NULL,
   `Image` varchar(300) NOT NULL,
 `id` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `new_images`
@@ -167,7 +171,11 @@ CREATE TABLE IF NOT EXISTS `new_images` (
 INSERT INTO `new_images` (`Item`, `Image`, `id`) VALUES
 ('rustyKey', 'library.jpg', 1),
 ('lambChop', 'kitchen.jpg', 2),
-('dog', 'taxidermyRoom.jpg', 3);
+('dog', 'taxidermyRoom.jpg', 3),
+('brassKey', 'pantry.jpg', 4),
+('footLocker', 'servantsQuarters_lamp.jpg', 5),
+('lamp', 'servantsQuarters.jpg', 6),
+('windLamp', 'chessRoomlit.jpg', 7);
 
 -- --------------------------------------------------------
 
@@ -331,45 +339,45 @@ CREATE TABLE IF NOT EXISTS `room_descriptions` (
 --
 
 INSERT INTO `room_descriptions` (`Room`, `Description`, `id`) VALUES
-('forest', 'You are standing in a forest.  There are trees all around you.  A path leads north.', 1),
-('castleEntrance', 'You are at the edge of a forest and are standing at a grand castle.  The castle''s door lies to the north.', 2),
-('foyer', 'You are in the castle foyer.', 3),
-('tapestryE', 'You are in the east end of a long hall lined with ornate tapestries.  The room continues to the west.', 4),
-('tapestryW', 'You are in the west end of a long hall lined with ornate tapestries.  The room continues to the east.', 5),
-('study', 'You are in a private study lined with stained glass windows, and an ornately carved desk.  A small note rests on the desk.', 6),
-('library', 'You are in a large library with book cases stacked from floor to ceiling.  Intricate murals run along the top of the book cases, and there are carved wood panels in the ceiling.', 7),
-('conservatory', 'You are in a beautiful conservatory with many exotic plants and a greenhouse ceiling.', 8),
-('lounge', 'You are in a lounge decorated with many paintings, and nice comfortable searting.  There is a door to the east.', 9),
-('butlersQuarters', 'You are in the butler''s quarters.  You see stairs that lead to nowhere, and some tables and chairs.  It seems the butler must be a lush since he has an entire tavern in his quarters!', 10),
-('kitchen', 'You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.', 11),
-('pantry', 'You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods.', 12),
-('banquetHall', 'You are in the banquet hall.', 13),
-('hallway1', 'You are in a hallway.', 14),
-('servantsQuarters', 'You are in a humble servant''s quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.', 15),
-('taxidermyRoom', 'You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he''s watching you intently.  A bowl also sits on the floor nearby.', 16),
-('chessRoom', 'This room is pitch black.  You can''t see anything.', 17),
-('vestibule', 'You are in a small vestibule.', 18),
-('artGallery', 'You are in the castle art gallery.', 19),
-('westTower1', 'You are in a circular room with a spiral staircase leading up to the right.', 20),
-('grandHall', 'You are in the Grand Hall.', 21),
-('grandStaircase', 'You are at a magnificant staircase at the north end of the Grand Hall.', 22),
-('eastTower1', 'You are in a circular room with a spiral staircase leading up to the left.', 23),
-('courtyard', 'You are in the castle courtyard.', 24),
-('stables', 'You are in the stables.', 25),
-('smithery', 'You are in a smithery.', 26),
-('grandBalcony', 'You are on a grand balcony that is overlooking the Grand Hall below.', 27),
+('forest', 'You are standing in a forest.  There are trees all around you.  A path leads north', 1),
+('castleEntrance', 'You are at the edge of a forest and are standing at a grand castle.  The castle''s door lies to the north', 2),
+('foyer', 'You are in the castle foyer', 3),
+('tapestryE', 'You are in the east end of a long hall lined with ornate tapestries.  The room continues to the west', 4),
+('tapestryW', 'You are in the west end of a long hall lined with ornate tapestries.  The room continues to the east', 5),
+('study', 'You are in a private study lined with stained glass windows, and an ornately carved desk.  A small note rests on the desk', 6),
+('library', 'You are in a large library with book cases stacked from floor to ceiling.  Intricate murals run along the top of the book cases, and there are carved wood panels in the ceiling', 7),
+('conservatory', 'You are in a beautiful conservatory with many exotic plants and a greenhouse ceiling', 8),
+('lounge', 'You are in a lounge decorated with many paintings, and nice comfortable searting.  There is a door to the east', 9),
+('butlersQuarters', 'You are in the butler''s quarters.  You see stairs that lead to nowhere, and some tables and chairs.  It seems the butler must be a lush since he has an entire tavern in his quarters', 10),
+('kitchen', 'You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air', 11),
+('pantry', 'You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods', 12),
+('banquetHall', 'You are in the banquet hall', 13),
+('hallway1', 'You are in a hallway', 14),
+('servantsQuarters', 'You are in a humble servant''s quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor', 15),
+('taxidermyRoom', 'You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he''s watching you intently.  A bowl also sits on the floor nearby', 16),
+('chessRoom', 'This room is pitch black.  You can''t see anything', 17),
+('vestibule', 'You are in a small vestibule', 18),
+('artGallery', 'You are in the castle art gallery', 19),
+('westTower1', 'You are in a circular room with a spiral staircase leading up to the right', 20),
+('grandHall', 'You are in the Grand Hall', 21),
+('grandStaircase', 'You are at a magnificant staircase at the north end of the Grand Hall', 22),
+('eastTower1', 'You are in a circular room with a spiral staircase leading up to the left', 23),
+('courtyard', 'You are in the castle courtyard', 24),
+('stables', 'You are in the stables', 25),
+('smithery', 'You are in a smithery', 26),
+('grandBalcony', 'You are on a grand balcony that is overlooking the Grand Hall below', 27),
 ('billiardsRoom', 'You are in a billiards room.', 28),
-('mapRoom', 'You are in a strange room with several globes.  The walls are all covered with maps.', 29),
-('drawingRoom', 'You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.', 30),
-('observatory', 'You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.', 31),
-('masterBedchambers', 'You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.', 32),
-('gerderobe', 'You are in master bathroom that is off the master bed chambers.', 33),
-('bedroom1', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.  You see a rocking chair, and a vanity with a mirror.', 34),
-('corridor2fn', 'You are in the North End of the corridor. Corridor is a stupid name but Sean wanted to use it.', 35),
-('corridor2fs', 'You are in the South End of the corridor. Corridor is a stupid name but Sean wanted to use it.', 36),
-('goldilocksRoom', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.', 37),
-('westTowerTop', 'You are in the top of a tower.', 38),
-('eastTowerTop', 'You are in the top of a tower.', 39);
+('mapRoom', 'You are in a strange room with several globes.  The walls are all covered with maps', 29),
+('drawingRoom', 'You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils', 30),
+('observatory', 'You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor', 31),
+('masterBedchambers', 'You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room', 32),
+('gerderobe', 'You are in master bathroom that is off the master bed chambers', 33),
+('bedroom1', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.  You see a rocking chair, and a vanity with a mirror', 34),
+('corridor2fn', 'You are in the North End of the corridor. Corridor is a stupid name but Sean wanted to use it', 35),
+('corridor2fs', 'You are in the South End of the corridor. Corridor is a stupid name but Sean wanted to use it', 36),
+('goldilocksRoom', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable', 37),
+('westTowerTop', 'You are in the top of a tower', 38),
+('eastTowerTop', 'You are in the top of a tower', 39);
 
 -- --------------------------------------------------------
 
@@ -437,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `room_objects` (
   `Room` varchar(200) NOT NULL,
   `Object` varchar(300) NOT NULL,
 `id` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `room_objects`
@@ -448,8 +456,26 @@ INSERT INTO `room_objects` (`Room`, `Object`, `id`) VALUES
 ('pantry', 'brassKey', 2),
 ('kitchen', 'lambChop', 3),
 ('taxidermyRoom', 'bowl', 4),
-('servantsQuarters', 'footLocker', 5),
-('footLocker', 'lamp', 6);
+('servantsQuarters', 'footLocker', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tabtext`
+--
+
+CREATE TABLE IF NOT EXISTS `tabtext` (
+  `room` varchar(500) NOT NULL,
+  `text` varchar(5000) NOT NULL,
+`id` int(11) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `tabtext`
+--
+
+INSERT INTO `tabtext` (`room`, `text`, `id`) VALUES
+('goldilocksRoom', '// Write the following if condition in Java:&#10;&#10;// If the bed equals soft then eatCookies equals true.&#10;&#10;// Else if the bed equals hard then fluffPillows equals true.&#10;&#10;// Else bed equals "just right".&#10;&#10;// Your Variables To Use&#10;&#10;String bed = "just right";&#10;bool fluffPillow = false;&#10;bool eatCookies = false;&#10;&#10;// Write your code here&#10;&#10;', 1);
 
 -- --------------------------------------------------------
 
@@ -560,6 +586,12 @@ ALTER TABLE `room_objects`
  ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tabtext`
+--
+ALTER TABLE `tabtext`
+ ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users_items`
 --
 ALTER TABLE `users_items`
@@ -584,7 +616,7 @@ MODIFY `int` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 -- AUTO_INCREMENT for table `commands_array`
 --
 ALTER TABLE `commands_array`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT for table `definition_array`
 --
@@ -599,7 +631,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 -- AUTO_INCREMENT for table `new_images`
 --
 ALTER TABLE `new_images`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `object_descriptions`
 --
@@ -629,7 +661,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
 -- AUTO_INCREMENT for table `room_objects`
 --
 ALTER TABLE `room_objects`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `tabtext`
+--
+ALTER TABLE `tabtext`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `users_items`
 --
