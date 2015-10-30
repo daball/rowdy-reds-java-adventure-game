@@ -68,7 +68,46 @@
 			}
 		}
 		
-		consoleAppend($oExits);
+		consoleAppend($oExits . ".");
+	}
+	
+	function inspect($command)
+	{
+		consoleAppend(getJunk($_SESSION['CurrentRoom'], $_SESSION['roomDescriptions']) . ".");
+		exitAppend();
+		objectAppend();
+	}
+	
+	function objectAppend()
+	{
+		$apendThis = "The objects are: ";
+		$count = 0;
+		
+		foreach($_SESSION['roomObjects'] as $room => $object){
+			if($room == $_SESSION['CurrentRoom'])
+			{
+				if(count($_SESSION['roomObjects'][$_SESSION['CurrentRoom']]) == 1)
+				{
+					$apendThis = $apendThis . "a " . $object . "";
+				}
+				else if($count == count($_SESSION['roomObjects']) - 1)
+				{
+					$apendThis = $apendThis . "and a " . $object . "";
+				}
+				else
+				{
+					$apendThis = $apendThis . "a " . $object . ", ";
+				}
+				$count = $count + 1;
+			}
+		}
+		
+		if($apendThis == "The objects are: ")
+		{
+			$apendThis = "You do not see any objects here";
+		}
+		
+		consoleAppend($apendThis . ".");
 	}
 	
 	function showTablet(){
@@ -82,7 +121,9 @@
 	function startNewGame(){
 		$_SESSION['CurrentRoom'] = "castleEntrance";
 		$_SESSION['console'] = getJunk("castleEntrance", $_SESSION['roomDescriptions']);
+		$_SESSION['tText'] = "// THERE IS NO JAVA CODE TO WRITE FOR THIS ROOM.";
 		exitAppend();
+		objectAppend();
 	}
 	
 	// Run the Current Command That The User Input
@@ -340,6 +381,82 @@
 		}
 	}
 	
+	function openLocker()
+	{
+		consoleAppend("You opened the foot locker with the brass key. There is now a lamp in the room!");		
+		$_SESSION['roomImage'][$_SESSION['CurrentRoom']] = getJunk("footLocker", $_SESSION['newImages']);
+		unset($_SESSION['roomObjects'][$_SESSION['CurrentRoom']]);
+		unset($_SESSION['roomObjects']['footLocker']);
+		unset($_SESSION['commandsArray']['footLocker.unlock(leftHand);']);
+		unset($_SESSION['commandsArray']['footLocker.unlock(rightHand);']);
+		
+		// ADD LAMP TO ROOM OBJECTS
+		$_SESSION['roomObjects'][$_SESSION['CurrentRoom']] = "lamp";
+	}
+	
+	function windLmap($command)
+	{
+		// leght the room;
+		if($_SESSION['handsArray']['rightHand'] == "lamp" || $_SESSION['handsArray']['leftHand'] == "lamp")
+		{
+			if($_SESSION['CurrentRoom'] == "chessRoom")
+			{
+				$_SESSION['roomImage'][$_SESSION['CurrentRoom']] = getJunk("windLamp", $_SESSION['newImages']);
+				consoleAppend("You are in the Chess Room.");
+			}
+				
+			consoleAppend("The lamp is now on and you can see better.");
+		}
+		else
+		{
+			consoleAppend("I do not understand.");
+		}
+		
+	}
+	
+	function unlockFootLocker($command)
+	{
+		
+		if($_SESSION['CurrentRoom'] == "servantsQuarters")
+		{
+			if (strpos($command,'rightHand') !== false) {
+				
+				if($_SESSION['handsArray']['rightHand']  == ""){
+					consoleAppend("You have nothing in your right hand.");
+				}
+				else if($_SESSION['handsArray']['rightHand'] == "brassKey")
+				{
+					openLocker();
+				}
+				else
+				{
+					consoleAppend("You cannot open the foot locker with a " . $_SESSION['handsArray']['rightHand']);
+				}
+			}
+			else if (strpos($command,'leftHand') !== false) {
+				if($_SESSION['handsArray']['leftHand']  == ""){
+					consoleAppend("You have nothing in your left hand.");
+				}
+				else if($_SESSION['handsArray']['leftHand'] == "brassKey")
+				{
+					openLocker();
+				}
+				else
+				{
+					consoleAppend("You cannot open the foot locker with a " . $_SESSION['handsArray']['leftHand']);
+				}
+			}
+			else
+			{
+				consoleAppend("I do not understand.");
+			}
+		}
+		else
+		{
+			consoleAppend("I do not understand.");
+		}
+	}
+	
 	// Try to Move Character Based on Current Room and Direction
 	function moveCharacter($command)
 	{
@@ -360,8 +477,16 @@
 			else
 			{
 				$_SESSION['CurrentRoom'] = $nextRoom;
+				$_SESSION['tText'] = getJunk($_SESSION['CurrentRoom'], $_SESSION['tabText']);
+				
+				if(trim($_SESSION['tText']) == "")
+				{
+					$_SESSION['tText'] = "// THERE IS NO JAVA CODE TO WRITE FOR THIS ROOM.";
+				}
+				
 				consoleAppend(getJunk($_SESSION['CurrentRoom'], $_SESSION['roomDescriptions']) . ".");
 				exitAppend();
+				objectAppend();
 			}
 		}
 		else
