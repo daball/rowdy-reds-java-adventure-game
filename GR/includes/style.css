@@ -90,11 +90,13 @@ body{
 		font-weight: bold;
 	 resize: none;
     -webkit-touch-callout: none;
+		/* disabled: causes up/down arrows to not function in Firefox
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+		*/
 }
 
 #button {
