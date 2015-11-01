@@ -78,6 +78,20 @@
 		objectAppend();
 	}
 	
+	function inspectObject($object)
+	{
+		$desc = getJunk(trim($object), $_SESSION['objectDescriptions']);
+		if(trim($desc) == "")
+		{
+			consoleAppend("That is not an object to inspect.");
+		}
+		else
+		{
+			consoleAppend($desc);
+		}
+		
+	}
+	
 	function objectAppend()
 	{
 		$apendThis = "The objects are: ";
@@ -131,36 +145,47 @@
 	function runCommand($command)
 	{
 		// Remove any extra white spaces
-		$command = cleanCommand($command);
 		
+		
+
 		$arr = explode(' ',trim($command));
-		$checkThis = $arr[0];
 		
-		if(isset($arr[1]))
+		if(isset($arr[1]) && $arr[0] == "inspect")
 		{
-			$checkThis = $checkThis . " " . $arr[1];
+			inspectObject($arr[1]);
 		}
-		
-		// Get the Function for the Command
-		$returnCommand = getJunk($checkThis, $_SESSION['commandsArray']);
-		
-		// If the the Commands Array Returned a Function Run the Function
-		if($returnCommand != ""){
-			// Run Function Name The Array Return Us
-			$returnCommand($command);
-		}
-		else {
-			// Try to Get the Function for the Command again but in Lower Case
-			$returnCommand = getJunk(strtolower($command), $_SESSION['commandsArray']);
+		else
+		{
+			$command = cleanCommand($command);
+			$arr = explode(' ',trim($command));
+			$checkThis = $arr[0];
+			
+			if(isset($arr[1]))
+			{
+				$checkThis = $checkThis . " " . $arr[1];
+			}
+			
+			// Get the Function for the Command
+			$returnCommand = getJunk($checkThis, $_SESSION['commandsArray']);
 			
 			// If the the Commands Array Returned a Function Run the Function
 			if($returnCommand != ""){
 				// Run Function Name The Array Return Us
-				$returnCommand(strtolower($command));
+				$returnCommand($command);
 			}
 			else {
-				// Append Console Text With I Do Not Understand
-				$_SESSION['console'] = $_SESSION['console'] . "\n" . "I do not understand.";
+				// Try to Get the Function for the Command again but in Lower Case
+				$returnCommand = getJunk(strtolower($command), $_SESSION['commandsArray']);
+				
+				// If the the Commands Array Returned a Function Run the Function
+				if($returnCommand != ""){
+					// Run Function Name The Array Return Us
+					$returnCommand(strtolower($command));
+				}
+				else {
+					// Append Console Text With I Do Not Understand
+					$_SESSION['console'] = $_SESSION['console'] . "\n" . "I do not understand.";
+				}
 			}
 		}
 	}
