@@ -105,7 +105,10 @@ body{
 
 #mainMenu{
 	width: 500px;
-	height: 400px;
+	/*height: 400px;
+	Changed height after hiding Continue and Options buttons on Main Menu
+	*/
+	height: 200px;
 	border-radius: 15px;
 	border-style: solid;
 	border-width: 2px;

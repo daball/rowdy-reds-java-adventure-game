@@ -10,8 +10,8 @@
 		<div class="container">
 			<div id="mainMenu">
 				<a href="main.php?id=1"><button class="menuButton" style="margin-top: 70px;">New Game</button></a>
-				<a href="main.php?id=2"><button class="menuButton">Continue Game</button></a>
-				<a href="main.php?id=3"><button class="menuButton">Options</button></a>
+				<!-- <a href="main.php?id=2"><button class="menuButton">Continue Game</button></a>
+				<a href="main.php?id=3"><button class="menuButton">Options</button></a> -->
 			</div>
 		</div>
 	</body>
