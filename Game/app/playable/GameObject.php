@@ -2,17 +2,30 @@
 
 namespace playable;
 
-require_once "IInspectable.php";
-require_once "TInspectable.php";
-require_once __DIR__.'/../util/ISerializable.php';
+class GameObject /*implements \Serializable*/ {
+  private $components;
 
-abstract class GameObject implements IInspectable {
-  use TInspectable;
+  public function addComponent($component) {
+    //assert $component is the right type
+    if (!is_a($component, "\components\BaseComponent")) {
+      throw new \Exception('You must pass an object from a class extended from \components\BaseComponent in order to call \playable\GameObject\addComponent().');
+    }
+    //register this GameObject into the component as its parent, in case
+    //the Component needs to be able use the GameObject it belongs to
+    $component->setParent($this);
+    //use reflection to obtain the class type name, without the namespace,
+    //use this as the associative array key for getComponent()
+    $reflectComponent = new \ReflectionClass($component);
+    //store the component
+    $this->components[$reflectComponent->getShortName()] = $component;
+  }
 
-  protected function __construct()
-  {
-    $this->onInspect(function () {
-      return "This is a GameObject, but you should describe it first. That means you, developer.";
-    });
+  public function getComponent($componentType) {
+    //return the component
+    return $this->components[$componentType];
+  }
+
+  public function removeComponent($componentType) {
+    unset($this->components[$componentType]);
   }
 }

@@ -10,13 +10,12 @@ require_once 'TCreate.php';
 require_once 'TCollidable.php';
 require_once 'TCanEat.php';
 require_once 'TInspectable.php';
-require_once __DIR__.'/../util/ISerializable.php';
 
 
 /**
  * A LambChop item is used to feed a hungy Dog obstacle.
  */
-class Dog extends GameObject implements IInspectable, ICollidable, ICanEat, \util\ISerializable, \Serializable
+class Dog extends GameObject implements IInspectable, ICollidable, ICanEat, \Serializable
 {
   use TInspectable;
   use TCollidable;

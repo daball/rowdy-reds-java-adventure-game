@@ -10,12 +10,11 @@ require_once 'TCreate.php';
 require_once 'TOpenable.php';
 require_once 'TCloseable.php';
 require_once 'TCollidable.php';
-require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * A Door game item must be opened in order to pass to the next room.
  */
-class Door extends GameObject implements IOpenable, ICloseable, ICollidable, \util\ISerializable, \Serializable
+class Door extends GameObject implements IOpenable, ICloseable, ICollidable, \Serializable
 {
   use TOpenable;
   use TCloseable;

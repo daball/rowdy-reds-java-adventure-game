@@ -2,11 +2,9 @@
 
 namespace map;
 
-require_once __DIR__.'/../util/ISerializable.php';
-
 ///Helper class helps resolve directions to a direction string
 ///for proper use in Room->directions associative array.
-class Direction implements \util\ISerializable
+class Direction implements \Serializable
 {
   public static $north = 'n';
   public static $south = 's';

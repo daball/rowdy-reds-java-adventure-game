@@ -8,10 +8,9 @@ use \playable\System;
 require_once 'CommandProcessor.php';
 require_once __DIR__.'/../playable/index.php';
 require_once __DIR__.'/../playable/System.php';
-require_once __DIR__.'/../util/ISerializable.php';
 require_once 'RowdyRedMap.php';
 
-final class GameState implements \util\ISerializable, \Serializable
+final class GameState implements \Serializable
 {
   public $map;
   public $consoleHistory;

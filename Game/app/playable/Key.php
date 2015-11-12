@@ -2,19 +2,17 @@
 
 namespace playable;
 
-require_once __DIR__.'/../util/ISerializable.php';
 require_once 'GameObject.php';
 require_once 'IAssignable.php';
 require_once 'IInspectable.php';
 require_once 'TCreateWithKey.php';
 require_once 'TInspectable.php';
 require_once 'TAssignable.php';
-require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * A Key item must be used to open an Unlockable item.
  */
-class Key extends GameObject implements IInspectable, IAssignable, \util\ISerializable, \Serializable
+class Key extends GameObject implements IInspectable, IAssignable, \Serializable
 {
   use TCreateWithKey;
   use TInspectable;

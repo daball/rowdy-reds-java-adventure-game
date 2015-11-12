@@ -8,9 +8,8 @@ require_once "TCreate.php";
 require_once "TContainer.php";
 require_once "TOpenable.php";
 require_once "TCloseable.php";
-require_once __DIR__.'/../util/ISerializable.php';
 
-class Container extends GameObject implements IContainer, \util\ISerializable, \Serializable
+class Container extends GameObject implements IContainer, \Serializable
 {
   use TCreate;
   use TContainer;

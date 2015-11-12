@@ -4,9 +4,8 @@ namespace playable;
 
 require_once "GameObject.php";
 require_once "Container.php";
-require_once __DIR__.'/../util/ISerializable.php';
 
-class DogBowl extends Container implements \util\ISerializable, \Serializable
+class DogBowl extends Container implements \Serializable
 {
   protected $dog = null;
 

@@ -12,13 +12,12 @@ require_once 'TCollidable.php';
 require_once 'TCanEat.php';
 require_once 'TInspectable.php';
 require_once 'TAssignable.php';
-require_once __DIR__.'/../util/ISerializable.php';
 
 
 /**
  * A Lamp item is used to light dark areas.
  */
-class Lamp extends GameObject implements IInspectable, IAssignable, \util\ISerializable, \Serializable
+class Lamp extends GameObject implements IInspectable, IAssignable, \Serializable
 {
   use TInspectable;
   use TCreate;

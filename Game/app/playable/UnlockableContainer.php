@@ -8,9 +8,8 @@ require_once "TUnlockable.php";
 require_once "TCloseable.php";
 require_once "TContainer.php";
 require_once "TCreateWithKey.php";
-require_once __DIR__.'/../util/ISerializable.php';
 
-class UnlockableContainer extends Container implements IUnlockable, \util\ISerializable, \Serializable
+class UnlockableContainer extends Container implements IUnlockable, \Serializable
 {
   use TUnlockable;
   use TCloseable;

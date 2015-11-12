@@ -3,12 +3,11 @@
 namespace map;
 
 require_once "Direction.php";
-require_once __DIR__.'/../util/ISerializable.php';
 
 /**
  * Defines RoomDirections for a given Room
  **/
-class RoomDirections
+class RoomDirections implements \Serializable
 {
   public $n;
   public $s;
