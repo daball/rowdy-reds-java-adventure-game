@@ -23,6 +23,9 @@ class Key extends GameObject implements IInspectable, IAssignable, \Serializable
    */
   private $key;
 
+  /**
+   * @ignore
+   */
   public function __construct($key) {
     $this->key = $key;
     $this->setDescription("You have found a key.");
@@ -35,6 +38,9 @@ class Key extends GameObject implements IInspectable, IAssignable, \Serializable
     return $this->key;
   }
 
+  /**
+   * @ignore
+   */
   public function serialize() {
     return serialize(
       array(
@@ -44,6 +50,9 @@ class Key extends GameObject implements IInspectable, IAssignable, \Serializable
     );
   }
 
+  /**
+   * @ignore
+   */
   public function unserialize($data) {
     $data = unserialize($data);
     $this->key = $data['key'];

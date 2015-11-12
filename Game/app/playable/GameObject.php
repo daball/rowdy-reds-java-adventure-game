@@ -3,8 +3,14 @@
 namespace playable;
 
 class GameObject /*implements \Serializable*/ {
+  /**
+   * @ignore
+   */
   private $components;
 
+  /**
+   * @ignore
+   */
   public function addComponent($component) {
     //assert $component is the right type
     if (!is_a($component, "\components\BaseComponent")) {
@@ -19,12 +25,26 @@ class GameObject /*implements \Serializable*/ {
     //store the component
     $this->components[$reflectComponent->getShortName()] = $component;
   }
-
-  public function getComponent($componentType) {
-    //return the component
-    return $this->components[$componentType];
+  
+  /**
+   * @ignore
+   */
+  public function hasComponent($componentType) {
+    return array_key_exists($componentType, $this->components);
   }
 
+  /**
+   * @ignore
+   */
+  public function getComponent($componentType) {
+    //return the component
+    if ($this->hasComponent($componentType))
+      return $this->components[$componentType];
+  }
+
+  /**
+   * @ignore
+   */
   public function removeComponent($componentType) {
     unset($this->components[$componentType]);
   }

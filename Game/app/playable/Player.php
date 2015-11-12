@@ -74,7 +74,7 @@ class Player implements \Serializable
   /**
    * @ignore
    **/
-  private function validateCollision($direction) {
+  private function validateCollision(Room $room, $direction) {
     if ($direction->obstacleItem == null)
       return false;
     else
@@ -90,7 +90,7 @@ class Player implements \Serializable
   /**
    * @ignore
    **/
-  private function explainCollision($d, Direction $direction) {
+  private function explainCollision(Room $room, $direction) {
     $item = GameState::getGameState()->getPlayerRoom()->getItem($direction->obstacleItem);
     $d = ($d == Direction::$n ? 'north' : '') .
          ($d == Direction::$s ? 'south' : '') .
@@ -113,9 +113,9 @@ class Player implements \Serializable
     $nextRoom = $directionInfo->nextRoom;
     //make sure this is valid
     if ($nextRoom !== '') {
-      if ($this->validateCollision($directionInfo))
+      if ($this->validateCollision($nextRoom, $direction))
       {
-        return $this->explainCollision($direction, $directionInfo);
+        return $this->explainCollision($nextRoom, $direction);
       }
       else {
         //put the avatar in the next room

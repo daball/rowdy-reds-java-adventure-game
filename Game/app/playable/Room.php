@@ -12,11 +12,8 @@ require_once __DIR__.'/../playable/TInspectable.php';
 /**
  * Defines a Room in the Game
  **/
-class Room implements IInspectable, IContainer, \Serializable
+class Room extends GameObject implements \Serializable
 {
-  use TContainer;
-  use TInspectable;
-
   /**
    * Name of the room (used internally as a reference)
    * @type String
@@ -46,7 +43,8 @@ class Room implements IInspectable, IContainer, \Serializable
   public function __construct()
   {
     $this->directions = new RoomDirections();
-    $this->onInspect(function () {
+    $inspector = new Inspector();
+    $inspector->onInspect(function ($inspector) {
       $obviousExits = [];
       if ($this->directions->n->nextRoom && $this->directions->n->obvious) array_push($obviousExits, "NORTH");
       if ($this->directions->e->nextRoom && $this->directions->e->obvious) array_push($obviousExits, "EAST");
@@ -55,6 +53,7 @@ class Room implements IInspectable, IContainer, \Serializable
       $obviousExits = implode(', ', $obviousExits);
       return "\n$this->description\nThe obvious exits are: $obviousExits";
     });
+    $this->addComponent($inspector);
   }
 
   /* ISerializable interface implementation */
@@ -67,7 +66,6 @@ class Room implements IInspectable, IContainer, \Serializable
         'imageUrl' => $this->imageUrl,
         'spawn' => $this->spawn,
         'directions' => $this->directions,
-        'items' => $this->items,
       )
     );
   }

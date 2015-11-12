@@ -50,9 +50,23 @@ class Direction implements \Serializable
     }
   }
 
+  public static function fullDirection($direction)
+  {
+    switch (self::cardinalDirection($direction))
+    {
+      case self::$n:
+        return "north";
+      case self::$s:
+        return "south";
+      case self::$w:
+        return "west";
+      case self::$e:
+        return "east";
+    }
+  }
+
   public $description = "";
   public $nextRoom = "";
-  public $obstacleItem = null;
   public $obvious = true;
 
   public function serialize() {
@@ -60,7 +74,6 @@ class Direction implements \Serializable
       array(
         'description' => $this->description,
         'nextRoom' => $this->nextRoom,
-        'obstacleItem' => $this->obstacleItem,
         'obvious' => $this->obvious,
       )
     );
@@ -70,7 +83,6 @@ class Direction implements \Serializable
     $data = unserialize($data);
     $this->description = $data['description'];
     $this->nextRoom = $data['nextRoom'];
-    $this->obstacleItem = $data['obstacleItem'];
     $this->obvious = $data['obvious'];
   }
 
