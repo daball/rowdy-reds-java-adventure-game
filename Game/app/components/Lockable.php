@@ -36,18 +36,16 @@ class Lockable extends BaseComponent
     $this->onBeforeUnlock($lockLogic);
 
     $this->onLock(function ($lockable, $keyProvided) {
-      if ($lockable->isLocked()) {
-        return "You turned the key and the object locks.";
-      }
-      else
-        return "You insert the key, but it doesn't fit the lock.";
+      return "You turned the key and the object locks.";
+    });
+    $this->onRefuseLock(function ($lockable, $keyProvided) {
+      return "You insert the key, but it doesn't fit the lock.";
     });
     $this->onUnlock(function ($lockable, $keyProvided) {
-      if ($lockable->isUnlocked()) {
-        return "You turned the key and the object unlocks.";
-      }
-      else
-        return "You insert the key, but it doesn't fit the lock.";
+      return "You turned the key and the object unlocks.";
+    });
+    $this->onRefuseUnlock(function ($lockable, $keyProvided) {
+      return "You insert the key, but it doesn't fit the lock.";
     });
   }
 

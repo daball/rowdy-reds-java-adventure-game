@@ -1,5 +1,20 @@
 <phpunit bootstrap="./vendor/autoload.php">
   <testsuites>
+    <testsuite name="game">
+      <directory>./tests/unit/app/game</directory>
+    </testsuite>
+    <testsuite name="commands">
+      <directory>./tests/unit/app/commands</directory>
+    </testsuite>
+    <testsuite name="components">
+      <directory>./tests/unit/app/components</directory>
+    </testsuite>
+    <testsuite name="map">
+      <directory>./tests/unit/app/map</directory>
+    </testsuite>
+    <testsuite name="playable">
+      <directory>./tests/unit/app/playable</directory>
+    </testsuite>
     <testsuite name="unit">
       <directory>./tests/unit</directory>
     </testsuite>

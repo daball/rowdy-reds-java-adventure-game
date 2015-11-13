@@ -18,8 +18,9 @@ use \components\Openable;
 class Door extends GameObject
 {
 
-  public function __construct($direction)
+  public function __construct($name, $direction)
   {
+    super::__construct($name);
     $collider = new Collider($direction);
     $inspector = new Inspector();
     $openable = new Openable();

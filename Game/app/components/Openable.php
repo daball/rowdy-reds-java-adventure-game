@@ -45,7 +45,7 @@ class Openable extends BaseComponent
     $this->onClose(function ($openable) {
       return "You closed the object.";
     });
-    $this->onClose(function ($openable) {
+    $this->onRefuseClose(function ($openable) {
       return "You tried to close the object, but it didn't close.";
     });
   }

@@ -30,14 +30,18 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-  protected $onCollideCallback = null;
+   protected $onBeforeCollideCallback = null;
+   protected $onCollideCallback = null;
 
   /**
    * @ignore
    */
   public function __construct($direction) {
     $this->setDirection($direction);
-    $this->onCollide(function ($collider) {
+    $this->onBeforeCollide(function ($collider, $direction) {
+      return $collider->isEnabled() && $collider->validateCollision($direction);
+    });
+    $this->onCollide(function ($collider, $direction) {
       $direction = $collider->getDirection();
       return "There is something in the way to your $direction.";
     });
@@ -47,7 +51,7 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function validateCollision($direction) {
-    return ($this->enabled && Direction::fullDirection($direction) == $direction);
+    return ($this->enabled && Direction::fullDirection($direction) == $this->direction);
   }
 
   /**
@@ -75,7 +79,7 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-  public function collisionsEnabled() {
+  public function isEnabled() {
     return $this->enabled;
   }
 
@@ -89,19 +93,21 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-  public function collisionsDisabled() {
-    return !$this->enabled;
+  public function collide($direction) {
+    $onBeforeCollide = $this->onBeforeCollideCallback;
+    $onCollide = $this->onCollideCallback;
+
+    $collisionEvent = "";
+    if ($onBeforeCollide($this, $direction))
+      $collisionEvent = $onCollide($this, $direction);
+    return $collisionEvent;
   }
 
   /**
    * @ignore
    */
-  public function collide() {
-    $collision = "";
-    $cb = $this->onCollideCallback;
-    if ($this->enabled && $cb)
-      $collision = $cb($this);
-    return $collision;
+  public function onBeforeCollide($callback) {
+    $this->onBeforeCollideCallback = $callback;
   }
 
   /**
