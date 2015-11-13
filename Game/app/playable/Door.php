@@ -1,77 +1,64 @@
 <?php
-
 namespace playable;
 
 require_once 'GameObject.php';
-require_once 'IOpenable.php';
-require_once 'ICloseable.php';
-require_once 'ICollidable.php';
-require_once 'TCreate.php';
-require_once 'TOpenable.php';
-require_once 'TCloseable.php';
-require_once 'TCollidable.php';
+
+require_once __DIR__.'/../components/Collider.php';
+require_once __DIR__.'/../components/Inspector.php';
+require_once __DIR__.'/../components/Openable.php';
+
+use \components\Collider;
+use \components\Inspector;
+use \components\Lockable;
+use \components\Openable;
 
 /**
  * A Door game item must be opened in order to pass to the next room.
  */
-class Door extends GameObject implements IOpenable, ICloseable, ICollidable, \Serializable
+class Door extends GameObject
 {
-  use TOpenable;
-  use TCloseable;
-  use TCollidable;
-  use TCreate;
 
-  protected function __construct()
+  public function __construct($direction)
   {
-    parent::__construct();
-
-    $this->onInspect(function () {
-      return "There is a door.";
+    $collider = new Collider($direction);
+    $inspector = new Inspector();
+    $openable = new Openable();
+    $collider->onCollide(function ($collider) {
+     $direction = $collider->getDirection();
+     return "There is a door blocking your path to the $direction. You might try to open it first.";
     });
-
-    $this->setExplainCollision(function ($direction)
-    {
-      return "There is a door blocking you from going $direction.";
+    $openable->onOpen(function ($openable) {
+     $door = $openable->getParent();
+     $collider = $door->getComponent('Collider');
+     $collider->disableCollisions();
+     $direction = $collider->getDirection();
+     return "The door is now open. You may now enter through the $direction.";
     });
-
-    $this->onOpen(function ($success) {
-      if ($success) {
-        return "The door swings open.";
-      }
-      else {
-        return "The door does not open.";
-      }
+    $openable->onRefuseOpen(function ($openable) {
+     return "You tried to open the door, but it will not budge.";
     });
-
-    $this->onClose(function ($success) {
-      if ($success) {
-        return "The door slams shut.";
-      }
-      else {
-        return "The door does not open.";
-      }
+    $openable->onClose(function ($openable) {
+      $door = $openable->getParent();
+      $collider = $door->getComponent('Collider');
+      $collider->enableCollisions();
+      $direction = $collider->getDirection();
+      return "The door is now closed, blocking your path to the $direction.";
     });
-
-    $this->setExplainCollision(function ($direction) {
-      return "There is a door blocking you from going $direction.";
+    $openable->onRefuseClose(function ($openable) {
+     return "You tried to close the door, but it will not budge.";
     });
-  }
-
-  /* ISerializable interface implementation */
-
-  public function serialize() {
-    return serialize(
-      array(
-        'description' => $this->description,
-        'opened' => $this->opened,
-      )
-    );
-  }
-
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->__construct();
-    $this->description = $data['description'];
-    $this->opened = $data['opened'];
+    $inspector->onInspect(function ($inspector) {
+     $door = $inspector->getParent();
+     $collider = $door->getComponent('Collider');
+     $openable = $door->getComponent('Openable');
+     $direction = $collider->getDirection();
+     if ($openable->isOpened())
+       return "There is a open door to your $direction.";
+     else
+       return "There is a door blocking your path to the $direction.";
+    });
+    $this->addComponent($collider);
+    $this->addComponent($inspector);
+    $this->addComponent($openable);
   }
 }

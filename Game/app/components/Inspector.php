@@ -14,34 +14,15 @@ class Inspector extends BaseComponent
   /**
    * @ignore
    */
-  protected $description = "The Inspector component allows any GameObject to be inspected.";
-  /**
-   * @ignore
-   */
-  protected $beforeInspectCallback = null;
+  protected $onInspectCallback = null;
 
   /**
    * @ignore
    */
   public function __construct() {
-    $this->onBeforeInspect(function ($inspector) {
-      return $inspector->getDescription();
+    $this->onInspect(function ($inspector) {
+      return "You don't see anything interesting about this object.";
     });
-  }
-
-  /**
-   * @ignore
-   */
-  public function setDescription($description) {
-    $this->description = $description;
-    return $this->getDescription();
-  }
-
-  /**
-   * @ignore
-   */
-  public function getDescription() {
-    return $this->description;
   }
 
   /**
@@ -49,18 +30,14 @@ class Inspector extends BaseComponent
    */
   public function inspect() {
     $description = "";
-    $cb = $this->beforeInspectCallback;
-    if ($cb)
-      $description = $cb($this);
-    if (!$description)
-      $description = $this->getDescription();
-    return $description;
+    $onInspectCallback = $this->onInspectCallback;
+    return $onInspectCallback($this);
   }
 
   /**
    * @ignore
    */
-  public function onBeforeInspect($callback) {
-    $this->beforeInspectCallback = $callback;
+  public function onInspect($callback) {
+    $this->onInspectCallback = $callback;
   }
 }
