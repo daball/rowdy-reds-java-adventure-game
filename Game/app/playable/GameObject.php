@@ -3,10 +3,10 @@
 namespace playable;
 
 require_once __DIR__.'/../util/TDefine.php';
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../util/TSerializable.php';
 
-use util\TDefine;
-use SuperClosure\Serializer;
+use \util\TDefine;
+use \util\TSerializable;
 
 /**
  * The GameObject represents almost any object in the game.
@@ -26,6 +26,7 @@ use SuperClosure\Serializer;
  **/
 class GameObject implements \Serializable {
   use TDefine;
+  use TSerializable;
 
   /**
    * The name of the GameObject.
@@ -99,30 +100,5 @@ class GameObject implements \Serializable {
    */
   public function removeComponent($componentType) {
     unset($this->components[$componentType]);
-  }
-
-  /**
-   * @ignore
-   */
-  public function serialize() {
-    return serialize(
-      array(
-        'name' => $this->name,
-        'components' => $this->components,
-        // 'definitions' => $this->definitions,
-      )
-    );
-  }
-
-  /**
-   * @ignore
-   */
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->__construct($data['name']);
-    $this->name = $data['name'];
-    $this->components = $data['components'];
-    // $this->definitions = $data['definitions'];
-    // $this->replayDefinitions();
   }
 }

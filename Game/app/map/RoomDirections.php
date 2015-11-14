@@ -8,7 +8,7 @@ require_once "DirectionException.php";
 /**
  * Defines RoomDirections for a given Room
  **/
-class RoomDirections //implements \Serializable
+class RoomDirections implements \Serializable
 {
   public $n;
   public $s;
@@ -48,26 +48,26 @@ class RoomDirections //implements \Serializable
     throw new DirectionException();
   }
 
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'n' => $this->n,
-  //       's' => $this->s,
-  //       'e' => $this->e,
-  //       'w' => $this->w,
-  //       'u' => $this->u,
-  //       'd' => $this->d,
-  //     )
-  //   );
-  // }
-  //
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $this->n = $data['n'];
-  //   $this->s = $data['s'];
-  //   $this->e = $data['e'];
-  //   $this->w = $data['w'];
-  //   $this->u = $data['u'];
-  //   $this->d = $data['d'];
-  // }
+  public function serialize() {
+    return serialize(
+      array(
+        'n' => $this->n,
+        's' => $this->s,
+        'e' => $this->e,
+        'w' => $this->w,
+        'u' => $this->u,
+        'd' => $this->d,
+      )
+    );
+  }
+
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->n = $data['n'];
+    $this->s = $data['s'];
+    $this->e = $data['e'];
+    $this->w = $data['w'];
+    $this->u = $data['u'];
+    $this->d = $data['d'];
+  }
 }

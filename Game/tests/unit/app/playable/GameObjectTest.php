@@ -51,7 +51,7 @@ class GameObjectTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($parent->getName(), $component->getParent()->getName());
 
     $serialized = serialize($parent);
-    echo $serialized;
+    // echo $serialized;
     $unserialized = unserialize($serialized);
 
     $this->assertEquals($parent->getName(), $unserialized->getName());

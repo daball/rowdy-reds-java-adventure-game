@@ -4,9 +4,9 @@ namespace engine;
 
 class CommandProcessor
 {
-  public static $commandHandlers;
-  public $commandInput;
-  public $commandOutput;
+  protected static $commandHandlers;
+  protected $commandInput;
+  protected $commandOutput;
 
   public static function init()
   {
@@ -42,6 +42,14 @@ class CommandProcessor
       }
     }
     $this->commandOutput = trim($commandOutput);
+    return $this->commandOutput;
+  }
+
+  public function getCommandInput() {
+    return $this->commandInput;
+  }
+
+  public function getCommandOutput() {
     return $this->commandOutput;
   }
 

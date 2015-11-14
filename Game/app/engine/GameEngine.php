@@ -14,23 +14,35 @@ require_once __DIR__.'/../commands/index.php';
 ///handlers and updates the game state when command is done executing.
 class GameEngine
 {
-  public $gameState;
-  public $commandProcessor;
+  protected $gameState;
+  protected $commandProcessor;
 
   public function createSession()
   {
+    echo "createSession() hit";
     $this->gameState = GameState::getGameState();
-    $_SESSION['gameState'] = $this->gameState->serialize();
   }
 
   public function restoreSession()
   {
+    echo "restoreSession() hit";
     $this->gameState = GameState::getGameState($_SESSION['gameState']);
   }
 
   public function saveSession()
   {
+    echo "saveSession() hit";
     $_SESSION['gameState'] = $this->gameState->serialize();
+  }
+
+  public function getGameState()
+  {
+    return $this->gameState;
+  }
+
+  public function getCommandProcessor()
+  {
+    return $this->commandProcessor;
   }
 
   public function __construct()

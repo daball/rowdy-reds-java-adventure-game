@@ -103,7 +103,7 @@ class Direction extends GameObject //implements \Serializable
   public function __construct($name) {
     $name = self::cardinalDirection($name);
     parent::__construct($name);
-    $this->define(function ($direction) {
+    /*$this->define(function ($direction) {
       $inspector = new Inspector();
       $inspector->onInspect(function ($inspector) {
         $direction = $inspector->getParent();
@@ -119,7 +119,7 @@ class Direction extends GameObject //implements \Serializable
           return "You wonder what is to your $name.";
       });
       $direction->addComponent($inspector);
-    });
+    });*/
   }
 
   public function getNextRoomName() {
@@ -153,7 +153,6 @@ class Direction extends GameObject //implements \Serializable
   // public function serialize() {
   //   return serialize(
   //     array(
-  //       'description' => $this->description,
   //       'nextRoom' => $this->nextRoom,
   //       'obvious' => $this->obvious,
   //     )
@@ -162,7 +161,6 @@ class Direction extends GameObject //implements \Serializable
   //
   // public function unserialize($data) {
   //   $data = unserialize($data);
-  //   $this->description = $data['description'];
   //   $this->nextRoom = $data['nextRoom'];
   //   $this->obvious = $data['obvious'];
   // }

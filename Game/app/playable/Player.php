@@ -107,11 +107,12 @@ class Player implements \Serializable
     **/
   public function navigate($direction)
   {
+    $gameState = GameState::getGameState();
     //sanitize direction
     $direction = Direction::cardinalDirection($direction);
     //get adjacent room
-    $directionInfo = GameState::getGameState()->getPlayerRoom()->getDirection($direction);
-    $nextRoom = $directionInfo->getNextRoom();
+    $directionInfo = $gameState->getPlayerRoom()->getDirection($direction);
+    $nextRoom = $directionInfo->getNextRoomName();
     //make sure this is valid
     if ($nextRoom !== '') {
       // if ($this->validateCollision($nextRoom, $direction))
@@ -120,9 +121,9 @@ class Player implements \Serializable
       // }
       // else {
         //put the avatar in the next room
-        $this->location = $nextRoom->getName();
+        $this->location = $nextRoom;
         //return next room description
-        return GameState::getGameState()->getPlayerRoom()->getComponent('Inspector')->inspect();
+        return $gameState->getPlayerRoom()->getComponent('Inspector')->inspect();
       // }
     }
     else {

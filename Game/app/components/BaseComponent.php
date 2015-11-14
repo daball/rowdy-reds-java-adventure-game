@@ -3,9 +3,11 @@
 namespace components;
 
 require_once __DIR__.'/../util/TDefine.php';
+require_once __DIR__.'/../util/TSerializable.php';
 require_once __DIR__.'/../../vendor/autoload.php';
 
 use util\TDefine;
+use util\TSerializable;
 use SuperClosure\Serializer;
 
 /**
@@ -14,6 +16,7 @@ use SuperClosure\Serializer;
 abstract class BaseComponent implements \Serializable
 {
   use TDefine;
+  use TSerializable;
 
   /**
    * @ignore
@@ -39,26 +42,26 @@ abstract class BaseComponent implements \Serializable
     return $this->getParent();
   }
 
-  /**
-   * @ignore
-   */
-  public function serialize() {
-    return serialize(
-      array(
-        'parent' => $this->parent,
-        // 'definitions' => $this->definitions,
-      )
-    );
-  }
-
-  /**
-   * @ignore
-   */
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->parent = $data['parent'];
-    // $this->definitions = $data['definitions'];
-    // //replay definitions
-    // $this->replayDefinitions();
-  }
+  // /**
+  //  * @ignore
+  //  */
+  // public function serialize() {
+  //   return serialize(
+  //     array(
+  //       'parent' => $this->parent,
+  //       // 'definitions' => $this->definitions,
+  //     )
+  //   );
+  // }
+  //
+  // /**
+  //  * @ignore
+  //  */
+  // public function unserialize($data) {
+  //   $data = unserialize($data);
+  //   $this->parent = $data['parent'];
+  //   // $this->definitions = $data['definitions'];
+  //   // //replay definitions
+  //   // $this->replayDefinitions();
+  // }
 }

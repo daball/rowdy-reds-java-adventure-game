@@ -13,13 +13,13 @@ use \playable\System;
 
 final class GameState implements \Serializable
 {
-  public $map;
-  public $consoleHistory;
-  public $moves;
-  public $isExiting;
-  public $knownAPIClasses;
-  public $locals;
-  public $globals;
+  protected $map;
+  protected $consoleHistory;
+  protected $moves;
+  protected $exiting;
+  protected $knownAPIClasses;
+  protected $locals;
+  protected $globals;
 
   public function isKnownAPIClass($className)
   {
@@ -64,7 +64,7 @@ final class GameState implements \Serializable
     $this->locals = array();
     $this->consoleHistory = "Game restarted." . $eol . $this->inspectRoom();
     $this->moves = 0;
-    $this->isExiting = false;
+    $this->exiting = false;
   }
 
   public function getPlayerRoom()
@@ -89,6 +89,26 @@ final class GameState implements \Serializable
       else
         $this->consoleHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
     }
+  }
+
+  public function getConsoleHistory() {
+    return $this->consoleHistory;
+  }
+
+  public function getMap() {
+    return $this->map;
+  }
+
+  public function getMoves() {
+    return $this->moves;
+  }
+
+  public function incrementMoves() {
+    return ++$this->moves;
+  }
+
+  public function isExiting() {
+    return $this->exiting;
   }
 
   protected static $instance = null;
@@ -147,7 +167,7 @@ final class GameState implements \Serializable
         'map' => $this->map,
         'consoleHistory' => $this->consoleHistory,
         'moves' => $this->moves,
-        'isExiting' => $this->isExiting,
+        'exiting' => $this->exiting,
         'knownAPIClasses' => $this->knownAPIClasses,
         'locals' => $this->locals,
         'globals' => $this->globals,
@@ -161,7 +181,7 @@ final class GameState implements \Serializable
     $this->map = $data['map'];
     $this->consoleHistory = $data['consoleHistory'];
     $this->moves = $data['moves'];
-    $this->isExiting = $data['isExiting'];
+    $this->exiting = $data['exiting'];
     $this->knownAPIClasses = $data['knownAPIClasses'];
     $this->locals = $data['locals'];
     $this->globals = $data['globals'];

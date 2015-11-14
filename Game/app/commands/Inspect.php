@@ -41,7 +41,7 @@ class InspectCommandHandler extends BaseCommandHandler
   {
     $gameState = GameState::getGameState();
     $inspectWhat = $this->getTargetName($commandLine);
-    echo $inspectWhat;
+    // echo $inspectWhat;
     if ($inspectWhat === "")
       //no parameters, inspect the room
       return $gameState->inspectRoom() . "\n\n" . $this->inspectRoomContents();

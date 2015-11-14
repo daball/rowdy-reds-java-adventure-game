@@ -9,7 +9,7 @@ require_once __DIR__.'/../components/Openable.php';
 use \components\Inspector;
 use \components\Openable;
 
-class BasicContainer extends GameObject // implements \Serializable
+class BasicContainer extends GameObject //implements \Serializable
 {
   public function __construct($name) {
     parent::__construct($name);

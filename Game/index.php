@@ -12,22 +12,20 @@ $gameEngine = new \engine\GameEngine();
 $eol = "\n";
 $prompt = "> ";
 // random comment
-$gameState = $gameEngine->gameState;
-$map = $gameState->map;
+$gameState = $gameEngine->getGameState();
+$map = $gameState->getMap();
 
 $avatarRoom = $gameState->getPlayerRoom();
-$moves = $gameState->moves;
-$isExiting = $gameState->isExiting;
+$moves = $gameState->getMoves();
+$isExiting = $gameState->isExiting();
 
 $roomName = $avatarRoom->getName();
 $imageUrl = $avatarRoom->getImageUrl();
 
-$consoleHistory = $gameState->consoleHistory;
-$commandProcessor = $gameEngine->commandProcessor;
-$commandInput = $commandProcessor->commandInput;
-$commandOutput = $commandProcessor->commandOutput;
-
-$serialized = serialize($gameState);
+$consoleHistory = $gameState->getConsoleHistory();
+$commandProcessor = $gameEngine->getCommandProcessor();
+$commandInput = $commandProcessor->getCommandInput();
+$commandOutput = $commandProcessor->getCommandOutput();
 
 Twig_Autoloader::register();
 
@@ -47,7 +45,6 @@ echo $template->render(array(
 	'consoleHistory' => $consoleHistory,
 	'eol' => $eol,
   'prompt' => $prompt,
-  'serialized' => $serialized,
 ));
 
 //when the game is exiting, go ahead and restart it, since there is no other way to restart the session

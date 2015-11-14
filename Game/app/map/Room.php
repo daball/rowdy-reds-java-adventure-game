@@ -47,6 +47,8 @@ class Room extends GameObject //implements \Serializable
         if ($this->directions->e->nextRoom && $this->directions->e->obvious) array_push($obviousExits, "EAST");
         if ($this->directions->s->nextRoom && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
         if ($this->directions->w->nextRoom && $this->directions->w->obvious) array_push($obviousExits, "WEST");
+        if ($this->directions->u->nextRoom && $this->directions->u->obvious) array_push($obviousExits, "UP");
+        if ($this->directions->d->nextRoom && $this->directions->d->obvious) array_push($obviousExits, "DOWN");
         $obviousExits = implode(', ', $obviousExits);
         return "\n$this->description\nThe obvious exits are: $obviousExits";
       });
