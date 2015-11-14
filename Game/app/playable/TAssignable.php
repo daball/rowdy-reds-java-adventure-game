@@ -2,12 +2,6 @@
 
 namespace playable;
 
-require_once 'GameObject.php';
-require_once 'IOpenable.php';
-require_once 'ICloseable.php';
-require_once 'ICollidable.php';
-
-
 trait TAssignable
 {
   /**

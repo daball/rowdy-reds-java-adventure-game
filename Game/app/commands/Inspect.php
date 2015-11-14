@@ -1,11 +1,11 @@
 <?php
 
 namespace commands;
-use game\CommandProcessor;
-use game\GameState;
+use engine\CommandProcessor;
+use engine\GameState;
 
-require_once __DIR__.'/../game/GameState.php';
-require_once __DIR__.'/../game/CommandProcessor.php';
+require_once __DIR__.'/../engine/GameState.php';
+require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
 
@@ -44,7 +44,7 @@ class InspectCommandHandler extends BaseCommandHandler
     echo $inspectWhat;
     if ($inspectWhat === "")
       //no parameters, inspect the room
-      return $gameState->getPlayerRoom()->inspect() . "\n\n" . $this->inspectRoomContents();
+      return $gameState->inspectRoom() . "\n\n" . $this->inspectRoomContents();
     else {
 
       if (($item = $this->isPlayerItem($inspectWhat)) !== FALSE) {

@@ -37,13 +37,15 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function __construct($direction) {
-    $this->setDirection($direction);
-    $this->onBeforeCollide(function ($collider, $direction) {
-      return $collider->isEnabled() && $collider->validateCollision($direction);
-    });
-    $this->onCollide(function ($collider, $direction) {
-      $direction = $collider->getDirection();
-      return "There is something in the way to your $direction.";
+    $this->define(function ($collider) use ($direction) {
+      $collider->setDirection($direction);
+      $collider->onBeforeCollide(function ($collider, $direction) {
+        return $collider->isEnabled() && $collider->validateCollision($direction);
+      });
+      $collider->onCollide(function ($collider, $direction) {
+        $direction = $collider->getDirection();
+        return "There is something in the way to your $direction.";
+      });
     });
   }
 
@@ -97,7 +99,7 @@ class Collider extends BaseComponent
     $onBeforeCollide = $this->onBeforeCollideCallback;
     $onCollide = $this->onCollideCallback;
 
-    $collisionEvent = "";
+    $collisionEvent = false;
     if ($onBeforeCollide($this, $direction))
       $collisionEvent = $onCollide($this, $direction);
     return $collisionEvent;

@@ -1,10 +1,10 @@
 <?php
 
 namespace commands;
-use game\GameState;
+use engine\GameState;
 use \ReflectionClass;
 
-require_once __DIR__.'/../game/GameState.php';
+require_once __DIR__.'/../engine/GameState.php';
 
 trait TUsesItems
 {

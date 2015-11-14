@@ -1,8 +1,8 @@
 <?php
 
 namespace game\tests;
-use \game\CommandProcessor;
-use \game\GameState;
+use \engine\CommandProcessor;
+use \engine\GameState;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/game/CommandProcessor.php';

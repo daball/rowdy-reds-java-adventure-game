@@ -2,6 +2,12 @@
 
 namespace playable;
 
+require_once __DIR__.'/../util/TDefine.php';
+require_once __DIR__.'/../../vendor/autoload.php';
+
+use util\TDefine;
+use SuperClosure\Serializer;
+
 /**
  * The GameObject represents almost any object in the game.
  * It is meant to be generic enough to be able to become any
@@ -18,7 +24,9 @@ namespace playable;
  * components in a certain way in order to achieve the game behavior
  * desired.
  **/
-class GameObject /*implements \Serializable*/ {
+class GameObject implements \Serializable {
+  use TDefine;
+
   /**
    * The name of the GameObject.
    **/
@@ -26,11 +34,13 @@ class GameObject /*implements \Serializable*/ {
 
   /**
    * @ignore
-   */
-  private $components;
+   **/
+  protected $components;
 
   public function __construct($name) {
-    $this->setName($name);
+    $this->define(function ($gameObject) use ($name) {
+      $gameObject->setName($name);
+    });
   }
 
   /**
@@ -51,6 +61,8 @@ class GameObject /*implements \Serializable*/ {
    * @ignore
    */
   public function addComponent($component) {
+    if (!isset($this->components))
+      $this->components = array();
     //assert $component is the right type
     if (!is_a($component, "\components\BaseComponent")) {
       throw new \Exception('You must pass an object from a class extended from \components\BaseComponent in order to call \playable\GameObject\addComponent().');
@@ -69,7 +81,8 @@ class GameObject /*implements \Serializable*/ {
    * @ignore
    */
   public function hasComponent($componentType) {
-    return array_key_exists($componentType, $this->components);
+    return isset($this->components)
+            && array_key_exists($componentType, $this->components);
   }
 
   /**
@@ -86,5 +99,30 @@ class GameObject /*implements \Serializable*/ {
    */
   public function removeComponent($componentType) {
     unset($this->components[$componentType]);
+  }
+
+  /**
+   * @ignore
+   */
+  public function serialize() {
+    return serialize(
+      array(
+        'name' => $this->name,
+        'components' => $this->components,
+        // 'definitions' => $this->definitions,
+      )
+    );
+  }
+
+  /**
+   * @ignore
+   */
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->__construct($data['name']);
+    $this->name = $data['name'];
+    $this->components = $data['components'];
+    // $this->definitions = $data['definitions'];
+    // $this->replayDefinitions();
   }
 }

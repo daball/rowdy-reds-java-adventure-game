@@ -1,10 +1,10 @@
 <?php
 
 namespace commands;
-use game\CommandProcessor;
-use game\GameState;
+use engine\CommandProcessor;
+use engine\GameState;
 
-require_once __DIR__.'/../game/CommandProcessor.php';
+require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 
 ///Handles help command.

@@ -1,7 +1,7 @@
 <?php
 
 namespace game\tests;
-use \game\GameState;
+use \engine\GameState;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/game/GameState.php';

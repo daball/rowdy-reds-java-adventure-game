@@ -2,12 +2,10 @@
 
 namespace map;
 
-use \playable\Room;
-
-require_once __DIR__.'/../playable/Room.php';
+require_once 'Room.php';
 
 ///Defines a Map which contains multiple Rooms
-class Map implements \Serializable
+class Map //implements \Serializable
 {
   //Do yourself a favor and don't manipulate this manually.
   //It is manipulated by the app framework, but you shouldn't change it
@@ -17,7 +15,7 @@ class Map implements \Serializable
   //Pushes the room onto the end of the room array
   public function addRoom(Room $room)
   {
-    $this->rooms[$room->name] = $room;
+    $this->rooms[$room->getName()] = $room;
   }
 
   ///Gets the room by the roomName from the rooms array
@@ -31,21 +29,22 @@ class Map implements \Serializable
   {
     foreach ($this->rooms as $r => $room)
     {
-      if ($room->spawn)
-        return $room->name;
+      if ($room->isSpawnPoint())
+        return $room->getName();
     }
+    return null;
   }
 
-  public function serialize() {
-    return serialize(
-      array(
-        'rooms' => $this->rooms
-      )
-    );
-  }
-
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->rooms = $data['rooms'];
-  }
+  // public function serialize() {
+  //   return serialize(
+  //     array(
+  //       'rooms' => $this->rooms
+  //     )
+  //   );
+  // }
+  //
+  // public function unserialize($data) {
+  //   $data = unserialize($data);
+  //   $this->rooms = $data['rooms'];
+  // }
 }

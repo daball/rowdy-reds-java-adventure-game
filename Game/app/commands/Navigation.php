@@ -1,11 +1,11 @@
 <?php
 
 namespace commands;
-use game\CommandProcessor;
-use game\GameState;
+use engine\CommandProcessor;
+use engine\GameState;
 
-require_once __DIR__.'/../game/GameState.php';
-require_once __DIR__.'/../game/CommandProcessor.php';
+require_once __DIR__.'/../engine/GameState.php';
+require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 
 ///Handles navigation commands.
@@ -16,22 +16,35 @@ class NavigateCommandHandler extends BaseCommandHandler
   ///Return false if command line is not valid for this command handler.
   public function validateCommand($commandLine)
   {
-    return  strtolower($commandLine) == 'north' ||
+    return  strtolower($commandLine) == 'n' ||
+            strtolower($commandLine) == 'north' ||
             $commandLine == 'moveNorth();' ||
             $commandLine == 'me.moveNorth();' ||
-            strtolower($commandLine) == 'n' ||
+
+            strtolower($commandLine) == 's' ||
             strtolower($commandLine) == 'south' ||
             $commandLine == 'moveSouth();' ||
             $commandLine == 'me.moveSouth();' ||
-            strtolower($commandLine) == 's' ||
+
+            strtolower($commandLine) == 'e' ||
             strtolower($commandLine) == 'east' ||
             $commandLine == 'moveEast();' ||
             $commandLine == 'me.moveEast();' ||
-            strtolower($commandLine) == 'e' ||
+
+            strtolower($commandLine) == 'w' ||
             strtolower($commandLine) == 'west' ||
             $commandLine == 'moveWest();' ||
             $commandLine == 'me.moveWest();' ||
-            strtolower($commandLine) == 'w';
+
+            strtolower($commandLine) == 'u' ||
+            strtolower($commandLine) == 'up' ||
+            $commandLine == 'moveUp();' ||
+            $commandLine == 'me.moveUp();' ||
+
+            strtolower($commandLine) == 'down' ||
+            strtolower($commandLine) == 'd';
+            $commandLine == 'moveDown();' ||
+            $commandLine == 'me.moveDown()';
   }
 
   ///Executes the incoming command line.
@@ -57,6 +70,14 @@ class NavigateCommandHandler extends BaseCommandHandler
       case 'moveWest();':
       case 'me.moveWest();':
         $commandLine = 'w';
+          break;
+      case 'moveUp();':
+      case 'me.moveUp();':
+        $commandLine = 'u';
+        break;
+      case 'moveDown();':
+      case 'me.moveDown();':
+        $commandLine = 'd';
         break;
     }
     $gameState->moves++;

@@ -2,12 +2,13 @@
 
 namespace playable;
 
-use \map\Direction;
-use game\GameState;
-
 require_once 'IAssignable.php';
 require_once __DIR__.'/../map/Direction.php';
-require_once __DIR__.'/../game/GameState.php';
+require_once __DIR__.'/../engine/GameState.php';
+
+use \map\Direction;
+use engine\GameState;
+
 
 /**
  * Player represents the player's avatar throughout the game.
@@ -109,24 +110,24 @@ class Player implements \Serializable
     //sanitize direction
     $direction = Direction::cardinalDirection($direction);
     //get adjacent room
-    $directionInfo = GameState::getGameState()->getPlayerRoom()->directions->getDirection($direction);
-    $nextRoom = $directionInfo->nextRoom;
+    $directionInfo = GameState::getGameState()->getPlayerRoom()->getDirection($direction);
+    $nextRoom = $directionInfo->getNextRoom();
     //make sure this is valid
     if ($nextRoom !== '') {
-      if ($this->validateCollision($nextRoom, $direction))
-      {
-        return $this->explainCollision($nextRoom, $direction);
-      }
-      else {
+      // if ($this->validateCollision($nextRoom, $direction))
+      // {
+      //   return $this->explainCollision($nextRoom, $direction);
+      // }
+      // else {
         //put the avatar in the next room
-        $this->location = GameState::getGameState()->map->getRoom($nextRoom)->name;
+        $this->location = $nextRoom->getName();
         //return next room description
-        return GameState::getGameState()->getPlayerRoom()->inspect();
-      }
+        return GameState::getGameState()->getPlayerRoom()->getComponent('Inspector')->inspect();
+      // }
     }
     else {
       //room didn't exist, check if direction has a description
-      $nextDirection = GameState::getGameState()->getPlayerRoom()->directions->getDirection($direction)->description;
+      $nextDirection = GameState::getGameState()->getPlayerRoom()->getDirection($direction)->getComponent('Inspector')->inspect();
       if ($nextDirection !== '')
         //return description of the direction
         return $nextDirection;

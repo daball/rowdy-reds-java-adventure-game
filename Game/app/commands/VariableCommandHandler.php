@@ -1,8 +1,8 @@
 <?php
 
 namespace commands;
-use game\CommandProcessor;
-use game\GameState;
+use engine\CommandProcessor;
+use engine\GameState;
 
 // LEFT HAND RULES:
 // Specify ClassType varName

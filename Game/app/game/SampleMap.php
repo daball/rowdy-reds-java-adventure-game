@@ -1,13 +1,13 @@
 <?php
 
 namespace game;
-use map\MapBuilder;
-use map\Direction;
-use map\Map;
-
 
 require_once __DIR__.'/../map/MapBuilder.php';
 require_once __DIR__.'/../map/Direction.php';
+
+use map\MapBuilder;
+use map\Direction;
+use map\Map;
 
 ///SampleMap builds a sample map for Iteration 1 using MapBuilder
 class SampleMap

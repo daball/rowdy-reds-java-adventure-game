@@ -1,7 +1,7 @@
 <?php
 
 namespace commands;
-use game\CommandProcessor;
+use engine\CommandProcessor;
 
 ///Extend this class and override the base functionality for
 ///each command handler.

@@ -11,14 +11,14 @@ class HelpCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
   public function testHelpCommand()
   {
-    $validCommandLines = array("help", "HELP", "heLP", "Help", "HElp");
+    $validCommandLines = array("help", "HELP", "heLP", "Help", "HElp", "?");
 
     $commandHandler = new HelpCommandHandler();
 
     foreach ($validCommandLines as $validCommandLine)
     {
-      $this->assertTrue($commandHandler->validateCommand(null, $validCommandLine));
-      $this->assertNotEquals("", $commandHandler->executeCommand(null, $validCommandLine));
+      $this->assertTrue($commandHandler->validateCommand($validCommandLine));
+      $this->assertContains("HELP", strtoupper($commandHandler->executeCommand($validCommandLine)));
     }
   }
 }

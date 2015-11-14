@@ -13,8 +13,8 @@ class LockableTest extends \PHPUnit_Framework_TestCase
 {
   public function testLockable()
   {
-    $key = new Key("anyKey");
-    $wrongKey = new Key("theWrongKey");
+    $key = new Key("anyKey", "anySecret");
+    $wrongKey = new Key("theWrongKey", "theWrongSecret");
     $lockable = new Lockable($key);
 
     $this->assertTrue(is_a($lockable, "\components\BaseComponent"));
@@ -31,25 +31,25 @@ class LockableTest extends \PHPUnit_Framework_TestCase
     $this->assertFalse($lockable->isUnlocked());
 
     //negative test: test unlocking with the wrong key
-    $this->assertNotEquals($wrongKey->getKey(), $lockable->getKey()->getKey());
+    $this->assertNotEquals($wrongKey->getSecret(), $lockable->getKey()->getSecret());
     $this->assertTrue(!!$lockable->unlock($wrongKey));
     $this->assertTrue($lockable->isLocked());
     $this->assertFalse($lockable->isUnlocked());
 
     //positive test: test unlocking with the right key
-    $this->assertEquals($key->getKey(), $lockable->getKey()->getKey());
+    $this->assertEquals($key->getSecret(), $lockable->getKey()->getSecret());
     $this->assertTrue(!!$lockable->unlock($key));
     $this->assertFalse($lockable->isLocked());
     $this->assertTrue($lockable->isUnlocked());
 
     //negative test: test locking with the wrong key
-    $this->assertNotEquals($wrongKey->getKey(), $lockable->getKey()->getKey());
+    $this->assertNotEquals($wrongKey->getSecret(), $lockable->getKey()->getSecret());
     $this->assertTrue(!!$lockable->lock($wrongKey));
     $this->assertFalse($lockable->isLocked());
     $this->assertTrue($lockable->isUnlocked());
 
     //positive test: test locking with the right key
-    $this->assertEquals($key->getKey(), $lockable->getKey()->getKey());
+    $this->assertEquals($key->getSecret(), $lockable->getKey()->getSecret());
     $this->assertTrue(!!$lockable->lock($key));
     $this->assertTrue($lockable->isLocked());
     $this->assertFalse($lockable->isUnlocked());

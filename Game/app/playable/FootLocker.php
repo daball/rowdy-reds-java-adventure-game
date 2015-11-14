@@ -2,18 +2,17 @@
 
 namespace playable;
 
-require_once 'GameObject.php';
-require_once 'IOpenable.php';
-require_once 'ICloseable.php';
-require_once 'ICollidable.php';
 require_once 'UnlockableContainer.php';
+// require_once 'IOpenable.php';
+// require_once 'ICloseable.php';
+// require_once 'ICollidable.php';
 
 /**
  * A foot locker game item must be opened in order to pass to the next room.
  */
 class FootLocker extends UnlockableContainer
 {
-  protected function __construct($key) {
+  public function __construct($key) {
     parent();
     $this->key = $key;
     $this->onOpen(function () {

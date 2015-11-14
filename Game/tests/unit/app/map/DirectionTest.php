@@ -86,64 +86,104 @@ class DirectionTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals("w", Direction::cardinalDirection("weST"));
     $this->assertEquals("w", Direction::cardinalDirection("WEST"));
   }
+  public function testUp() {
+    $this->assertEquals("u", Direction::$u);
+    $this->assertEquals("u", Direction::$up);
+    $this->assertEquals("u", Direction::cardinalDirection("u"));
+    $this->assertEquals("u", Direction::cardinalDirection("up"));
+    $this->assertEquals("u", Direction::cardinalDirection("uP"));
+    $this->assertEquals("u", Direction::cardinalDirection("U"));
+    $this->assertEquals("u", Direction::cardinalDirection("Up"));
+    $this->assertEquals("u", Direction::cardinalDirection("UP"));
+  }
+  public function testDown() {
+    $this->assertEquals("d", Direction::$d);
+    $this->assertEquals("d", Direction::$down);
+    $this->assertEquals("d", Direction::cardinalDirection("d"));
+    $this->assertEquals("d", Direction::cardinalDirection("D"));
+    $this->assertEquals("d", Direction::cardinalDirection("down"));
+    $this->assertEquals("d", Direction::cardinalDirection("DOWN"));
+    $this->assertEquals("d", Direction::cardinalDirection("doWN"));
+    $this->assertEquals("d", Direction::cardinalDirection("DOwn"));
+  }
   public function testOppositeNorth()
   {
     $this->assertEquals("s", Direction::oppositeDirection(Direction::$n));
     $this->assertEquals("s", Direction::oppositeDirection(Direction::$north));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("n")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("N")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("north")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("North")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("nOrth")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("noRth")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("NOrth")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("NORth")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("NORTh")));
-    $this->assertEquals("s", Direction::oppositeDirection(Direction::cardinalDirection("NORTH")));
+    $this->assertEquals("s", Direction::oppositeDirection("n"));
+    $this->assertEquals("s", Direction::oppositeDirection("N"));
+    $this->assertEquals("s", Direction::oppositeDirection("north"));
+    $this->assertEquals("s", Direction::oppositeDirection("North"));
+    $this->assertEquals("s", Direction::oppositeDirection("nOrth"));
+    $this->assertEquals("s", Direction::oppositeDirection("noRth"));
+    $this->assertEquals("s", Direction::oppositeDirection("NOrth"));
+    $this->assertEquals("s", Direction::oppositeDirection("NORth"));
+    $this->assertEquals("s", Direction::oppositeDirection("NORTh"));
+    $this->assertEquals("s", Direction::oppositeDirection("NORTH"));
   }
   public function testOppositeSouth()
   {
     $this->assertEquals("n", Direction::oppositeDirection(Direction::$s));
     $this->assertEquals("n", Direction::oppositeDirection(Direction::$south));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("s")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("S")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("south")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("South")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("sOuth")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("soUth")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("SOuth")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("SOUth")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("SOUTh")));
-    $this->assertEquals("n", Direction::oppositeDirection(Direction::cardinalDirection("SOUTH")));
+    $this->assertEquals("n", Direction::oppositeDirection("s"));
+    $this->assertEquals("n", Direction::oppositeDirection("S"));
+    $this->assertEquals("n", Direction::oppositeDirection("south"));
+    $this->assertEquals("n", Direction::oppositeDirection("South"));
+    $this->assertEquals("n", Direction::oppositeDirection("sOuth"));
+    $this->assertEquals("n", Direction::oppositeDirection("soUth"));
+    $this->assertEquals("n", Direction::oppositeDirection("SOuth"));
+    $this->assertEquals("n", Direction::oppositeDirection("SOUth"));
+    $this->assertEquals("n", Direction::oppositeDirection("SOUTh"));
+    $this->assertEquals("n", Direction::oppositeDirection("SOUTH"));
   }
   public function testOppositeEast()
   {
     $this->assertEquals("w", Direction::oppositeDirection(Direction::$e));
     $this->assertEquals("w", Direction::oppositeDirection(Direction::$east));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("e")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("E")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("east")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("East")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("eAst")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("eaSt")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("EAst")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("EASt")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("eaST")));
-    $this->assertEquals("w", Direction::oppositeDirection(Direction::cardinalDirection("EAST")));
+    $this->assertEquals("w", Direction::oppositeDirection("e"));
+    $this->assertEquals("w", Direction::oppositeDirection("E"));
+    $this->assertEquals("w", Direction::oppositeDirection("east"));
+    $this->assertEquals("w", Direction::oppositeDirection("East"));
+    $this->assertEquals("w", Direction::oppositeDirection("eAst"));
+    $this->assertEquals("w", Direction::oppositeDirection("eaSt"));
+    $this->assertEquals("w", Direction::oppositeDirection("EAst"));
+    $this->assertEquals("w", Direction::oppositeDirection("EASt"));
+    $this->assertEquals("w", Direction::oppositeDirection("eaST"));
+    $this->assertEquals("w", Direction::oppositeDirection("EAST"));
   }
   public function testOppositeWest()
   {
     $this->assertEquals("e", Direction::oppositeDirection(Direction::$w));
     $this->assertEquals("e", Direction::oppositeDirection(Direction::$west));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("w")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("W")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("west")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("West")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("wEst")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("weSt")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("WEst")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("WESt")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("weST")));
-    $this->assertEquals("e", Direction::oppositeDirection(Direction::cardinalDirection("WEST")));
+    $this->assertEquals("e", Direction::oppositeDirection("w"));
+    $this->assertEquals("e", Direction::oppositeDirection("W"));
+    $this->assertEquals("e", Direction::oppositeDirection("west"));
+    $this->assertEquals("e", Direction::oppositeDirection("West"));
+    $this->assertEquals("e", Direction::oppositeDirection("wEst"));
+    $this->assertEquals("e", Direction::oppositeDirection("weSt"));
+    $this->assertEquals("e", Direction::oppositeDirection("WEst"));
+    $this->assertEquals("e", Direction::oppositeDirection("WESt"));
+    $this->assertEquals("e", Direction::oppositeDirection("weST"));
+    $this->assertEquals("e", Direction::oppositeDirection("WEST"));
+  }
+  public function testOppositeUp() {
+    $this->assertEquals("d", Direction::oppositeDirection(Direction::$u));
+    $this->assertEquals("d", Direction::oppositeDirection(Direction::$up));
+    $this->assertEquals("d", Direction::oppositeDirection("u"));
+    $this->assertEquals("d", Direction::oppositeDirection("up"));
+    $this->assertEquals("d", Direction::oppositeDirection("uP"));
+    $this->assertEquals("d", Direction::oppositeDirection("U"));
+    $this->assertEquals("d", Direction::oppositeDirection("Up"));
+    $this->assertEquals("d", Direction::oppositeDirection("UP"));
+  }
+  public function testOppositeDown() {
+    $this->assertEquals("u", Direction::oppositeDirection(Direction::$d));
+    $this->assertEquals("u", Direction::oppositeDirection(Direction::$down));
+    $this->assertEquals("u", Direction::oppositeDirection("d"));
+    $this->assertEquals("u", Direction::oppositeDirection("D"));
+    $this->assertEquals("u", Direction::oppositeDirection("down"));
+    $this->assertEquals("u", Direction::oppositeDirection("DOWN"));
+    $this->assertEquals("u", Direction::oppositeDirection("doWN"));
+    $this->assertEquals("u", Direction::oppositeDirection("DOwn"));
   }
 }

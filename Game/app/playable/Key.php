@@ -3,48 +3,76 @@
 namespace playable;
 
 require_once 'GameObject.php';
+require_once __DIR__.'/../components/Assignable.php';
+require_once __DIR__.'/../components/Inspector.php';
+
+use components\Assignable;
+use components\Inspector;
 
 /**
  * A Key item must be used to open an Unlockable item.
  */
-class Key extends GameObject
+class Key extends GameObject //implements \Serializable
 {
   /**
    * @ignore
    */
-  private $key;
+  private $secret;
 
   /**
    * @ignore
    */
-  public function __construct($key) {
-    $this->key = $key;
+  public function __construct($name, $secret) {
+    parent::__construct($name);
+    $this->define(function ($key) use ($secret) {
+      $key->setSecret($secret);
+    });
+    $this->define(function ($key) {
+      $assignable = new Assignable();
+      $key->addComponent($assignable);
+    });
+    $this->define(function ($key) {
+      $inspector = new Inspector();
+      $inspector->onInspect(function ($inspector) {
+        return "It's a key of some sort.";
+      });
+      $key->addComponent($inspector);
+    });
   }
 
   /**
    * @ignore
    **/
-  public function getKey() {
-    return $this->key;
+  public function setSecret($secret) {
+    $this->secret = $secret;
   }
 
   /**
    * @ignore
-   */
-  public function serialize() {
-    return serialize(
-      array(
-        'key' => $this->key,
-      )
-    );
+   **/
+  public function getSecret() {
+    return $this->secret;
   }
 
-  /**
-   * @ignore
-   */
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->key = $data['key'];
-    $this->__construct($this->key);
-  }
+  // /**
+  //  * @ignore
+  //  */
+  // public function serialize() {
+  //   return serialize(
+  //     array(
+  //       'secret' => $this->secret,
+  //       'gameObject' => parent::serialize(),
+  //     )
+  //   );
+  // }
+  //
+  // /**
+  //  * @ignore
+  //  */
+  // public function unserialize($data) {
+  //   $data = unserialize($data);
+  //   $data['gameObject'] = unserialize($data['gameObject']);
+  //   parent::__construct($data['gameObject']['name']);
+  //   $this->__construct($data['gameObject']['name'], $data['secret']);
+  // }
 }

@@ -2,20 +2,20 @@
 
 namespace playable;
 
-require_once "Container.php";
-require_once "IUnlockable.php";
-require_once "TUnlockable.php";
-require_once "TCloseable.php";
-require_once "TContainer.php";
-require_once "TCreateWithKey.php";
+require_once "BasicContainer.php";
+// require_once "IUnlockable.php";
+// require_once "TUnlockable.php";
+// require_once "TCloseable.php";
+// require_once "TContainer.php";
+// require_once "TCreateWithKey.php";
 
-class UnlockableContainer extends Container implements IUnlockable, \Serializable
+class UnlockableContainer extends BasicContainer // implements IUnlockable, \Serializable
 {
-  use TUnlockable;
-  use TCloseable;
-  use TCreateWithKey;
+  // use TUnlockable;
+  // use TCloseable;
+  // use TCreateWithKey;
 
-  protected function __construct($key) {
+  public function __construct($key) {
     parent::__construct();
     $this->key = $key;
     $this->onOpen(function () {
@@ -35,7 +35,7 @@ class UnlockableContainer extends Container implements IUnlockable, \Serializabl
           return "You try to open the container, but this container is locked.";
       }
     });
-    /*$this->onLock(function ($success) {
+    $this->onLock(function ($success) {
       if ($this->unlocked) {
         if ($success)
           return "The key turns and the container is locked. The container remains opened.";
@@ -45,7 +45,7 @@ class UnlockableContainer extends Container implements IUnlockable, \Serializabl
       else {
         return "This container has already been locked.";
       }
-    });*/
+    });
     $this->onUnlock(function ($success) {
       if ($success)
         return "You have unlocked the container. The container swings open.";
@@ -56,25 +56,25 @@ class UnlockableContainer extends Container implements IUnlockable, \Serializabl
 
   /* ISerializable interface implementation */
 
-  public function serialize() {
-    return serialize(
-      array(
-        'description' => $this->description,
-        'items' => $this->items,
-        'opened' => $this->opened,
-        'unlocked' => $this->unlocked,
-        'key' => $this->key,
-      )
-    );
-  }
-
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->key = $data['key'];
-    $this->__construct($this->key);
-    $this->description = $data['description'];
-    $this->items = $data['items'];
-    $this->opened = $data['opened'];
-    $this->unlocked = $data['unlocked'];
-  }
+  // public function serialize() {
+  //   return serialize(
+  //     array(
+  //       'description' => $this->description,
+  //       'items' => $this->items,
+  //       'opened' => $this->opened,
+  //       'unlocked' => $this->unlocked,
+  //       'key' => $this->key,
+  //     )
+  //   );
+  // }
+  //
+  // public function unserialize($data) {
+  //   $data = unserialize($data);
+  //   $this->key = $data['key'];
+  //   $this->__construct($this->key);
+  //   $this->description = $data['description'];
+  //   $this->items = $data['items'];
+  //   $this->opened = $data['opened'];
+  //   $this->unlocked = $data['unlocked'];
+  // }
 }

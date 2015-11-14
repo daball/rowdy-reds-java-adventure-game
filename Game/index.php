@@ -1,12 +1,12 @@
 <?php
 
-require_once __DIR__.'/app/game/GameEngine.php';
+require_once __DIR__.'/app/engine/GameEngine.php';
 
 //start session services
 session_start();
 
 //start the game engine
-$gameEngine = new \game\GameEngine();
+$gameEngine = new \engine\GameEngine();
 
 //install shortcut variables, for easier to read code
 $eol = "\n";
@@ -19,14 +19,15 @@ $avatarRoom = $gameState->getPlayerRoom();
 $moves = $gameState->moves;
 $isExiting = $gameState->isExiting;
 
-$roomName = $avatarRoom->name;
-$imageUrl = $avatarRoom->imageUrl;
+$roomName = $avatarRoom->getName();
+$imageUrl = $avatarRoom->getImageUrl();
 
 $consoleHistory = $gameState->consoleHistory;
 $commandProcessor = $gameEngine->commandProcessor;
 $commandInput = $commandProcessor->commandInput;
 $commandOutput = $commandProcessor->commandOutput;
 
+$serialized = serialize($gameState);
 
 Twig_Autoloader::register();
 
@@ -45,7 +46,8 @@ echo $template->render(array(
 	'imageUrl' => $imageUrl,
 	'consoleHistory' => $consoleHistory,
 	'eol' => $eol,
-	'prompt' => $prompt,
+  'prompt' => $prompt,
+  'serialized' => $serialized,
 ));
 
 //when the game is exiting, go ahead and restart it, since there is no other way to restart the session

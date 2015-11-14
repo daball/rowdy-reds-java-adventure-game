@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     $vendorDir . '/kriswallsmith/assetic/src/functions.php',
+    $vendorDir . '/nikic/php-parser/lib/bootstrap.php',
 );

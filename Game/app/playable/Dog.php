@@ -3,24 +3,24 @@
 namespace playable;
 
 require_once 'GameObject.php';
-require_once 'ICollidable.php';
-require_once 'ICanEat.php';
-require_once 'IInspectable.php';
-require_once 'TCreate.php';
-require_once 'TCollidable.php';
-require_once 'TCanEat.php';
-require_once 'TInspectable.php';
+// require_once 'ICollidable.php';
+// require_once 'ICanEat.php';
+// require_once 'IInspectable.php';
+// require_once 'TCreate.php';
+// require_once 'TCollidable.php';
+// require_once 'TCanEat.php';
+// require_once 'TInspectable.php';
 
 
 /**
  * A LambChop item is used to feed a hungy Dog obstacle.
  */
-class Dog extends GameObject implements IInspectable, ICollidable, ICanEat, \Serializable
+class Dog extends GameObject //implements IInspectable, ICollidable, ICanEat, \Serializable
 {
-  use TInspectable;
-  use TCollidable;
-  use TCanEat;
-  use TCreate;
+  // use TInspectable;
+  // use TCollidable;
+  // use TCanEat;
+  // use TCreate;
 
   public function __construct()
   {

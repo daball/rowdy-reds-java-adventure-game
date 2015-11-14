@@ -3,7 +3,6 @@
 namespace playable;
 
 require_once "GameObject.php";
-require_once "IUnlockable.php";
 
 interface IContainer
 {

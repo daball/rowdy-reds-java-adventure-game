@@ -26,30 +26,35 @@ class Lockable extends BaseComponent
   protected $onRefuseUnlockCallback = null;
 
   public function __construct(Key $key) {
-    $this->key = $key;
+    $this->define(function ($lockable) use ($key) {
+      $lockable->setKey($key);
+      //This defines the logic for locking/unlocking an object
+      $lockLogic = function ($lockable, $keyProvided) {
+        return ($lockable->getKey()->getSecret() == $keyProvided->getSecret());
+      };
+      $lockable->onBeforeLock($lockLogic);
+      $lockable->onBeforeUnlock($lockLogic);
 
-    //This defines the logic for locking/unlocking an object
-    $lockLogic = function ($lockable, $keyProvided) {
-      return ($lockable->getKey()->getKey() == $keyProvided->getKey());
-    };
-    $this->onBeforeLock($lockLogic);
-    $this->onBeforeUnlock($lockLogic);
-
-    $this->onLock(function ($lockable, $keyProvided) {
-      return "You turned the key and the object locks.";
-    });
-    $this->onRefuseLock(function ($lockable, $keyProvided) {
-      return "You insert the key, but it doesn't fit the lock.";
-    });
-    $this->onUnlock(function ($lockable, $keyProvided) {
-      return "You turned the key and the object unlocks.";
-    });
-    $this->onRefuseUnlock(function ($lockable, $keyProvided) {
-      return "You insert the key, but it doesn't fit the lock.";
+      $lockable->onLock(function ($lockable, $keyProvided) {
+        return "You turned the key and the object locks.";
+      });
+      $lockable->onRefuseLock(function ($lockable, $keyProvided) {
+        return "You insert the key, but it doesn't fit the lock.";
+      });
+      $lockable->onUnlock(function ($lockable, $keyProvided) {
+        return "You turned the key and the object unlocks.";
+      });
+      $lockable->onRefuseUnlock(function ($lockable, $keyProvided) {
+        return "You insert the key, but it doesn't fit the lock.";
+      });
     });
   }
 
   /* Property Getter/Setter */
+
+  public function setKey($key) {
+    $this->key = $key;
+  }
 
   public function getKey() {
     return $this->key;

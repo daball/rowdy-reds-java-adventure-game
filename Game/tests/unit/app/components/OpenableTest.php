@@ -24,11 +24,11 @@ class OpenableTest extends \PHPUnit_Framework_TestCase
     $this->assertFalse($openable->isOpened());
     $this->assertTrue($openable->isClosed());
 
-    $openable->setOpen();
+    $openable->setOpened();
     $this->assertTrue($openable->isOpened());
     $this->assertFalse($openable->isClosed());
 
-    $openable->setClose();
+    $openable->setClosed();
     $this->assertFalse($openable->isOpened());
     $this->assertTrue($openable->isClosed());
 
@@ -53,7 +53,7 @@ class OpenableTest extends \PHPUnit_Framework_TestCase
     $this->assertTrue($openable->isClosed());
 
     //test a openable that never closes
-    $openable->setOpen();
+    $openable->setOpened();
     $openable->onBeforeClose(function ($openable) {
       return false;
     });
@@ -61,7 +61,7 @@ class OpenableTest extends \PHPUnit_Framework_TestCase
     $this->assertFalse($openable->isClosed());
 
     //test a openable that never opens
-    $openable->setClose();
+    $openable->setClosed();
     $openable->onBeforeOpen(function ($openable) {
       return false;
     });
@@ -74,7 +74,7 @@ class OpenableTest extends \PHPUnit_Framework_TestCase
     $openable = new Openable();
     $this->assertTrue($openable->isClosed());
 
-    $key = new Key("anyKey");
+    $key = new Key("anyKey", "anySecret");
     $lockable = new Lockable($key);
     $this->assertTrue($lockable->isLocked());
 

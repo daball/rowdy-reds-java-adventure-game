@@ -22,41 +22,43 @@ class Openable extends BaseComponent
   protected $onRefuseCloseCallback = null;
 
   public function __construct() {
-    $this->onBeforeOpen(function ($openable) {
-      return (
-          //If Openable doesn't have a parent
-          !$openable->getParent() ||
-          //Or, Openable's parent doesn't have a Lockable
-          !$openable->getParent()->hasComponent('Lockable') ||
-          //Or, Openable's parent has a Lockable and the Lockable is unlocked
-          !$openable->getParent()->getComponent('Lockable')->isLocked()
-        );
-    });
-    $this->onBeforeClose(function ($openable) {
-      //No reason not to
-      return true;
-    });
-    $this->onOpen(function ($openable) {
-      return "The object was opened.";
-    });
-    $this->onRefuseOpen(function ($openable) {
-      return "The object was not opened. Perhaps it is locked.";
-    });
-    $this->onClose(function ($openable) {
-      return "You closed the object.";
-    });
-    $this->onRefuseClose(function ($openable) {
-      return "You tried to close the object, but it didn't close.";
+    $this->define(function ($openable) {
+      $openable->onBeforeOpen(function ($openable) {
+        return (
+            //If Openable doesn't have a parent
+            !$openable->getParent() ||
+            //Or, Openable's parent doesn't have a Lockable
+            !$openable->getParent()->hasComponent('Lockable') ||
+            //Or, Openable's parent has a Lockable and the Lockable is unlocked
+            !$openable->getParent()->getComponent('Lockable')->isLocked()
+          );
+      });
+      $openable->onBeforeClose(function ($openable) {
+        //No reason not to
+        return true;
+      });
+      $openable->onOpen(function ($openable) {
+        return "The object was opened.";
+      });
+      $openable->onRefuseOpen(function ($openable) {
+        return "The object was not opened. Perhaps it is locked.";
+      });
+      $openable->onClose(function ($openable) {
+        return "You closed the object.";
+      });
+      $openable->onRefuseClose(function ($openable) {
+        return "You tried to close the object, but it didn't close.";
+      });
     });
   }
 
   /* Property Getter/Setter */
 
-  public function setOpen() {
+  public function setOpened() {
     $this->opened = true;
   }
 
-  public function setClose() {
+  public function setClosed() {
     $this->opened = false;
   }
 
@@ -68,7 +70,7 @@ class Openable extends BaseComponent
     $onRefuseOpenCallback = $this->onRefuseOpenCallback;
 
     if ($onBeforeOpenCallback($this)) {
-      $this->setOpen();
+      $this->setOpened();
       return $onOpenCallback($this);
     }
     else
@@ -81,7 +83,7 @@ class Openable extends BaseComponent
     $onRefuseCloseCallback = $this->onRefuseCloseCallback;
 
     if ($onBeforeCloseCallback($this)) {
-      $this->setClose();
+      $this->setClosed();
       return $onCloseCallback($this);
     }
     else

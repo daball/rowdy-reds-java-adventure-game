@@ -3,13 +3,13 @@
 namespace playable;
 
 require_once "GameObject.php";
-require_once "Container.php";
+require_once "BasicContainer.php";
 
-class DogBowl extends Container implements \Serializable
+class DogBowl extends BasicContainer // implements \Serializable
 {
   protected $dog = null;
 
-  protected function __construct($dog) {
+  public function __construct($name, $dog) {
     parent::__construct();
     $this->dog = $dog;
     $this->onSetItem(function ($itemName, $item) {
@@ -34,21 +34,21 @@ class DogBowl extends Container implements \Serializable
 
   /* ISerializable interface implementation */
 
-  public function serialize() {
-    return serialize(
-      array(
-        'description' => $this->description,
-        'items' => $this->items,
-        'dog' => $this->dog,
-      )
-    );
-  }
-
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->dog = $data['dog'];
-    $this->__construct($this->dog);
-    $this->items = $data['items'];
-    $this->description = $data['description'];
-  }
+  // public function serialize() {
+  //   return serialize(
+  //     array(
+  //       'description' => $this->description,
+  //       'items' => $this->items,
+  //       'dog' => $this->dog,
+  //     )
+  //   );
+  // }
+  //
+  // public function unserialize($data) {
+  //   $data = unserialize($data);
+  //   $this->dog = $data['dog'];
+  //   $this->__construct($this->dog);
+  //   $this->items = $data['items'];
+  //   $this->description = $data['description'];
+  // }
 }

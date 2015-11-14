@@ -20,8 +20,10 @@ class Inspector extends BaseComponent
    * @ignore
    */
   public function __construct() {
-    $this->onInspect(function ($inspector) {
-      return "You don't see anything interesting about this object.";
+    $this->define(function ($inspector) {
+      $inspector->onInspect(function ($inspector) {
+        return "You don't see anything interesting about this object.";
+      });
     });
   }
 

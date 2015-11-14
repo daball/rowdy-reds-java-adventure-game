@@ -32,37 +32,62 @@ class Container extends BaseComponent
   protected $onRefuseUnsetCallback = null;
 
   public function __construct() {
-    $this->items = array();
-    $this->validItemTypes = array('\playable\GameObject');
-    $this->onBeforeSet(function ($container, $index, $item) {
-      return (
-              //If index is between 0 and maxItems-1 (when maxItems >= 0)
-              ($index >= 0 &&
-                ($this->maxItems < 0 || $index < $container->maxItems)) &&
-              //And if the item is a valid item type
-              ($container->isItemAValidType($item)) &&
-              //And if the item has a
-              ($container->isItemAssignable($item))
-              ;
+    $this->define(function ($container) {
+      $container->maxItems = -1;
+      $container->items = array();
+      $container->validItemTypes = array('\playable\GameObject');
+      $setLogic = function ($container, $index, $item) {
+        return (
+                //If index is between 0 and maxItems-1 (when maxItems >= 0)
+                ($index >= 0
+                  && ($container->getMaxItems() < 0
+                      || $index < $container->getMaxItems()))
+                //And if the index is not out of bounds
+                && (!$container->isIndexOutOfBounds($index))
+                //And if the item is a valid item type
+                && ($container->isItemAValidType($item))
+                //And if the item has an Assignable component
+                && ($container->isItemAssignable($item))
+              );
+      };
+      $container->onBeforeSet($setLogic);
+      $container->onSet(function ($container, $index, $item) {
+        return "You assigned an item to a container.";
+      });
+      $container->onRefuseSet(function ($container, $index, $item) {
+        if (!$container->isItemAValidType($item)) {
+          return "You cannot put this type of item in the container.";
+        }
+        else if (!$container->isItemAssignable($item)) {
+          return "You cannot assign this item.";
+        }
+        else if ($container->isIndexOutOfBounds($index)) {
+          return "You cannot assign an item there, the index is out of bounds.";
+        }
+        else {
+          return "You tried to assign an item, but it did not work.";
+        }
+      });
+      $container->onBeforeUnset(function ($container, $index, $item) use ($setLogic) {
+        //Not sure why not
+        return $setLogic($container, $index, $item) && $item != null;
+      });
+      $container->onUnset(function ($container, $index, $item) {
+        return "You unassigned an item from a container.";
+      });
+      $container->onRefuseUnset(function ($container, $index, $item) {
+        //Not sure why not
+        if ($item == null)
+          return "There was no item to unset from the container.";
+        return "You attempted to unset an item from the container, but it was not unset.";
+      });
     });
-    $this->onSet(function ($container, $index, $item) {
-      return "You assigned an item to a container.";
-    });
-    $this->onRefuseSet(function ($container, $index, $item) {
-      if ($index < 0 && $index >= $container->maxItems) {
-        return "You cannot assign an item there, the index is out of bounds.";
-      }
-      else {
-        return "You tried to assign an item, but it did not work.";
-      }
-    });
-    $this->onBeforeUnset(function ($container, $index, $item) {
-      //Not sure why not
-      return true;
-    });
-    $this->onUnset(function ($container, $index, $item) {
-      return "You unassigned an"
-    });
+  }
+
+  public function insertItem($item) {
+    $index = count($this->items);
+    while ($this->hasItemAt($index)) { $index++; }
+    return $this->setItemAt($index, $item);
   }
 
   public function setItemAt($index, $item) {
@@ -70,20 +95,34 @@ class Container extends BaseComponent
     $onSetCallback = $this->onSetCallback;
     $onRefuseSetCallback = $this->onRefuseSetCallback;
 
-    if ($onBeforeSetCallback($index, $item)) {
+    if ($onBeforeSetCallback($this, $index, $item)) {
       $this->items[$index] = $item;
-      return $onSetCallback($index, $item);
+      return $onSetCallback($this, $index, $item);
     }
     else
-      return $onRefuseSetCallback($index, $item);
+      return $onRefuseSetCallback($this, $index, $item);
   }
 
   public function unsetItemAt($index) {
-    $this->items[$index] = $item;
+    $onBeforeUnsetCallback = $this->onBeforeUnsetCallback;
+    $onUnsetCallback = $this->onUnsetCallback;
+    $onRefuseUnsetCallback = $this->onRefuseUnsetCallback;
+    $item = $this->getItemAt($index);
+
+    if ($onBeforeUnsetCallback($this, $index, $item)) {
+      unset($this->items[$index]);
+      return $onUnsetCallback($this, $index, $item);
+    }
+    else
+      return $onRefuseUnsetCallback($this, $index, $item);
   }
 
   public function hasItemAt($index) {
-    return isset(isset($this->items[$i]));
+    return $index >= 0 && isset($this->items[$index]);
+  }
+
+  public function getAllItems() {
+    return $this->items;
   }
 
   public function getItemAt($index) {
@@ -96,12 +135,16 @@ class Container extends BaseComponent
     return $this->maxItems;
   }
 
+  public function setMaxItems($maxItems) {
+    $this->maxItems = $maxItems;
+  }
+
   public function countItems() {
-    return array_count_values($this->items);
+    return count($this->items);
   }
 
   public function findItemIndexByName($gameObjectName) {
-    for ($i = 0; $i < sizeof($this->items); $i++) {
+    for ($i = 0; $i < count($this->items); $i++) {
       if ($this->hasItemAt($i) &&
           $this->getItemAt($i)->getName() == $gameObjectName)
           return $i;
@@ -110,16 +153,59 @@ class Container extends BaseComponent
   }
 
   public function findItemByName($gameObjectName) {
-    $i = $this->findItemIndexByName;
+    $i = $this->findItemIndexByName($gameObjectName);
     if ($i > -1)
       return $this->getItemAt($i);
     return null;
   }
 
+  public function findIndexByItem($item) {
+    return array_search($item, $this->items);
+  }
+
+  public function itemExists($item) {
+    return $this->findIndexByItem($item) !== FALSE;
+  }
+
   public function isItemAValidType($item) {
-    for($v = 0; $v < sizeof($this->validItemTypes); $v++)
+    for($v = 0; $v < count($this->validItemTypes); $v++)
       if (is_a($item, $this->validItemTypes[$v]))
         return true;
     return false;
+  }
+
+  public function isItemAssignable($item) {
+    return $this->isItemAValidType($item) && $item->hasComponent("Assignable");
+  }
+
+  public function isIndexOutOfBounds($index) {
+    return ($index < 0
+      || ($this->maxItems >= 0 && $index >= $this->maxItems));
+  }
+
+  /* Event Callback Registration Functions */
+
+  public function onBeforeSet($callback) {
+    $this->onBeforeSetCallback = $callback;
+  }
+
+  public function onSet($callback) {
+    $this->onSetCallback = $callback;
+  }
+
+  public function onRefuseSet($callback) {
+    $this->onRefuseSetCallback = $callback;
+  }
+
+  public function onBeforeUnset($callback) {
+    $this->onBeforeUnsetCallback = $callback;
+  }
+
+  public function onUnset($callback) {
+    $this->onUnsetCallback = $callback;
+  }
+
+  public function onRefuseUnset($callback) {
+    $this->onRefuseUnsetCallback = $callback;
   }
 }

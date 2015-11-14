@@ -2,15 +2,19 @@
 
 namespace components;
 
-require_once __DIR__.'/../playable/GameObject.php';
+require_once __DIR__.'/../util/TDefine.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
-use \playable\GameObject;
+use util\TDefine;
+use SuperClosure\Serializer;
 
 /**
  * @ignore
  */
-abstract class BaseComponent
+abstract class BaseComponent implements \Serializable
 {
+  use TDefine;
+
   /**
    * @ignore
    */
@@ -33,5 +37,28 @@ abstract class BaseComponent
     }
     $this->parent = $parent;
     return $this->getParent();
+  }
+
+  /**
+   * @ignore
+   */
+  public function serialize() {
+    return serialize(
+      array(
+        'parent' => $this->parent,
+        // 'definitions' => $this->definitions,
+      )
+    );
+  }
+
+  /**
+   * @ignore
+   */
+  public function unserialize($data) {
+    $data = unserialize($data);
+    $this->parent = $data['parent'];
+    // $this->definitions = $data['definitions'];
+    // //replay definitions
+    // $this->replayDefinitions();
   }
 }

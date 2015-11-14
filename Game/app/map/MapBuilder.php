@@ -2,10 +2,9 @@
 
 namespace map;
 
-use \playable\Room;
-
 require_once 'Map.php';
 require_once 'Direction.php';
+require_once 'Room.php';
 require_once __DIR__.'/../playable/index.php';
 
 ///The MapBuilder class helps automate building a Map by using
@@ -23,33 +22,40 @@ class MapBuilder
     $this->map = $map;
   }
 
-  public function createRoom($roomName)
+  public function insertRoom($room)
   {
-    $room = new Room();
-    $room->name = $roomName;
-    if (sizeof($this->map->rooms) == 0)
-      $room->spawn = true;
     $this->map->addRoom($room);
+    if (!$this->map->getSpawnPoint())
+      $room->define(function ($room) {
+        $room->setSpawnPoint();
+      });
     return $this;
   }
 
-  public function setRoomDescription($roomName, $roomDescription)
-  {
-    $room = $this->map->getRoom($roomName);
-    $room->setDescription($roomDescription);
-    return $this;
-  }
-
-  public function setRoomImageUrl($roomName, $roomImageUrl)
-  {
-    $this->map->getRoom($roomName)->imageUrl = $roomImageUrl;
-    return $this;
-  }
+  // public function setRoomDescription($roomName, $roomDescription)
+  // {
+  //   $room = $this->map->getRoom($roomName);
+  //   $room->define(function ($room) use ($roomDescription) {
+  //     $inspector = $room->getComponent('Inspector');
+  //     $inspector->onInspect(function ($inspector) use ($roomDescription) {
+  //       return $roomDescription;
+  //     });
+  //   });
+  //   return $this;
+  // }
+  //
+  // public function setRoomImageUrl($roomName, $roomImageUrl)
+  // {
+  //   $this->map->getRoom($roomName)->define(function ($room) use ($roomImageUrl) {
+  //     $room->setImageUrl($roomImageUrl);
+  //   });
+  //   return $this;
+  // }
 
   public function setRoomDirectionDescription($roomName, $roomDirection, $roomDirectionDescription)
   {
     $room = $this->map->getRoom($roomName);
-    $roomDirection = $room->directions->getDirection(Direction::cardinalDirection($roomDirection));
+    $roomDirection = $room->getDirection(Direction::cardinalDirection($roomDirection));
     $roomDirection->description = $roomDirectionDescription;
     return $this;
   }
@@ -61,24 +67,24 @@ class MapBuilder
     $room2 = $this->map->getRoom($roomName2);
     $room1Direction = Direction::cardinalDirection($room1Direction);
     $room2Direction = Direction::oppositeDirection($room1Direction);
-    $room1->directions->getDirection($room1Direction)->nextRoom = $room2->name;
-    $room2->directions->getDirection($room2Direction)->nextRoom = $room1->name;
-    if ($room1->directions->getDirection($room1Direction)->obstacleItem !== null) {
-      $itemName = $room1->directions->getDirection($room1Direction)->obstacleItem;
-      $item = $room1->items[$itemName];
-      //copy item to $room2
-      $room2->items[$itemName] = $item;
-      //assign obstacle to $room2
-      $room2->directions->getDirection($room2Direction)->obstacleItem = $itemName;
-    }
-    else if ($room2->directions->getDirection($room2Direction)->obstacleItem !== null) {
-      $itemName = $room2->directions->getDirection($room2Direction)->obstacleItem;
-      $item = $room2->items[$itemName];
-      //copy item to $room1
-      $room1->items[$itemName] = $item;
-      //assign obstacle to $room1
-      $room1->directions->getDirection($room1Direction)->obstacleItem = $itemName;
-    }
+    $room1->getDirection($room1Direction)->setNextRoom($room2);
+    $room2->getDirection($room2Direction)->setNextRoom($room1);
+    // if ($room1->getDirection($room1Direction)->obstacleItem !== null) {
+    //   $itemName = $room1->getDirection($room1Direction)->obstacleItem;
+    //   $item = $room1->items[$itemName];
+    //   //copy item to $room2
+    //   $room2->items[$itemName] = $item;
+    //   //assign obstacle to $room2
+    //   $room2->directions->getDirection($room2Direction)->obstacleItem = $itemName;
+    // }
+    // else if ($room2->getDirection($room2Direction)->obstacleItem !== null) {
+    //   $itemName = $room2->getDirection($room2Direction)->obstacleItem;
+    //   $item = $room2->items[$itemName];
+    //   //copy item to $room1
+    //   $room1->items[$itemName] = $item;
+    //   //assign obstacle to $room1
+    //   $room1->getDirection($room1Direction)->obstacleItem = $itemName;
+    // }
     return $this;
   }
 
@@ -86,10 +92,14 @@ class MapBuilder
   {
     foreach ($this->map->rooms as $r => $room)
     {
-      if ($room->name === $roomName)
-        $room->spawn = true;
+      if ($room->getName() === $roomName)
+        $room->define(function ($room) {
+          $room->setSpawnPoint();
+        });
       else
-        $room->spawn = false;
+      $room->define(function ($room) {
+        $room->unsetSpawnPoint();
+      });
     }
     return $this;
   }
@@ -99,26 +109,26 @@ class MapBuilder
     return $this->map;
   }
 
-  public function insertObjectInRoom($roomName, $itemName, $item)
-  {
-    $room = $this->map->getRoom($roomName);
-    $room->setItem($itemName, $item);
-    return $this;
-  }
-
-  public function insertObstacleObjectInRoom($roomName, $roomDirection, $itemName, $item)
-  {
-    $room = $this->map->getRoom($roomName);
-    $room->directions->getDirection($roomDirection)->obstacleItem = $itemName;
-    $room->setItem($itemName, $item);
-    if ($room->directions->getDirection($roomDirection)->nextRoom !== "") {
-      $room2 = $this->map->getRoom($room->directions->getDirection($roomDirection)->nextRoom);
-      //copy item to room2
-      $room2->setItem($itemName, $item);
-      $room2Direction = Direction::oppositeDirection($roomDirection);
-      //assign collision object to other room
-      $room2->directions->getDirection($room2Direction)->obstacleItem = $itemName;
-    }
-    return $this;
-  }
+  // public function insertObjectInRoom($roomName, $itemName, $item)
+  // {
+  //   $room = $this->map->getRoom($roomName);
+  //   $room->setItem($itemName, $item);
+  //   return $this;
+  // }
+  //
+  // public function insertObstacleObjectInRoom($roomName, $roomDirection, $itemName, $item)
+  // {
+  //   $room = $this->map->getRoom($roomName);
+  //   $room->getDirection($roomDirection)->obstacleItem = $itemName;
+  //   $room->setItem($itemName, $item);
+  //   if ($room->getDirection($roomDirection)->getNextRoom() !== "") {
+  //     $room2 = $this->map->getRoom($room->getDirection($roomDirection)->getNextRoomName());
+  //     //copy item to room2
+  //     $room2->setItem($itemName, $item);
+  //     $room2Direction = Direction::oppositeDirection($roomDirection);
+  //     //assign collision object to other room
+  //     $room2->getDirection($room2Direction)->obstacleItem = $itemName;
+  //   }
+  //   return $this;
+  // }
 }
