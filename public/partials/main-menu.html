@@ -1,4 +1,4 @@
-<nav class="navbar navbar-fixed navbar-radfordred">
+<nav class="navbar navbar-fixed-top navbar-radfordred">
     <div class="container-fluid">
         <div class="navbar-header">
             <div class="navbar-brand">Rowdy Red's Java Adventures <small class="subtitle">Brought to you by Team Combat Clones at Radford University.</small></div>
@@ -6,8 +6,20 @@
     </div>
 </nav>
 
-<div id="mainMenu">
-  <a ng-click="vm.startNewGame()"><button class="menuButton" style="margin-top: 70px;">New Game</button></a>
-  <!-- <a href="main.php?id=2"><button class="menuButton">Continue Game</button></a>
-  <a href="main.php?id=3"><button class="menuButton">Options</button></a> -->
+<div class="jumbotron jumbotron-radford-blue">
+  <div class="container">
+    <h1>Text adventure with a twist</h1>
+    <p>Take on a journey with Rowdy Red through the adventure maze at Count Castle,
+        where you can put your best Java skills to the test.</p>
+    <p><a href="#/ role="button" class="btn btn-primary btn-lg">How to play &raquo;</a></p>
+  </div>
+</div>
+
+<div class="container-fluid">
+
+  <div id="mainMenu">
+    <a ng-click="vm.startNewGame()"><button class="menuButton" style="margin-top: 70px;">New Game</button></a>
+    <!-- <a href="main.php?id=2"><button class="menuButton">Continue Game</button></a>
+    <a href="main.php?id=3"><button class="menuButton">Options</button></a> -->
+  </div>
 </div>

@@ -1,0 +1,18 @@
+<nav class="navbar navbar-fixed-top navbar-radfordred">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">Rowdy Red's Java Adventures <small>&raquo; You May Begin Playing {{vm.gameName}}...</small></div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid no-space">
+  <div class="row" style="height:100%;">
+    <div class="col-sm-6 no-space" style="height:100%;background: url('./images/{{vm.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;">
+      <!-- <img src="./images/{{vm.gameName}}/{{vm.game.imageUrl}}" /> -->
+    </div>
+    <div class="col-sm-6 no-space">
+      <div ui-ace ng-model="vm.game.consoleHistory"></div>
+    </div>
+  </div>
+</div>

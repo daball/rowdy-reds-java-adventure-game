@@ -18,7 +18,7 @@ module app.game {
       });
     }
 
-    startNewGame(gameName) {
+    playGame(gameName) {
       this.$location.url("/game/" + gameName + "/play");
     }
   }

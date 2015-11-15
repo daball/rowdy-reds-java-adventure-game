@@ -13,7 +13,7 @@ var app;
                     _this.games = games;
                 });
             }
-            GameListCtrl.prototype.startNewGame = function (gameName) {
+            GameListCtrl.prototype.playGame = function (gameName) {
                 this.$location.url("/game/" + gameName + "/play");
             };
             GameListCtrl.$inject = ['GameListService', '$location'];

@@ -1,6 +1,6 @@
 var app;
 (function (app) {
-    var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource"]);
+    var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ui.ace"]);
     main.config(routeConfig);
     routeConfig.$inject = ["$routeProvider"];
     function routeConfig($routeProvider) {
@@ -15,7 +15,7 @@ var app;
         })
             .when('/game/:gameName/play', {
             templateUrl: "./partials/play-game.html",
-            controller: "PlayCtrl as vm"
+            controller: "PlayGameCtrl as vm"
         })
             .otherwise("/");
     }

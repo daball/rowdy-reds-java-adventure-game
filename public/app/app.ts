@@ -1,5 +1,5 @@
 module app {
-  var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource" /*, "common.services", "productResourceMock"*/ ]);
+  var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ui.ace" /*, "common.services", "productResourceMock"*/ ]);
 
   main.config(routeConfig);
 
@@ -16,7 +16,7 @@ module app {
       })
       .when('/game/:gameName/play', {
         templateUrl: "./partials/play-game.html",
-        controller: "PlayCtrl as vm"
+        controller: "PlayGameCtrl as vm"
       })
       .otherwise("/");
   }
