@@ -59,7 +59,7 @@ class CommandProcessor
     {
       $this->commandInput = $_POST['commandLine'];
       $this->commandOutput = $this->dispatchCommand($this->commandInput);
-      GameState::getGameState()->addCommandToHistory($this->commandInput, $this->commandOutput);
+      GameState::getInstance()->addCommandToHistory($this->commandInput, $this->commandOutput);
     }
     else
     {

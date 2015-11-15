@@ -1,15 +1,17 @@
 <?php
 
-namespace game\tests;
+namespace engine\tests;
+
+require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
+require_once __DIR__.'/../../../../app/engine/GameEngine.php';
+require_once __DIR__.'/../../../../app/engine/CommandProcessor.php';
+require_once __DIR__.'/../../../../app/commands/index.php';
+require_once __DIR__.'/../../../../app/engine/GameState.php';
+
+use \engine\GameEngine;
 use \engine\CommandProcessor;
 use \engine\GameState;
 
-require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../../app/game/CommandProcessor.php';
-require_once __DIR__.'/../../../../app/commands/index.php';
-require_once __DIR__.'/../../../../app/game/GameState.php';
-
-///Unit tests CommandProcessor class
 class CommandProcessorTest extends \PHPUnit_Framework_TestCase
 {
   public function testCommandProcessor()
@@ -34,17 +36,17 @@ class CommandProcessorTest extends \PHPUnit_Framework_TestCase
     foreach ($validCommandLines as $validCommandLine)
     {
       $_POST['commandLine'] = $validCommandLine;
-      $gameState = new GameState();
+      $gameState = GameState::init('Iteration0');
       $commandProcessor = new CommandProcessor($gameState);
-      $this->assertNotEquals("I do not understand.", $commandProcessor->commandOutput);
+      $this->assertNotEquals("I do not understand.", $commandProcessor->getCommandOutput());
     }
 
     foreach ($invalidCommandLines as $invalidCommandLine)
     {
       $_POST['commandLine'] = $invalidCommandLine;
-      $gameState = new GameState();
+      $gameState = GameState::init('Iteration0');
       $commandProcessor = new CommandProcessor($gameState);
-      $this->assertEquals("I do not understand.", $commandProcessor->commandOutput);
+      $this->assertEquals("I do not understand.", $commandProcessor->getCommandOutput());
     }
   }
 }

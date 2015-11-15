@@ -2,7 +2,7 @@
 
 namespace playable;
 
-require_once 'GameObject.php';
+require_once __DIR__.'/../game/GameObject.php';
 // require_once 'ICollidable.php';
 // require_once 'ICanEat.php';
 // require_once 'IInspectable.php';
@@ -11,6 +11,7 @@ require_once 'GameObject.php';
 // require_once 'TCanEat.php';
 // require_once 'TInspectable.php';
 
+use \game\GameObject;
 
 /**
  * A LambChop item is used to feed a hungy Dog obstacle.

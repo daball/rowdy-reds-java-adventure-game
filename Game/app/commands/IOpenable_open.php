@@ -13,7 +13,7 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
 
   public function validateCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $matches = array();
     if (preg_match('/([\w$_]+[\w\d$_]*)\.open\(\);/', $commandLine, $matches))
     {
@@ -31,7 +31,7 @@ class IOpenable_openCommandHandler extends BaseCommandHandler
 
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $matches = array();
     if (preg_match('/([\w$_]+[\w\d$_]*)\.open\(\);/', $commandLine, $matches))
     {

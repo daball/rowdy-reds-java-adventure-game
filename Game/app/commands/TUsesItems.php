@@ -13,9 +13,9 @@ trait TUsesItems
    **/
   private function isPlayerItem($itemInQuestion) {
     if ($itemInQuestion == "me.leftHand" || $itemInQuestion == "leftHand")
-      return GameState::getGameState()->getPlayer()->leftHand;
+      return GameState::getInstance()->getPlayer()->leftHand;
     else if ($itemInQuestion == "me.rightHand" || $itemInQuestion == "rightHand")
-      return GameState::getGameState()->getPlayer()->rightHand;
+      return GameState::getInstance()->getPlayer()->rightHand;
     else return false;
   }
 
@@ -23,7 +23,7 @@ trait TUsesItems
    * Is this an object contained in the room?
    **/
   private function isRoomItem($itemInQuestion) {
-    $room = GameState::getGameState()->getPlayerRoom();
+    $room = GameState::getInstance()->getPlayerRoom();
     foreach ($room->getAllItems() as $itemName => $item)
     {
       if ($itemName == $itemInQuestion)
@@ -36,7 +36,7 @@ trait TUsesItems
    * Is this an object contained in a container in the room?
    **/
   private function isItemInContainerInRoom($itemInQuestion) {
-    $room = GameState::getGameState()->getPlayerRoom();
+    $room = GameState::getInstance()->getPlayerRoom();
     foreach ($room->getAllItems() as $itemName => $item)
     {
       if (is_a($item, "\playable\IContainer"))
@@ -55,7 +55,7 @@ trait TUsesItems
 
   public function inspectLocals()
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $eol = "\n";
     $output = "You have the following variables in your local variable bag:$eol";
     foreach($gameState->locals as $local => $value)
@@ -70,7 +70,7 @@ trait TUsesItems
 
   public function inspectRoomContents()
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $eol = "\n";
     $output = "The following variables are available to you because of where you are standing:$eol";
     foreach($gameState->getPlayerRoom()->getAllItems() as $item => $value)
@@ -85,7 +85,7 @@ trait TUsesItems
 
   public function inspectGlobals()
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $eol = "\n";
     $output = "The following variables are available anywhere in the game:$eol";
     foreach($gameState->globals as $global => $value)

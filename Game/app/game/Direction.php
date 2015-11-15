@@ -1,11 +1,10 @@
 <?php
 
-namespace map;
+namespace game;
 
-require_once __DIR__.'/../playable/GameObject.php';
+require_once 'GameObject.php';
 require_once __DIR__.'/../components/Inspector.php';
 
-use \playable\GameObject;
 use \components\Inspector;
 
 /**
@@ -15,7 +14,7 @@ use \components\Inspector;
  *
  * @author David Ball
  **/
-class Direction extends GameObject //implements \Serializable
+class Direction extends GameObject
 {
   public static $north = 'n';
   public static $south = 's';
@@ -97,16 +96,18 @@ class Direction extends GameObject //implements \Serializable
     throw new DirectionException();
   }
 
-  protected $nextRoom = "";
+  protected $nextRoomName = "";
   protected $obvious = true;
 
   public function __construct($name) {
     $name = self::cardinalDirection($name);
     parent::__construct($name);
-    /*$this->define(function ($direction) {
+    $this->define(function ($direction) {
       $inspector = new Inspector();
       $inspector->onInspect(function ($inspector) {
         $direction = $inspector->getParent();
+        // echo "INSPECTOR:";var_dump($inspector);
+        // echo "DIRECTION:";var_dump($direction);
         $name = Direction::fullDirection($direction->getName());
         $nextRoom = $direction->getNextRoomName();
         if ($direction->isNextRoomObvious()) {
@@ -119,49 +120,28 @@ class Direction extends GameObject //implements \Serializable
           return "You wonder what is to your $name.";
       });
       $direction->addComponent($inspector);
-    });*/
+
+    });
+    // var_dump($this);
   }
 
   public function getNextRoomName() {
-    return $this->nextRoom;
-  }
-
-  public function getNextRoom() {
-    return $this->nextRoom;
+    return $this->nextRoomName;
   }
 
   public function setNextRoomName($nextRoomName) {
-    $this->nextRoom = $nextRoomName;
+    $this->nextRoomName = $nextRoomName;
   }
 
   public function setNextRoom(Room $nextRoom) {
-    $this->nextRoom = $nextRoom->getName();
+    $this->nextRoomName = $nextRoom->getName();
   }
 
   public function isNextRoomObvious() {
     return $this->obvious;
   }
 
-  public function setNextRoomObvious() {
-    $this->obvious = true;
+  public function setNextRoomObvious($obvious = true) {
+    $this->obvious = $obvious;
   }
-
-  public function setNextRoomNotObvious() {
-    $this->obvious = false;
-  }
-
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'nextRoom' => $this->nextRoom,
-  //       'obvious' => $this->obvious,
-  //     )
-  //   );
-  // }
-  //
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $this->nextRoom = $data['nextRoom'];
-  //   $this->obvious = $data['obvious'];
-  // }
 }

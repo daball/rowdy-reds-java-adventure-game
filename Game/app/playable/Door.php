@@ -1,8 +1,7 @@
 <?php
 namespace playable;
 
-require_once 'GameObject.php';
-
+require_once __DIR__.'/../game/GameObject.php';
 require_once __DIR__.'/../components/Collider.php';
 require_once __DIR__.'/../components/Inspector.php';
 require_once __DIR__.'/../components/Openable.php';
@@ -10,6 +9,7 @@ require_once __DIR__.'/../components/Openable.php';
 use \components\Collider;
 use \components\Inspector;
 use \components\Openable;
+use \game\GameObject;
 
 /**
  * A Door game item must be opened in order to pass to the next room.

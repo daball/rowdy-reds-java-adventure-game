@@ -1,13 +1,14 @@
 <?php
 
 namespace commands;
-use engine\CommandProcessor;
-use engine\GameState;
 
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
+
+use engine\CommandProcessor;
+use engine\GameState;
 
 class IAssignable_assignCommandHandler extends BaseCommandHandler
 {
@@ -15,7 +16,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
 
   public function validateCommand($commandLine)
   {
-    $gameState = GameState::getGameState()->getGameState();
+    $gameState = GameState::getInstance();
     $matches = array();
     if (preg_match('/\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;/', $commandLine, $matches))
     {
@@ -26,7 +27,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
 
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState()->getGameState();
+    $gameState = GameState::getInstance();
     $matches = array();
     if (preg_match('/\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;/', $commandLine, $matches))
     {
@@ -91,7 +92,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
         }
         else if ($this->isItemInContainerInRoom($right) !== FALSE)
         {
-          $room = GameState::getGameState()->getPlayerRoom();
+          $room = GameState::getInstance()->getPlayerRoom();
           foreach ($room->getAllItems() as $itemName => $item)
           {
             if (is_a($item, "\playable\IContainer") && (!is_a($item, "\playable\IOpenable") || $item->isOpened()))
@@ -117,7 +118,7 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
       }
       else if ($this->isRoomItem($left) !== FALSE)
       {
-        $room = GameState::getGameState()->getPlayerRoom();
+        $room = GameState::getInstance()->getPlayerRoom();
         if (is_a($room->getItem($left), "\playable\IContainer")) {
           if ($this->isPlayerItem($right) !== FALSE)
           {

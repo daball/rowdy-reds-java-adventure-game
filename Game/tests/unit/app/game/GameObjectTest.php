@@ -1,13 +1,13 @@
 <?php
 
-namespace component\tests;
+namespace game\tests;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../../app/playable/GameObject.php';
+require_once __DIR__.'/../../../../app/game/GameObject.php';
 require_once __DIR__.'/../../../../app/components/BaseComponent.php';
 require_once __DIR__.'/../../../../app/components/Inspector.php';
 
-use \playable\GameObject;
+use \game\GameObject;
 use \components\BaseComponent;
 use \components\Inspector;
 

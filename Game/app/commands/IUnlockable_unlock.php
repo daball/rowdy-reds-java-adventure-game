@@ -16,7 +16,7 @@ class IUnlockable_unlockCommandHandler extends BaseCommandHandler
 
   public function validateCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $matches = array();
     if (preg_match('/([\w$_]+[\w\d$_]*)\.unlock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches))
     {
@@ -27,7 +27,7 @@ class IUnlockable_unlockCommandHandler extends BaseCommandHandler
 
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $matches = array();
     if (preg_match('/([\w$_]+[\w\d$_]*)\.unlock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches))
     {

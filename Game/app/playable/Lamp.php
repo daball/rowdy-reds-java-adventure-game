@@ -2,7 +2,7 @@
 
 namespace playable;
 
-require_once 'GameObject.php';
+require_once __DIR__.'/../game/GameObject.php';
 // require_once 'ICollidable.php';
 // require_once 'ICanEat.php';
 // require_once 'IAssignable.php';
@@ -13,6 +13,7 @@ require_once 'GameObject.php';
 // require_once 'TInspectable.php';
 // require_once 'TAssignable.php';
 
+use \game\GameObject;
 
 /**
  * A Lamp item is used to light dark areas.

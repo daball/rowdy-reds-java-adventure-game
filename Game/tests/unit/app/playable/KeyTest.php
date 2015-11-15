@@ -12,7 +12,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
   public function testKey()
   {
     $key = new Key('anyKey', 'anySecret');
-    $this->assertTrue(is_a($key, "\playable\GameObject"));
+    $this->assertTrue(is_a($key, "\game\GameObject"));
     $this->assertEquals('anyKey', $key->getName());
     $this->assertEquals('anySecret', $key->getSecret());
 

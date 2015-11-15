@@ -36,7 +36,7 @@ class JavadocCommandHandler extends BaseCommandHandler
   ///end of the output.
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $eol = "\n";
     if ($this->isClassSpecified($commandLine)) {
       $className = $this->getClassName($commandLine);

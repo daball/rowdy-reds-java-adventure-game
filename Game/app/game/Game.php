@@ -1,11 +1,14 @@
 <?php
 
-namespace map;
+namespace game;
 
+require_once 'GameObject.php';
 require_once 'Room.php';
 
-///Defines a Map which contains multiple Rooms
-class Map implements \Serializable
+/**
+ *  Defines a Game which contains multiple Rooms.
+ **/
+class Game extends GameObject
 {
   //Do yourself a favor and don't manipulate this manually.
   //It is manipulated by the app framework, but you shouldn't change it
@@ -33,18 +36,5 @@ class Map implements \Serializable
         return $room->getName();
     }
     return null;
-  }
-
-  public function serialize() {
-    return serialize(
-      array(
-        'rooms' => $this->rooms
-      )
-    );
-  }
-
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->rooms = $data['rooms'];
   }
 }

@@ -1,26 +1,19 @@
 <?php
 
-namespace playable;
+namespace game;
 
-require_once 'IAssignable.php';
-require_once __DIR__.'/../map/Direction.php';
+require_once __DIR__.'/../game/Direction.php';
 require_once __DIR__.'/../engine/GameState.php';
 
-use \map\Direction;
-use engine\GameState;
-
+use \game\Direction;
+use \engine\GameState;
 
 /**
  * Player represents the player's avatar throughout the game.
  * @author David Ball
  */
-class Player implements \Serializable
+class Player
 {
-  /**
-   * @ignore
-   **/
-  public static $gameState = null;
-
   /**
    * Player's left hand.
    * @var IAssignable
@@ -38,14 +31,14 @@ class Player implements \Serializable
    * @var IAssignable
    * @ignore
    **/
-  public $location = null;
+  protected $location = null;
 
   /**
     * Navigates North.
     * @return String
     **/
   public function moveNorth() {
-    return GameState::getGameState()->navigate(Direction::$north);
+    return GameState::getInstance()->navigate(Direction::$north);
   }
 
   /**
@@ -53,7 +46,7 @@ class Player implements \Serializable
     * @return String
     **/
   public function moveSouth() {
-    return GameState::getGameState()->navigate(Direction::$south);
+    return GameState::getInstance()->navigate(Direction::$south);
   }
 
   /**
@@ -61,7 +54,7 @@ class Player implements \Serializable
     * @return String
     **/
   public function moveEast() {
-    return GameState::getGameState()->navigate(Direction::$east);
+    return GameState::getInstance()->navigate(Direction::$east);
   }
 
   /**
@@ -69,7 +62,7 @@ class Player implements \Serializable
     * @return String
     **/
   public function moveWest() {
-    return GameState::getGameState()->navigate(Direction::$west);
+    return GameState::getInstance()->navigate(Direction::$west);
   }
 
   /**
@@ -80,7 +73,7 @@ class Player implements \Serializable
       return false;
     else
     {
-      $item = GameState::getGameState()->getPlayerRoom()->getItem($direction->obstacleItem);
+      $item = GameState::getInstance()->getPlayerRoom()->getItem($direction->obstacleItem);
       if (is_a($item, "\playable\ICollidable"))
         return $item->isInTheWay();
       else
@@ -92,7 +85,7 @@ class Player implements \Serializable
    * @ignore
    **/
   private function explainCollision(Room $room, $direction) {
-    $item = GameState::getGameState()->getPlayerRoom()->getItem($direction->obstacleItem);
+    $item = GameState::getInstance()->getPlayerRoom()->getItem($direction->obstacleItem);
     $d = ($d == Direction::$n ? 'north' : '') .
          ($d == Direction::$s ? 'south' : '') .
          ($d == Direction::$e ? 'east' : '') .
@@ -107,7 +100,7 @@ class Player implements \Serializable
     **/
   public function navigate($direction)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     //sanitize direction
     $direction = Direction::cardinalDirection($direction);
     //get adjacent room
@@ -128,7 +121,7 @@ class Player implements \Serializable
     }
     else {
       //room didn't exist, check if direction has a description
-      $nextDirection = GameState::getGameState()->getPlayerRoom()->getDirection($direction)->getComponent('Inspector')->inspect();
+      $nextDirection = GameState::getInstance()->getPlayerRoom()->getDirection($direction)->getComponent('Inspector')->inspect();
       if ($nextDirection !== '')
         //return description of the direction
         return $nextDirection;
@@ -141,26 +134,11 @@ class Player implements \Serializable
     }
   }
 
-  /**
-   * @ignore
-   **/
-  public function serialize() {
-    return serialize(
-      array(
-        'location' => $this->location,
-        'leftHand' => $this->leftHand,
-        'rightHand' => $this->rightHand,
-      )
-    );
+  public function getLocation() {
+    return $this->location;
   }
 
-  /**
-   * @ignore
-   **/
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->location = $data['location'];
-    $this->leftHand = $data['leftHand'];
-    $this->rightHand = $data['rightHand'];
+  public function setLocation($location) {
+    $this->location = $location;
   }
 }

@@ -3,9 +3,9 @@
 namespace components;
 
 require_once 'BaseComponent.php';
-require_once __DIR__.'/../map/Direction.php';
+require_once __DIR__.'/../game/Direction.php';
 
-use \map\Direction;
+use \game\Direction;
 
 /**
  * The Collider component works together with the player when navigating
@@ -109,13 +109,13 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function onBeforeCollide($callback) {
-    $this->onBeforeCollideCallback = $callback;
+    $this->onBeforeCollideCallback = $this->serializableClosure($callback);
   }
 
   /**
    * @ignore
    */
   public function onCollide($callback) {
-    $this->onCollideCallback = $callback;
+    $this->onCollideCallback = $this->serializableClosure($callback);
   }
 }

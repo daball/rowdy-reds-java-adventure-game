@@ -52,7 +52,7 @@ class NavigateCommandHandler extends BaseCommandHandler
   ///end of the output.
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     switch ($commandLine)
     {
       case 'moveNorth();':

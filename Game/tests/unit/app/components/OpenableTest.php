@@ -5,12 +5,12 @@ namespace component\tests;
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/components/Openable.php';
 require_once __DIR__.'/../../../../app/components/Lockable.php';
-require_once __DIR__.'/../../../../app/playable/GameObject.php';
+require_once __DIR__.'/../../../../app/game/GameObject.php';
 require_once __DIR__.'/../../../../app/playable/Key.php';
 
 use \components\Openable;
 use \components\Lockable;
-use \playable\GameObject;
+use \game\GameObject;
 use \playable\Key;
 
 class OpenableTest extends \PHPUnit_Framework_TestCase

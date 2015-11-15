@@ -3,20 +3,18 @@
 namespace components;
 
 require_once __DIR__.'/../util/TDefine.php';
-require_once __DIR__.'/../util/TSerializable.php';
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../util/TSerializableClosure.php';
 
-use util\TDefine;
-use util\TSerializable;
-use SuperClosure\Serializer;
+use \util\TDefine;
+use \util\TSerializableClosure;
 
 /**
  * @ignore
  */
-abstract class BaseComponent implements \Serializable
+abstract class BaseComponent
 {
   use TDefine;
-  use TSerializable;
+  use TSerializableClosure;
 
   /**
    * @ignore
@@ -35,33 +33,10 @@ abstract class BaseComponent implements \Serializable
    */
   public function setParent($parent) {
     //assert $parent is the right type
-    if (!is_a($parent, "\playable\GameObject")) {
-      throw new \Exception('You must pass a \playable\GameObject instance or an object from a class extended from \playable\GameObject in order to call \components\BaseComponent\setParent().');
+    if (!is_a($parent, "\game\GameObject")) {
+      throw new \Exception('You must pass a \game\GameObject instance or an object from a class extended from \game\GameObject in order to call \components\BaseComponent\setParent().');
     }
     $this->parent = $parent;
     return $this->getParent();
   }
-
-  // /**
-  //  * @ignore
-  //  */
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'parent' => $this->parent,
-  //       // 'definitions' => $this->definitions,
-  //     )
-  //   );
-  // }
-  //
-  // /**
-  //  * @ignore
-  //  */
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $this->parent = $data['parent'];
-  //   // $this->definitions = $data['definitions'];
-  //   // //replay definitions
-  //   // $this->replayDefinitions();
-  // }
 }

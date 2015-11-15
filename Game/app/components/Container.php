@@ -18,7 +18,7 @@ class Container extends BaseComponent
   protected $maxItems = -1;
   /**
    * validItemTypes is an array of GameObject types. It defaults to:
-   * [ '\playable\GameObject' ], but can be set so that only particular
+   * [ '\game\GameObject' ], but can be set so that only particular
    * objects can be inserted into the container.
    **/
   protected $validItemTypes = null;
@@ -35,7 +35,7 @@ class Container extends BaseComponent
     $this->define(function ($container) {
       $container->maxItems = -1;
       $container->items = array();
-      $container->validItemTypes = array('\playable\GameObject');
+      $container->validItemTypes = array('\game\GameObject');
       $setLogic = function ($container, $index, $item) {
         return (
                 //If index is between 0 and maxItems-1 (when maxItems >= 0)
@@ -186,26 +186,26 @@ class Container extends BaseComponent
   /* Event Callback Registration Functions */
 
   public function onBeforeSet($callback) {
-    $this->onBeforeSetCallback = $callback;
+    $this->onBeforeSetCallback = $this->serializableClosure($callback);
   }
 
   public function onSet($callback) {
-    $this->onSetCallback = $callback;
+    $this->onSetCallback = $this->serializableClosure($callback);
   }
 
   public function onRefuseSet($callback) {
-    $this->onRefuseSetCallback = $callback;
+    $this->onRefuseSetCallback = $this->serializableClosure($callback);
   }
 
   public function onBeforeUnset($callback) {
-    $this->onBeforeUnsetCallback = $callback;
+    $this->onBeforeUnsetCallback = $this->serializableClosure($callback);
   }
 
   public function onUnset($callback) {
-    $this->onUnsetCallback = $callback;
+    $this->onUnsetCallback = $this->serializableClosure($callback);
   }
 
   public function onRefuseUnset($callback) {
-    $this->onRefuseUnsetCallback = $callback;
+    $this->onRefuseUnsetCallback = $this->serializableClosure($callback);
   }
 }

@@ -16,7 +16,7 @@ class DoorTest extends \PHPUnit_Framework_TestCase
     foreach ($directions as $direction) {
       $doorName = $direction."Door";
       $door = new Door($doorName, $direction);
-      $this->assertTrue(is_a($door, '\playable\GameObject'));
+      $this->assertTrue(is_a($door, '\game\GameObject'));
       $this->assertEquals($doorName, $door->getName());
 
       $this->assertTrue($door->hasComponent('Collider'));

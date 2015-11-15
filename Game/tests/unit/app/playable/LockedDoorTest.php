@@ -20,7 +20,7 @@ class LockedDoorTest extends \PHPUnit_Framework_TestCase
       $key = new Key("key_$direction", "secret_$direction");
       $doorName = $direction . "LockedDoor";
       $door = new LockedDoor($doorName, $direction, $key);
-      $this->assertTrue(is_a($door, '\playable\GameObject'));
+      $this->assertTrue(is_a($door, '\game\GameObject'));
       $this->assertEquals($doorName, $door->getName());
 
       $this->assertTrue($door->hasComponent('Collider'));

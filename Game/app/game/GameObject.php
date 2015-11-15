@@ -1,12 +1,10 @@
 <?php
 
-namespace playable;
+namespace game;
 
 require_once __DIR__.'/../util/TDefine.php';
-require_once __DIR__.'/../util/TSerializable.php';
 
 use \util\TDefine;
-use \util\TSerializable;
 
 /**
  * The GameObject represents almost any object in the game.
@@ -24,9 +22,9 @@ use \util\TSerializable;
  * components in a certain way in order to achieve the game behavior
  * desired.
  **/
-class GameObject implements \Serializable {
+class GameObject //implements \Serializable
+{
   use TDefine;
-  use TSerializable;
 
   /**
    * The name of the GameObject.

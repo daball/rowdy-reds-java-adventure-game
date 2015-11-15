@@ -40,6 +40,6 @@ class Inspector extends BaseComponent
    * @ignore
    */
   public function onInspect($callback) {
-    $this->onInspectCallback = $callback;
+    $this->onInspectCallback = $this->serializableClosure($callback);
   }
 }

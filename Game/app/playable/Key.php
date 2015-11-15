@@ -2,12 +2,13 @@
 
 namespace playable;
 
-require_once 'GameObject.php';
+require_once __DIR__.'/../game/GameObject.php';
 require_once __DIR__.'/../components/Assignable.php';
 require_once __DIR__.'/../components/Inspector.php';
 
-use components\Assignable;
-use components\Inspector;
+use \game\GameObject;
+use \components\Assignable;
+use \components\Inspector;
 
 /**
  * A Key item must be used to open an Unlockable item.

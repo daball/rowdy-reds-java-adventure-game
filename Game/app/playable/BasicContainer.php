@@ -2,10 +2,11 @@
 
 namespace playable;
 
-require_once "GameObject.php";
+require_once __DIR__.'/../game/GameObject.php';
 require_once __DIR__.'/../components/Inspector.php';
 require_once __DIR__.'/../components/Openable.php';
 
+use \game\GameObject;
 use \components\Inspector;
 use \components\Openable;
 

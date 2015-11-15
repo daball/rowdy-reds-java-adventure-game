@@ -39,7 +39,7 @@ class InspectCommandHandler extends BaseCommandHandler
   ///end of the output.
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $inspectWhat = $this->getTargetName($commandLine);
     // echo $inspectWhat;
     if ($inspectWhat === "")

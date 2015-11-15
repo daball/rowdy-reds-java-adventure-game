@@ -1,70 +1,65 @@
 <?php
 
-namespace map;
+namespace game;
 
-require_once 'Map.php';
+require_once 'Game.php';
 require_once 'Direction.php';
 require_once 'Room.php';
 require_once __DIR__.'/../playable/index.php';
 
-///The MapBuilder class helps automate building a Map by using
-///the factory/builder design pattern. Each method will return
-///the same MapBuilder instance so that you can continue calling
-///methods on the object, allowing for simpler code to build a
-///map.
-class MapBuilder
+/**
+ *  The GameBuilder class helps automate building a Game by using
+ *  the factory/builder design pattern. Each method will return
+ *  the same GameBuilder instance so that you can continue calling
+ *  methods on the object, allowing for simpler code to build a
+ *  map. Call getGame() when you are finished.
+ **/
+class GameBuilder
 {
-  private $map = null;
+  protected static $gameBuilders;
+  protected $game = null;
 
-  public function __construct($map = null)
+  protected function __construct($gameName = null)
   {
-    if ($map == null) $map = new Map();
-    $this->map = $map;
+    $this->game = new Game($gameName);
   }
+
+  public static function newGame($gameName)
+  {
+    if (is_null(self::$gameBuilders))
+      self::$gameBuilders = array();
+    return self::$gameBuilders[$gameName] = new GameBuilder($gameName);
+  }
+
+  // public static function editGame($gameName)
+  // {
+  //   if (is_null(self::$gameBuilders))
+  //     self::$gameBuilders = array();
+  //   return self::$gameBuilders[$gameName] = new GameBuilder();
+  // }
 
   public function insertRoom($room)
   {
-    $this->map->addRoom($room);
-    if (!$this->map->getSpawnPoint())
+    $this->game->addRoom($room);
+    if (!$this->game->getSpawnPoint())
       $room->define(function ($room) {
         $room->setSpawnPoint();
       });
     return $this;
   }
 
-  // public function setRoomDescription($roomName, $roomDescription)
+  // public function setRoomDirectionDescription($roomName, $roomDirection, $roomDirectionDescription)
   // {
-  //   $room = $this->map->getRoom($roomName);
-  //   $room->define(function ($room) use ($roomDescription) {
-  //     $inspector = $room->getComponent('Inspector');
-  //     $inspector->onInspect(function ($inspector) use ($roomDescription) {
-  //       return $roomDescription;
-  //     });
-  //   });
+  //   $room = $this->game->getRoom($roomName);
+  //   $roomDirection = $room->getDirection(Direction::cardinalDirection($roomDirection));
+  //   $roomDirection->description = $roomDirectionDescription;
   //   return $this;
   // }
-  //
-  // public function setRoomImageUrl($roomName, $roomImageUrl)
-  // {
-  //   $this->map->getRoom($roomName)->define(function ($room) use ($roomImageUrl) {
-  //     $room->setImageUrl($roomImageUrl);
-  //   });
-  //   return $this;
-  // }
-
-  public function setRoomDirectionDescription($roomName, $roomDirection, $roomDirectionDescription)
-  {
-    $room = $this->map->getRoom($roomName);
-    $roomDirection = $room->getDirection(Direction::cardinalDirection($roomDirection));
-    $roomDirection->description = $roomDirectionDescription;
-    return $this;
-  }
-
 
   public function connectRooms($roomName1, $room1Direction, $roomName2)
   {
-    $room1 = $this->map->getRoom($roomName1);
-    $room2 = $this->map->getRoom($roomName2);
+    $room1 = $this->game->getRoom($roomName1);
+    $room2 = $this->game->getRoom($roomName2);
     $room1Direction = Direction::cardinalDirection($room1Direction);
     $room2Direction = Direction::oppositeDirection($room1Direction);
     $room1->getDirection($room1Direction)->setNextRoom($room2);
@@ -90,7 +85,7 @@ class MapBuilder
 
   public function setSpawnPoint($roomName)
   {
-    foreach ($this->map->rooms as $r => $room)
+    foreach ($this->game->rooms as $r => $room)
     {
       if ($room->getName() === $roomName)
         $room->define(function ($room) {
@@ -104,25 +99,32 @@ class MapBuilder
     return $this;
   }
 
-  public function getMap()
+  public function getGame()
   {
-    return $this->map;
+    return $this->game;
+  }
+
+  public static function getNamedGame($gameName)
+  {
+    if (isset(self::$gameBuilders) && array_key_exists($gameName, self::$gameBuilders))
+      return self::$gameBuilders[$gameName]->getGame();
+    return FALSE;
   }
 
   // public function insertObjectInRoom($roomName, $itemName, $item)
   // {
-  //   $room = $this->map->getRoom($roomName);
+  //   $room = $this->game->getRoom($roomName);
   //   $room->setItem($itemName, $item);
   //   return $this;
   // }
   //
   // public function insertObstacleObjectInRoom($roomName, $roomDirection, $itemName, $item)
   // {
-  //   $room = $this->map->getRoom($roomName);
+  //   $room = $this->game->getRoom($roomName);
   //   $room->getDirection($roomDirection)->obstacleItem = $itemName;
   //   $room->setItem($itemName, $item);
   //   if ($room->getDirection($roomDirection)->getNextRoom() !== "") {
-  //     $room2 = $this->map->getRoom($room->getDirection($roomDirection)->getNextRoomName());
+  //     $room2 = $this->game->getRoom($room->getDirection($roomDirection)->getNextRoomName());
   //     //copy item to room2
   //     $room2->setItem($itemName, $item);
   //     $room2Direction = Direction::oppositeDirection($roomDirection);

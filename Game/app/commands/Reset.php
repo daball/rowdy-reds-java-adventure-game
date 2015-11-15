@@ -26,7 +26,7 @@ class ResetCommandHandler extends BaseCommandHandler
   ///end of the output.
   public function executeCommand($commandLine)
   {
-    $gameState = GameState::getGameState();
+    $gameState = GameState::getInstance();
     $message = $gameState->resetGameState();
     return $message;
   }

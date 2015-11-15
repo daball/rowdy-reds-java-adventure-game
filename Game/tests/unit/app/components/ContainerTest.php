@@ -5,11 +5,11 @@ namespace component\tests;
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/components/Assignable.php';
 require_once __DIR__.'/../../../../app/components/Container.php';
-require_once __DIR__.'/../../../../app/playable/GameObject.php';
+require_once __DIR__.'/../../../../app/game/GameObject.php';
 
 use \components\Assignable;
 use \components\Container;
-use \playable\GameObject;
+use \game\GameObject;
 
 class BasicItem extends GameObject
 {
@@ -34,13 +34,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     for ($i = 0; $i < 10; $i++) {
       $item = new BasicItem("item$i");
       $this->assertTrue($container->isItemAValidType($item));
-      $container->setItemAt($i, $item);
+      $container->insertItem($item);
       $this->assertEquals("item" . $i, $container->getItemAt($i)->getName());
       $this->assertEquals($i, $container->findItemIndexByName("item$i"));
       $this->assertEquals("item" . $i, $container->findItemByName("item$i")->getName());
       $this->assertTrue($container->itemExists($item));
     }
+    foreach ($container->getAllItems() as $i => $item) {
+      $this->assertEquals("item" . $i, $item->getName());
+      $this->assertTrue($container->itemExists($item));
+    }
     $this->assertEquals(10, $container->countItems());
+    $this->assertEquals(10, count($container->getAllItems()));
     $this->assertNull($container->getItemAt(11));
     $this->assertNull($container->getItemAt(-1));
     $this->assertLessThan(0, $container->findItemIndexByName("item100"));

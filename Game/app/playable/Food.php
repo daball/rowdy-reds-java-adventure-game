@@ -2,7 +2,7 @@
 
 namespace playable;
 
-require_once 'GameObject.php';
+require_once __DIR__.'/../game/GameObject.php';
 require_once __DIR__.'/../components/Assignable.php';
 require_once __DIR__.'/../components/Inspector.php';
 // require_once 'IAssignable.php';
@@ -10,8 +10,9 @@ require_once __DIR__.'/../components/Inspector.php';
 // require_once 'TCreate.php';
 // require_once 'TAssignable.php';
 
-use components\Assignable;
-use components\Inspector;
+use \game\GameObject;
+use \components\Assignable;
+use \components\Inspector;
 
 /**
  * A Food item is used to feed a hungy Dog obstacle.

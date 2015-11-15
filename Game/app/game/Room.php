@@ -1,20 +1,21 @@
 <?php
 
-namespace map;
+namespace game;
 
 require_once 'RoomDirections.php';
-require_once __DIR__.'/../playable/GameObject.php';
+require_once 'GameObject.php';
+require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../components/Inspector.php';
 require_once __DIR__.'/../components/Container.php';
 
 use \components\Container;
 use \components\Inspector;
-use \playable\GameObject;
+use \engine\GameState;
 
 /**
  * Defines a Room in the Game
  **/
-class Room extends GameObject //implements \Serializable
+class Room extends GameObject
 {
   /**
    * Image path (URL)
@@ -84,27 +85,19 @@ class Room extends GameObject //implements \Serializable
     return $this->directions->getDirection($direction);
   }
 
-  // /* ISerializable interface implementation */
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'name' => $this->name,
-  //       'description' => $this->description,
-  //       'imageUrl' => $this->imageUrl,
-  //       'spawn' => $this->spawn,
-  //       'directions' => $this->directions,
-  //     )
-  //   );
-  // }
-  //
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $this->__construct();
-  //   $this->name = $data['name'];
-  //   $this->description = $data['description'];
-  //   $this->imageUrl = $data['imageUrl'];
-  //   $this->spawn = $data['spawn'];
-  //   $this->directions = $data['directions'];
-  //   $this->items = $data['items'];
-  // }
+  public function getRoomNameAtDirection($direction) {
+    return $this->directions->getDirection($direction)->getNextRoomName();
+  }
+
+  public function getRoomAtDirection($direction) {
+    return GameState::getInstance()->getGame()->getRoom($this->getRoomNameAtDirection($direction));
+  }
+
+  public function inspectRoom() {
+    return $this->getComponent('Inspector')->inspect();
+  }
+
+  public function inspectDirection($direction) {
+    return $this->getDirection($direction)->getComponent('Inspector')->inspect();
+  }
 }

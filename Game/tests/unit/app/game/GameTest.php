@@ -1,20 +1,20 @@
 <?php
 
-namespace map\tests;
-use \map\Map;
-use \map\Room;
+namespace game\tests;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../../app/map/Room.php';
-require_once __DIR__.'/../../../../app/map/Map.php';
+require_once __DIR__.'/../../../../app/game/Game.php';
+require_once __DIR__.'/../../../../app/game/Room.php';
 
-///Unit tests Map class
-class MapTest extends \PHPUnit_Framework_TestCase
+use \game\Game;
+use \game\Room;
+
+class GameTest extends \PHPUnit_Framework_TestCase
 {
-  public function testMap()
+  public function testGame()
   {
     //build map with rooms
-    $map = new Map();
+    $map = new Game('testGame');
     $room1 = new Room("room1");
     $room2 = new Room("room2");
     $room3 = new Room("room3");

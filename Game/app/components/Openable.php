@@ -101,26 +101,26 @@ class Openable extends BaseComponent
   /* Event Callback Registration Functions */
 
   public function onBeforeOpen($callback) {
-    $this->onBeforeOpenCallback = $callback;
+    $this->onBeforeOpenCallback = $this->serializableClosure($callback);
   }
 
   public function onOpen($callback) {
-    $this->onOpenCallback = $callback;
+    $this->onOpenCallback = $this->serializableClosure($callback);
   }
 
   public function onRefuseOpen($callback) {
-    $this->onRefuseOpenCallback = $callback;
+    $this->onRefuseOpenCallback = $this->serializableClosure($callback);
   }
 
   public function onBeforeClose($callback) {
-    $this->onBeforeCloseCallback = $callback;
+    $this->onBeforeCloseCallback = $this->serializableClosure($callback);
   }
 
   public function onClose($callback) {
-    $this->onCloseCallback = $callback;
+    $this->onCloseCallback = $this->serializableClosure($callback);
   }
 
   public function onRefuseClose($callback) {
-    $this->onRefuseCloseCallback = $callback;
+    $this->onRefuseCloseCallback = $this->serializableClosure($callback);
   }
 }

@@ -107,26 +107,26 @@ class Lockable extends BaseComponent
   /* Event Callback Registration Functions */
 
   public function onBeforeLock($callback) {
-    $this->onBeforeLockCallback = $callback;
+    $this->onBeforeLockCallback = $this->serializableClosure($callback);
   }
 
   public function onLock($callback) {
-    $this->onLockCallback = $callback;
+    $this->onLockCallback = $this->serializableClosure($callback);
   }
 
   public function onRefuseLock($callback) {
-    $this->onRefuseLockCallback = $callback;
+    $this->onRefuseLockCallback = $this->serializableClosure($callback);
   }
 
   public function onBeforeUnlock($callback) {
-    $this->onBeforeUnlockCallback = $callback;
+    $this->onBeforeUnlockCallback = $this->serializableClosure($callback);
   }
 
   public function onUnlock($callback) {
-    $this->onUnlockCallback = $callback;
+    $this->onUnlockCallback = $this->serializableClosure($callback);
   }
 
   public function onRefuseUnlock($callback) {
-    $this->onRefuseUnlockCallback = $callback;
+    $this->onRefuseUnlockCallback = $this->serializableClosure($callback);
   }
 }

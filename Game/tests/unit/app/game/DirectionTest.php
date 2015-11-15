@@ -1,30 +1,33 @@
 <?php
 
-namespace map\tests;
-use \map\Direction;
+namespace game\tests;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
-require_once __DIR__.'/../../../../app/map/Direction.php';
+require_once __DIR__.'/../../../../app/game/Direction.php';
 
-///Unit tests Direction class
+use \game\Direction;
+
 class DirectionTest extends \PHPUnit_Framework_TestCase
 {
   public function testRoomDirection()
   {
     //define values
     $nextRoom = "roomName";
+    $obvious = false;
     $description = "There is a room in this direction called roomName.";
 
     //create room direction
-    $roomDirection = new Direction();
+    $roomDirection = new Direction('n');
 
     //set room direction properties
-    $roomDirection->nextRoom = $nextRoom;
-    $roomDirection->description = $description;
+    $roomDirection->setNextRoomName($nextRoom);
+    $roomDirection->getComponent("Inspector")->onInspect(function ($inspector) use ($description) {
+      return $description;
+    });
 
     //test room direction properties
-    $this->assertEquals($nextRoom, $roomDirection->nextRoom);
-    $this->assertEquals($description, $roomDirection->description);
+    $this->assertEquals($nextRoom, $roomDirection->getNextRoomName());
+    $this->assertEquals($description, $roomDirection->getComponent("Inspector")->inspect());
   }
   public function testNorth()
   {
@@ -185,5 +188,13 @@ class DirectionTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals("u", Direction::oppositeDirection("DOWN"));
     $this->assertEquals("u", Direction::oppositeDirection("doWN"));
     $this->assertEquals("u", Direction::oppositeDirection("DOwn"));
+  }
+  public function testFullDirections() {
+    $this->assertEquals("north", Direction::fullDirection(Direction::$n));
+    $this->assertEquals("south", Direction::fullDirection(Direction::$s));
+    $this->assertEquals("east", Direction::fullDirection(Direction::$e));
+    $this->assertEquals("west", Direction::fullDirection(Direction::$w));
+    $this->assertEquals("up", Direction::fullDirection(Direction::$u));
+    $this->assertEquals("down", Direction::fullDirection(Direction::$d));
   }
 }
