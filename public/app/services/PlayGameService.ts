@@ -17,6 +17,10 @@ module app.services {
       return this.$resource("./api/play-game.php");
     }
 
+    consoleHistoryLoaded(consoleHistoryEditor) {
+      consoleHistoryEditor.setReadOnly(true);
+    }
+
   }
 
   angular.module("RowdyRedApp").service("PlayGameService", PlayGameService);

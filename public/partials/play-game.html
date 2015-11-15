@@ -12,7 +12,11 @@
       <!-- <img src="./images/{{vm.gameName}}/{{vm.game.imageUrl}}" /> -->
     </div>
     <div class="col-sm-6 no-space">
-      <div ui-ace ng-model="vm.game.consoleHistory"></div>
+      <div ui-ace="{
+        useWrapMode: true,
+        showGutter: true,
+        theme: 'twilight'
+      }" ng-model="vm.game.consoleHistory" readonly></div>
     </div>
   </div>
 </div>

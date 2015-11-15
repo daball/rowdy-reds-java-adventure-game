@@ -9,6 +9,9 @@ var app;
             PlayGameService.prototype.playGame = function () {
                 return this.$resource("./api/play-game.php");
             };
+            PlayGameService.prototype.consoleHistoryLoaded = function (consoleHistoryEditor) {
+                consoleHistoryEditor.setReadOnly(true);
+            };
             PlayGameService.$inject = ["$resource"];
             return PlayGameService;
         })();
