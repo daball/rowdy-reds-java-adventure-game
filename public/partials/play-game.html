@@ -1,7 +1,10 @@
 <nav class="navbar navbar-fixed-top navbar-radfordred">
     <div class="container-fluid">
         <div class="navbar-header">
-            <div class="navbar-brand">Rowdy Red's Java Adventures <small>&raquo; You May Begin Playing {{vm.gameName}}...</small></div>
+            <div class="navbar-brand">Rowdy Red's Java Adventures <small>&raquo;
+                <span ng-if="!vm.game.roomName">Loading {{vm.gameName}}...</span>
+                <span ng-if="vm.game.roomName">You are in the {{vm.game.roomName}}</span>
+            </small></div>
         </div>
     </div>
 </nav>

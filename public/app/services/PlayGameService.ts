@@ -1,6 +1,6 @@
 module app.services {
   interface IPlayGameService {
-    getGames(): ng.resource.IResourceClass<IPlayGameResource>;
+    playGame(): ng.resource.IResourceClass<IPlayGameResource>;
   }
 
   interface IPlayGameResource extends ng.resource.IResource<app.domain.IGameInProgress> {

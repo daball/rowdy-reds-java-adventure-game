@@ -21,7 +21,18 @@ module app.game {
                 private $location: ng.ILocationService) {
       this.gameName = $routeParams.gameName;
 
+      this.game = {
+        imageUrl: "loading.png",
+        consoleHistory: "Connecting to server...",
+        commandHistory: [],
+        eol: "\n",
+        prompt: "> ",
+        moves: 0,
+        isExiting: false
+      };
+
       this.gameResource = gameService.playGame();
+
       this.gameResource.get({gameName: this.gameName}, (game: app.domain.IGameInProgress) => {
         this.game = game;
       });

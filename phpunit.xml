@@ -13,7 +13,7 @@
       <directory>./tests/unit/app/game</directory>
     </testsuite>
     <testsuite name="games">
-      <directory>./tests/unit/app/games</directory>
+      <directory>./tests/unit/games</directory>
     </testsuite>
     <testsuite name="playable">
       <directory>./tests/unit/app/playable</directory>
@@ -34,10 +34,6 @@
       <exclude>
         <directory>./vendor</directory>
         <directory>./components</directory>
-        <directory>./css</directory>
-        <directory>./font</directory>
-        <directory>./images</directory>
-        <directory>./js</directory>
       </exclude>
     </whitelist>
   </filter>
