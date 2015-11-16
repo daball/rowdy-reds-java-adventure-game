@@ -85,11 +85,13 @@ module app.game {
     onCommandLineChanged() {
       var scope = this;
       if (scope.commandLine.indexOf('\n') > -1) {
+        console.log('onCommandLineChanged() hit');
         scope.commandLineReadOnly = true;
         let callback = function () {
           console.log(scope);
           scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n')+1);
           scope.commandLineReadOnly = false;
+          scope.onCommandLineChanged();
         };
         scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), callback);
       }
