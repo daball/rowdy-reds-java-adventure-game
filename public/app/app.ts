@@ -1,5 +1,5 @@
 module app {
-  var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ui.ace" /*, "common.services", "productResourceMock"*/ ]);
+  var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ngSanitize", "ui.bootstrap", "ui.ace" ]);
 
   main.config(routeConfig);
 
@@ -7,15 +7,15 @@ module app {
   function routeConfig($routeProvider: ng.route.IRouteProvider): void {
     $routeProvider
       .when("/", {
-        templateUrl: "./partials/main-menu.html",
+        templateUrl: "./views/main-menu.html",
         controller: "MainMenuCtrl as vm"
       })
       .when("/games", {
-        templateUrl: "./partials/list-games.html",
+        templateUrl: "./views/list-games.html",
         controller: "GameListCtrl as vm"
       })
       .when('/game/:gameName/play', {
-        templateUrl: "./partials/play-game.html",
+        templateUrl: "./views/play-game.html",
         controller: "PlayGameCtrl as vm"
       })
       .otherwise("/");

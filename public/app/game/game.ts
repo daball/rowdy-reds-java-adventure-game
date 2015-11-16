@@ -8,6 +8,7 @@ module app.domain {
     prompt?: string;
     moves?: number;
     isExiting?: boolean;
+    error?: any;
   }
 
   export class GameInProgress implements IGameInProgress {

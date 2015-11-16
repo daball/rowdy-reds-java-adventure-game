@@ -1,20 +1,20 @@
 var app;
 (function (app) {
-    var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ui.ace"]);
+    var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ngSanitize", "ui.bootstrap", "ui.ace"]);
     main.config(routeConfig);
     routeConfig.$inject = ["$routeProvider"];
     function routeConfig($routeProvider) {
         $routeProvider
             .when("/", {
-            templateUrl: "./partials/main-menu.html",
+            templateUrl: "./views/main-menu.html",
             controller: "MainMenuCtrl as vm"
         })
             .when("/games", {
-            templateUrl: "./partials/list-games.html",
+            templateUrl: "./views/list-games.html",
             controller: "GameListCtrl as vm"
         })
             .when('/game/:gameName/play', {
-            templateUrl: "./partials/play-game.html",
+            templateUrl: "./views/play-game.html",
             controller: "PlayGameCtrl as vm"
         })
             .otherwise("/");

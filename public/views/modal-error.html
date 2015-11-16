@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h3 class="modal-title">Application Error</h3>
+</div>
+<div class="modal-body">
+    <p>There was an error in the application.</p>
+    <br />
+    <br />
+    <p ng-bind-html="vm.error"></p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="vm.ok()">OK</button>
+</div>

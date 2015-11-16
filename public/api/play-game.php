@@ -1,70 +1,87 @@
 <?php
 
-require_once __DIR__.'/../../app/engine/GameEngine.php';
-
 use \engine\GameEngine;
 
-/* CONFIGURATION */
-$gameName = "Iteration 1"; //default
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['gameName']))
-	$gameName = $_GET['gameName'];
-else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['gameName']))
-	$gameName = $_GET['gameName'];
-else if ($_SERVER['REQUEST_METHOD'] == 'POST' && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
-	$data = json_decode(file_get_contents('php://input'), true);
-	if (isset($data['gameName']))
-		$gameName = $data['gameName'];
+function exception_error_handler($severity, $message, $file, $line) {
+	// if (!(error_reporting() & $severity))
+	// 	return;
+	throw new ErrorException($message, 0, $severity, $file, $line);
 }
 
-//start session services
-session_start();
+try {
 
-/* OBTAIN VIEW MODEL */
+	set_error_handler("exception_error_handler");
 
-//start the game engine
-$gameEngine = new GameEngine($gameName);
+	require_once __DIR__.'/../../app/engine/GameEngine.php';
 
-//install shortcut variables, for easier to read code
-$eol = "\n";
-$prompt = "> ";
-// random comment
-$gameState = $gameEngine->getGameState();
-$game = $gameState->getGame();
+	/* CONFIGURATION */
+	$gameName = "Iteration 1"; //default
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['gameName']))
+		$gameName = $_GET['gameName'];
+	else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['gameName']))
+		$gameName = $_GET['gameName'];
+	else if ($_SERVER['REQUEST_METHOD'] == 'POST' && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
+		$data = json_decode(file_get_contents('php://input'), true);
+		if (isset($data['gameName']))
+			$gameName = $data['gameName'];
+	}
 
-$avatarRoom = $gameState->getPlayerRoom();
-$moves = $gameState->getMoves();
-$isExiting = $gameState->isExiting();
+	//start session services
+	session_start();
 
-$roomName = $avatarRoom->getName();
-$imageUrl = $avatarRoom->getImageUrl();
+	/* OBTAIN VIEW MODEL */
 
-$consoleHistory = $gameState->getConsoleHistory();
-$commandHistory = $gameState->getCommandHistory();
-$commandProcessor = $gameEngine->getCommandProcessor();
-$commandInput = $commandProcessor->getCommandInput();
-$commandOutput = $commandProcessor->getCommandOutput();
+	//start the game engine
+	$gameEngine = new GameEngine($gameName);
 
-/* RENDER MODEL TO VIEW AND OUTPUT RESPONSE */
+	//install shortcut variables, for easier to read code
+	$eol = "\n";
+	$prompt = "> ";
+	// random comment
+	$gameState = $gameEngine->getGameState();
+	$game = $gameState->getGame();
 
-echo json_encode(array(
-	'roomName' => $roomName,
-	'imageUrl' => $imageUrl,
-  'consoleHistory' => $consoleHistory,
-  'commandHistory' => $commandHistory,
-	'eol' => $eol,
-  'prompt' => $prompt,
-	'moves' => $moves,
-	'isExiting' => $isExiting,
-), JSON_PRETTY_PRINT);
+	$avatarRoom = $gameState->getPlayerRoom();
+	$moves = $gameState->getMoves();
+	$isExiting = $gameState->isExiting();
 
-/* MAINTENANCE */
+	$roomName = $avatarRoom->getName();
+	$imageUrl = $avatarRoom->getImageUrl();
 
-//when the game is exiting, go ahead and restart it, since there is no other way to restart the session
-//next time it loads, it'll be ready to play
-if ($isExiting) {
-	//reset game state
-	$gameEngine->gameState = new GameState();
+	$consoleHistory = $gameState->getConsoleHistory();
+	$commandHistory = $gameState->getCommandHistory();
+	$commandProcessor = $gameEngine->getCommandProcessor();
+	$commandInput = $commandProcessor->getCommandInput();
+	$commandOutput = $commandProcessor->getCommandOutput();
+
+	/* RENDER MODEL TO VIEW AND OUTPUT RESPONSE */
+
+	echo json_encode(array(
+		'roomName' => $roomName,
+		'imageUrl' => $imageUrl,
+	  'consoleHistory' => $consoleHistory,
+	  'commandHistory' => $commandHistory,
+		'eol' => $eol,
+	  'prompt' => $prompt,
+		'moves' => $moves,
+		'isExiting' => $isExiting,
+	), JSON_PRETTY_PRINT);
+
+	/* MAINTENANCE */
+
+	//when the game is exiting, go ahead and restart it, since there is no other way to restart the session
+	//next time it loads, it'll be ready to play
+	if ($isExiting) {
+		//reset game state
+		$gameEngine->gameState = new GameState();
+	}
+
+	//always save the session state
+	$gameEngine->saveSession();
+
 }
-
-//always save the session state
-$gameEngine->saveSession();
+catch (Exception $e) {
+	echo json_encode(array(
+		'error' => $e
+	));
+}

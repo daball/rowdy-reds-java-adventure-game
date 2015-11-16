@@ -19,10 +19,11 @@ module app.game {
     commandLineReadOnly: boolean = false;
     gameResource: ng.resource.IResourceClass<app.services.IPlayGameResource>;
 
-    static $inject = ['$routeParams', 'PlayGameService', '$location'];
+    static $inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal'];
     constructor(private $routeParams: IPlayGameParams,
                 private gameService: app.services.PlayGameService,
-                private $location: ng.ILocationService) {
+                private $location: ng.ILocationService,
+                private $uibModal: any) {
       this.gameName = $routeParams.gameName;
 
       this.game = {
@@ -37,8 +38,16 @@ module app.game {
 
       this.gameResource = gameService.playGame();
 
+      this.reconnectGame();
+    }
+
+    reconnectGame() {
       this.gameResource.get({gameName: this.gameName}, (game: app.domain.IGameInProgress) => {
-        this.game = game;
+        console.log(game);
+        if (game.commandHistory)
+          this.game = game;
+        else if (game.error)
+          this.handleError(game.error);
       });
     }
 
@@ -46,10 +55,31 @@ module app.game {
       // this.gameResource.
       this.game.consoleHistory += "\n" + this.game.prompt + command + "\nProcessing command via game service...";
       this.gameResource.save({gameName: this.gameName, commandLine: command}, (game: app.domain.IGameInProgress) => {
-        this.game = game;
+        console.log(game);
+        if (game.commandHistory)
+          this.game = game;
+        else if (game.error)
+          this.handleError(game.error);
         if (callback)
           callback();
       });
+    }
+
+    handleError(error) {
+      if (error.xdebug_message)
+        error = error.xdebug_message;
+      var modalInstance = this.$uibModal.open({
+        animation: true,
+        templateUrl: './views/modal-error.html',
+        controller: 'ModalErrorCtrl',
+        controllerAs: 'vm',
+        resolve: {
+          error: function () {
+            return error;
+          }
+        }
+      });
+      modalInstance.result.then(this.reconnectGame, this.reconnectGame);
     }
 
     onConsoleHistoryLoaded(editor) {
@@ -88,7 +118,6 @@ module app.game {
         console.log('onCommandLineChanged() hit');
         scope.commandLineReadOnly = true;
         let callback = function () {
-          console.log(scope);
           scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n')+1);
           scope.commandLineReadOnly = false;
           scope.onCommandLineChanged();
