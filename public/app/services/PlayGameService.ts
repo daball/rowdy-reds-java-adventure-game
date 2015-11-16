@@ -1,9 +1,9 @@
 module app.services {
-  interface IPlayGameService {
+  export interface IPlayGameService {
     playGame(): ng.resource.IResourceClass<IPlayGameResource>;
   }
 
-  interface IPlayGameResource extends ng.resource.IResource<app.domain.IGameInProgress> {
+  export interface IPlayGameResource extends ng.resource.IResource<app.domain.IGameInProgress> {
   }
 
   export class PlayGameService implements IPlayGameService {
@@ -16,11 +16,6 @@ module app.services {
     playGame(): ng.resource.IResourceClass<IPlayGameResource> {
       return this.$resource("./api/play-game.php");
     }
-
-    consoleHistoryLoaded(consoleHistoryEditor) {
-      consoleHistoryEditor.setReadOnly(true);
-    }
-
   }
 
   angular.module("RowdyRedApp").service("PlayGameService", PlayGameService);

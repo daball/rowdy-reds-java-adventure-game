@@ -5,6 +5,16 @@ require_once __DIR__.'/../../app/engine/GameEngine.php';
 use \engine\GameEngine;
 
 /* CONFIGURATION */
+$gameName = "Iteration 1"; //default
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['gameName']))
+	$gameName = $_GET['gameName'];
+else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['gameName']))
+	$gameName = $_GET['gameName'];
+else if ($_SERVER['REQUEST_METHOD'] == 'POST' && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
+	$data = json_decode(file_get_contents('php://input'), true);
+	if (isset($data['gameName']))
+		$gameName = $data['gameName'];
+}
 
 //start session services
 session_start();
@@ -12,7 +22,7 @@ session_start();
 /* OBTAIN VIEW MODEL */
 
 //start the game engine
-$gameEngine = new GameEngine("Iteration 1");
+$gameEngine = new GameEngine($gameName);
 
 //install shortcut variables, for easier to read code
 $eol = "\n";

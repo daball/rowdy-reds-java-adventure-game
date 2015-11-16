@@ -1,13 +1,13 @@
-module app.game.domain {
+module app.domain {
   export interface IGameInProgress {
-    roomName: string;
-    imageUrl: string;
-    consoleHistory: string;
-    commandHistory: string[];
-    eol: string;
-    prompt: string;
-    moves: number;
-    isExiting: boolean;
+    roomName?: string;
+    imageUrl?: string;
+    consoleHistory?: string;
+    commandHistory?: string[];
+    eol?: string;
+    prompt?: string;
+    moves?: number;
+    isExiting?: boolean;
   }
 
   export class GameInProgress implements IGameInProgress {

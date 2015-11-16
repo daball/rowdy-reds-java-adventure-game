@@ -55,9 +55,17 @@ class CommandProcessor
 
   public function __construct()
   {
-    if (isset($_POST['commandLine']))
+    $commandLine = "";
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['commandLine']))
+    	$commandLine = $_POST['commandLine'];
+    else if ($_SERVER['REQUEST_METHOD'] == 'POST' && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
+    	$data = json_decode(file_get_contents('php://input'), true);
+    	if (isset($data['commandLine']))
+    		$commandLine = $data['commandLine'];
+    }
+    if ($commandLine)
     {
-      $this->commandInput = $_POST['commandLine'];
+      $this->commandInput = trim($commandLine);
       $this->commandOutput = $this->dispatchCommand($this->commandInput);
       GameState::getInstance()->addCommandToHistory($this->commandInput, $this->commandOutput);
     }
