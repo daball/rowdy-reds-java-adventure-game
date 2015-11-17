@@ -1,10 +1,10 @@
 <nav class="navbar navbar-fixed-top navbar-radfordred">
     <div class="container-fluid">
         <div class="navbar-header">
-            <div class="navbar-brand">Rowdy Red's Java Adventures <small>&raquo;
-                <span ng-if="!vm.game.roomName">Loading {{vm.gameName}}...</span>
-                <span ng-if="vm.game.roomName">You are in the {{vm.game.roomName}}</span>
-            </small></div>
+            <div class="navbar-brand">Rowdy Red's Java Adventures &raquo;
+                <span ng-if="!vm.game.roomName">{{vm.gameName}} Connecting...</span>
+                <span ng-if="vm.game.roomName">{{vm.game.gameName}}</span>
+            </div>
         </div>
     </div>
 </nav>
@@ -40,3 +40,19 @@
     </div>
   </div>
 </div>
+
+<nav class="navbar navbar-fixed-bottom navbar-rowdyblack">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+              <span ng-if="vm.game.roomName">{{vm.game.roomName}} |</span>
+              <span ng-if="vm.game.obviousDirections">Obvious Directions:
+                <span ng-repeat="d in vm.game.obviousDirections">{{d}}</span>
+              |
+              </span>
+              <span ng-if="vm.game.moves">{{vm.game.moves}} Moves |</span>
+              <span ng-if="vm.game.commandHistory">{{vm.game.commandHistory.length}} Commands</span>
+            </div>
+        </div>
+    </div>
+</nav>

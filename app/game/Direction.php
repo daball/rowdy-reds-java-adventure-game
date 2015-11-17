@@ -138,7 +138,7 @@ class Direction extends GameObject
   }
 
   public function isNextRoomObvious() {
-    return $this->obvious;
+    return $this->nextRoomName && $this->obvious;
   }
 
   public function setNextRoomObvious($obvious = true) {

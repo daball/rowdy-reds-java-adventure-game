@@ -35,6 +35,7 @@ $avatarRoom = $gameState->getPlayerRoom();
 $moves = $gameState->getMoves();
 $isExiting = $gameState->isExiting();
 
+$gameName = $game->getName();
 $roomName = $avatarRoom->getName();
 $imageUrl = $avatarRoom->getImageUrl();
 
@@ -44,10 +45,20 @@ $commandProcessor = $gameEngine->getCommandProcessor();
 $commandInput = $commandProcessor->getCommandInput();
 $commandOutput = $commandProcessor->getCommandOutput();
 
+$obviousDirections = array();
+if ($avatarRoom->getDirection('u')->isNextRoomObvious()) array_push($obviousDirections, 'U');
+if ($avatarRoom->getDirection('w')->isNextRoomObvious()) array_push($obviousDirections, 'W');
+if ($avatarRoom->getDirection('n')->isNextRoomObvious()) array_push($obviousDirections, 'N');
+if ($avatarRoom->getDirection('e')->isNextRoomObvious()) array_push($obviousDirections, 'E');
+if ($avatarRoom->getDirection('s')->isNextRoomObvious()) array_push($obviousDirections, 'S');
+if ($avatarRoom->getDirection('d')->isNextRoomObvious()) array_push($obviousDirections, 'D');
+
 /* RENDER MODEL TO VIEW AND OUTPUT RESPONSE */
 
 echo json_encode(array(
+	'gameName' => $gameName,
 	'roomName' => $roomName,
+	'obviousDirections' => $obviousDirections,
 	'imageUrl' => $imageUrl,
   'consoleHistory' => $consoleHistory,
   'commandHistory' => $commandHistory,
