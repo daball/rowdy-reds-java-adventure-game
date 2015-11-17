@@ -6,6 +6,17 @@
     </div>
 </nav>
 
+<div class="jumbotron jumbotron-radford-blue">
+  <div class="container">
+    <h1>Choose your adventure</h1>
+    <p>
+      <span ng-repeat="gameName in vm.games">
+        <a ng-click="vm.playGame(gameName)" role="button" class="btn btn-primary btn-lg">Play {{gameName}} &raquo;</a>
+      </span>
+    </p>
+  </div>
+</div>
+
 <div id="mainMenu">
-  <a ng-repeat="gameName in vm.games" ng-click="vm.playGame(gameName)"><button class="menuButton" style="margin-top: 70px;">Play {{gameName}}</button></a>
+  <a ng-repeat="gameName in vm.games" ng-click="vm.playGame(gameName)"><button class="menuButton">Play {{gameName}}</button></a>
 </div>
