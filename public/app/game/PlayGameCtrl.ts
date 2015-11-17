@@ -41,11 +41,16 @@ module app.game {
       this.reconnectGame();
     }
 
+    updateGame(game) {
+      var scope = this;
+      this.game = game;
+    }
+
     reconnectGame() {
       this.gameResource.get({gameName: this.gameName}, (game: app.domain.IGameInProgress) => {
         console.log(game);
         if (game.commandHistory)
-          this.game = game;
+          this.updateGame(game);
         else if (game.error)
           this.handleError(game.error);
       });
@@ -53,11 +58,11 @@ module app.game {
 
     sendCommand(command, callback) {
       // this.gameResource.
-      this.game.consoleHistory += "\n" + this.game.prompt + command + "\nProcessing command via game service...";
+      this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
       this.gameResource.save({gameName: this.gameName, commandLine: command}, (game: app.domain.IGameInProgress) => {
         console.log(game);
         if (game.commandHistory)
-          this.game = game;
+          this.updateGame(game);
         else if (game.error)
           this.handleError(game.error);
         if (callback)
@@ -73,13 +78,15 @@ module app.game {
         templateUrl: './views/modal-error.html',
         controller: 'ModalErrorCtrl',
         controllerAs: 'vm',
+        size: 'lg',
         resolve: {
-          error: function () {
+          error: () => {
             return error;
           }
         }
       });
-      modalInstance.result.then(this.reconnectGame, this.reconnectGame);
+      var scope = this;
+      modalInstance.result.then(() => { scope.reconnectGame() }, () => { scope.reconnectGame() });
     }
 
     onConsoleHistoryLoaded(editor) {
@@ -91,7 +98,15 @@ module app.game {
           return 3 * config.characterWidth;
         },
         getText: function(session, row) {
-          return row+1;
+          //return row+1;
+          var count: number = 0;
+          for (var l: number = 0; l < session.doc.$lines.length && l < row; l++) {
+            if (session.doc.$lines[l].indexOf('>') == 0)
+              count++;
+          }
+          if (session.doc.$lines[row].indexOf('>') == 0)
+            return (count+1).toString();
+          return "";
         }
       };
     }
@@ -117,12 +132,12 @@ module app.game {
       if (scope.commandLine.indexOf('\n') > -1) {
         console.log('onCommandLineChanged() hit');
         scope.commandLineReadOnly = true;
-        let callback = function () {
+        let onCommandLineProcessed = () => {
           scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n')+1);
           scope.commandLineReadOnly = false;
           scope.onCommandLineChanged();
         };
-        scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), callback);
+        scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
       }
     }
   }

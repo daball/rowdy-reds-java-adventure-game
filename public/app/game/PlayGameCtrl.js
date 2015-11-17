@@ -23,23 +23,27 @@ var app;
                 this.gameResource = gameService.playGame();
                 this.reconnectGame();
             }
+            PlayGameCtrl.prototype.updateGame = function (game) {
+                var scope = this;
+                this.game = game;
+            };
             PlayGameCtrl.prototype.reconnectGame = function () {
                 var _this = this;
                 this.gameResource.get({ gameName: this.gameName }, function (game) {
                     console.log(game);
                     if (game.commandHistory)
-                        _this.game = game;
+                        _this.updateGame(game);
                     else if (game.error)
                         _this.handleError(game.error);
                 });
             };
             PlayGameCtrl.prototype.sendCommand = function (command, callback) {
                 var _this = this;
-                this.game.consoleHistory += "\n" + this.game.prompt + command + "\nProcessing command via game service...";
+                this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
                 this.gameResource.save({ gameName: this.gameName, commandLine: command }, function (game) {
                     console.log(game);
                     if (game.commandHistory)
-                        _this.game = game;
+                        _this.updateGame(game);
                     else if (game.error)
                         _this.handleError(game.error);
                     if (callback)
@@ -54,13 +58,15 @@ var app;
                     templateUrl: './views/modal-error.html',
                     controller: 'ModalErrorCtrl',
                     controllerAs: 'vm',
+                    size: 'lg',
                     resolve: {
                         error: function () {
                             return error;
                         }
                     }
                 });
-                modalInstance.result.then(this.reconnectGame, this.reconnectGame);
+                var scope = this;
+                modalInstance.result.then(function () { scope.reconnectGame(); }, function () { scope.reconnectGame(); });
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor) {
                 editor.on('focus', function () {
@@ -71,7 +77,14 @@ var app;
                         return 3 * config.characterWidth;
                     },
                     getText: function (session, row) {
-                        return row + 1;
+                        var count = 0;
+                        for (var l = 0; l < session.doc.$lines.length && l < row; l++) {
+                            if (session.doc.$lines[l].indexOf('>') == 0)
+                                count++;
+                        }
+                        if (session.doc.$lines[row].indexOf('>') == 0)
+                            return (count + 1).toString();
+                        return "";
                     }
                 };
             };
@@ -94,12 +107,12 @@ var app;
                 if (scope.commandLine.indexOf('\n') > -1) {
                     console.log('onCommandLineChanged() hit');
                     scope.commandLineReadOnly = true;
-                    var callback = function () {
+                    var onCommandLineProcessed = function () {
                         scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n') + 1);
                         scope.commandLineReadOnly = false;
                         scope.onCommandLineChanged();
                     };
-                    scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), callback);
+                    scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
                 }
             };
             PlayGameCtrl.$inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal'];
