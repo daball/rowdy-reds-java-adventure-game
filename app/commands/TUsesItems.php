@@ -13,9 +13,9 @@ trait TUsesItems
    **/
   private function isPlayerItem($itemInQuestion) {
     if ($itemInQuestion == "me.leftHand" || $itemInQuestion == "leftHand")
-      return GameState::getInstance()->getPlayer()->leftHand;
+      return GameState::getInstance()->getPlayer()->getLeftHand();
     else if ($itemInQuestion == "me.rightHand" || $itemInQuestion == "rightHand")
-      return GameState::getInstance()->getPlayer()->rightHand;
+      return GameState::getInstance()->getPlayer()->getRightHand();
     else return false;
   }
 

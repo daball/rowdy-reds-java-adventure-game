@@ -1,15 +1,15 @@
 <?php
 
 namespace commands;
-use engine\CommandProcessor;
-use engine\GameState;
 
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
 
-///Handles inspect command.
+use engine\CommandProcessor;
+use engine\GameState;
+
 class InspectCommandHandler extends BaseCommandHandler
 {
   use TUsesItems;
@@ -44,33 +44,38 @@ class InspectCommandHandler extends BaseCommandHandler
     // echo $inspectWhat;
     if ($inspectWhat === "")
       //no parameters, inspect the room
-      return $gameState->inspectRoom() . "\n\n" . $this->inspectRoomContents();
-    else {
-
-      if (($item = $this->isPlayerItem($inspectWhat)) !== FALSE) {
-        if ($item === null)
-          return "Your hand is empty.";
-        else if (is_a($item, '\playable\IInspectable'))
-          return $item->inspect();
-        else
-          return "The item in your hand is not inspectable.";
-      }
-      else if (($item = $this->isRoomItem($inspectWhat)) !== FALSE) {
-        if (is_a($item, '\playable\IInspectable'))
-          return $item->inspect();
-        else
-          return "The item in the room is not inspectable.";
-      }
-      else if (($item = $isItemInContainerInRoom($itemInQuestion)) !== FALSE) {
-        if (is_a($item, '\playable\IInspectable'))
-          return $item->inspect();
-        else
-          return "The item in the room is not inspectable.";
-      }
+      return $gameState->inspectRoom();
+    else if ($inspectWhat == 'leftHand'
+          || $inspectWhat == 'me.leftHand')
+      return $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
+    else if ($inspectWhat == 'rightHand'
+          || $inspectWhat == 'me.rightHand')
+          return $gameState->getPlayer()->getRightHand()->getComponent('Inspector')->inspect();
+    // else {
+    //   if (($item = $this->isPlayerItem($inspectWhat)) !== FALSE) {
+    //     if ($item === null)
+    //       return "Your hand is empty.";
+    //     else if (is_a($item, '\playable\IInspectable'))
+    //       return $item->inspect();
+    //     else
+    //       return "The item in your hand is not inspectable.";
+    //   }
+    //   else if (($item = $this->isRoomItem($inspectWhat)) !== FALSE) {
+    //     if (is_a($item, '\playable\IInspectable'))
+    //       return $item->inspect();
+    //     else
+    //       return "The item in the room is not inspectable.";
+    //   }
+    //   else if (($item = $isItemInContainerInRoom($itemInQuestion)) !== FALSE) {
+    //     if (is_a($item, '\playable\IInspectable'))
+    //       return $item->inspect();
+    //     else
+    //       return "The item in the room is not inspectable.";
+    //   }
       else {
         return "I don't know what an $inspectWhat is.";
       }
-    }
+    // }
   }
 }
 

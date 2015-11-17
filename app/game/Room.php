@@ -43,15 +43,7 @@ class Room extends GameObject
     $this->define(function ($room) {
       $inspector = new Inspector();
       $inspector->onInspect(function ($inspector) {
-        $obviousExits = [];
-        if ($this->directions->n->nextRoom && $this->directions->n->obvious) array_push($obviousExits, "NORTH");
-        if ($this->directions->e->nextRoom && $this->directions->e->obvious) array_push($obviousExits, "EAST");
-        if ($this->directions->s->nextRoom && $this->directions->s->obvious) array_push($obviousExits, "SOUTH");
-        if ($this->directions->w->nextRoom && $this->directions->w->obvious) array_push($obviousExits, "WEST");
-        if ($this->directions->u->nextRoom && $this->directions->u->obvious) array_push($obviousExits, "UP");
-        if ($this->directions->d->nextRoom && $this->directions->d->obvious) array_push($obviousExits, "DOWN");
-        $obviousExits = implode(', ', $obviousExits);
-        return "\n$this->description\nThe obvious exits are: $obviousExits";
+        return "You enter into an empty room.";
       });
       $room->addComponent($inspector);
     });

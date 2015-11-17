@@ -12,6 +12,22 @@ use \game\GameBuilder;
 use \game\Player;
 use \playable\System;
 
+/**
+ * Join a string with a natural language conjunction at the end.
+ * Source:
+ *   https://gist.github.com/dan-sprog/e01b8712d6538510dd9c
+ */
+function natural_language_join(array $list, $conjunction = 'and') {
+  $last = array_pop($list);
+  if ($list) {
+    if (count($list) == 1)
+      return implode(', ', $list) . ' ' . $conjunction . ' ' . $last;
+    else if (count($list) > 1)
+      return implode(', ', $list) . ', ' . $conjunction . ' ' . $last;
+  }
+  return $last;
+}
+
 final class GameState
 {
   /**
@@ -40,8 +56,6 @@ final class GameState
     $eol = "\n";
     $this->game = $game;
     $this->resetGameState();
-    $this->consoleHistory = "Game started." . $eol
-            . $this->getPlayerRoom()->getComponent('Inspector')->inspect();
   }
 
   public function addCommandToHistory($commandInput, $commandOutput)
@@ -92,18 +106,38 @@ final class GameState
 
   public function inspectRoom() {
     $eol = "\n";
-    $output = $this->getPlayerRoom()->getComponent('Inspector')->inspect() . $eol;
-    $roomItems = $this->getPlayerRoom()->getComponent('Container')->getAllItems();
-    if (count($roomItems) > 0)
-      $output .= "The following items are available in this area:$eol";
-    foreach($roomItems as $item => $value)
-    {
-      //$output .= \java\JavaReflection::inspectInstance($value, $item) . $eol;
-      $class = new ReflectionClass($value);
-      $className = $class->getShortName();
-      $output .= "$className $item;";
+    $room = $this->getPlayerRoom();
+    //inspect room
+    $output = $room->getComponent('Inspector')->inspect();
+    //print items in room
+    $roomItems = $room->getComponent('Container')->getAllItems();
+    $saRoomItems = array();
+    foreach($roomItems as $value) { array_push($saRoomItems, $value->getName()); }
+    if (count($roomItems) > 0) {
+      $sRoomItems = natural_language_join($saRoomItems);
+      $output .= " You see here a $sRoomItems.";
     }
+    //print obvious exits
+    $obviousExits = array();
+    if ($room->getDirection('u')->isNextRoomObvious()) array_push($obviousExits, "up");
+    if ($room->getDirection('w')->isNextRoomObvious()) array_push($obviousExits, "west");
+    if ($room->getDirection('n')->isNextRoomObvious()) array_push($obviousExits, "north");
+    if ($room->getDirection('e')->isNextRoomObvious()) array_push($obviousExits, "east");
+    if ($room->getDirection('s')->isNextRoomObvious()) array_push($obviousExits, "south");
+    if ($room->getDirection('d')->isNextRoomObvious()) array_push($obviousExits, "down");
+    $sObviousExits = natural_language_join($obviousExits);
+    if (count($obviousExits) == 1)
+      $output .= " The obvious exit is $sObviousExits.";
+    else if (count($obviousExits) > 1)
+      $output .= " The obvious exits are $sObviousExits.";
     return $output;
+  }
+
+  public function inspectItemInRoom($itemName) {
+    $room = $this->getPlayerRoom();
+    //inspect room
+    $roomItem = $room->getComponent('Container')->findItemByName($itemName);
+    // if ($roomItem)
   }
 
   public function resetGameState()
@@ -121,7 +155,7 @@ final class GameState
     $this->globals = array('me' => $player);
     $this->locals = array();
     $this->commandHistory = array();
-    $this->consoleHistory = "Game restarted." . $eol . $this->inspectRoom();
+    $this->consoleHistory = $this->inspectRoom();
     $this->moves = 0;
     $this->exiting = false;
   }

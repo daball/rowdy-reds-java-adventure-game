@@ -74,6 +74,7 @@ class GameObject //implements \Serializable
     $reflectComponent = new \ReflectionClass($component);
     //store the component
     $this->components[$reflectComponent->getShortName()] = $component;
+    return $this->getComponent($reflectComponent->getShortName());
   }
 
   /**

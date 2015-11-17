@@ -4,9 +4,13 @@ namespace game;
 
 require_once __DIR__.'/../game/Direction.php';
 require_once __DIR__.'/../engine/GameState.php';
+require_once 'GameObject.php';
+require_once __DIR__.'/../components/index.php';
 
 use \game\Direction;
 use \engine\GameState;
+use \components\Container;
+use \components\Inspector;
 
 /**
  * Player represents the player's avatar throughout the game.
@@ -16,22 +20,51 @@ class Player
 {
   /**
    * Player's left hand.
-   * @var IAssignable
+   * @var GameObject
    **/
   public $leftHand = null;
 
   /**
    * Player's right hand.
-   * @var IAssignable
+   * @var GameObject
    **/
   public $rightHand = null;
 
   /**
    * Player's location in the game.
-   * @var IAssignable
+   * @var String
    * @ignore
    **/
   protected $location = null;
+
+  public function __construct() {
+    $handDefinition = function ($which) {
+      return function ($hand) use ($which) {
+        $hand->addComponent(new Container())->define(function ($container) {
+          $container->setMaxItems(1);
+        });
+        $hand->addComponent(new Inspector())->define(function ($inspector) use ($which) {
+          $inspector->onInspect(function ($inspector) use ($which) {
+            $hand = $inspector->getParent();
+            $container = $hand->getComponent('Container');
+            if (!$container->countItems())
+              return "Your $which hand is empty.";
+            else {
+              $item = $container->getItemAt(0);
+              $itemInspector = $item->getComponent('Inspector');
+              if (!$itemInspector)
+                return "The item in your $which hand is not inspectable.";
+              else
+                return $itemInspector->inspect();
+            }
+          });
+        });
+      };
+    };
+
+    $this->leftHand = (new GameObject('leftHand'))->define($handDefinition('left'));
+    $this->rightHand = (new GameObject('rightHand'))->define($handDefinition('right'));
+  }
 
   /**
     * Navigates North.
@@ -116,7 +149,7 @@ class Player
         //put the avatar in the next room
         $this->location = $nextRoom;
         //return next room description
-        return $gameState->getPlayerRoom()->getComponent('Inspector')->inspect();
+        return $gameState->inspectRoom();
       // }
     }
     else {
@@ -140,5 +173,13 @@ class Player
 
   public function setLocation($location) {
     $this->location = $location;
+  }
+
+  public function getLeftHand() {
+    return $this->leftHand;
+  }
+
+  public function getRightHand() {
+    return $this->rightHand;
   }
 }
