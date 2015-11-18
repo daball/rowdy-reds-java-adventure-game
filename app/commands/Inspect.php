@@ -50,7 +50,10 @@ class InspectCommandHandler extends BaseCommandHandler
       return $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
     else if ($inspectWhat == 'rightHand'
           || $inspectWhat == 'me.rightHand')
-          return $gameState->getPlayer()->getRightHand()->getComponent('Inspector')->inspect();
+      return $gameState->getPlayer()->getRightHand()->getComponent('Inspector')->inspect();
+    else if (($item = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
+      return $item->getComponent('Inspector')->inspect();
+    //else if ($item = $gameState->getPlayer()->getBackpack()->getComponent('Container')->findItemWithin)
     // else {
     //   if (($item = $this->isPlayerItem($inspectWhat)) !== FALSE) {
     //     if ($item === null)
@@ -72,10 +75,8 @@ class InspectCommandHandler extends BaseCommandHandler
     //     else
     //       return "The item in the room is not inspectable.";
     //   }
-      else {
+      else
         return "I don't know what an $inspectWhat is.";
-      }
-    // }
   }
 }
 

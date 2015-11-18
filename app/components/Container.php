@@ -33,7 +33,7 @@ class Container extends BaseComponent
 
   public function __construct() {
     $this->define(function ($container) {
-      $container->maxItems = -1;
+      $container->setMaxItems(-1);
       $container->items = array();
       $container->validItemTypes = array('\game\GameObject');
       $setLogic = function ($container, $index, $item) {
@@ -143,24 +143,39 @@ class Container extends BaseComponent
     return count($this->items);
   }
 
-  public function findItemIndexByName($gameObjectName) {
+  public function findItemIndexByName($itemName) {
     for ($i = 0; $i < count($this->items); $i++) {
       if ($this->hasItemAt($i) &&
-          $this->getItemAt($i)->getName() == $gameObjectName)
+          $this->getItemAt($i)->getName() == $itemName)
           return $i;
     }
     return -1;
   }
 
-  public function findItemByName($gameObjectName) {
-    $i = $this->findItemIndexByName($gameObjectName);
+  public function findItemByName($itemName) {
+    $i = $this->findItemIndexByName($itemName);
     if ($i > -1)
       return $this->getItemAt($i);
     return null;
   }
 
+
   public function findIndexByItem($item) {
     return array_search($item, $this->items);
+  }
+
+  public function findNestedItemByName($itemName) {
+    if (($item = $this->findItemByName($itemName)) != null)
+      return $item;
+    else if ($this->getParent()->hasComponent('Container')) {
+      foreach ($this->getAllItems() as $searchable) {
+        if ($searchable->hasComponent('Container')
+        && ($item = $searchable->getComponent('Container')->findNestedItemByName($itemName)) != null) {
+          return $item;
+        }
+      }
+    }
+    return null;
   }
 
   public function itemExists($item) {
