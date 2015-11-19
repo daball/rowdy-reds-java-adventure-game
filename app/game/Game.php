@@ -24,7 +24,13 @@ class Game extends GameObject
   ///Gets the room by the roomName from the rooms array
   public function getRoom($roomName)
   {
-    return $this->rooms[$roomName];
+    if (array_key_exists($roomName, $this->rooms))
+      return $this->rooms[$roomName];
+  }
+
+  public function getAllRooms()
+  {
+    return $this->rooms;
   }
 
   ///Gets the room name where spawn is true

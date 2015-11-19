@@ -53,7 +53,6 @@ class Direction extends GameObject
       case "d":
         return self::$d;
     }
-    throw new DirectionException();
   }
 
   public static function oppositeDirection($direction)
@@ -73,7 +72,6 @@ class Direction extends GameObject
       case self::$d:
         return self::$u;
     }
-    throw new DirectionException();
   }
 
   public static function fullDirection($direction)
@@ -93,7 +91,6 @@ class Direction extends GameObject
       case self::$d:
         return "down";
     }
-    throw new DirectionException();
   }
 
   protected $nextRoomName = "";

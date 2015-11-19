@@ -10,6 +10,7 @@ var app;
                 this.$uibModal = $uibModal;
                 this.commandLine = "";
                 this.commandLineReadOnly = false;
+                var scope = this;
                 this.gameName = $routeParams.gameName;
                 this.game = {
                     imageUrl: "loading.png",
@@ -22,6 +23,25 @@ var app;
                 };
                 this.gameResource = gameService.playGame();
                 this.reconnectGame();
+                this.consoleHistoryAceOption = {
+                    useWrapMode: true,
+                    showGutter: true,
+                    theme: 'twilight',
+                    onLoad: function (_ace) {
+                        return scope.onConsoleHistoryLoaded(_ace, scope);
+                    },
+                    onChange: function (_ace) {
+                        return scope.onConsoleHistoryChanged(_ace, scope);
+                    }
+                };
+                this.commandLineAceOption = {
+                    useWrapMode: true,
+                    showGutter: true,
+                    theme: 'twilight',
+                    onLoad: function (_ace) {
+                        return scope.onCommandLineLoaded(_ace, scope);
+                    }
+                };
             }
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
@@ -30,7 +50,6 @@ var app;
             PlayGameCtrl.prototype.reconnectGame = function () {
                 var _this = this;
                 this.gameResource.get({ gameName: this.gameName }, function (game) {
-                    console.log(game);
                     if (game.commandHistory)
                         _this.updateGame(game);
                     else if (game.error)
@@ -41,7 +60,6 @@ var app;
                 var _this = this;
                 this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
                 this.gameResource.save({ gameName: this.gameName, commandLine: command }, function (game) {
-                    console.log(game);
                     if (game.commandHistory)
                         _this.updateGame(game);
                     else if (game.error)
@@ -68,7 +86,8 @@ var app;
                 var scope = this;
                 modalInstance.result.then(function () { scope.reconnectGame(); }, function () { scope.reconnectGame(); });
             };
-            PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor) {
+            PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
+                console.log('onConsoleHistoryLoaded', scope);
                 editor.on('focus', function () {
                     editor.blur();
                 });
@@ -88,11 +107,11 @@ var app;
                     }
                 };
             };
-            PlayGameCtrl.prototype.onConsoleHistoryChanged = function (e) {
+            PlayGameCtrl.prototype.onConsoleHistoryChanged = function (e, scope) {
                 var editor = e[1];
                 editor.scrollToLine(editor.session.doc.getLength(), false, true);
             };
-            PlayGameCtrl.prototype.onCommandLineLoaded = function (editor) {
+            PlayGameCtrl.prototype.onCommandLineLoaded = function (editor, scope) {
                 editor.session.gutterRenderer = {
                     getWidth: function (session, lastLineNumber, config) {
                         return 3 * config.characterWidth;
@@ -102,7 +121,7 @@ var app;
                     }
                 };
             };
-            PlayGameCtrl.prototype.onCommandLineChanged = function () {
+            PlayGameCtrl.prototype.onCommandLineChanged = function (e) {
                 var scope = this;
                 if (scope.commandLine.indexOf('\n') > -1) {
                     console.log('onCommandLineChanged() hit');

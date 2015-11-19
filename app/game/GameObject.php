@@ -3,7 +3,9 @@
 namespace game;
 
 require_once __DIR__.'/../util/TDefine.php';
+require_once __DIR__.'/../components/Inspector.php';
 
+use \components\Inspector;
 use \util\TDefine;
 
 /**
@@ -39,6 +41,9 @@ class GameObject //implements \Serializable
   public function __construct($name) {
     $this->define(function ($gameObject) use ($name) {
       $gameObject->setName($name);
+      $gameObject->addComponent((new Inspector())->define(function ($inspector) use ($name) {
+        return "You don't see anything interesting about $name.";
+      }));
     });
   }
 

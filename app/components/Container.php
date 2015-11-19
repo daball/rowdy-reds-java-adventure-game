@@ -23,13 +23,13 @@ class Container extends BaseComponent
    **/
   protected $validItemTypes = null;
 
-  protected $onBeforeSetCallback = null;
-  protected $onSetCallback = null;
-  protected $onRefuseSetCallback = null;
+  protected $onBeforeSetClosure = null;
+  protected $onSetClosure = null;
+  protected $onRefuseSetClosure = null;
 
-  protected $onBeforeUnsetCallback = null;
-  protected $onUnsetCallback = null;
-  protected $onRefuseUnsetCallback = null;
+  protected $onBeforeUnsetClosure = null;
+  protected $onUnsetClosure = null;
+  protected $onRefuseUnsetClosure = null;
 
   public function __construct() {
     $this->define(function ($container) {
@@ -91,30 +91,31 @@ class Container extends BaseComponent
   }
 
   public function setItemAt($index, $item) {
-    $onBeforeSetCallback = $this->onBeforeSetCallback;
-    $onSetCallback = $this->onSetCallback;
-    $onRefuseSetCallback = $this->onRefuseSetCallback;
+    $onBeforeSet = $this->onBeforeSet();
+    $onSet = $this->onSet();
+    $onRefuseSet = $this->onRefuseSet();
 
-    if ($onBeforeSetCallback($this, $index, $item)) {
+    if ($onBeforeSet($this, $index, $item)) {
       $this->items[$index] = $item;
-      return $onSetCallback($this, $index, $item);
+      return $onSet($this, $index, $item);
     }
     else
-      return $onRefuseSetCallback($this, $index, $item);
+      return $onRefuseSet($this, $index, $item);
   }
 
   public function unsetItemAt($index) {
-    $onBeforeUnsetCallback = $this->onBeforeUnsetCallback;
-    $onUnsetCallback = $this->onUnsetCallback;
-    $onRefuseUnsetCallback = $this->onRefuseUnsetCallback;
+    $onBeforeUnset = $this->onBeforeUnset();
+    $onUnset = $this->onUnset();
+    $onRefuseUnset = $this->onRefuseUnset();
+
     $item = $this->getItemAt($index);
 
-    if ($onBeforeUnsetCallback($this, $index, $item)) {
+    if ($onBeforeUnset($this, $index, $item)) {
       unset($this->items[$index]);
-      return $onUnsetCallback($this, $index, $item);
+      return $onUnset($this, $index, $item);
     }
     else
-      return $onRefuseUnsetCallback($this, $index, $item);
+      return $onRefuseUnset($this, $index, $item);
   }
 
   public function hasItemAt($index) {
@@ -198,29 +199,41 @@ class Container extends BaseComponent
       || ($this->maxItems >= 0 && $index >= $this->maxItems));
   }
 
-  /* Event Callback Registration Functions */
+  /* Event Closure Registration Functions */
 
-  public function onBeforeSet($callback) {
-    $this->onBeforeSetCallback = $this->serializableClosure($callback);
+  public function onBeforeSet($closure=null) {
+    if ($closure)
+      $this->onBeforeSetClosure = $this->serializableClosure($closure);
+    return $this->onBeforeSetClosure;
   }
 
-  public function onSet($callback) {
-    $this->onSetCallback = $this->serializableClosure($callback);
+  public function onSet($closure=null) {
+    if ($closure)
+      $this->onSetClosure = $this->serializableClosure($closure);
+    return $this->onSetClosure;
   }
 
-  public function onRefuseSet($callback) {
-    $this->onRefuseSetCallback = $this->serializableClosure($callback);
+  public function onRefuseSet($closure=null) {
+    if ($closure)
+      $this->onRefuseSetClosure = $this->serializableClosure($closure);
+    return $this->onRefuseSetClosure;
   }
 
-  public function onBeforeUnset($callback) {
-    $this->onBeforeUnsetCallback = $this->serializableClosure($callback);
+  public function onBeforeUnset($closure=null) {
+    if ($closure)
+      $this->onBeforeUnsetClosure = $this->serializableClosure($closure);
+    return $this->onBeforeUnsetClosure;
   }
 
-  public function onUnset($callback) {
-    $this->onUnsetCallback = $this->serializableClosure($callback);
+  public function onUnset($closure=null) {
+    if ($closure)
+      $this->onUnsetClosure = $this->serializableClosure($closure);
+    return $this->onUnsetClosure;
   }
 
-  public function onRefuseUnset($callback) {
-    $this->onRefuseUnsetCallback = $this->serializableClosure($callback);
+  public function onRefuseUnset($closure=null) {
+    if ($closure)
+      $this->onRefuseUnsetClosure = $this->serializableClosure($closure);
+    return $this->onRefuseSetClosure;
   }
 }

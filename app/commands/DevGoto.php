@@ -1,0 +1,53 @@
+<?php
+
+namespace commands;
+
+require_once __DIR__.'/../engine/GameState.php';
+require_once __DIR__.'/../engine/GameEngine.php';
+require_once __DIR__.'/../engine/CommandProcessor.php';
+require_once 'BaseCommandHandler.php';
+
+use engine\CommandProcessor;
+use engine\GameState;
+use engine\GameEngine;
+
+class DevGoto extends BaseCommandHandler
+{
+  private function getTargetName($commandLine)
+  {
+    if (stripos($commandLine, 'goto') === 0)
+      return trim(substr($commandLine, 5));
+    else
+      return "";
+  }
+
+  public function validateCommand($commandLine)
+  {
+    return (GameEngine::isApplicationEnv('development')
+        && stripos($commandLine, 'goto') === 0);
+  }
+
+  public function executeCommand($commandLine)
+  {
+    $gameState = GameState::getInstance();
+    $gotoWhere = $this->getTargetName($commandLine);
+    if ($gotoWhere === "") {
+      $output = "DEVELOPMENT MODE ONLY:  ";
+      $output .= "Type goto [room name] in order to inspert player into that room, despite any game rules.\n";
+      $output .= "The following rooms exist in the game:\n";
+      foreach ($gameState->getGame()->getAllRooms() as $room) {
+        $output .= "  " . $room->getName() . "\n";
+      }
+      return $output;
+    }
+    else if ($room = $gameState->getGame()->getRoom($gotoWhere)) {
+      $gameState->getPlayer()->setLocation($room->getName());
+      return "DEVELOPMENT MODE ONLY: You have been inserted into $gotoWhere, despite any game rules.\n" . $gameState->inspectRoom();
+    }
+    else
+      return "DEVELOPMENT MODE ONLY: $gotoWhere does not exist in the game.";
+  }
+
+}
+
+CommandProcessor::addCommandHandler(new DevGoto());

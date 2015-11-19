@@ -73,6 +73,16 @@ class GameEngine
     }
   }
 
+  /**
+   * Checks the APPLICATION_ENV variable passed into PHP by the web server.
+   * $env should be one of debug, staging, or production and is provided by the
+   * server configuration by the administrator.
+   **/
+  public static function isApplicationEnv($env) {
+    return (array_key_exists('APPLICATION_ENV', $_SERVER)
+        && strtolower($_SERVER['APPLICATION_ENV']) == strtolower($env));
+  }
+
   public function __construct($gameName)
   {
     //check if existing gameState exists in session

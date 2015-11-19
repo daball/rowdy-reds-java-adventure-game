@@ -10,7 +10,7 @@ require_once 'TUsesItems.php';
 use engine\CommandProcessor;
 use engine\GameState;
 
-class IAssignable_assignCommandHandler extends BaseCommandHandler
+class Assign extends BaseCommandHandler
 {
   use TUsesItems;
 
@@ -149,4 +149,4 @@ class IAssignable_assignCommandHandler extends BaseCommandHandler
 
 }
 
-CommandProcessor::addCommandHandler(new IAssignable_assignCommandHandler());
+CommandProcessor::addCommandHandler(new Assign());

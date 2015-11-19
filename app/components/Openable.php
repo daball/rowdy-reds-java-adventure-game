@@ -13,25 +13,19 @@ class Openable extends BaseComponent
 {
   protected $opened = false;
 
-  protected $onBeforeOpenCallback = null;
-  protected $onOpenCallback = null;
-  protected $onRefuseOpenCallback = null;
+  protected $onBeforeOpenClosure = null;
+  protected $onOpenClosure = null;
+  protected $onRefuseOpenClosure = null;
 
-  protected $onBeforeCloseCallback = null;
-  protected $onCloseCallback = null;
-  protected $onRefuseCloseCallback = null;
+  protected $onBeforeCloseClosure = null;
+  protected $onCloseClosure = null;
+  protected $onRefuseCloseClosure = null;
 
   public function __construct() {
     $this->define(function ($openable) {
       $openable->onBeforeOpen(function ($openable) {
-        return (
-            //If Openable doesn't have a parent
-            !$openable->getParent() ||
-            //Or, Openable's parent doesn't have a Lockable
-            !$openable->getParent()->hasComponent('Lockable') ||
-            //Or, Openable's parent has a Lockable and the Lockable is unlocked
-            !$openable->getParent()->getComponent('Lockable')->isLocked()
-          );
+        //No reason not to
+        return true;
       });
       $openable->onBeforeClose(function ($openable) {
         //No reason not to
@@ -41,7 +35,7 @@ class Openable extends BaseComponent
         return "The object was opened.";
       });
       $openable->onRefuseOpen(function ($openable) {
-        return "The object was not opened. Perhaps it is locked.";
+        return "The object was not opened.";
       });
       $openable->onClose(function ($openable) {
         return "You closed the object.";
@@ -65,29 +59,29 @@ class Openable extends BaseComponent
   /* Public API for Component */
 
   public function open() {
-    $onBeforeOpenCallback = $this->onBeforeOpenCallback;
-    $onOpenCallback = $this->onOpenCallback;
-    $onRefuseOpenCallback = $this->onRefuseOpenCallback;
+    $onBeforeOpen = $this->onBeforeOpen();
+    $onOpen = $this->onOpen();
+    $onRefuseOpen = $this->onRefuseOpen();
 
-    if ($onBeforeOpenCallback($this)) {
+    if ($onBeforeOpen($this)) {
       $this->setOpened();
-      return $onOpenCallback($this);
+      return $onOpen($this);
     }
     else
-      return $onRefuseOpenCallback($this);
+      return $onRefuseOpen($this);
   }
 
   public function close() {
-    $onBeforeCloseCallback = $this->onBeforeCloseCallback;
-    $onCloseCallback = $this->onCloseCallback;
-    $onRefuseCloseCallback = $this->onRefuseCloseCallback;
+    $onBeforeClose = $this->onBeforeClose;
+    $onClose = $this->onClose;
+    $onRefuseClose = $this->onRefuseClose;
 
-    if ($onBeforeCloseCallback($this)) {
+    if ($onBeforeClose($this)) {
       $this->setClosed();
-      return $onCloseCallback($this);
+      return $onClose($this);
     }
     else
-      return $onRefuseCloseCallback($this);
+      return $onRefuseClose($this);
   }
 
   public function isOpened() {
@@ -98,29 +92,41 @@ class Openable extends BaseComponent
     return !$this->isOpened();
   }
 
-  /* Event Callback Registration Functions */
+  /* Event Closure Registration Functions */
 
-  public function onBeforeOpen($callback) {
-    $this->onBeforeOpenCallback = $this->serializableClosure($callback);
+  public function onBeforeOpen($closure=null) {
+    if ($closure)
+      $this->onBeforeOpenClosure = $this->serializableClosure($closure);
+    return $this->onBeforeOpenClosure;
   }
 
-  public function onOpen($callback) {
-    $this->onOpenCallback = $this->serializableClosure($callback);
+  public function onOpen($closure=null) {
+    if ($closure)
+      $this->onOpenClosure = $this->serializableClosure($closure);
+    return $this->onOpenClosure;
   }
 
-  public function onRefuseOpen($callback) {
-    $this->onRefuseOpenCallback = $this->serializableClosure($callback);
+  public function onRefuseOpen($closure=null) {
+    if ($closure)
+      $this->onRefuseOpenClosure = $this->serializableClosure($closure);
+    return $this->onRefuseOpenClosure;
   }
 
-  public function onBeforeClose($callback) {
-    $this->onBeforeCloseCallback = $this->serializableClosure($callback);
+  public function onBeforeClose($closure=null) {
+    if ($closure)
+      $this->onBeforeCloseClosure = $this->serializableClosure($closure);
+    return $this->onBeforeCloseClosure;
   }
 
-  public function onClose($callback) {
-    $this->onCloseCallback = $this->serializableClosure($callback);
+  public function onClose($closure=null) {
+    if ($closure)
+      $this->onCloseClosure = $this->serializableClosure($closure);
+    return $this->onCloseClosure;
   }
 
-  public function onRefuseClose($callback) {
-    $this->onRefuseCloseCallback = $this->serializableClosure($callback);
+  public function onRefuseClose($closure=null) {
+    if ($closure)
+      $this->onRefuseCloseClosure = $this->serializableClosure($closure);
+    return $this->onRefuseCloseClosure;
   }
 }

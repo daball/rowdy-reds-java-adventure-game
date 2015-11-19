@@ -17,23 +17,12 @@
     <div class="col-xs-6 no-space">
       <div class="row consoleHistory disableMarginRight">
         <div class="col-sm-12 no-space">
-          <div ui-ace="{
-            useWrapMode: true,
-            showGutter: true,
-            theme: 'twilight',
-            onLoad: vm.onConsoleHistoryLoaded,
-            onChange: vm.onConsoleHistoryChanged,
-          }" ng-model="vm.game.consoleHistory" readonly></div>
+          <div ui-ace="vm.consoleHistoryAceOption" ng-model="vm.game.consoleHistory" readonly></div>
         </div>
       </div>
       <div class="row commandLine disableMarginRight">
         <div class="col-sm-12 no-space">
-          <div id="commandLine" ui-ace="{
-            useWrapMode: true,
-            showGutter: true,
-            theme: 'twilight',
-            onLoad: vm.onCommandLineLoaded,
-          }" ng-model="vm.commandLine" ng-change="vm.onCommandLineChanged()"
+          <div ui-ace="vm.commandLineAceOption" ng-model="vm.commandLine" ng-change="vm.onCommandLineChanged()"
           ng-readonly="vm.commandLineReadOnly"></div>
         </div>
       </div>

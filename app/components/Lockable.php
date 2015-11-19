@@ -27,6 +27,22 @@ class Lockable extends BaseComponent
 
   public function __construct(Key $key) {
     $this->define(function ($lockable) use ($key) {
+      //override openable logic to cater to lockable
+      if ($lockable->getParent()
+       && $lockable->getParent()->hasComponent('Openable'))
+      {
+        $openable = $lockable->getParent()->getComponent('Openable');
+        $onBeforeOpen = $openable->onBeforeOpen();
+        $openable->onBeforeOpen(function ($openable) use ($onBeforeOpen) {
+          return $onBeforeOpen($openable)
+              && !$openable->getParent()->getComponent('Lockable')->isLocked();
+        });
+        $onRefuseOpen = $openable->onRefuseOpen();
+        $openable->onRefuseOpen(function ($openable) use ($onRefuseOpen) {
+          return $onRefuseOpen() . " Perhaps it is locked.";
+        });
+      }
+
       $lockable->setKey($key);
       //This defines the logic for locking/unlocking an object
       $lockLogic = function ($lockable, $keyProvided) {
@@ -71,29 +87,29 @@ class Lockable extends BaseComponent
   /* Public API for Component */
 
   public function lock(Key $key) {
-    $onBeforeLockCallback = $this->onBeforeLockCallback;
-    $onLockCallback = $this->onLockCallback;
-    $onRefuseLockCallback = $this->onRefuseLockCallback;
+    $onBeforeLock = $this->onBeforeLock();
+    $onLock = $this->onLock();
+    $onRefuseLock = $this->onRefuseLock();
 
-    if ($onBeforeLockCallback($this, $key)) {
+    if ($onBeforeLock($this, $key)) {
       $this->setLocked();
-      return $onLockCallback($this, $key);
+      return $onLock($this, $key);
     }
     else
-      return $onRefuseLockCallback($this, $key);
+      return $onRefuseLock($this, $key);
   }
 
   public function unlock(Key $key) {
-    $onBeforeUnlockCallback = $this->onBeforeUnlockCallback;
-    $onUnlockCallback = $this->onUnlockCallback;
-    $onRefuseUnlockCallback = $this->onRefuseUnlockCallback;
+    $onBeforeUnlock = $this->onBeforeUnlock();
+    $onUnlock = $this->onUnlock();
+    $onRefuseUnlock = $this->onRefuseUnlock();
 
-    if ($onBeforeUnlockCallback($this, $key)) {
+    if ($onBeforeUnlock($this, $key)) {
       $this->setUnlocked();
-      return $onUnlockCallback($this, $key);
+      return $onUnlock($this, $key);
     }
     else
-      return $onRefuseUnlockCallback($this, $key);
+      return $onRefuseUnlock($this, $key);
   }
 
   public function isLocked() {
@@ -106,27 +122,39 @@ class Lockable extends BaseComponent
 
   /* Event Callback Registration Functions */
 
-  public function onBeforeLock($callback) {
-    $this->onBeforeLockCallback = $this->serializableClosure($callback);
+  public function onBeforeLock($callback=null) {
+    if ($callback)
+      $this->onBeforeLockCallback = $this->serializableClosure($callback);
+    return $this->onBeforeLockCallback;
   }
 
-  public function onLock($callback) {
-    $this->onLockCallback = $this->serializableClosure($callback);
+  public function onLock($callback=null) {
+    if ($callback)
+      $this->onLockCallback = $this->serializableClosure($callback);
+    return $this->onLockCallback;
   }
 
-  public function onRefuseLock($callback) {
-    $this->onRefuseLockCallback = $this->serializableClosure($callback);
+  public function onRefuseLock($callback=null) {
+    if ($callback)
+      $this->onRefuseLockCallback = $this->serializableClosure($callback);
+    return $this->onRefuseLockCallback;
   }
 
-  public function onBeforeUnlock($callback) {
-    $this->onBeforeUnlockCallback = $this->serializableClosure($callback);
+  public function onBeforeUnlock($callback=null) {
+    if ($callback)
+      $this->onBeforeUnlockCallback = $this->serializableClosure($callback);
+    return $this->onBeforeUnlockCallback;
   }
 
-  public function onUnlock($callback) {
-    $this->onUnlockCallback = $this->serializableClosure($callback);
+  public function onUnlock($callback=null) {
+    if ($callback)
+      $this->onUnlockCallback = $this->serializableClosure($callback);
+    return $this->onUnlockCallback;
   }
 
-  public function onRefuseUnlock($callback) {
-    $this->onRefuseUnlockCallback = $this->serializableClosure($callback);
+  public function onRefuseUnlock($callback=null) {
+    if ($callback)
+      $this->onRefuseUnlockCallback = $this->serializableClosure($callback);
+    return $this->onRefuseUnlockCallback;
   }
 }

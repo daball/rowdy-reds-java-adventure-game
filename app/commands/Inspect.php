@@ -4,13 +4,31 @@ namespace commands;
 
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/CommandProcessor.php';
+require_once __DIR__.'/../game/Direction.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
 
 use engine\CommandProcessor;
 use engine\GameState;
+use game\Direction;
+use game\DirectionException;
 
-class InspectCommandHandler extends BaseCommandHandler
+function is_vowel($letter) {
+  $letter = strtolower($letter);
+  return $letter === 'a'
+      || $letter === 'e'
+      || $letter === 'i'
+      || $letter === 'o'
+      || $letter === 'u';
+}
+
+function insertAOrAn($beforeWord) {
+  if (is_vowel(substr($beforeWord, 0, 1)))
+    return "an $beforeWord";
+  return "a $beforeWord";
+}
+
+class Inspect extends BaseCommandHandler
 {
   use TUsesItems;
 
@@ -42,42 +60,40 @@ class InspectCommandHandler extends BaseCommandHandler
     $gameState = GameState::getInstance();
     $inspectWhat = $this->getTargetName($commandLine);
     // echo $inspectWhat;
-    if ($inspectWhat === "")
+    if ($inspectWhat === "" || strtolower($inspectWhat) == 'room')
       //no parameters, inspect the room
       return $gameState->inspectRoom();
+    else if (Direction::cardinalDirection($inspectWhat))
+      //direction provided, inspect direction from inside room
+      return $gameState->getPlayerRoom()->getDirection($inspectWhat)->getComponent('Inspector')->inspect();
     else if ($inspectWhat == 'leftHand'
           || $inspectWhat == 'me.leftHand')
+      //left hand provided, inspect contents of left hand
       return $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
     else if ($inspectWhat == 'rightHand'
           || $inspectWhat == 'me.rightHand')
+      //right hand provided, inspect contents of right hand
       return $gameState->getPlayer()->getRightHand()->getComponent('Inspector')->inspect();
+    else if (($inspectWhat == 'backpack'
+          || $inspectWhat == 'me.backpack')
+          && $gameState->getPlayer()->getBackpack())
+      //backpack provided, inspect contents of backpack
+      return $gameState->getPlayer()->getBackpack()->getComponent('Inspector')->inspect();
     else if (($item = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
+      //room item (or item within any container hierarchy in room) provided, inspect item
       return $item->getComponent('Inspector')->inspect();
-    //else if ($item = $gameState->getPlayer()->getBackpack()->getComponent('Container')->findItemWithin)
+    // else if ($item = $gameState->getPlayer()->getBackpack()->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
+      //backpack item provided, inspect contents of back pack
+      // return $item->getComponent('Inspector')->inspect();
     // else {
-    //   if (($item = $this->isPlayerItem($inspectWhat)) !== FALSE) {
-    //     if ($item === null)
-    //       return "Your hand is empty.";
-    //     else if (is_a($item, '\playable\IInspectable'))
-    //       return $item->inspect();
-    //     else
-    //       return "The item in your hand is not inspectable.";
-    //   }
-    //   else if (($item = $this->isRoomItem($inspectWhat)) !== FALSE) {
-    //     if (is_a($item, '\playable\IInspectable'))
-    //       return $item->inspect();
-    //     else
-    //       return "The item in the room is not inspectable.";
-    //   }
     //   else if (($item = $isItemInContainerInRoom($itemInQuestion)) !== FALSE) {
     //     if (is_a($item, '\playable\IInspectable'))
     //       return $item->inspect();
     //     else
     //       return "The item in the room is not inspectable.";
     //   }
-      else
-        return "I don't know what an $inspectWhat is.";
+    return "I don't know what " . insertAOrAn($inspectWhat) . " is.";
   }
 }
 
-CommandProcessor::addCommandHandler(new InspectCommandHandler());
+CommandProcessor::addCommandHandler(new Inspect());

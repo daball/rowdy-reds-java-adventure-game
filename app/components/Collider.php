@@ -30,8 +30,8 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-   protected $onBeforeCollideCallback = null;
-   protected $onCollideCallback = null;
+   protected $onBeforeCollideClosure = null;
+   protected $onCollideClosure = null;
 
   /**
    * @ignore
@@ -96,8 +96,8 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function collide($direction) {
-    $onBeforeCollide = $this->onBeforeCollideCallback;
-    $onCollide = $this->onCollideCallback;
+    $onBeforeCollide = $this->onBeforeCollide();
+    $onCollide = $this->onCollide();
 
     $collisionEvent = false;
     if ($onBeforeCollide($this, $direction))
@@ -108,14 +108,18 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-  public function onBeforeCollide($callback) {
-    $this->onBeforeCollideCallback = $this->serializableClosure($callback);
+  public function onBeforeCollide($closure) {
+    if ($closure)
+      $this->onBeforeCollideClosure = $this->serializableClosure($closure);
+    return $this->onBeforeCollideClosure;
   }
 
   /**
    * @ignore
    */
-  public function onCollide($callback) {
-    $this->onCollideCallback = $this->serializableClosure($callback);
+  public function onCollide($closure) {
+    if ($closure)
+      $this->onCollideClosure = $this->serializableClosure($closure);
+    return $this->onCollideClosure;
   }
 }

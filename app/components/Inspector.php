@@ -14,7 +14,7 @@ class Inspector extends BaseComponent
   /**
    * @ignore
    */
-  protected $onInspectCallback = null;
+  protected $onInspectClosure = null;
 
   /**
    * @ignore
@@ -31,15 +31,16 @@ class Inspector extends BaseComponent
    * @ignore
    */
   public function inspect() {
-    $description = "";
-    $onInspectCallback = $this->onInspectCallback;
-    return $onInspectCallback($this);
+    $onInspect = $this->onInspect();
+    return $onInspect($this);
   }
 
   /**
    * @ignore
    */
-  public function onInspect($callback) {
-    $this->onInspectCallback = $this->serializableClosure($callback);
+  public function onInspect($closure=null) {
+    if ($closure)
+      $this->onInspectClosure = $this->serializableClosure($closure);
+    return $this->onInspectClosure;
   }
 }

@@ -1,11 +1,13 @@
 <?php
 
 namespace commands;
-use engine\CommandProcessor;
-use engine\GameState;
 
 require_once __DIR__.'/../engine/CommandProcessor.php';
+require_once __DIR__.'/../engine/GameEngine.php';
 require_once 'BaseCommandHandler.php';
+
+use engine\CommandProcessor;
+use engine\GameEngine;
 
 ///Handles help command.
 class HelpCommandHandler extends BaseCommandHandler
@@ -26,8 +28,13 @@ class HelpCommandHandler extends BaseCommandHandler
   public function executeCommand($commandLine)
   {
     $eol = "\n";
+    $isDevMode = GameEngine::isApplicationEnv("development");
+    $devCommands = "DEVELOPMENT MODE ONLY:$eol"
+                  ."goto - lists all rooms you can go to$eol"
+                  ."goto [room name] - enters a room, despite any game logic$eol$eol";
     return  "********* HELP MENU *********" . $eol
           . $eol
+          . ($isDevMode?$devCommands:"")
           . "Goal: Explore our tiny castle." . $eol
           . $eol
           . "New experimental commands:" . $eol
@@ -47,16 +54,19 @@ class HelpCommandHandler extends BaseCommandHandler
           . "exit or System.exit(0);" . $eol
           . $eol
           . "Move north by typing:" . $eol
-          . "north, n, or moveNorth();" . $eol
+          . "north, n, or moveNorth(); or me.moveNorth();" . $eol
           . $eol
           . "Move south by typing:" . $eol
-          . "south, s, or moveSouth();" . $eol
+          . "south, s, or moveSouth(); or me.moveSouth();" . $eol
           . $eol
           . "Move west by typing:" . $eol
-          . "west, w, moveWest();" . $eol
+          . "west, w, moveWest(); or me.moveWest();" . $eol
           . $eol
           . "Move east by typing:" . $eol
-          . "east, e, moveEast();" . $eol
+          . "east, e, moveEast(); or me.moveEast();" . $eol
+          . $eol
+          . "Move up by typing:" . $eol
+          . "up, u, moveUp(); or me.moveUp();" . $eol
           . $eol
           . "********** END HELP **********";
   }
