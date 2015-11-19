@@ -4,12 +4,10 @@ namespace component\tests;
 
 require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/components/Openable.php';
-require_once __DIR__.'/../../../../app/components/Lockable.php';
 require_once __DIR__.'/../../../../app/game/GameObject.php';
 require_once __DIR__.'/../../../../app/playable/Key.php';
 
 use \components\Openable;
-use \components\Lockable;
 use \game\GameObject;
 use \playable\Key;
 
@@ -67,36 +65,5 @@ class OpenableTest extends \PHPUnit_Framework_TestCase
     });
     $this->assertTrue(!!$openable->close());
     $this->assertFalse($openable->isOpened());
-  }
-
-  public function testOpenableIntegrationLockable()
-  {
-    $openable = new Openable();
-    $this->assertTrue($openable->isClosed());
-
-    $key = new Key("anyKey", "anySecret");
-    $lockable = new Lockable($key);
-    $this->assertTrue($lockable->isLocked());
-
-    $parent = new GameObject("myGameObject");
-    $parent->addComponent($openable);
-    //TESTER: do not add lockable yet, we need to negative test
-    //branch two in openable->onBeforeOpen
-
-    $this->assertTrue(!!$openable->open());
-    $this->assertTrue($openable->isOpened());
-    $this->assertTrue(!!$openable->close());
-
-    //now add the lockable, to test branch three in openable->onBeforeOpen
-    $parent->addComponent($lockable);
-
-    $this->assertTrue(!!$openable->open());
-    $this->assertFalse($openable->isOpened());
-    $this->assertTrue(!!$openable->close());
-
-    $this->assertTrue(!!$lockable->unlock($key));
-    $this->assertTrue(!!$openable->open());
-    $this->assertTrue($openable->isOpened());
-    $this->assertTrue(!!$openable->close());
   }
 }

@@ -3,7 +3,8 @@ var app;
     var domain;
     (function (domain) {
         var GameInProgress = (function () {
-            function GameInProgress(roomName, imageUrl, consoleHistory, commandHistory, eol, prompt, moves, isExiting) {
+            function GameInProgress(gameName, roomName, imageUrl, consoleHistory, commandHistory, eol, prompt, moves, isExiting) {
+                this.gameName = gameName;
                 this.roomName = roomName;
                 this.imageUrl = imageUrl;
                 this.consoleHistory = consoleHistory;

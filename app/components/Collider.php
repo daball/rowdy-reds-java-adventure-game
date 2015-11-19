@@ -108,7 +108,7 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-  public function onBeforeCollide($closure) {
+  public function onBeforeCollide($closure=null) {
     if ($closure)
       $this->onBeforeCollideClosure = $this->serializableClosure($closure);
     return $this->onBeforeCollideClosure;
@@ -117,7 +117,7 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-  public function onCollide($closure) {
+  public function onCollide($closure=null) {
     if ($closure)
       $this->onCollideClosure = $this->serializableClosure($closure);
     return $this->onCollideClosure;

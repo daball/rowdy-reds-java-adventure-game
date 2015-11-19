@@ -1,19 +1,17 @@
 <nav class="navbar navbar-fixed-top navbar-radfordred">
     <div class="container-fluid">
         <div class="navbar-header">
-            <div class="navbar-brand">Rowdy Red's Java Adventures &raquo;
-                <span ng-if="!vm.game.roomName">{{vm.gameName}} Connecting...</span>
-                <span ng-if="vm.game.roomName">{{vm.game.gameName}}</span>
+            <div class="navbar-brand">Rowdy Red's Java Adventures
+                <span ng-if="!vm.game.roomName">&raquo; {{vm.gameName}} Connecting...</span>
+                <span ng-if="vm.game.roomName">&raquo; {{vm.game.gameName}}</span>
             </div>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid no-space">
+<div class="container-fluid no-space pad-bottom">
   <div class="row disableMarginRight">
-    <div class="col-xs-6 no-space" style="height:100%;background: url('./img/{{vm.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;">
-      <!-- <img src="./images/{{vm.gameName}}/{{vm.game.imageUrl}}" /> -->
-    </div>
+    <div class="col-xs-6 no-space" style="height:100%;background: url('./img/{{vm.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;"></div>
     <div class="col-xs-6 no-space">
       <div class="row consoleHistory disableMarginRight">
         <div class="col-sm-12 no-space">
@@ -30,7 +28,7 @@
   </div>
 </div>
 
-<nav class="navbar navbar-fixed-bottom navbar-rowdyblack">
+<nav class="navbar navbar-fixed-bottom rowdyblack">
     <div class="container-fluid">
         <div class="navbar-header">
             <div class="navbar-brand">

@@ -18,7 +18,6 @@ class GameStateTest extends \PHPUnit_Framework_TestCase
 
     $this->assertEquals($gameState->getGame()->getSpawnPoint(), $gameState->getPlayerRoom()->getName());
     $this->assertEquals($gameState->getGame()->getRoom($gameState->getGame()->getSpawnPoint())->getName(), $gameState->getPlayerRoom()->getName());
-    $this->assertContains("Game started.", $gameState->getConsoleHistory());
     $this->assertContains($gameState->getPlayerRoom()->inspectRoom(), $gameState->getConsoleHistory());
 
     //test inspect room
@@ -35,6 +34,5 @@ class GameStateTest extends \PHPUnit_Framework_TestCase
     $gameState->resetGameState();
     $this->assertEquals($gameState->getGame()->getSpawnPoint(), $gameState->getPlayerRoom()->getName());
     $this->assertEquals($gameState->getGame()->getRoom($gameState->getGame()->getSpawnPoint())->getName(), $gameState->getPlayerRoom()->getName());
-    $this->assertContains("Game restarted.", $gameState->getConsoleHistory());
   }
 }

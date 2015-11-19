@@ -18,6 +18,10 @@ module app {
         templateUrl: "./views/play-game.html",
         controller: "PlayGameCtrl as vm"
       })
+      .when('/game/:gameName/thank-you', {
+        templateUrl: "./views/thank-you.html",
+        controller: "ThankYouCtrl as vm"
+      })
       .otherwise("/");
   }
 }

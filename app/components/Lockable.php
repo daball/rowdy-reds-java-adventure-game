@@ -17,32 +17,16 @@ class Lockable extends BaseComponent
   protected $locked = true;
   protected $key = null;
 
-  protected $onBeforeLockCallback = null;
-  protected $onLockCallback = null;
-  protected $onRefuseLockCallback = null;
+  protected $onBeforeLockClosure = null;
+  protected $onLockClosure = null;
+  protected $onRefuseLockClosure = null;
 
-  protected $onBeforeUnlockCallback = null;
-  protected $onUnlockCallback = null;
-  protected $onRefuseUnlockCallback = null;
+  protected $onBeforeUnlockClosure = null;
+  protected $onUnlockClosure = null;
+  protected $onRefuseUnlockClosure = null;
 
   public function __construct(Key $key) {
     $this->define(function ($lockable) use ($key) {
-      //override openable logic to cater to lockable
-      if ($lockable->getParent()
-       && $lockable->getParent()->hasComponent('Openable'))
-      {
-        $openable = $lockable->getParent()->getComponent('Openable');
-        $onBeforeOpen = $openable->onBeforeOpen();
-        $openable->onBeforeOpen(function ($openable) use ($onBeforeOpen) {
-          return $onBeforeOpen($openable)
-              && !$openable->getParent()->getComponent('Lockable')->isLocked();
-        });
-        $onRefuseOpen = $openable->onRefuseOpen();
-        $openable->onRefuseOpen(function ($openable) use ($onRefuseOpen) {
-          return $onRefuseOpen() . " Perhaps it is locked.";
-        });
-      }
-
       $lockable->setKey($key);
       //This defines the logic for locking/unlocking an object
       $lockLogic = function ($lockable, $keyProvided) {
@@ -52,12 +36,18 @@ class Lockable extends BaseComponent
       $lockable->onBeforeUnlock($lockLogic);
 
       $lockable->onLock(function ($lockable, $keyProvided) {
+        if ($lockable->getParent()
+          && $lockable->getParent()->hasComponent('Openable'))
+          $lockable->getParent()->getComponent('Openable')->close();
         return "You turned the key and the object locks.";
       });
       $lockable->onRefuseLock(function ($lockable, $keyProvided) {
         return "You insert the key, but it doesn't fit the lock.";
       });
       $lockable->onUnlock(function ($lockable, $keyProvided) {
+        if ($lockable->getParent()
+          && $lockable->getParent()->hasComponent('Openable'))
+          $lockable->getParent()->getComponent('Openable')->open();
         return "You turned the key and the object unlocks.";
       });
       $lockable->onRefuseUnlock(function ($lockable, $keyProvided) {
@@ -120,41 +110,41 @@ class Lockable extends BaseComponent
     return !$this->isLocked();
   }
 
-  /* Event Callback Registration Functions */
+  /* Event Closure Registration Functions */
 
-  public function onBeforeLock($callback=null) {
-    if ($callback)
-      $this->onBeforeLockCallback = $this->serializableClosure($callback);
-    return $this->onBeforeLockCallback;
+  public function onBeforeLock($closure=null) {
+    if ($closure)
+      $this->onBeforeLockClosure = $this->serializableClosure($closure);
+    return $this->onBeforeLockClosure;
   }
 
-  public function onLock($callback=null) {
-    if ($callback)
-      $this->onLockCallback = $this->serializableClosure($callback);
-    return $this->onLockCallback;
+  public function onLock($closure=null) {
+    if ($closure)
+      $this->onLockClosure = $this->serializableClosure($closure);
+    return $this->onLockClosure;
   }
 
-  public function onRefuseLock($callback=null) {
-    if ($callback)
-      $this->onRefuseLockCallback = $this->serializableClosure($callback);
-    return $this->onRefuseLockCallback;
+  public function onRefuseLock($closure=null) {
+    if ($closure)
+      $this->onRefuseLockClosure = $this->serializableClosure($closure);
+    return $this->onRefuseLockClosure;
   }
 
-  public function onBeforeUnlock($callback=null) {
-    if ($callback)
-      $this->onBeforeUnlockCallback = $this->serializableClosure($callback);
-    return $this->onBeforeUnlockCallback;
+  public function onBeforeUnlock($closure=null) {
+    if ($closure)
+      $this->onBeforeUnlockClosure = $this->serializableClosure($closure);
+    return $this->onBeforeUnlockClosure;
   }
 
-  public function onUnlock($callback=null) {
-    if ($callback)
-      $this->onUnlockCallback = $this->serializableClosure($callback);
-    return $this->onUnlockCallback;
+  public function onUnlock($closure=null) {
+    if ($closure)
+      $this->onUnlockClosure = $this->serializableClosure($closure);
+    return $this->onUnlockClosure;
   }
 
-  public function onRefuseUnlock($callback=null) {
-    if ($callback)
-      $this->onRefuseUnlockCallback = $this->serializableClosure($callback);
-    return $this->onRefuseUnlockCallback;
+  public function onRefuseUnlock($closure=null) {
+    if ($closure)
+      $this->onRefuseUnlockClosure = $this->serializableClosure($closure);
+    return $this->onRefuseUnlockClosure;
   }
 }

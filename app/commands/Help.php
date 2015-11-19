@@ -32,43 +32,34 @@ class HelpCommandHandler extends BaseCommandHandler
     $devCommands = "DEVELOPMENT MODE ONLY:$eol"
                   ."goto - lists all rooms you can go to$eol"
                   ."goto [room name] - enters a room, despite any game logic$eol$eol";
-    return  "********* HELP MENU *********" . $eol
+
+    return  "Rowdy Red's Java Adventures" . $eol
+          . $eol
+          . "Goal: Explore our tiny castle and battle the dragon if you dare." . $eol
           . $eol
           . ($isDevMode?$devCommands:"")
-          . "Goal: Explore our tiny castle." . $eol
+          . "User interface commands:" . $eol
+          . "  ?     | help            - Displays this help screen" . $eol
+          . "  reset | restart         - Restart the game" . $eol
+          . "  exit  | System.exit(0); - Exit the game" . $eol
+          . $eol
+          . "Navigation commands:" . $eol
+          . "  u | up    | moveUp();    | me.moveUp();    - Navigate up" . $eol
+          . "  w | west  | moveWest();  | me.moveWest();  - Navigate west" . $eol
+          . "  n | north | moveNorth(); | me.moveNorth(); - Navigate north" . $eol
+          . "  s | south | moveSouth(); | me.moveSouth(); - Navigate south" . $eol
+          . "  e | east  | moveEast();  | me.moveEast();  - Navigate east" . $eol
+          . "  d | down  | moveDown();  | me.moveDown();  - Navigate down" . $eol
           . $eol
           . "New experimental commands:" . $eol
-          . "  javadoc - list of known API classes in your javadoc notebook$eol"
-          . "  javadoc ClassName - displays documentation about the API class$eol"
-          . "  locals - displays list of variables is the player variable bag$eol"
-          . "  gc - garbage collects a local variable the player has made$eol"
-          . "  globals - displays list of variables available anywhere in the game$eol"
-          . "  User can instantiate any class for which an API class has been found to a local variable.$eol"
+          . "  javadoc             - Lists known API classes in your JavaDoc notebook$eol"
+          . "  javadoc [ClassName] - Displays JavaDoc documentation about the API class$eol"
+          . "  locals              - Displays list of variables in your variable bag$eol"
+          . "  gc                  - Garbage collects a local variable the player has made$eol"
+          . "  globals             - Lists variables available anywhere in the game$eol"
           . $eol
-          . "HELP displays this help screen." . $eol
-          . $eol
-          . "Restart the game by typing:" . $eol
-          . "restart or reset" . $eol
-          . $eol
-          . "Exit the game by typing:" . $eol
-          . "exit or System.exit(0);" . $eol
-          . $eol
-          . "Move north by typing:" . $eol
-          . "north, n, or moveNorth(); or me.moveNorth();" . $eol
-          . $eol
-          . "Move south by typing:" . $eol
-          . "south, s, or moveSouth(); or me.moveSouth();" . $eol
-          . $eol
-          . "Move west by typing:" . $eol
-          . "west, w, moveWest(); or me.moveWest();" . $eol
-          . $eol
-          . "Move east by typing:" . $eol
-          . "east, e, moveEast(); or me.moveEast();" . $eol
-          . $eol
-          . "Move up by typing:" . $eol
-          . "up, u, moveUp(); or me.moveUp();" . $eol
-          . $eol
-          . "********** END HELP **********";
+          . "  ClassName = new ClassName(); - Instantiate any class for which an API class has been found to a local variable.$eol"
+          ;
   }
 }
 

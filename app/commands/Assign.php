@@ -4,6 +4,7 @@ namespace commands;
 
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/CommandProcessor.php';
+require_once __DIR__.'/../util/BasicEnglish.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
 
@@ -31,120 +32,51 @@ class Assign extends BaseCommandHandler
     $matches = array();
     if (preg_match('/\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;/', $commandLine, $matches))
     {
-      //left of =
-      $left = $matches[1];
-      //where is left at? Player, Room, Locker, etc.?
-      $leftContainer = "";
-      if ( !(($leftContainer = $this->isPlayerItem($left)) !== FALSE)
-        && !(($leftContainer = $this->isRoomItem($left)) !== FALSE)
-        && !(($leftContainer = $this->isItemInContainerInRoom($left)) !== FALSE)
-        )
-      {
-        return "I don't know what a $left is.";
-      }
-      //right of =
-      $right = $matches[2];
-      //where is right at? Player, Room, Locker, etc.?
-      $rightContainer = "";
-      if ( !(($rightContainer = $this->isPlayerItem($right)) !== FALSE)
-        && !(($rightContainer = $this->isRoomItem($right)) !== FALSE)
-        && !(($rightContainer = $this->isItemInContainerInRoom($right)) !== FALSE)
-        )
-      {
-        return "I don't know what a $right is.";
-      }
-      if ($this->isPlayerItem($left) !== FALSE)
-      {
-        if ($this->isPlayerItem($right) !== FALSE)
-        {
-          if ($left == $right) {
-            return "Your $left is already in your hand.";
-          }
-          else if (substr($left, -8) === "leftHand") {
-            $gameState->getPlayer()->leftHand = $rightContainer;
-            $gameState->getPlayer()->rightHand = $leftContainer;
-            return "You swapped the contents of your hands.";
-          }
-          else if (substr($left, -9) === "rightHand") {
-            $gameState->getPlayer()->rightHand = $rightContainer;
-            $gameState->getPlayer()->leftHand = $leftContainer;
-            return "You swapped the contents of your hands.";
-          }
-        }
-        else if ($this->isRoomItem($right) !== FALSE)
-        {
-          if (is_a($rightContainer, "\playable\IAssignable")) {
-            if (substr($left, -8) === "leftHand")
-            {
-              $rightContainer->assign($right, $this->getPlayerRoom(), $gameState->getPlayer()->leftHand);
-            }
-            else if (substr($left, -9) === "rightHand")
-            {
-              $rightContainer->assign($right, $this->getPlayerRoom(), $gameState->getPlayer()->leftHand);
-            }
-            //this should be done in TAssignable::assign() now:
-            //$gameState->getPlayerRoom()->removeItem($right);
-            $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
-            return "You grabbed the $right and put it in your $whichHand.";
-          }
-          else
-            return "You can't pick up the $right.";
-        }
-        else if ($this->isItemInContainerInRoom($right) !== FALSE)
-        {
-          $room = GameState::getInstance()->getPlayerRoom();
-          foreach ($room->getAllItems() as $itemName => $item)
-          {
-            if (is_a($item, "\playable\IContainer") && (!is_a($item, "\playable\IOpenable") || $item->isOpened()))
-            {
-              foreach ($item->getAllItems() as $containedItemName => $containedItem) {
-                if ($containerItemName == $itemInQuestion) {
-                  if (is_a($rightContainer, "\playable\IAssignable"))
-                  {
-                    $leftContainer = $rightContainer;
-                    $item->removeItem($right);
-                    $whichHand = (substr($left, -9) === "rightHand" ? "right hand" : "left hand");
-                    return "You grabbed the $right from the $item and put it in your $whichHand.";
-                  }
-                  else
-                    return "You can't pick up the $right.";
-                }
-              }
-            }
-          }
-        }
+      $target = $matches[1]; //left side of equals, assignment target
+      $index = -1; //where in the target to assign
+      $item = $matches[2]; //right side of equals, assignment item
+
+      //evaluate target
+      if ($target == 'leftHand' || $target == 'me.leftHand')
+        $target = $gameState->getPlayer()->getLeftHand();
+      else if ($target == 'rightHand' || $target == 'me.rightHand')
+        $target = $gameState->getPlayer()->getRightHand();
+      // else if ($target == 'backpack' || $target == 'me.backpack')
+      //   $target = $gameState->getPlayer()->getBackpack()
+      else if ($search = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($inspectWhat))
+        $target = $search;
+      else
+        return "I don't know what " . insertAOrAn($target) . " is.";
+
+      //evalute item
+      if ($item == 'leftHand' || $item == 'me.leftHand') {
+        if ($gameState->getPlayer()->getLeftHand()->getComponent('Container')->hasItemAt(0))
+          $item = $gameState->getPlayer()->getLeftHand()->getComponent('Container')->getItemAt(0);
         else
-          return "I don't know what a $right is.";
+          return "You cannot do that, your left hand is empty.";
       }
-      else if ($this->isRoomItem($left) !== FALSE)
-      {
-        $room = GameState::getInstance()->getPlayerRoom();
-        if (is_a($room->getItem($left), "\playable\IContainer")) {
-          if ($this->isPlayerItem($right) !== FALSE)
-          {
-            $output = "";
-            if (substr($right, -8) === "leftHand")
-            {
-              $output = $room->setItem($left, $gameState->getPlayer()->leftHand);
-              $gameState->getPlayer()->leftHand = null;
-            }
-            else if (substr($right, -9) === "rightHand")
-            {
-              $output = $room->setItem($left, $gameState->getPlayer()->rightHand);
-              $gameState->getPlayer()->rightHand = null;
-            }
-            var_dump($output);
-            return $output;
-          }
-          else {
-            return "You must pick it up first.";
-          }
-        }
+      else if ($item == 'rightHand' || $item == 'me.rightHand') {
+        if ($gameState->getPlayer()->getRightHand()->getComponent('Container')->hasItemAt(0))
+          $item = $gameState->getPlayer()->getRightHand()->getComponent('Container')->getItemAt(0);
+        else
+          return "You cannot do that, your right hand is empty.";
       }
-      else {
-        return "I don't know what to do.";
-      }
+      // else if ($target == 'backpack' || $target == 'me.backpack')
+      //   $target = $gameState->getPlayer()->getBackpack()
+      else if ($search = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($item))
+        $item = $search;
+      else
+        return "I don't know what " . insertAOrAn($item) . " is.";
+
+      //pre-assignment check
+      if (!$item->hasComponent('Assignable'))
+        return "$item is not an assignable item.";
+      if (!$target->hasComponent('Container'))
+        return "$target is not a valid place to assign the $item.";
+      //perform assignment
+      return $item->getComponent('Assignable')->assignTo($target, $index);
     }
+    return "I don't know what to do.";
   }
 
 }

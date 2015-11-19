@@ -54,6 +54,8 @@ var app;
                         _this.updateGame(game);
                     else if (game.error)
                         _this.handleError(game.error);
+                    if (_this.game.isExiting)
+                        _this.$location.url("/game/" + _this.game.gameName + "/thank-you");
                 });
             };
             PlayGameCtrl.prototype.sendCommand = function (command, callback) {
@@ -66,6 +68,8 @@ var app;
                         _this.handleError(game.error);
                     if (callback)
                         callback();
+                    if (_this.game.isExiting)
+                        _this.$location.url("/game/" + _this.game.gameName + "/thank-you");
                 });
             };
             PlayGameCtrl.prototype.handleError = function (error) {
@@ -121,7 +125,7 @@ var app;
                     }
                 };
             };
-            PlayGameCtrl.prototype.onCommandLineChanged = function (e) {
+            PlayGameCtrl.prototype.onCommandLineChanged = function () {
                 var scope = this;
                 if (scope.commandLine.indexOf('\n') > -1) {
                     console.log('onCommandLineChanged() hit');
@@ -129,7 +133,6 @@ var app;
                     var onCommandLineProcessed = function () {
                         scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n') + 1);
                         scope.commandLineReadOnly = false;
-                        scope.onCommandLineChanged();
                     };
                     scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
                 }

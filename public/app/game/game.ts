@@ -1,5 +1,6 @@
 module app.domain {
   export interface IGameInProgress {
+    gameName?: string;
     roomName?: string;
     imageUrl?: string;
     consoleHistory?: string;
@@ -12,7 +13,8 @@ module app.domain {
   }
 
   export class GameInProgress implements IGameInProgress {
-    constructor(public roomName: string,
+    constructor(public gameName: string,
+                public roomName: string,
                 public imageUrl: string,
                 public consoleHistory: string,
                 public commandHistory: string[],

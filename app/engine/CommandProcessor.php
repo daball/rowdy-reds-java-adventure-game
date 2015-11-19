@@ -2,6 +2,8 @@
 
 namespace engine;
 
+use \commands\AutoSuggest;
+
 class CommandProcessor
 {
   protected static $commandHandlers;
@@ -38,6 +40,13 @@ class CommandProcessor
       }
       if ($commandOutput === "")
       {
+        $autoSuggest = new AutoSuggest();
+        if ($autoSuggest->validateCommand($commandLine)) {
+          $commandOutput = $autoSuggest->executeCommand($commandLine);
+        }
+      }
+      if ($commandOutput === "")
+      {
         $commandOutput = "I do not understand.";
       }
     }
@@ -56,9 +65,12 @@ class CommandProcessor
   public function __construct()
   {
     $commandLine = "";
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['commandLine']))
+    if (isset($_POST['commandLine']))
     	$commandLine = $_POST['commandLine'];
-    else if ($_SERVER['REQUEST_METHOD'] == 'POST' && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
+    else if (isset($_SERVER['REQUEST_METHOD'])
+          && $_SERVER['REQUEST_METHOD'] == 'POST'
+          && isset($_SERVER['HTTP_ACCEPT'])
+          && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
     	$data = json_decode(file_get_contents('php://input'), true);
     	if (isset($data['commandLine']))
     		$commandLine = $data['commandLine'];

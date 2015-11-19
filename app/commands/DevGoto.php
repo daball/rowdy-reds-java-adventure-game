@@ -27,6 +27,16 @@ class DevGoto extends BaseCommandHandler
         && stripos($commandLine, 'goto') === 0);
   }
 
+  public function listAllRooms()
+  {
+    $gameState = GameState::getInstance();
+    $output = "The following rooms exist in the game:\n";
+    foreach ($gameState->getGame()->getAllRooms() as $room) {
+      $output .= "  " . $room->getName() . "\n";
+    }
+    return $output;
+  }
+
   public function executeCommand($commandLine)
   {
     $gameState = GameState::getInstance();
@@ -34,18 +44,19 @@ class DevGoto extends BaseCommandHandler
     if ($gotoWhere === "") {
       $output = "DEVELOPMENT MODE ONLY:  ";
       $output .= "Type goto [room name] in order to inspert player into that room, despite any game rules.\n";
-      $output .= "The following rooms exist in the game:\n";
-      foreach ($gameState->getGame()->getAllRooms() as $room) {
-        $output .= "  " . $room->getName() . "\n";
-      }
+      $output .= $this->listAllRooms();
       return $output;
     }
     else if ($room = $gameState->getGame()->getRoom($gotoWhere)) {
       $gameState->getPlayer()->setLocation($room->getName());
-      return "DEVELOPMENT MODE ONLY: You have been inserted into $gotoWhere, despite any game rules.\n" . $gameState->inspectRoom();
+      return "DEVELOPMENT MODE ONLY:  "
+            . "You have been inserted into $gotoWhere, despite any game rules.\n"
+            . $gameState->inspectRoom();
     }
     else
-      return "DEVELOPMENT MODE ONLY: $gotoWhere does not exist in the game.";
+      return "DEVELOPMENT MODE ONLY:  "
+            . "$gotoWhere does not exist in the game.\n"
+            . $this->listAllRooms();
   }
 
 }

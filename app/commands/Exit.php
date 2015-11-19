@@ -25,8 +25,9 @@ class ExitCommandHandler extends BaseCommandHandler
   public function executeCommand($commandLine)
   {
     $gameState = GameState::getInstance();
-    $gameState = GameState::init($gameState->getGame()->getName());
-    $gameState->isExiting = true;
+    // $gameState = GameState::init($gameState->getGame()->getName());
+    $gameState->isExiting(true);
+    return "Thank you for playing!\nWelcome back!";
   }
 }
 

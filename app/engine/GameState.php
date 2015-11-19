@@ -6,27 +6,12 @@ require_once 'CommandProcessor.php';
 require_once __DIR__.'/../game/GameBuilder.php';
 require_once __DIR__.'/../game/Player.php';
 require_once __DIR__.'/../playable/index.php';
+require_once __DIR__.'/../util/BasicEnglish.php';
 
 use \game\Game;
 use \game\GameBuilder;
 use \game\Player;
 use \playable\System;
-
-/**
- * Join a string with a natural language conjunction at the end.
- * Source:
- *   https://gist.github.com/dan-sprog/e01b8712d6538510dd9c
- */
-function natural_language_join(array $list, $conjunction = 'and') {
-  $last = array_pop($list);
-  if ($list) {
-    if (count($list) == 1)
-      return implode(', ', $list) . ' ' . $conjunction . ' ' . $last;
-    else if (count($list) > 1)
-      return implode(', ', $list) . ', ' . $conjunction . ' ' . $last;
-  }
-  return $last;
-}
 
 final class GameState
 {
@@ -89,7 +74,9 @@ final class GameState
     return ++$this->moves;
   }
 
-  public function isExiting() {
+  public function isExiting($isExiting=null) {
+    if ($isExiting !== null)
+      $this->exiting = $isExiting;
     return $this->exiting;
   }
 

@@ -24,8 +24,9 @@ class Openable extends BaseComponent
   public function __construct() {
     $this->define(function ($openable) {
       $openable->onBeforeOpen(function ($openable) {
-        //No reason not to
-        return true;
+        return !$openable->getParent()
+            || !$openable->getParent()->hasComponent('Lockable')
+            || $openable->getParent()->getComponent('Lockable')->isUnlocked();
       });
       $openable->onBeforeClose(function ($openable) {
         //No reason not to
@@ -35,7 +36,7 @@ class Openable extends BaseComponent
         return "The object was opened.";
       });
       $openable->onRefuseOpen(function ($openable) {
-        return "The object was not opened.";
+        return "The object was not opened.  Perhaps it is locked.";
       });
       $openable->onClose(function ($openable) {
         return "You closed the object.";
@@ -72,9 +73,9 @@ class Openable extends BaseComponent
   }
 
   public function close() {
-    $onBeforeClose = $this->onBeforeClose;
-    $onClose = $this->onClose;
-    $onRefuseClose = $this->onRefuseClose;
+    $onBeforeClose = $this->onBeforeClose();
+    $onClose = $this->onClose();
+    $onRefuseClose = $this->onRefuseClose();
 
     if ($onBeforeClose($this)) {
       $this->setClosed();

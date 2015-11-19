@@ -37,18 +37,21 @@ class Container extends BaseComponent
       $container->items = array();
       $container->validItemTypes = array('\game\GameObject');
       $setLogic = function ($container, $index, $item) {
-        return (
-                //If index is between 0 and maxItems-1 (when maxItems >= 0)
-                ($index >= 0
-                  && ($container->getMaxItems() < 0
-                      || $index < $container->getMaxItems()))
-                //And if the index is not out of bounds
-                && (!$container->isIndexOutOfBounds($index))
-                //And if the item is a valid item type
-                && ($container->isItemAValidType($item))
-                //And if the item has an Assignable component
-                && ($container->isItemAssignable($item))
-              );
+        return $container->isItemAValidType($item)
+            && !$container->isIndexOutOfBounds($index);
+            // && ($container->isItemAssignable($item));
+        // return (
+        //         //If index is between 0 and maxItems-1 (when maxItems >= 0)
+        //         ($index >= 0
+        //           && ($container->getMaxItems() < 0
+        //               || $index < $container->getMaxItems()))
+        //         //And if the index is not out of bounds
+        //         && (!$container->isIndexOutOfBounds($index))
+        //         //And if the item is a valid item type
+        //         && ($container->isItemAValidType($item))
+        //         //And if the item has an Assignable component
+        //         && ($container->isItemAssignable($item))
+        //       );
       };
       $container->onBeforeSet($setLogic);
       $container->onSet(function ($container, $index, $item) {
@@ -85,9 +88,7 @@ class Container extends BaseComponent
   }
 
   public function insertItem($item) {
-    $index = count($this->items);
-    while ($this->hasItemAt($index)) { $index++; }
-    return $this->setItemAt($index, $item);
+    return $this->setItemAt(-1, $item);
   }
 
   public function setItemAt($index, $item) {
@@ -95,8 +96,16 @@ class Container extends BaseComponent
     $onSet = $this->onSet();
     $onRefuseSet = $this->onRefuseSet();
 
+    if ($index == -1) {
+      $index = count($this->items);
+      while ($this->hasItemAt($index)) { $index++; }
+      if ($this->getMaxItems() != -1 && $index >= $this->getMaxItems())
+        $index = $this->getMaxItems()-1;
+    }
+
     if ($onBeforeSet($this, $index, $item)) {
       $this->items[$index] = $item;
+      $item->setContainer($this->getParent());
       return $onSet($this, $index, $item);
     }
     else
@@ -145,7 +154,7 @@ class Container extends BaseComponent
   }
 
   public function findItemIndexByName($itemName) {
-    for ($i = 0; $i < count($this->items); $i++) {
+    for ($i = 0; $i < $this->countItems(); $i++) {
       if ($this->hasItemAt($i) &&
           $this->getItemAt($i)->getName() == $itemName)
           return $i;
@@ -168,7 +177,7 @@ class Container extends BaseComponent
   public function findNestedItemByName($itemName) {
     if (($item = $this->findItemByName($itemName)) != null)
       return $item;
-    else if ($this->getParent()->hasComponent('Container')) {
+    else if ($this->getParent() && $this->getParent()->hasComponent('Container')) {
       foreach ($this->getAllItems() as $searchable) {
         if ($searchable->hasComponent('Container')
         && ($item = $searchable->getComponent('Container')->findNestedItemByName($itemName)) != null) {

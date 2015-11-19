@@ -5,6 +5,7 @@ namespace commands;
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once __DIR__.'/../game/Direction.php';
+require_once __DIR__.'/../util/BasicEnglish.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
 
@@ -12,21 +13,6 @@ use engine\CommandProcessor;
 use engine\GameState;
 use game\Direction;
 use game\DirectionException;
-
-function is_vowel($letter) {
-  $letter = strtolower($letter);
-  return $letter === 'a'
-      || $letter === 'e'
-      || $letter === 'i'
-      || $letter === 'o'
-      || $letter === 'u';
-}
-
-function insertAOrAn($beforeWord) {
-  if (is_vowel(substr($beforeWord, 0, 1)))
-    return "an $beforeWord";
-  return "a $beforeWord";
-}
 
 class Inspect extends BaseCommandHandler
 {
@@ -60,7 +46,7 @@ class Inspect extends BaseCommandHandler
     $gameState = GameState::getInstance();
     $inspectWhat = $this->getTargetName($commandLine);
     // echo $inspectWhat;
-    if ($inspectWhat === "" || strtolower($inspectWhat) == 'room')
+    if ($inspectWhat === "" || strtolower($inspectWhat) == 'room' || strtolower($inspectWhat) == strtolower($gameState->getPlayerRoom()->getName()))
       //no parameters, inspect the room
       return $gameState->inspectRoom();
     else if (Direction::cardinalDirection($inspectWhat))
@@ -92,6 +78,7 @@ class Inspect extends BaseCommandHandler
     //     else
     //       return "The item in the room is not inspectable.";
     //   }
+    var_dump($gameState->getPlayerRoom()->getComponent('Container')->getAllItems());
     return "I don't know what " . insertAOrAn($inspectWhat) . " is.";
   }
 }

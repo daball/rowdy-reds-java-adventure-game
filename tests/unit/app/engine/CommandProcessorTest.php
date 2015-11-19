@@ -27,10 +27,10 @@ class CommandProcessorTest extends \PHPUnit_Framework_TestCase
     );
     $invalidCommandLines = array(
       "aoeu", "asdf", "123",
-      "movenorth();", "moveNorth()",
-      "movesouth();", "moveSouth()",
-      "moveeast();", "moveEast()",
-      "movewest();", "moveWest()",
+      // "movenorth();", "moveNorth()",
+      // "movesouth();", "moveSouth()",
+      // "moveeast();", "moveEast()",
+      // "movewest();", "moveWest()",
     );
 
     foreach ($validCommandLines as $validCommandLine)

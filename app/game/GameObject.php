@@ -38,6 +38,8 @@ class GameObject //implements \Serializable
    **/
   protected $components;
 
+  protected $container = null;
+
   public function __construct($name) {
     $this->define(function ($gameObject) use ($name) {
       $gameObject->setName($name);
@@ -59,6 +61,14 @@ class GameObject //implements \Serializable
    **/
   public function setName($name) {
     $this->name = $name;
+  }
+
+  public function getContainer() {
+    return $this->container;
+  }
+
+  public function setContainer($container) {
+    $this->container = $container;
   }
 
   /**

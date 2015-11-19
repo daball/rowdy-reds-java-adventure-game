@@ -20,8 +20,6 @@ class BasicItem extends GameObject
   }
 }
 
-class NotAnAssignableItem extends GameObject { }
-
 class NotAContainableItem { }
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
@@ -39,6 +37,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($i, $container->findItemIndexByName("item$i"));
       $this->assertEquals("item" . $i, $container->findItemByName("item$i")->getName());
       $this->assertTrue($container->itemExists($item));
+      $this->assertNotNull($container->findNestedItemByName("item$i"));
     }
     foreach ($container->getAllItems() as $i => $item) {
       $this->assertEquals("item" . $i, $item->getName());
@@ -53,12 +52,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     $invalidItem = new NotAContainableItem();
     $this->assertFalse($container->isItemAValidType($invalidItem));
-    $this->assertFalse($container->isItemAssignable($invalidItem));
-    $this->assertTrue(!!$container->setItemAt(0, $invalidItem));
-    $this->assertFalse($container->itemExists($invalidItem));
-
-    $invalidItem = new NotAnAssignableItem('notAssignable');
-    $this->assertTrue($container->isItemAValidType($invalidItem));
     $this->assertFalse($container->isItemAssignable($invalidItem));
     $this->assertTrue(!!$container->setItemAt(0, $invalidItem));
     $this->assertFalse($container->itemExists($invalidItem));

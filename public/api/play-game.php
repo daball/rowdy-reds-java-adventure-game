@@ -72,9 +72,10 @@ echo json_encode(array(
 
 //when the game is exiting, go ahead and restart it, since there is no other way to restart the session
 //next time it loads, it'll be ready to play
-if ($isExiting) {
-	//reset game state
-	$gameEngine->gameState = new GameState();
+if ($gameEngine->getGameState()->isExiting()) {
+	//unset isExiting for next time
+	//$gameEngine->gameState = new GameState();
+	$gameEngine->getGameState()->isExiting(false);
 }
 
 //always save the session state
