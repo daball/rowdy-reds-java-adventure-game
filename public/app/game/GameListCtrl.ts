@@ -18,8 +18,12 @@ module app.game {
       });
     }
 
-    playGame(gameName) {
+    playGame(gameName: string) {
       this.$location.url("/game/" + gameName + "/play");
+    }
+
+    goHome() {
+      this.$location.url("/");
     }
   }
 

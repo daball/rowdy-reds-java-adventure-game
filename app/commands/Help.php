@@ -30,8 +30,8 @@ class HelpCommandHandler extends BaseCommandHandler
     $eol = "\n";
     $isDevMode = GameEngine::isApplicationEnv("development");
     $devCommands = "DEVELOPMENT MODE ONLY:$eol"
-                  ."goto - lists all rooms you can go to$eol"
-                  ."goto [room name] - enters a room, despite any game logic$eol$eol";
+                  ."goto             - list all rooms you can go to$eol"
+                  ."goto room name   - enter a room, despite any game logic$eol$eol";
 
     return  "Rowdy Red's Java Adventures" . $eol
           . $eol
@@ -39,7 +39,7 @@ class HelpCommandHandler extends BaseCommandHandler
           . $eol
           . ($isDevMode?$devCommands:"")
           . "User interface commands:" . $eol
-          . "  ?     | help            - Displays this help screen" . $eol
+          . "  ?     | help            - Display this help screen" . $eol
           . "  reset | restart         - Restart the game" . $eol
           . "  exit  | System.exit(0); - Exit the game" . $eol
           . $eol
@@ -51,14 +51,26 @@ class HelpCommandHandler extends BaseCommandHandler
           . "  e | east  | moveEast();  | me.moveEast();  - Navigate east" . $eol
           . "  d | down  | moveDown();  | me.moveDown();  - Navigate down" . $eol
           . $eol
-          . "New experimental commands:" . $eol
-          . "  javadoc             - Lists known API classes in your JavaDoc notebook$eol"
-          . "  javadoc [ClassName] - Displays JavaDoc documentation about the API class$eol"
-          . "  locals              - Displays list of variables in your variable bag$eol"
-          . "  gc                  - Garbage collects a local variable the player has made$eol"
-          . "  globals             - Lists variables available anywhere in the game$eol"
+          // . "New experimental commands:" . $eol
+          // . "  javadoc             - List known API classes in your JavaDoc notebook$eol"
+          // . "  javadoc ClassName   - Display JavaDoc documentation about the API class$eol"
+          // . "  locals              - Display list of variables in your variable bag$eol"
+          // . "  gc                  - Garbage collect a local variable the player has made$eol"
+          // . "  globals             - List variables available anywhere in the game$eol"
+          // . $eol
+          . "Game commands:" . $eol
+          . "  target = item;                - Assign an item to a target container$eol"
+          . "  inspect [room]|item|direction - Inspects the room, an item, or a direction$eol"
+          . "  item.open();                  - Open an item$eol"
+          . "  item.close();                 - Close an item$eol"
+          . "  item.unlock(key|hand);        - Unlock an item with a key in your hand$eol"
+          . "  item.lock(key|hand);          - Lock an item with a key in your hand$eol"
+          . "  ClassName = new ClassName();  - Instantiate an API class to a local variable$eol"
           . $eol
-          . "  ClassName = new ClassName(); - Instantiate an API class to a local variable.$eol"
+          . "Player items:" . $eol
+          . "  leftHand                     - Player's left hand$eol"
+          . "  rightHand                    - Player's right hand$eol"
+          . "  backpack                     - Player's backpack, if equipped$eol"
           ;
   }
 }

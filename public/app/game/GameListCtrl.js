@@ -16,6 +16,9 @@ var app;
             GameListCtrl.prototype.playGame = function (gameName) {
                 this.$location.url("/game/" + gameName + "/play");
             };
+            GameListCtrl.prototype.goHome = function () {
+                this.$location.url("/");
+            };
             GameListCtrl.$inject = ['GameListService', '$location'];
             return GameListCtrl;
         })();
