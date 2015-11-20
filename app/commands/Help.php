@@ -58,7 +58,7 @@ class HelpCommandHandler extends BaseCommandHandler
           . "  gc                  - Garbage collects a local variable the player has made$eol"
           . "  globals             - Lists variables available anywhere in the game$eol"
           . $eol
-          . "  ClassName = new ClassName(); - Instantiate any class for which an API class has been found to a local variable.$eol"
+          . "  ClassName = new ClassName(); - Instantiate an API class to a local variable.$eol"
           ;
   }
 }

@@ -90,6 +90,21 @@ class Room extends GameObject
   }
 
   public function inspectDirection($direction) {
-    return $this->getDirection($direction)->getComponent('Inspector')->inspect();
+    if (($item = $this->getColliderItemInDirection($direction)) != null
+      && $item->getComponent('Collider')->isEnabled())
+      return $item->getComponent('Inspector')->inspect();
+    else
+      return $this->getDirection($direction)->getComponent('Inspector')->inspect();
+  }
+
+  /**
+   * @ignore
+   **/
+  public function getColliderItemInDirection($direction) {
+    foreach ($this->getComponent('Container')->getAllItems() as $item) {
+      if ($item->hasComponent('Collider')
+        && Direction::fullDirection($item->getComponent('Collider')->getDirection()) == Direction::fullDirection($direction))
+        return $item;
+    }
   }
 }

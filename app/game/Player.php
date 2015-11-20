@@ -102,28 +102,16 @@ class Player
    * @ignore
    **/
   private function validateCollision(Room $room, $direction) {
-    if ($direction->obstacleItem == null)
-      return false;
-    else
-    {
-      $item = GameState::getInstance()->getPlayerRoom()->getItem($direction->obstacleItem);
-      if (is_a($item, "\playable\ICollidable"))
-        return $item->isInTheWay();
-      else
-        return false;
-    }
+    $colliderItem = $room->getColliderItemInDirection($direction);
+    return $colliderItem && $colliderItem->getComponent('Collider')->isEnabled();
   }
 
   /**
    * @ignore
    **/
   private function explainCollision(Room $room, $direction) {
-    $item = GameState::getInstance()->getPlayerRoom()->getItem($direction->obstacleItem);
-    $d = ($d == Direction::$n ? 'north' : '') .
-         ($d == Direction::$s ? 'south' : '') .
-         ($d == Direction::$e ? 'east' : '') .
-         ($d == Direction::$w ? 'west' : '') . '';
-    return $item->explainCollision($d);
+    $colliderItem = $room->getColliderItemInDirection($direction);
+    return $colliderItem->getComponent('Collider')->collide($direction);
   }
 
   /**
@@ -138,19 +126,19 @@ class Player
     $direction = Direction::cardinalDirection($direction);
     //get adjacent room
     $directionInfo = $gameState->getPlayerRoom()->getDirection($direction);
-    $nextRoom = $directionInfo->getNextRoomName();
+    $nextRoom = $gameState->getGame()->getRoom($directionInfo->getNextRoomName());
     //make sure this is valid
-    if ($nextRoom !== '') {
-      // if ($this->validateCollision($nextRoom, $direction))
-      // {
-      //   return $this->explainCollision($nextRoom, $direction);
-      // }
-      // else {
+    if ($nextRoom) {
+      if ($this->validateCollision($gameState->getPlayerRoom(), $direction))
+      {
+        return $this->explainCollision($gameState->getPlayerRoom(), $direction);
+      }
+      else {
         //put the avatar in the next room
-        $this->location = $nextRoom;
+        $this->location = $nextRoom->getName();
         //return next room description
         return $gameState->inspectRoom();
-      // }
+      }
     }
     else {
       //room didn't exist, check if direction has a description

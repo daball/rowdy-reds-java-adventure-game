@@ -51,15 +51,23 @@ class Inspect extends BaseCommandHandler
       return $gameState->inspectRoom();
     else if (Direction::cardinalDirection($inspectWhat))
       //direction provided, inspect direction from inside room
-      return $gameState->getPlayerRoom()->getDirection($inspectWhat)->getComponent('Inspector')->inspect();
+      return $gameState->getPlayerRoom()->inspectDirection($inspectWhat);
     else if ($inspectWhat == 'leftHand'
           || $inspectWhat == 'me.leftHand')
       //left hand provided, inspect contents of left hand
       return $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
+    else if ($gameState->getPlayer()->getLeftHand()->getComponent('Container')->countItems() > 0
+          && $gameState->getPlayer()->getLeftHand()->getComponent('Container')->getItemAt(0)->getName() == $inspectWhat)
+      //left hand item provided, inspect contents of left hand
+      return "The $inspectWhat is in your " . $gameState->getPlayer()->getLeftHand()->getName() . ".  " . $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
     else if ($inspectWhat == 'rightHand'
           || $inspectWhat == 'me.rightHand')
       //right hand provided, inspect contents of right hand
       return $gameState->getPlayer()->getRightHand()->getComponent('Inspector')->inspect();
+    else if ($gameState->getPlayer()->getRightHand()->getComponent('Container')->countItems() > 0
+          && $gameState->getPlayer()->getRightHand()->getComponent('Container')->getItemAt(0)->getName() == $inspectWhat)
+      //right hand item provided, inspect contents of left hand
+      return "The $inspectWhat is in your " . $gameState->getPlayer()->getRightHand()->getName() . ".  " . $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
     else if (($inspectWhat == 'backpack'
           || $inspectWhat == 'me.backpack')
           && $gameState->getPlayer()->getBackpack())
@@ -78,7 +86,6 @@ class Inspect extends BaseCommandHandler
     //     else
     //       return "The item in the room is not inspectable.";
     //   }
-    var_dump($gameState->getPlayerRoom()->getComponent('Container')->getAllItems());
     return "I don't know what " . insertAOrAn($inspectWhat) . " is.";
   }
 }

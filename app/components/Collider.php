@@ -100,6 +100,7 @@ class Collider extends BaseComponent
     $onCollide = $this->onCollide();
 
     $collisionEvent = false;
+    $direction = Direction::fullDirection($direction);
     if ($onBeforeCollide($this, $direction))
       $collisionEvent = $onCollide($this, $direction);
     return $collisionEvent;
