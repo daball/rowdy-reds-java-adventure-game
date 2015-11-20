@@ -2,10 +2,12 @@ module app.game {
 
   interface IGameListModel {
     games: string[];
+    isLoading: boolean;
   }
 
   class GameListCtrl implements IGameListModel {
     games: string[];
+    isLoading: boolean = false;
 
     static $inject = ['GameListService', '$location'];
     constructor(private gameService: app.services.GameListService,
@@ -13,8 +15,10 @@ module app.game {
       this.games = [];
 
       var gamesResource = gameService.getGames();
+      this.isLoading = true;
       gamesResource.query((games: string[]) => {
         this.games = games;
+        this.isLoading = false;
       });
     }
 

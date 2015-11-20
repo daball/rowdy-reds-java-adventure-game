@@ -6,6 +6,7 @@ module app.game {
     commandLine: string;
     commandLineReadOnly: boolean;
     gameResource: ng.resource.IResourceClass<app.services.IPlayGameResource>;
+    isLoading: boolean;
   }
 
   interface IPlayGameParams extends ng.route.IRouteParamsService {
@@ -20,6 +21,7 @@ module app.game {
     gameResource: ng.resource.IResourceClass<app.services.IPlayGameResource>;
     consoleHistoryAceOption: any;
     commandLineAceOption: any;
+    isLoading: boolean = false;
 
     static $inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal'];
     constructor(private $routeParams: IPlayGameParams,
@@ -69,15 +71,17 @@ module app.game {
     updateGame(game) {
       var scope = this;
       this.game = game;
+      this.isLoading = false;
     }
 
     reconnectGame() {
+      this.isLoading = true;
       this.gameResource.get({gameName: this.gameName}, (game: app.domain.IGameInProgress) => {
         // console.log(game);
-        if (game.commandHistory)
-          this.updateGame(game);
-        else if (game.error)
+        if (game.error)
           this.handleError(game.error);
+        else
+          this.updateGame(game);
         if (this.game.isExiting)
           this.$location.url("/game/" + this.game.gameName + "/thank-you");
       });
@@ -85,13 +89,14 @@ module app.game {
 
     sendCommand(command, callback) {
       // this.gameResource.
+      this.isLoading = true;
       this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
       this.gameResource.save({gameName: this.gameName, commandLine: command}, (game: app.domain.IGameInProgress) => {
         // console.log(game);
-        if (game.commandHistory)
-          this.updateGame(game);
-        else if (game.error)
+        if (game.error)
           this.handleError(game.error);
+        else
+          this.updateGame(game);
         if (callback)
           callback();
         if (this.game.isExiting)

@@ -2,8 +2,9 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <div class="navbar-brand">Rowdy Red's Java Adventures
-                <span ng-if="!vm.game.roomName">&raquo; {{vm.gameName}} Connecting...</span>
+                <span ng-if="!vm.game.roomName">&raquo; {{vm.gameName}}</span>
                 <span ng-if="vm.game.roomName">&raquo; {{vm.game.gameName}}</span>
+                <span ng-show="vm.isLoading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
             </div>
         </div>
     </div>

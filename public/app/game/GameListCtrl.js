@@ -7,10 +7,13 @@ var app;
                 var _this = this;
                 this.gameService = gameService;
                 this.$location = $location;
+                this.isLoading = false;
                 this.games = [];
                 var gamesResource = gameService.getGames();
+                this.isLoading = true;
                 gamesResource.query(function (games) {
                     _this.games = games;
+                    _this.isLoading = false;
                 });
             }
             GameListCtrl.prototype.playGame = function (gameName) {

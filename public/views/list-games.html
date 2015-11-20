@@ -1,7 +1,10 @@
 <nav class="navbar navbar-fixed-top navbar-radfordred">
     <div class="container-fluid">
         <div class="navbar-header">
-            <div class="navbar-brand">Rowdy Red's Java Adventures <small>&raquo; Choose a Game to Begin Playing</small></div>
+            <div class="navbar-brand">Rowdy Red's Java Adventures <small>
+              &raquo; Choose a Game to Begin Playing</small>
+              <span ng-show="vm.isLoading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+            </div>
         </div>
     </div>
 </nav>

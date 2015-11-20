@@ -10,6 +10,7 @@ var app;
                 this.$uibModal = $uibModal;
                 this.commandLine = "";
                 this.commandLineReadOnly = false;
+                this.isLoading = false;
                 var scope = this;
                 this.gameName = $routeParams.gameName;
                 this.game = {
@@ -46,26 +47,29 @@ var app;
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
                 this.game = game;
+                this.isLoading = false;
             };
             PlayGameCtrl.prototype.reconnectGame = function () {
                 var _this = this;
+                this.isLoading = true;
                 this.gameResource.get({ gameName: this.gameName }, function (game) {
-                    if (game.commandHistory)
-                        _this.updateGame(game);
-                    else if (game.error)
+                    if (game.error)
                         _this.handleError(game.error);
+                    else
+                        _this.updateGame(game);
                     if (_this.game.isExiting)
                         _this.$location.url("/game/" + _this.game.gameName + "/thank-you");
                 });
             };
             PlayGameCtrl.prototype.sendCommand = function (command, callback) {
                 var _this = this;
+                this.isLoading = true;
                 this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
                 this.gameResource.save({ gameName: this.gameName, commandLine: command }, function (game) {
-                    if (game.commandHistory)
-                        _this.updateGame(game);
-                    else if (game.error)
+                    if (game.error)
                         _this.handleError(game.error);
+                    else
+                        _this.updateGame(game);
                     if (callback)
                         callback();
                     if (_this.game.isExiting)
