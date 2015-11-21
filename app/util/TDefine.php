@@ -11,7 +11,7 @@ trait TDefine
   /**
    * @ignore
    **/
-  protected $definitions;
+  // protected $definitions;
   //
   // protected $serializer;
   // protected $analyzer;
@@ -20,14 +20,14 @@ trait TDefine
    * @ignore
    **/
   public function define($definitionFn) {
-    if (!isset($this->definitions))
-      $this->definitions = array();
+    // if (!isset($this->definitions))
+    //   $this->definitions = array();
     // if (!isset($this->analyzer))
     //   $this->analyzer = new AstAnalyzer();
     // if (!isset($this->serializer))
     //   $this->serializer = new Serializer($this->analyzer);
     // array_push($this->definitions, $this->serializer->serialize($definitionFn));
-    array_push($this->definitions, new SerializableClosure($definitionFn));
+    // array_push($this->definitions, new SerializableClosure($definitionFn));
     $definitionFn($this);
     return $this;
   }

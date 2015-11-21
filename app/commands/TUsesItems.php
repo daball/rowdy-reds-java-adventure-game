@@ -1,56 +1,58 @@
 <?php
 
 namespace commands;
-use engine\GameState;
-use \ReflectionClass;
 
 require_once __DIR__.'/../engine/GameState.php';
 
+use \engine\GameState;
+use \ReflectionClass;
+
 trait TUsesItems
 {
+  private function getItem($itemName) {
+    if (($item = $this->getPlayerItem($itemName)) != null)
+      return $item;
+    if (($item = $this->getRoomItem($itemName)) != null)
+      return $item;
+  }
+
   /**
    * Is this an object assigned to the player?
    **/
-  private function isPlayerItem($itemInQuestion) {
-    if ($itemInQuestion == "me.leftHand" || $itemInQuestion == "leftHand")
-      return GameState::getInstance()->getPlayer()->getLeftHand();
-    else if ($itemInQuestion == "me.rightHand" || $itemInQuestion == "rightHand")
-      return GameState::getInstance()->getPlayer()->getRightHand();
-    else return false;
+  private function getPlayerItem($itemName) {
+    $gameState = GameState::getInstance();
+    $player = $gameState->getPlayer();
+    $leftHand = $player->getLeftHand();
+    $rightHand = $player->getRightHand();
+    $backpack = $player->getBackpack();
+    if ($itemName == "me.leftHand" || $itemName == "leftHand")
+      return $player->getLeftHand();
+    if ($itemName == "me.rightHand" || $itemName == "rightHand")
+      return $player->getRightHand();
+    if ($itemName == "me.backpack" || $itemName == "backpack")
+      return $player->getBackpack();
+    // if ()
+    return null;
   }
 
   /**
    * Is this an object contained in the room?
    **/
-  private function isRoomItem($itemInQuestion) {
+  private function getRoomItem($itemName) {
+    $gameState = GameState::getInstance();
     $room = GameState::getInstance()->getPlayerRoom();
-    foreach ($room->getAllItems() as $itemName => $item)
-    {
-      if ($itemName == $itemInQuestion)
-        return $item;
-    }
-    return false;
+    $container = $room->getComponent('Container');
+    return $container->findNestedItemByName($itemName);
   }
 
   /**
-   * Is this an object contained in a container in the room?
+   * Is this an object contained in the room?
    **/
-  private function isItemInContainerInRoom($itemInQuestion) {
+  private function getRoomDirection($itemName) {
+    $gameState = GameState::getInstance();
     $room = GameState::getInstance()->getPlayerRoom();
-    foreach ($room->getAllItems() as $itemName => $item)
-    {
-      if (is_a($item, "\playable\IContainer"))
-      {
-        if (!is_a($item, "\playable\IOpenable") || $item->isOpened())
-        {
-          foreach ($item->getAllItems() as $containedItemName => $containedItem) {
-            if ($containerItemName == $itemInQuestion)
-              return $containedItem;
-          }
-        }
-      }
-    }
-    return false;
+    $container = $room->getComponent('Container');
+    return $container->findNestedItemByName($itemName);
   }
 
   public function inspectLocals()
@@ -68,21 +70,6 @@ trait TUsesItems
     return $output;
   }
 
-  public function inspectRoomContents()
-  {
-    $gameState = GameState::getInstance();
-    $eol = "\n";
-    $output = "The following variables are available to you because of where you are standing:$eol";
-    foreach($gameState->getPlayerRoom()->getAllItems() as $item => $value)
-    {
-      //$output .= \java\JavaReflection::inspectInstance($value, $item) . $eol;
-      $class = new ReflectionClass($value);
-      $className = $class->getShortName();
-      $output .= "$className $item";
-    }
-    return $output;
-  }
-
   public function inspectGlobals()
   {
     $gameState = GameState::getInstance();
@@ -96,4 +83,5 @@ trait TUsesItems
       $output .= "$className $global";
     }
     return $output;
-  }}
+  }
+}

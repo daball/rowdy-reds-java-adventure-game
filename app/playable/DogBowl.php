@@ -4,7 +4,7 @@ namespace playable;
 
 require_once "BasicContainer.php";
 
-class DogBowl extends BasicContainer // implements \Serializable
+class DogBowl extends BasicContainer
 {
   protected $dog = null;
 
@@ -30,24 +30,4 @@ class DogBowl extends BasicContainer // implements \Serializable
       }
     });
   }
-
-  /* ISerializable interface implementation */
-
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'description' => $this->description,
-  //       'items' => $this->items,
-  //       'dog' => $this->dog,
-  //     )
-  //   );
-  // }
-  //
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $this->dog = $data['dog'];
-  //   $this->__construct($this->dog);
-  //   $this->items = $data['items'];
-  //   $this->description = $data['description'];
-  // }
 }

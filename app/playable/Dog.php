@@ -3,57 +3,46 @@
 namespace playable;
 
 require_once __DIR__.'/../game/GameObject.php';
-// require_once 'ICollidable.php';
-// require_once 'ICanEat.php';
-// require_once 'IInspectable.php';
-// require_once 'TCreate.php';
-// require_once 'TCollidable.php';
-// require_once 'TCanEat.php';
-// require_once 'TInspectable.php';
+require_once __DIR__.'/../components/Collider.php';
+require_once __DIR__.'/../components/FoodConsumer.php';
 
+use \components\Collider;
+use \components\FoodConsumer;
 use \game\GameObject;
 
 /**
- * A LambChop item is used to feed a hungy Dog obstacle.
+ * Dog obstacle.
  */
-class Dog extends GameObject //implements IInspectable, ICollidable, ICanEat, \Serializable
+class Dog extends GameObject
 {
-  // use TInspectable;
-  // use TCollidable;
-  // use TCanEat;
-  // use TCreate;
-
-  public function __construct()
+  public function __construct($name, $direction)
   {
-    parent::__construct();
-    $this->onInspect(function () {
-      if ($this->hungry) {
-        return "You have found a growling dog blocking your path.";
-      }
-      else {
-        return "The dog is now happily eating from his bowl.";
-      }
+    parent::__construct($name);
+    $this->define(function ($dog) use ($direction) {
+      $inspector = $dog->getComponent('Inspector');
+      $inspector->onInspect(function ($inspector) {
+        $dog = $inspector->getParent();
+        $foodConsumer = $dog->getComponent('FoodConsumer');
+        if ($foodConsumer->isHungry()) {
+          return "You have found a growling dog blocking your path.";
+        }
+        else {
+          return "The dog is now happily eating from his bowl.";
+        }
+      });
+      $dog->addComponent((new Collider($direction))->define(function ($collider) {
+        $collider->onCollide(function () {
+          return "The dog growls menacingly.";
+        });
+      }));
+      $dog->addComponent((new FoodConsumer())->define(function ($foodConsumer) {
+        $foodConsumer->onEat(function () {
+          $dog = $inspector->getParent();
+          $collider = $dog->getComponent('Collider');
+          $collider->disableCollisions();
+          return "The dog is now happily eating from his bowl.";
+        });
+      }));
     });
-    $this->onEat(function () {
-      return "The dog is now happily eating from his bowl.";
-    });
-  }
-
-  /* ISerializable interface implementation */
-
-  public function serialize() {
-    return serialize(
-      array(
-        'description' => $this->description,
-        'hungry' => $this->hungry,
-      )
-    );
-  }
-
-  public function unserialize($data) {
-    $data = unserialize($data);
-    $this->__construct();
-    $this->description = $data['description'];
-    $this->hungry = $data['hungry'];
   }
 }

@@ -43,7 +43,7 @@ class Assign extends BaseCommandHandler
         $target = $gameState->getPlayer()->getRightHand();
       // else if ($target == 'backpack' || $target == 'me.backpack')
       //   $target = $gameState->getPlayer()->getBackpack()
-      else if ($search = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($inspectWhat))
+      else if ($search = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($target))
         $target = $search;
       else
         return "I don't know what " . insertAOrAn($target) . " is.";

@@ -28,7 +28,11 @@ class Assignable extends BaseComponent
       });
       $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) {
         $item = $assignable->getParent();
-        return "The " . $item->getName() . " has been assigned to your " . $newTarget->getName() . ".";
+        $container = $item->getContainer();
+        $yoursOrTheirs = "the";
+        if ($container && ($container->getName() == 'leftHand' || $container->getName() == 'rightHand' || $container->getName() == 'backpack'))
+          $yoursOrTheirs = "your";
+        return "The " . $item->getName() . " has been assigned to $yoursOrTheirs " . $newTarget->getName() . ".";
         // return "You $item->getName() has replaced the $oldItem->getName() in your $newTarget->getName().";
       });
       $assignable->onRefuseAssign(function ($assignable, $oldTarget, $newTarget, $index) {
@@ -52,15 +56,15 @@ class Assignable extends BaseComponent
         //unset existing item
         $container = $currentContainer->getComponent('Container');
         $index = $container->findIndexByItem($item);
-        $output .= $container->unsetItemAt($index) . ' ';
+        $output = $container->unsetItemAt($index) . ' ';
       }
       {
         //set item
         $container = $target->getComponent('Container');
         $output .= $container->setItemAt($index, $item) . ' ';
       }
-      $output .= $onAssign($this, $currentContainer, $target, $index);
-      return $output;
+      $output = $onAssign($this, $currentContainer, $target, $index) . ' ' . $output;
+      return trim($output);
     }
     return $onRefuseAssign($this, $currentContainer, $target, $index);
   }

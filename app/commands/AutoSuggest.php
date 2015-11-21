@@ -15,10 +15,15 @@ class AutoSuggest extends BaseCommandHandler
 
   public function __construct() {
     $this->verbs = array(
-      'open', 'close',
-      'lock', 'unlock',
-      'assign', 'set', 'unset',
-      'move', 'navigate'
+      'open',
+      'close',
+      'unlock',
+      'lock',
+      'assign',
+      'unset',
+      'set',
+      'move',
+      'navigate'
     );
   }
 

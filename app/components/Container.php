@@ -55,7 +55,8 @@ class Container extends BaseComponent
       };
       $container->onBeforeSet($setLogic);
       $container->onSet(function ($container, $index, $item) {
-        return "You assigned an item to a container.";
+        // return "You assigned an item to a container.";
+        return "";
       });
       $container->onRefuseSet(function ($container, $index, $item) {
         if (!$container->isItemAValidType($item)) {
@@ -76,7 +77,8 @@ class Container extends BaseComponent
         return $setLogic($container, $index, $item) && $item != null;
       });
       $container->onUnset(function ($container, $index, $item) {
-        return "You unassigned an item from a container.";
+        // return "You unassigned an item from a container.";
+        return "";
       });
       $container->onRefuseUnset(function ($container, $index, $item) {
         //Not sure why not
@@ -206,6 +208,15 @@ class Container extends BaseComponent
   public function isIndexOutOfBounds($index) {
     return ($index < 0
       || ($this->maxItems >= 0 && $index >= $this->maxItems));
+  }
+
+  public function getValidItemTypes() {
+    return $this->validItemTypes;
+  }
+
+  public function setValidItemTypes($validItemTypes) {
+    $this->validItemTypes = $validItemTypes;
+    return $this->getValidItemTypes();
   }
 
   /* Event Closure Registration Functions */

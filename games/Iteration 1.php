@@ -15,6 +15,7 @@ use \playable\BasicContainer;
 use \playable\Key;
 use \playable\Food;
 use \playable\LockedDoor;
+use \playable\Dog;
 
 GameBuilder::newGame("Iteration 1")
   ->insertRoom((new Room('Forest'))->define(function ($room) {
@@ -65,6 +66,12 @@ GameBuilder::newGame("Iteration 1")
       $inspector->onInspect(function ($inspector) {
         return "It's a dingy rusty key.";
       });
+      $initialOnAssign = $rustyKey->getComponent('Assignable')->onAssign();
+      $rustyKey->getComponent('Assignable')->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign) {
+        $room = $oldTarget;
+        $room->setImageUrl('library.jpg');
+        return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
+      });
     });
     $container->insertItem($rustyKey);
   }))
@@ -100,16 +107,10 @@ GameBuilder::newGame("Iteration 1")
     $lambChop->define(function ($lambChop) {
       $inspector = $lambChop->getComponent('Inspector');
       $inspector->onInspect(function ($inspector) {
-        return "It's a nice and shiny brass key.";
+        return "It's a chop of lamb.";
       });
     });
     $container->insertItem($lambChop);
-
-    $dogBowl = new BasicContainer('dogBowl');
-    $dogBowl->define(function ($dogBowl) {
-
-    });
-    //->insertObjectInRoom('kitchen', 'dogBowl', \playable\DogBowl::create($dog))
   }))
   ->insertRoom((new Room('Pantry'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
@@ -149,29 +150,59 @@ GameBuilder::newGame("Iteration 1")
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
       return "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.";
     });
-    $room->setImageUrl('servantsQuarters.jpg');;
+    $room->setImageUrl('servantsQuarters.jpg');
     // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
     //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
     //                                                     ->setItem('lamp', \playable\Lamp::create())
     //                     )
   }))
   ->insertRoom((new Room('Taxidermy Room'))->define(function ($room) {
+    $stateOfDog = "hungry";
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
       return "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.";
     });
     $room->setImageUrl('taxidermyRoom_dog.jpg');
-    // ->insertObstacleObjectInRoom('taxidermyRoom', Direction::$n, 'dog', $dog = \playable\Dog::create()
-    //                                                     ->onInspect(function () {
-    //                                                       if ($this->hungry) {
-    //                                                         return "It's a sizeable looking dog is sitting by the northern door, watching you alertly.";
-    //                                                       }
-    //                                                       else {
-    //                                                         return "The dog growls at you menacingly, and will not let you pass by.";
-    //                                                       }
-    //                                                     }))
-    // ->insertObjectInRoom('taxidermyRoom','bowl', \playable\Container::create('bowl')
-    //                                                     ->setDescription("It's an empty bowl sitting on the floor.")
-    //                     )
+    $room->getComponent('Container')->insertItem((new Dog('dog', Direction::$n))->define(function ($dog) use ($stateOfDog) {
+      $foodConsumer = $dog->getComponent('FoodConsumer');
+      $initialOnEat = $foodConsumer->onEat();
+      $foodConsumer->onEat(function ($foodConsumer) use ($stateOfDog, $initialOnEat) {
+        $dog = $foodConsumer->getParent();
+        $room = $dog->getContainer();
+        $room->setImageUrl('taxidermyRoom.jpg');
+        $stateOfDog = "eating";
+        return $initialOnEat($foodConsumer);
+      });
+      $inspector = $dog->getComponent('Inspector');
+      $initialOnInspect = $inspector->onInspect();
+      $inspector->onInspect(function ($inspector) use ($stateOfDog, $initialOnInspect) {
+        switch ($stateOfDog) {
+          case "hungry":
+            return "It's a sizeable looking dog is sitting by the northern door, watching you alertly.";
+          case "happy":
+            return "The dog is now satisfied from eating and smiles at you.  You are a new best friend.";
+          default:
+            return $initialOnInspect($inspector);
+        }
+      });
+    }));
+    $room->getComponent('Container')->insertItem((new BasicContainer('bowl'))->define(function ($bowl) use ($stateOfDog) {
+      $bowl->getComponent('Inspector')->onInspect(function ($inspector) use (&$stateOfDog) {
+        $bowl = $inspector->getParent();
+        $room = $bowl->getContainer();
+        $dog = $room->getComponent('Container')->findItemByName('dog');
+        $foodConsumer = $dog->getComponent('FoodConsumer');
+        if ($stateOfDog == "eating") {
+          $stateOfDog = "happy";
+          return "The dog is licking the bowl clean.";
+        }
+        return "It's an empty bowl sitting on the floor.";
+      });
+      $bowl->getComponent('Container')->setValidItemTypes(array('\playable\Food'));
+      $bowl->getComponent('Container')->onSet(function () use (&$stateOfDog) {
+        $stateOfDog = "eating";
+        return "The dog runs over and starts eating from the bowl.";
+      });
+    }));
   }))
   ->insertRoom((new Room('Dark Room'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
