@@ -62,9 +62,15 @@ var app;
             }
             PlayGameCtrl.prototype.showTabletCode = function () {
                 this.selectedTab = "tabletCode";
+                console.log("showTabletCode()", this.consoleHistoryEditor);
+                if (this.consoleHistoryEditor)
+                    this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
             };
             PlayGameCtrl.prototype.showCommandLine = function () {
                 this.selectedTab = "commandLine";
+                console.log("showCommandLine()", this.consoleHistoryEditor);
+                if (this.consoleHistoryEditor)
+                    this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
             };
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
@@ -87,7 +93,7 @@ var app;
                 var _this = this;
                 this.isLoading = true;
                 this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
-                this.gameResource.save({ gameName: this.gameName, commandLine: command }, function (game) {
+                this.gameResource.save({ gameName: this.gameName, commandLine: command, tabletCode: this.tabletCode }, function (game) {
                     if (game.error)
                         _this.handleError(game.error);
                     else
@@ -117,7 +123,7 @@ var app;
                 modalInstance.result.then(function () { scope.reconnectGame(); }, function () { scope.reconnectGame(); });
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
-                this.commandLineEditor = editor;
+                this.consoleHistoryEditor = editor;
                 console.log('onConsoleHistoryLoaded', scope);
                 editor.on('focus', function () {
                     editor.blur();

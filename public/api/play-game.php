@@ -5,6 +5,7 @@ use \engine\GameEngine;
 require_once __DIR__.'/../../app/engine/GameEngine.php';
 
 /* CONFIGURATION */
+
 $gameName = "Iteration 1"; //default
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['gameName']))
 	$gameName = $_GET['gameName'];
@@ -66,6 +67,7 @@ echo json_encode(array(
   'prompt' => $prompt,
 	'moves' => $moves,
 	'isExiting' => $isExiting,
+	'tabletCode' => "",
 ), JSON_PRETTY_PRINT);
 
 /* MAINTENANCE */

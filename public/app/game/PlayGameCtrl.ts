@@ -111,10 +111,16 @@ module app.game {
 
     showTabletCode() {
       this.selectedTab = "tabletCode";
+      console.log("showTabletCode()", this.consoleHistoryEditor);
+      if (this.consoleHistoryEditor)
+        this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
     }
 
     showCommandLine() {
       this.selectedTab = "commandLine";
+      console.log("showCommandLine()", this.consoleHistoryEditor);
+      if (this.consoleHistoryEditor)
+        this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
     }
 
     updateGame(game) {
@@ -140,7 +146,7 @@ module app.game {
       // this.gameResource.
       this.isLoading = true;
       this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
-      this.gameResource.save({gameName: this.gameName, commandLine: command}, (game: app.domain.IGameInProgress) => {
+      this.gameResource.save({gameName: this.gameName, commandLine: command, tabletCode: this.tabletCode}, (game: app.domain.IGameInProgress) => {
         // console.log(game);
         if (game.error)
           this.handleError(game.error);
@@ -173,7 +179,7 @@ module app.game {
     }
 
     onConsoleHistoryLoaded(editor, scope) {
-      this.commandLineEditor = editor;
+      this.consoleHistoryEditor = editor;
       console.log('onConsoleHistoryLoaded', scope);
       editor.on('focus', function () {
         editor.blur();

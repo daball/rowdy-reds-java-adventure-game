@@ -31,8 +31,8 @@
         <nav class="navbar navbar-rowdyblack navbar-fixed-bottom">
           <div class="container-fluid">
             <div class="btn-group">
-              <label class="btn btn-sm btn-primary" ng-model="vm.selectedTab" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
-              <label class="btn btn-sm btn-primary" ng-model="vm.selectedTab" uib-btn-radio="'tabletCode'"><code><small>&lt;/&gt;</small></code> Tablet Code</label>
+              <label class="btn btn-sm btn-primary btn-radfordred" ng-model="vm.selectedTab" ng-click="vm.showCommandLine()" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
+              <label class="btn btn-sm btn-primary btn-radfordred" ng-model="vm.selectedTab" ng-click="vm.showTabletCode()" uib-btn-radio="'tabletCode'"><code><small>&lt;/&gt;</small></code> Tablet Code</label>
             </div>
           </div>
         </nav>

@@ -6,6 +6,7 @@ require_once 'GameObject.php';
 require_once __DIR__.'/../components/Inspector.php';
 
 use \components\Inspector;
+use \Exception;
 
 /**
  * Direction stores direction information within a Room. It also provides
@@ -130,7 +131,9 @@ class Direction extends GameObject
     $this->nextRoomName = $nextRoomName;
   }
 
-  public function setNextRoom(Room $nextRoom) {
+  public function setNextRoom($nextRoom) {
+    if ($nextRoom == null)
+      throw new Exception('Room does not exist.');
     $this->nextRoomName = $nextRoom->getName();
   }
 
