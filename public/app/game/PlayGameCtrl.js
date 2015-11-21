@@ -3,11 +3,13 @@ var app;
     var game;
     (function (game_1) {
         var PlayGameCtrl = (function () {
-            function PlayGameCtrl($routeParams, gameService, $location, $uibModal) {
+            function PlayGameCtrl($routeParams, gameService, $location, $uibModal, $window, $timeout) {
                 this.$routeParams = $routeParams;
                 this.gameService = gameService;
                 this.$location = $location;
                 this.$uibModal = $uibModal;
+                this.$window = $window;
+                this.$timeout = $timeout;
                 this.commandLine = "";
                 this.tabletCode = "";
                 this.isLoading = false;
@@ -65,12 +67,16 @@ var app;
                 console.log("showTabletCode()", this.consoleHistoryEditor);
                 if (this.consoleHistoryEditor)
                     this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
+                if (this.tabletCodeEditor)
+                    this.tabletCodeEditor.env.editor.focus();
             };
             PlayGameCtrl.prototype.showCommandLine = function () {
                 this.selectedTab = "commandLine";
                 console.log("showCommandLine()", this.consoleHistoryEditor);
                 if (this.consoleHistoryEditor)
                     this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
+                if (this.commandLineEditor)
+                    this.commandLineEditor.env.editor.focus();
             };
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
@@ -123,10 +129,21 @@ var app;
                 modalInstance.result.then(function () { scope.reconnectGame(); }, function () { scope.reconnectGame(); });
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
-                this.consoleHistoryEditor = editor;
+                scope.consoleHistoryEditor = editor;
                 console.log('onConsoleHistoryLoaded', scope);
                 editor.on('focus', function () {
-                    editor.blur();
+                    console.log('onConsoleHistoryFocus() hit', scope);
+                    if (scope.selectedTab == 'commandLine')
+                        scope.commandLineEditor.env.editor.focus();
+                    else if (scope.selectedTab == 'tabletCode')
+                        scope.tabletCodeEditor.env.editor.focus();
+                });
+                editor.setHighlightActiveLine(false);
+                scope.$window.$(function () {
+                    console.log("window loaded with editor", editor);
+                    scope.$timeout(function () {
+                        editor.env.editor.focus();
+                    }, 50);
                 });
                 editor.session.gutterRenderer = {
                     getWidth: function (session, lastLineNumber, config) {
@@ -149,7 +166,13 @@ var app;
                 editor.scrollToLine(editor.session.doc.getLength(), false, true);
             };
             PlayGameCtrl.prototype.onCommandLineLoaded = function (editor, scope) {
-                this.commandLineEditor = editor;
+                scope.commandLineEditor = editor;
+                editor.on('blur', function () {
+                    if (scope.selectedTab == 'commandLine')
+                        scope.commandLineEditor.env.editor.focus();
+                    else if (scope.selectedTab == 'tabletCode')
+                        scope.tabletCodeEditor.env.editor.focus();
+                });
                 editor.session.gutterRenderer = {
                     getWidth: function (session, lastLineNumber, config) {
                         return 3 * config.characterWidth;
@@ -171,7 +194,13 @@ var app;
                 }
             };
             PlayGameCtrl.prototype.onTabletCodeLoaded = function (editor, scope) {
-                this.tabletCodeEditor = editor;
+                scope.tabletCodeEditor = editor;
+                editor.on('blur', function () {
+                    if (scope.selectedTab == 'commandLine')
+                        scope.commandLineEditor.env.editor.focus();
+                    else if (scope.selectedTab == 'tabletCode')
+                        scope.tabletCodeEditor.env.editor.focus();
+                });
                 editor.session.gutterRenderer = {
                     getWidth: function (session, lastLineNumber, config) {
                         return 3 * config.characterWidth;
@@ -183,7 +212,7 @@ var app;
             };
             PlayGameCtrl.prototype.onTabletCodeChanged = function (editor, scope) {
             };
-            PlayGameCtrl.$inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal'];
+            PlayGameCtrl.$inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal', '$window', '$timeout'];
             return PlayGameCtrl;
         })();
         angular.module("RowdyRedApp").controller("PlayGameCtrl", PlayGameCtrl);
