@@ -9,7 +9,7 @@ var app;
                 this.$location = $location;
                 this.$uibModal = $uibModal;
                 this.commandLine = "";
-                this.commandLineReadOnly = false;
+                this.tabletCode = "";
                 this.isLoading = false;
                 var scope = this;
                 this.gameName = $routeParams.gameName;
@@ -23,6 +23,7 @@ var app;
                     isExiting: false
                 };
                 this.gameResource = gameService.playGame();
+                this.showCommandLine();
                 this.reconnectGame();
                 this.consoleHistoryAceOption = {
                     useWrapMode: true,
@@ -41,9 +42,30 @@ var app;
                     theme: 'twilight',
                     onLoad: function (_ace) {
                         return scope.onCommandLineLoaded(_ace, scope);
+                    },
+                    onChange: function (_ace) {
+                        return scope.onCommandLineChanged(_ace, scope);
+                    }
+                };
+                this.tabletCodeAceOption = {
+                    useWrapMode: true,
+                    showGutter: true,
+                    theme: 'solarized_light',
+                    mode: 'java',
+                    onLoad: function (_ace) {
+                        return scope.onTabletCodeLoaded(_ace, scope);
+                    },
+                    onChange: function (_ace) {
+                        return scope.onTabletCodeChanged(_ace, scope);
                     }
                 };
             }
+            PlayGameCtrl.prototype.showTabletCode = function () {
+                this.selectedTab = "tabletCode";
+            };
+            PlayGameCtrl.prototype.showCommandLine = function () {
+                this.selectedTab = "commandLine";
+            };
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
                 this.game = game;
@@ -95,6 +117,7 @@ var app;
                 modalInstance.result.then(function () { scope.reconnectGame(); }, function () { scope.reconnectGame(); });
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
+                this.commandLineEditor = editor;
                 console.log('onConsoleHistoryLoaded', scope);
                 editor.on('focus', function () {
                     editor.blur();
@@ -120,6 +143,7 @@ var app;
                 editor.scrollToLine(editor.session.doc.getLength(), false, true);
             };
             PlayGameCtrl.prototype.onCommandLineLoaded = function (editor, scope) {
+                this.commandLineEditor = editor;
                 editor.session.gutterRenderer = {
                     getWidth: function (session, lastLineNumber, config) {
                         return 3 * config.characterWidth;
@@ -129,8 +153,7 @@ var app;
                     }
                 };
             };
-            PlayGameCtrl.prototype.onCommandLineChanged = function () {
-                var scope = this;
+            PlayGameCtrl.prototype.onCommandLineChanged = function (e, scope) {
                 if (scope.commandLine.indexOf('\n') > -1) {
                     console.log('onCommandLineChanged() hit');
                     scope.commandLineReadOnly = true;
@@ -140,6 +163,19 @@ var app;
                     };
                     scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
                 }
+            };
+            PlayGameCtrl.prototype.onTabletCodeLoaded = function (editor, scope) {
+                this.tabletCodeEditor = editor;
+                editor.session.gutterRenderer = {
+                    getWidth: function (session, lastLineNumber, config) {
+                        return 3 * config.characterWidth;
+                    },
+                    getText: function (session, row) {
+                        return row + 1;
+                    }
+                };
+            };
+            PlayGameCtrl.prototype.onTabletCodeChanged = function (editor, scope) {
             };
             PlayGameCtrl.$inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal'];
             return PlayGameCtrl;

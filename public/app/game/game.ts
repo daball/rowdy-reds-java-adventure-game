@@ -1,4 +1,9 @@
 module app.domain {
+  export interface IGamesList {
+    games?: string[];
+    error?: any;
+  }
+
   export interface IGameInProgress {
     gameName?: string;
     roomName?: string;
@@ -21,7 +26,15 @@ module app.domain {
                 public eol: string,
                 public prompt: string,
                 public moves: number,
-                public isExiting: boolean) {
+                public isExiting: boolean,
+                public error: any) {
+    }
+  }
+
+  export class GamesList implements IGamesList {
+    constructor(public games: string[],
+                public error: any) {
+
     }
   }
 }

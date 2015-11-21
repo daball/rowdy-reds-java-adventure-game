@@ -10,13 +10,22 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#232323', endColorstr='#0e0e0e',GradientType=0 ); /* IE6-9 */
 	color: #fff;
 }
-
 .game-container { height: 100%; padding-bottom: 50px; }
-.row.disableMarginRight { margin-right: auto !important; } /* Fixes horizontal scrollbar issue */
-.consoleHistory { height: 90%; }
-.commandLine { height: 10%; }
+.disableMargins { margin-right: auto !important; margin-left: auto !important; } /* Fixes horizontal scrollbar issue */
+
+.consoleHistory.commandLineSelected { height: 85%; }
+.tabs.commandLineSelected { height: 15%; }
+
+.consoleHistory.tabletCodeSelected { height: 50%; }
+.tabs.tabletCodeSelected { height: 50%; }
+
+.tabs .navbar { min-height: 30px; }
+.tabs .navbar.navbar-fixed-bottom { position: fixed; width: 50%; left: 50%; bottom: 51px; overflow: hidden; }
+.tabs .navbar.navbar-fixed-bottom .container-fluid { padding: 0px 0px 0px 0px; }
+.tabs { padding-bottom: 32px; }
+
 .ace_editor { height: 100%; width: 100%; font: 12pt 'Source Code Pro', monospace !important; }
-.ace_editor.commandLine { height: 1.2em; font: 12pt 'Source Code Pro', monospace !important; }
+.ace_editor.commandLine, .ace_editor.tabletCode { font: 12pt 'Source Code Pro', monospace !important; }
 .no-space { padding-left: 0px; padding-right: 0px; }
 .semi-transparent {   background: rgba(0,0,0,0.5); }
 .navbar-radfordred {
@@ -113,4 +122,23 @@ body {
 @keyframes spin {
 	from { transform: scale(1) rotate(0deg); }
 	to { transform: scale(1) rotate(360deg); }
+}
+
+.modal-content {
+	background: transparent;
+	color: white;
+}
+
+.modal-error {
+	background: rgba(194,1,27,0.75);
+	border: 1px solid black;
+	border-radius: 1.22em;
+}
+
+.modal-error table tbody tr td, .modal-error table tbody tr th {
+	color: black;
+}
+
+.float-right {
+	float: right;
 }

@@ -26,13 +26,13 @@ module app.services {
 
     public response = (responseSuccess): ng.IPromise<any> => {
       //check for API request
-      if (responseSuccess.config.url.indexOf('./api/') == 0 &&
+      if (responseSuccess.config.url.indexOf('/api/') != -1 &&
           typeof responseSuccess.data == 'string') {
-        //console.log("response() PHP error detected with responseSuccess =", responseSuccess,  typeof responseSuccess.data);
         //wrap the error into valid JSON for the PlayGameService for eventual consumption by PlayGameCtrl
         responseSuccess.data = {
           error: responseSuccess.data
         };
+        console.log("wrapped error up like", responseSuccess.data);
       }
       return responseSuccess;
     }

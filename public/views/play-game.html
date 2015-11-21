@@ -11,19 +11,31 @@
 </nav>
 
 <div class="container-fluid no-space game-container">
-  <div class="row disableMarginRight">
+  <div class="row disableMargins">
     <div class="col-xs-6 no-space" style="height:100%;background: url('./img/{{vm.game.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;"></div>
     <div class="col-xs-6 no-space">
-      <div class="row consoleHistory disableMarginRight">
+      <div class="row consoleHistory disableMargins" ng-class="{commandLineSelected: vm.selectedTab=='commandLine', tabletCodeSelected: vm.selectedTab=='tabletCode'}">
         <div class="col-sm-12 no-space">
           <div ui-ace="vm.consoleHistoryAceOption" ng-model="vm.game.consoleHistory" readonly></div>
         </div>
       </div>
-      <div class="row commandLine disableMarginRight">
-        <div class="col-sm-12 no-space">
-          <div ui-ace="vm.commandLineAceOption" ng-model="vm.commandLine" ng-change="vm.onCommandLineChanged()"
-          ng-readonly="vm.commandLineReadOnly"></div>
+      <div class="tabs row disableMargins" ng-class="{commandLineSelected: vm.selectedTab=='commandLine', tabletCodeSelected: vm.selectedTab=='tabletCode'}">
+        <div class="commandLine col-sm-12 no-space" ng-show="vm.selectedTab=='commandLine'">
+          <div ui-ace="vm.commandLineAceOption" ng-model="vm.commandLine"
+          ng-readonly="vm.isLoading"></div>
         </div>
+        <div class="tabletCode col-sm-12 no-space" ng-show="vm.selectedTab=='tabletCode'">
+          <div ui-ace="vm.tabletCodeAceOption" ng-model="vm.tabletCode"
+          ng-readonly="vm.isLoading"></div>
+        </div>
+        <nav class="navbar navbar-rowdyblack navbar-fixed-bottom">
+          <div class="container-fluid">
+            <div class="btn-group">
+              <label class="btn btn-sm btn-primary" ng-model="vm.selectedTab" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
+              <label class="btn btn-sm btn-primary" ng-model="vm.selectedTab" uib-btn-radio="'tabletCode'"><code><small>&lt;/&gt;</small></code> Tablet Code</label>
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
   </div>

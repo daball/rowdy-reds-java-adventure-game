@@ -11,7 +11,7 @@ var app;
         })
             .when("/games", {
             templateUrl: "./views/list-games.html",
-            controller: "GameListCtrl as vm"
+            controller: "GamesListCtrl as vm"
         })
             .when('/game/:gameName/play', {
             templateUrl: "./views/play-game.html",

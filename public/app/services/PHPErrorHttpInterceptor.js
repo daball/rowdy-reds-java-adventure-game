@@ -11,11 +11,12 @@ var app;
                     return requestFailure;
                 };
                 this.response = function (responseSuccess) {
-                    if (responseSuccess.config.url.indexOf('./api/') == 0 &&
+                    if (responseSuccess.config.url.indexOf('/api/') != -1 &&
                         typeof responseSuccess.data == 'string') {
                         responseSuccess.data = {
                             error: responseSuccess.data
                         };
+                        console.log("wrapped error up like", responseSuccess.data);
                     }
                     return responseSuccess;
                 };

@@ -2,10 +2,23 @@ module app.game {
 
   interface IGameInProgressModel {
     gameName: string;
-    game: app.domain.IGameInProgress;
-    commandLine: string;
-    commandLineReadOnly: boolean;
     gameResource: ng.resource.IResourceClass<app.services.IPlayGameResource>;
+
+    game: app.domain.IGameInProgress;
+
+    selectedTab: string;
+
+    commandLine: string;
+    tabletCode: string;
+
+    consoleHistoryEditor: any;
+    commandLineEditor: any;
+    tabletCodeEditor: any;
+
+    consoleHistoryAceOption: any;
+    commandLineAceOption: any;
+    tabletCodeAceOption: any;
+
     isLoading: boolean;
   }
 
@@ -15,12 +28,23 @@ module app.game {
 
   class PlayGameCtrl implements IGameInProgressModel {
     gameName: string;
-    game: app.domain.IGameInProgress;
-    commandLine: string = "";
-    commandLineReadOnly: boolean = false;
     gameResource: ng.resource.IResourceClass<app.services.IPlayGameResource>;
+
+    game: app.domain.IGameInProgress;
+
+    selectedTab: string;
+
+    commandLine: string = "";
+    tabletCode: string = "";
+
+    consoleHistoryEditor: any;
+    commandLineEditor: any;
+    tabletCodeEditor: any;
+
     consoleHistoryAceOption: any;
     commandLineAceOption: any;
+    tabletCodeAceOption: any;
+
     isLoading: boolean = false;
 
     static $inject = ['$routeParams', 'PlayGameService', '$location', '$uibModal'];
@@ -43,6 +67,7 @@ module app.game {
       };
 
       this.gameResource = gameService.playGame();
+      this.showCommandLine();
 
       this.reconnectGame();
 
@@ -64,8 +89,32 @@ module app.game {
         theme: 'twilight',
         onLoad: function (_ace) {
           return scope.onCommandLineLoaded(_ace, scope);
+        },
+        onChange: function (_ace) {
+          return scope.onCommandLineChanged(_ace, scope);
         }
       };
+
+      this.tabletCodeAceOption = {
+        useWrapMode: true,
+        showGutter: true,
+        theme: 'solarized_light',
+        mode: 'java',
+        onLoad: function (_ace) {
+          return scope.onTabletCodeLoaded(_ace, scope);
+        },
+        onChange: function (_ace) {
+          return scope.onTabletCodeChanged(_ace, scope);
+        }
+      };
+    }
+
+    showTabletCode() {
+      this.selectedTab = "tabletCode";
+    }
+
+    showCommandLine() {
+      this.selectedTab = "commandLine";
     }
 
     updateGame(game) {
@@ -124,6 +173,7 @@ module app.game {
     }
 
     onConsoleHistoryLoaded(editor, scope) {
+      this.commandLineEditor = editor;
       console.log('onConsoleHistoryLoaded', scope);
       editor.on('focus', function () {
         editor.blur();
@@ -152,6 +202,7 @@ module app.game {
     }
 
     onCommandLineLoaded(editor, scope) {
+      this.commandLineEditor = editor;
       editor.session.gutterRenderer = {
         getWidth: function(session, lastLineNumber, config) {
           return 3 * config.characterWidth;
@@ -162,8 +213,7 @@ module app.game {
       };
     }
 
-    onCommandLineChanged() {
-      var scope = this;
+    onCommandLineChanged(e, scope) {
       if (scope.commandLine.indexOf('\n') > -1) {
         console.log('onCommandLineChanged() hit');
         scope.commandLineReadOnly = true;
@@ -175,7 +225,22 @@ module app.game {
         scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
       }
     }
-  }
+
+    onTabletCodeLoaded(editor, scope) {
+      this.tabletCodeEditor = editor;
+      editor.session.gutterRenderer = {
+        getWidth: function(session, lastLineNumber, config) {
+          return 3 * config.characterWidth;
+        },
+        getText: function(session, row) {
+          return row+1;
+        }
+      };
+    }
+
+    onTabletCodeChanged(editor, scope) {
+    }
+}
 
   angular.module("RowdyRedApp").controller("PlayGameCtrl", PlayGameCtrl);
 
