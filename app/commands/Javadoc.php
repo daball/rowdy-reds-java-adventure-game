@@ -26,7 +26,7 @@ class JavadocCommandHandler extends BaseCommandHandler
   ///Validates the incoming command line for help commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     return stripos($commandLine, 'javadoc') === 0;
   }
@@ -34,7 +34,7 @@ class JavadocCommandHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $eol = "\n";

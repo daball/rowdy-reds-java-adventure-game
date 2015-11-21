@@ -132,6 +132,8 @@ module app.game {
     updateGame(game) {
       var scope = this;
       this.game = game;
+      if (this.tabletCode != game.tabletCode)
+        this.tabletCode = game.tabletCode;
       this.isLoading = false;
     }
 
@@ -148,13 +150,13 @@ module app.game {
       });
     }
 
-    sendCommand(command, callback) {
+    sendCommand(commandLine, tabletCode, callback) {
       // this.gameResource.
       this.isLoading = true;
-      this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
-      this.gameResource.save({gameName: this.gameName, commandLine: command, tabletCode: this.tabletCode}, (game: app.domain.IGameInProgress) => {
+      this.game.consoleHistory += "\n" + this.game.prompt + commandLine + "\nExecuting command on game service...";
+      this.gameResource.save({gameName: this.gameName, commandLine: commandLine, tabletCode: tabletCode}, (game: app.domain.IGameInProgress) => {
         // console.log(game);
-        if (game.error)
+        if (game.error != undefined)
           this.handleError(game.error);
         else
           this.updateGame(game);
@@ -251,7 +253,7 @@ module app.game {
           scope.commandLineReadOnly = false;
           //scope.onCommandLineChanged();
         };
-        scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
+        scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), scope.tabletCode, onCommandLineProcessed);
       }
     }
 

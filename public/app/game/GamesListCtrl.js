@@ -17,7 +17,7 @@ var app;
                 this.isLoading = true;
                 this.gamesListResource.get(function (games) {
                     console.log(games);
-                    if (games.error)
+                    if (games.error != undefined)
                         _this.handleError(games.error);
                     else {
                         _this.games = games.games;
@@ -55,3 +55,4 @@ var app;
         angular.module("RowdyRedApp").controller("GamesListCtrl", GamesListCtrl);
     })(game = app.game || (app.game = {}));
 })(app || (app = {}));
+//# sourceMappingURL=GamesListCtrl.js.map

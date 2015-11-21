@@ -14,7 +14,7 @@ class ExitCommandHandler extends BaseCommandHandler
   ///Validates the incoming command line for exit commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     return strtolower($commandLine) == 'exit' || $commandLine == "System.exit(0);";
   }
@@ -22,7 +22,7 @@ class ExitCommandHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     // $gameState = GameState::init($gameState->getGame()->getName());

@@ -23,7 +23,7 @@ module app.game {
       this.isLoading = true;
       this.gamesListResource.get((games: app.domain.IGamesList) => {
         console.log(games);
-        if (games.error)
+        if (games.error != undefined)
           this.handleError(games.error);
         else {
           this.games = games.games;

@@ -9,12 +9,12 @@ require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once 'BaseCommandHandler.php';
 
 ///Handles reset command.
-class ResetCommandHandler extends BaseCommandHandler
+class Reset extends BaseCommandHandler
 {
   ///Validates the incoming command line for reset commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     $commandLine = strtolower($commandLine);
     return  $commandLine == 'reset' ||
@@ -24,7 +24,7 @@ class ResetCommandHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $message = $gameState->resetGameState();
@@ -32,4 +32,4 @@ class ResetCommandHandler extends BaseCommandHandler
   }
 }
 
-CommandProcessor::addCommandHandler(new ResetCommandHandler());
+CommandProcessor::addCommandHandler(new Reset());

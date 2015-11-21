@@ -15,7 +15,7 @@ class Assign extends BaseCommandHandler
 {
   use TUsesItems;
 
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();
@@ -26,7 +26,7 @@ class Assign extends BaseCommandHandler
     return false;
   }
 
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();

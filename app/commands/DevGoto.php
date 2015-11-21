@@ -21,7 +21,7 @@ class DevGoto extends BaseCommandHandler
       return "";
   }
 
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     return (GameEngine::isApplicationEnv('development')
         && stripos($commandLine, 'goto') === 0);
@@ -37,7 +37,7 @@ class DevGoto extends BaseCommandHandler
     return $output;
   }
 
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $gotoWhere = $this->getTargetName($commandLine);

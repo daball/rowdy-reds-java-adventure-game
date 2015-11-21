@@ -27,7 +27,7 @@ class AutoSuggest extends BaseCommandHandler
     );
   }
 
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     foreach ($this->verbs as $searchVerb) {
       if (stristr($commandLine, $searchVerb) !== FALSE)
@@ -36,7 +36,7 @@ class AutoSuggest extends BaseCommandHandler
     return false;
   }
 
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $verb = '';
     foreach ($this->verbs as $searchVerb) {

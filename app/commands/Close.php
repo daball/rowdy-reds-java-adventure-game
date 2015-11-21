@@ -11,14 +11,14 @@ require_once 'BaseCommandHandler.php';
 class Close extends BaseCommandHandler
 {
 
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();
     return preg_match('/([\w$_]+[\w\d$_]*)\.close\(\);/', $commandLine, $matches);
   }
 
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();

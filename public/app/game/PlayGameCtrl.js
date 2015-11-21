@@ -81,6 +81,8 @@ var app;
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
                 this.game = game;
+                if (this.tabletCode != game.tabletCode)
+                    this.tabletCode = game.tabletCode;
                 this.isLoading = false;
             };
             PlayGameCtrl.prototype.reconnectGame = function () {
@@ -95,12 +97,12 @@ var app;
                         _this.$location.url("/game/" + _this.game.gameName + "/thank-you");
                 });
             };
-            PlayGameCtrl.prototype.sendCommand = function (command, callback) {
+            PlayGameCtrl.prototype.sendCommand = function (commandLine, tabletCode, callback) {
                 var _this = this;
                 this.isLoading = true;
-                this.game.consoleHistory += "\n" + this.game.prompt + command + "\nExecuting command on game service...";
-                this.gameResource.save({ gameName: this.gameName, commandLine: command, tabletCode: this.tabletCode }, function (game) {
-                    if (game.error)
+                this.game.consoleHistory += "\n" + this.game.prompt + commandLine + "\nExecuting command on game service...";
+                this.gameResource.save({ gameName: this.gameName, commandLine: commandLine, tabletCode: tabletCode }, function (game) {
+                    if (game.error != undefined)
                         _this.handleError(game.error);
                     else
                         _this.updateGame(game);
@@ -190,7 +192,7 @@ var app;
                         scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n') + 1);
                         scope.commandLineReadOnly = false;
                     };
-                    scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), onCommandLineProcessed);
+                    scope.sendCommand(scope.commandLine.substring(0, scope.commandLine.indexOf('\n')), scope.tabletCode, onCommandLineProcessed);
                 }
             };
             PlayGameCtrl.prototype.onTabletCodeLoaded = function (editor, scope) {
@@ -218,3 +220,4 @@ var app;
         angular.module("RowdyRedApp").controller("PlayGameCtrl", PlayGameCtrl);
     })(game = app.game || (app.game = {}));
 })(app || (app = {}));
+//# sourceMappingURL=PlayGameCtrl.js.map

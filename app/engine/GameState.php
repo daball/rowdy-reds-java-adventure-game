@@ -24,6 +24,10 @@ final class GameState
    **/
   protected $commandHistory;
   /**
+   * Tablet code written by the player.
+   **/
+  protected $tabletCode;
+  /**
    * Prior command I/O history (full text).
    **/
   protected $consoleHistory;
@@ -43,7 +47,7 @@ final class GameState
     $this->resetGameState();
   }
 
-  public function addCommandToHistory($commandInput, $commandOutput)
+  public function addCommandToHistory($commandInput, $commandOutput, $tabletCode)
   {
     $prompt = "> ";
     $eol = "\n";
@@ -56,10 +60,15 @@ final class GameState
       else
         $this->consoleHistory .= $eol . $prompt . $commandInput . $eol . $commandOutput;
     }
+    $this->tabletCode = $tabletCode;
   }
 
   public function getConsoleHistory() {
     return $this->consoleHistory;
+  }
+
+  public function getTabletCode() {
+    return $this->tabletCode;
   }
 
   public function getCommandHistory() {
@@ -143,6 +152,7 @@ final class GameState
     $this->locals = array();
     $this->commandHistory = array();
     $this->consoleHistory = $this->inspectRoom();
+    $this->tabletCode = "";
     $this->moves = 0;
     $this->exiting = false;
   }
@@ -186,7 +196,6 @@ final class GameState
 
   protected function __construct($game)
   {
-    $eol = "\n";
     $this->setGame(GameEngine::loadGame($game));
   }
 }

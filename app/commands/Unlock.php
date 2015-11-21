@@ -15,14 +15,14 @@ class Unlock extends BaseCommandHandler
 
   use TUsesItems;
 
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();
     return preg_match('/([\w$_]+[\w\d$_]*)\.unlock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches);
   }
 
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();

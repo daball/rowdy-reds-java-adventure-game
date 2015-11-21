@@ -9,6 +9,7 @@ class CommandProcessor
   protected static $commandHandlers;
   protected $commandInput;
   protected $commandOutput;
+  protected $tabletInput;
 
   public static function init()
   {
@@ -23,26 +24,27 @@ class CommandProcessor
     array_push(self::$commandHandlers, $commandHandler);
   }
 
-  public function dispatchCommand($commandLine)
+  public function dispatchCommand($commandLine, $tabletCode)
   {
     $this->commandInput = $commandLine;
+    $this->tabletInput = $tabletCode;
     $commandLine = trim($commandLine);
     $commandOutput = "";
     if ($commandLine !== "")
     {
       foreach (self::$commandHandlers as $commandHandler)
       {
-        if ($commandHandler->validateCommand($commandLine))
+        if ($commandHandler->validateCommand($commandLine, $tabletCode))
         {
-          $commandOutput = $commandHandler->executeCommand($commandLine);
+          $commandOutput = $commandHandler->executeCommand($commandLine, $tabletCode);
           break; //stop foreach
         }
       }
       if ($commandOutput === "")
       {
         $autoSuggest = new AutoSuggest();
-        if ($autoSuggest->validateCommand($commandLine)) {
-          $commandOutput = $autoSuggest->executeCommand($commandLine);
+        if ($autoSuggest->validateCommand($commandLine, $tabletCode)) {
+          $commandOutput = $autoSuggest->executeCommand($commandLine, $tabletCode);
         }
       }
       if ($commandOutput === "")
@@ -62,30 +64,20 @@ class CommandProcessor
     return $this->commandOutput;
   }
 
-  public function __construct()
+  public function __construct($commandLine, $tabletCode)
   {
-    $commandLine = "";
-    if (isset($_POST['commandLine']))
-    	$commandLine = $_POST['commandLine'];
-    else if (isset($_SERVER['REQUEST_METHOD'])
-          && $_SERVER['REQUEST_METHOD'] == 'POST'
-          && isset($_SERVER['HTTP_ACCEPT'])
-          && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
-    	$data = json_decode(file_get_contents('php://input'), true);
-    	if (isset($data['commandLine']))
-    		$commandLine = $data['commandLine'];
-    }
-    if ($commandLine)
-    {
-      $this->commandInput = trim($commandLine);
-      $this->commandOutput = $this->dispatchCommand($this->commandInput);
-      GameState::getInstance()->addCommandToHistory($this->commandInput, $this->commandOutput);
-    }
-    else
+    $this->commandInput = trim($commandLine);
+    $this->tabletInput = trim($tabletCode);
+    if (!$this->commandInput)
     {
       $this->commandInput = "";
+      $this->tabletCode = "";
       $this->commandOutput = "";
     }
+    else {
+      $this->commandOutput = $this->dispatchCommand($this->commandInput, $this->tabletInput);
+    }
+    GameState::getInstance()->addCommandToHistory($this->commandInput, $this->commandOutput, $this->tabletInput);
   }
 }
 

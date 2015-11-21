@@ -19,7 +19,7 @@ class BaseCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     $commandHandler = new AParticularCommandHandler();
 
-    $this->assertFalse($commandHandler->validateCommand(null, $commandLine));
-    $this->assertEquals("", $commandHandler->executeCommand(null, $commandLine));
+    $this->assertFalse($commandHandler->validateCommand($commandLine, $commandLine));
+    $this->assertEquals("", $commandHandler->executeCommand($commandLine, $commandLine));
   }
 }

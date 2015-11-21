@@ -10,12 +10,12 @@ use engine\CommandProcessor;
 use engine\GameEngine;
 
 ///Handles help command.
-class HelpCommandHandler extends BaseCommandHandler
+class Help extends BaseCommandHandler
 {
   ///Validates the incoming command line for help commands.
   ///Return true if command line is valid for this command handler.
   ///Return false if command line is not valid for this command handler.
-  public function validateCommand($commandLine)
+  public function validateCommand($commandLine, $tabletCode)
   {
     $commandLine = strtolower($commandLine);
     return  $commandLine == 'help' ||
@@ -25,7 +25,7 @@ class HelpCommandHandler extends BaseCommandHandler
   ///Executes the incoming command line.
   ///Return the output for the command. Do not add a newline at the
   ///end of the output.
-  public function executeCommand($commandLine)
+  public function executeCommand($commandLine, $tabletCode)
   {
     $eol = "\n";
     $isDevMode = GameEngine::isApplicationEnv("development");
@@ -75,4 +75,4 @@ class HelpCommandHandler extends BaseCommandHandler
   }
 }
 
-CommandProcessor::addCommandHandler(new HelpCommandHandler());
+CommandProcessor::addCommandHandler(new Help());

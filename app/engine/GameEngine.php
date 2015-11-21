@@ -83,6 +83,21 @@ class GameEngine
         && strtolower($_SERVER['APPLICATION_ENV']) == strtolower($env));
   }
 
+  public static function getPOSTParameter($postParameter) {
+    $output = "";
+    if (isset($_POST[$postParameter]))
+    	$output = $_POST[$postParameter];
+    else if (isset($_SERVER['REQUEST_METHOD'])
+          && $_SERVER['REQUEST_METHOD'] == 'POST'
+          && isset($_SERVER['HTTP_ACCEPT'])
+          && strstr($_SERVER['HTTP_ACCEPT'], 'application/json') !== FALSE) {
+    	$data = json_decode(file_get_contents('php://input'), true);
+    	if (isset($data[$postParameter]))
+    		$output = $data[$postParameter];
+    }
+    return $output;
+  }
+
   public function __construct($gameName)
   {
     //check if existing gameState exists in session
@@ -93,6 +108,12 @@ class GameEngine
       //otherwise, create a new gameState session
       $this->createSession($gameName);
     //create command processor, which will execute any command on the $_POST['commandLine']
-    $this->commandProcessor = new CommandProcessor();
+    $commandLine = self::getPOSTParameter('commandLine');
+    $tabletCode = self::getPOSTParameter('tabletCode');
+    if (isset($_SERVER['REQUEST_METHOD'])
+          && $_SERVER['REQUEST_METHOD'] != 'POST'
+          && !$tabletCode)
+          $tabletCode = GameState::getInstance()->getTabletCode();
+    $this->commandProcessor = new CommandProcessor($commandLine, $tabletCode);
   }
 }

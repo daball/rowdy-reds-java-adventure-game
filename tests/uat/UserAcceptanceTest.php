@@ -103,7 +103,7 @@ class UserAcceptanceTest extends PHPUnit_Extensions_SeleniumTestCase
     //echo "initialconsolehistory=".$consoleHistory;
     $lastCommandOutputStart = sizeof($commandLines);
     $commandOutput = $gameEngine->commandProcessor->dispatchCommand($gameEngine->gameState, $command);
-    $gameEngine->gameState->addCommandToHistory($command, $commandOutput);
+    $gameEngine->gameState->addCommandToHistory($command, $commandOutput, "");
     $consoleHistory = $gameEngine->gameState->consoleHistory;
     //echo "finalconsolehistory=".$consoleHistory;
     $commandLines = explode($eol, $consoleHistory);

@@ -42,6 +42,7 @@ $imageUrl = $avatarRoom->getImageUrl();
 
 $consoleHistory = $gameState->getConsoleHistory();
 $commandHistory = $gameState->getCommandHistory();
+$tabletCode = $gameState->getTabletCode();
 $commandProcessor = $gameEngine->getCommandProcessor();
 $commandInput = $commandProcessor->getCommandInput();
 $commandOutput = $commandProcessor->getCommandOutput();
@@ -67,7 +68,7 @@ echo json_encode(array(
   'prompt' => $prompt,
 	'moves' => $moves,
 	'isExiting' => $isExiting,
-	'tabletCode' => "",
+	'tabletCode' => $tabletCode,
 ), JSON_PRETTY_PRINT);
 
 /* MAINTENANCE */
