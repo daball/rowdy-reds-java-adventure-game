@@ -2,79 +2,41 @@
 
 namespace playable;
 
-require_once "BasicContainer.php";
-// require_once "IUnlockable.php";
-// require_once "TUnlockable.php";
-// require_once "TCloseable.php";
-// require_once "TContainer.php";
-// require_once "TCreateWithKey.php";
+require_once "OpenableContainer.php";
 
-class UnlockableContainer extends BasicContainer // implements IUnlockable, \Serializable
+class UnlockableContainer extends OpenableContainer
 {
-  // use TUnlockable;
-  // use TCloseable;
-  // use TCreateWithKey;
-
-  public function __construct($key) {
-    parent::__construct();
-    $this->key = $key;
-    $this->onOpen(function () {
-      if ($this->unlocked) {
-        if (!$this->opened) {
-          $this->opened = true;
-          return "The container swings open.";
+  public function __construct($name, $key) {
+    parent::__construct($name);
+    //implement lockable
+    $this->define(function ($unlockableContainer) use ($name, $key) {
+      $lockable = new Lockable($key);
+      $lockable->onLock(function ($lockable) {
+      });
+      $lockable->onRefuseLock(function ($lockable) {
+      });
+      $lockable->onUnlock(function ($lockable) {
+      });
+      $lockable->onRefuseUnlock(function ($lockable) {
+      });
+      $unlockableContainer->addComponent($lockable);
+    });
+    //override Door
+    $this->define(function ($lockedDoor) use ($name, $direction, $key) {
+      $lockedDoor->getComponent('Inspector')->onInspect(function ($inspector) {
+        $door = $inspector->getParent();
+        $lockable = $door->getComponent('Lockable');
+        $openable = $door->getComponent('Openable');
+        if ($lockable->isLocked()) {
+          return "This is a locked container.";
         }
         else {
-          return "This container has already been opened.";
+          if ($openable->isOpened())
+            return "This is an unlocked container.";
+          else
+            return "This is an unlocked container, but it is closed.";
         }
-      }
-      else {
-        if ($this->opened)
-          return "This container has already been opened.";
-        else
-          return "You try to open the container, but this container is locked.";
-      }
-    });
-    $this->onLock(function ($success) {
-      if ($this->unlocked) {
-        if ($success)
-          return "The key turns and the container is locked. The container remains opened.";
-        else
-          return "The key turns and the container is locked. The container remains closed.";
-      }
-      else {
-        return "This container has already been locked.";
-      }
-    });
-    $this->onUnlock(function ($success) {
-      if ($success)
-        return "You have unlocked the container. The container swings open.";
-      else
-        return "You must use a key to unlock a locked container.";
+      });
     });
   }
-
-  /* ISerializable interface implementation */
-
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'description' => $this->description,
-  //       'items' => $this->items,
-  //       'opened' => $this->opened,
-  //       'unlocked' => $this->unlocked,
-  //       'key' => $this->key,
-  //     )
-  //   );
-  // }
-  //
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $this->key = $data['key'];
-  //   $this->__construct($this->key);
-  //   $this->description = $data['description'];
-  //   $this->items = $data['items'];
-  //   $this->opened = $data['opened'];
-  //   $this->unlocked = $data['unlocked'];
-  // }
 }

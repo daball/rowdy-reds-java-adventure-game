@@ -13,7 +13,7 @@ use \components\Inspector;
 /**
  * A Key item must be used to open an Unlockable item.
  */
-class Key extends GameObject //implements \Serializable
+class Key extends GameObject
 {
   /**
    * @ignore
@@ -54,26 +54,4 @@ class Key extends GameObject //implements \Serializable
   public function getSecret() {
     return $this->secret;
   }
-
-  // /**
-  //  * @ignore
-  //  */
-  // public function serialize() {
-  //   return serialize(
-  //     array(
-  //       'secret' => $this->secret,
-  //       'gameObject' => parent::serialize(),
-  //     )
-  //   );
-  // }
-  //
-  // /**
-  //  * @ignore
-  //  */
-  // public function unserialize($data) {
-  //   $data = unserialize($data);
-  //   $data['gameObject'] = unserialize($data['gameObject']);
-  //   parent::__construct($data['gameObject']['name']);
-  //   $this->__construct($data['gameObject']['name'], $data['secret']);
-  // }
 }

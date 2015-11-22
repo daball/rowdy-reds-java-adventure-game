@@ -32,16 +32,9 @@ class OpenableContainer extends BasicContainer
       $basicContainer->addComponent($openable);
 
       $container = new Container();
-      // $inspector->onInspect(function ($inspector) {
-      //   $openable = $inspector->getParent()->getComponent('Openable');
-      //   if ($openable->isOpened())
-      //     return "The container is open.";
-      //   else
-      //     return "The container is not open.";
-      // });
       $basicContainer->addComponent($container);
 
-      $inspector = new Inspector();
+      $inspector = $this->getComponent('Inspector');
       $inspector->onInspect(function ($inspector) {
         $openable = $inspector->getParent()->getComponent('Openable');
         if ($openable->isOpened())
@@ -49,7 +42,6 @@ class OpenableContainer extends BasicContainer
         else
           return "The container is not open.";
       });
-      $basicContainer->addComponent($inspector);
     });
   }
 }

@@ -16,7 +16,6 @@ use \game\GameObject;
  */
 class Door extends GameObject
 {
-
   public function __construct($name, $direction)
   {
     parent::__construct($name);

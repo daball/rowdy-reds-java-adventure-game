@@ -37,7 +37,7 @@ class CommandProcessorTest extends \PHPUnit_Framework_TestCase
     {
       $_POST['commandLine'] = $validCommandLine;
       $gameState = GameState::init('Iteration 0');
-      $commandProcessor = new CommandProcessor($gameState);
+      $commandProcessor = new CommandProcessor($validCommandLine, "");
       $this->assertNotEquals("I do not understand.", $commandProcessor->getCommandOutput());
     }
 
@@ -45,7 +45,7 @@ class CommandProcessorTest extends \PHPUnit_Framework_TestCase
     {
       $_POST['commandLine'] = $invalidCommandLine;
       $gameState = GameState::init('Iteration 0');
-      $commandProcessor = new CommandProcessor($gameState);
+      $commandProcessor = new CommandProcessor($invalidCommandLine, "");
       $this->assertEquals("I do not understand.", $commandProcessor->getCommandOutput());
     }
   }

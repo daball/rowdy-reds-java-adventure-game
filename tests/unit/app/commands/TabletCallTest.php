@@ -94,7 +94,7 @@ class TabletCallTest extends \PHPUnit_Framework_TestCase
     $this->assertTrue($tabletCall->validateCommand($validCalls[1], $validSignatures));
     $this->assertTrue($tabletCall->validateCommand($validCalls[2], $validSignatures));
 
-    echo $tabletCall->executeCommand($validCalls[0], $validSignatures);
+    // echo $tabletCall->executeCommand($validCalls[0], $validSignatures);
     $this->assertTrue(!!$tabletCall->executeCommand($validCalls[0], $validSignatures));
     $this->assertTrue(!!$tabletCall->executeCommand($validCalls[1], $validSignatures));
     $this->assertTrue(!!$tabletCall->executeCommand($validCalls[2], $validSignatures));
