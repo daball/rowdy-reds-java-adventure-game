@@ -2,6 +2,7 @@
 
 namespace util\tests;
 
+require_once __DIR__.'/../../../../vendor/phpunit/phpunit/src/Framework/TestCase.php';
 require_once __DIR__.'/../../../../app/util/TDefine.php';
 
 use \util\TDefine;

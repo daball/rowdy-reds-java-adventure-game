@@ -6,6 +6,7 @@ require_once __DIR__.'/../game/Direction.php';
 require_once __DIR__.'/../engine/GameState.php';
 require_once 'GameObject.php';
 require_once __DIR__.'/../components/index.php';
+require_once __DIR__.'/../util/PubSubMessageQueue.php';
 
 use \game\Direction;
 use \engine\GameState;
@@ -160,7 +161,13 @@ class Player
   }
 
   public function setLocation($location) {
+    $oldLocation = $this->getLocation();
     $this->location = $location;
+    PubSubMessageQueue::publish($this, "Player", array(
+      'action' => 'setLocation',
+      'oldLocation' => $oldLocation,
+      'newLocation' => $this->getLocation(),
+    ));
   }
 
   public function getLeftHand() {

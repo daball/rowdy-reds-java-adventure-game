@@ -18,7 +18,10 @@ use \playable\Key;
 use \playable\Food;
 use \playable\LockedDoor;
 
-GameBuilder::newGame("Experimental")
+$gameName = pathinfo(__FILE__)['filename'];
+$gameUri = "game://$gameName/"
+
+GameBuilder::newGame($gameName)
   ->insertRoom((new Room('Forest'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
       return "You are standing in a forest.  There are trees all around you.  A path leads north.";

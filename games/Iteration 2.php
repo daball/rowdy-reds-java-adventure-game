@@ -17,155 +17,172 @@ use \playable\Food;
 use \playable\LockedDoor;
 use \playable\Dog;
 
-function constructBasicRoom($name, $desc, $image) {
-
-  return (new Room($name))->define(function ($room) use ($desc, $image) {
-      $room->getComponent('Inspector')->onInspect(function ($inspector) use ($desc) {
-        return $desc;
-      });
-      $room->setImageUrl($image);
-    });
+function constructBasicRoom($n, $d, $i) {
+  return \game\initialRoom(array('name'=>$n, 'description'=>$d, 'imageUrl'=>$i));
 }
 
-GameBuilder::newGame("Iteration 2")
-  ->insertRoom((new Room('Forest'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are standing in a forest.  There are trees all around you.  A path leads north.";
-    });
-    $room->setImageUrl('forest.png');
-  }))
-  ->insertRoom((new Room('Castle Entrance'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are at the edge of a forest and are standing at a grand castle.  The castle's door lies to the north.";
-    });
-    $room->setImageUrl('castleEntrance.png');
-  }))
-  ->insertRoom((new Room('Foyer'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a foyer. Intricate stonework decorates the foyer and lamps line the wall.";
-    });
-    $room->setImageUrl('foyer.jpg');
-  }))
-  ->insertRoom((new Room('Eastern End of Tapestry Room'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in the east end of a long hall lined with ornate tapestries.  The room continues to the west.";
-    });
-    $room->setImageUrl('tapestryE.jpg');
-  }))
-  ->insertRoom((new Room('Western End of Tapestry Room'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in the west end of a long hall lined with ornate tapestries.  The room continues to the east.";
-    });
-    $room->setImageUrl('tapestryW.jpg');
-  }))
-  ->insertRoom((new Room('Study'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a private study lined with stained glass windows, and an ornately carved desk.  A small note rests on the desk.";
-    });
-    $room->setImageUrl('study.jpg');
-  }))
-  ->insertRoom((new Room('Library'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a large library with book cases stacked from floor to ceiling.  Intricate murals run along the top of the book cases, and there are carved wood panels in the ceiling.";
-    });
-    $room->setImageUrl('library_key.jpg');
-    $container = $room->getComponent('Container');
-    $rustyKey = new Key('rustyKey', 'rustySecret');
-    $rustyKey->define(function ($rustyKey) {
-      $inspector = $rustyKey->getComponent('Inspector');
-      $inspector->onInspect(function ($inspector) {
-        return "It's a dingy rusty key.";
-      });
-      $initialOnAssign = $rustyKey->getComponent('Assignable')->onAssign();
-      $rustyKey->getComponent('Assignable')->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign) {
-        $room = $oldTarget;
-        $room->setImageUrl('library.jpg');
-        return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
-      });
-    });
-    $container->insertItem($rustyKey);
-  }))
-  ->insertRoom((new Room('Conservatory'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a beautiful conservatory with many exotic plants and a greenhouse ceiling.";
-    });
-    $room->setImageUrl('conservatory.jpg');
-  }))
-  ->insertRoom((new Room('Lounge'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a lounge decorated with many paintings, and nice comfortable searting.  There is a door to the east.";
-    });
-    $room->setImageUrl('lounge.jpg');
-    $room->getComponent('Container')->insertItem(new LockedDoor('door', Direction::$e, new Key('rustyKey', 'rustySecret')));
-  }))
-  ->insertRoom((new Room("Butlers' Quarters"))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in the butler's quarters.  You see stairs that lead to nowhere, and some tables and chairs.  It seems the butler must be a lush since he has an entire tavern in his quarters!";
-    });
-    $room->setImageUrl('butlersQuarters.jpg');
-  }))
-  ->insertRoom((new Room('Kitchen'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.";
-    });
-    $room->setImageUrl('kitchen.jpg');
-    $container = $room->getComponent('Container');
+/* SIMPLE ROOM DEFINITIONS */
+$gameName = pathinfo(__FILE__)['filename'];
+$forest = array(
+  'name'        => "Forest",
+  'description' => "You are standing in a forest.  There are trees all around you.  A path leads north.",
+  'imageUrl'    => "forest.png",
+);
+$castleEntrance = array(
+  'name'        => "Castle Entrance",
+  'description' => "You are at the edge of a forest and are standing at a grand castle.  The castle's door lies to the north.",
+  'imageUrl'    => "castleEntrance.png",
+);
+$foyer = array(
+  'name'        => "Foyer",
+  'description' => "You are in a foyer. Intricate stonework decorates the foyer and lamps line the wall.",
+  'imageUrl'    => "foyer.jpg",
+);
+$tapestryE = array(
+  'name'        => "Eastern End of Tapestry Room",
+  'description' => "You are in the east end of a long hall lined with ornate tapestries.  The room continues to the west.",
+  'imageUrl'    => "tapestryE.jpg",
+);
+$tapestryW = array(
+  'name'        => "Western End of Tapestry Room",
+  'description' => "You are in the west end of a long hall lined with ornate tapestries.  The room continues to the east.",
+  'imageUrl'    => "tapestryW.jpg",
+);
+$study = array(
+  'name'        => "Study",
+  'description' => "You are in a private study lined with stained glass windows, and an ornately carved desk.  A small note rests on the desk.",
+  'imageUrl'    => "study.jpg",
+  'items'       => array(
+    'note'       => array(
+      'type'                    => 'note',
+      'name'                    => "note",
+      'description'             => "I'm a note!",
+    ),
+  ),
+);
+$library = array(
+  'name'        => "Library",
+  'description' => "You are in a large library with book cases stacked from floor to ceiling.  Intricate murals run along the top of the book cases, and there are carved wood panels in the ceiling.",
+  'imageUrl'    => "library_key.jpg",
+  'items'       => array(
+    'rustyKey'    => array(
+      'type'                    => 'key',
+      'name'                    => "rustyKey",
+      'secret'                  => "rustySecret",
+      'description'             => "It's a dingy rusty key.",
+      'onAssign.room.imageUrl'  => "library.jpg",
+    ),
+  ),
+);
+$conservatory = array(
+  'name'        => "Conservatory",
+  'description' => "You are in a beautiful conservatory with many exotic plants and a greenhouse ceiling.",
+  'imageUrl'    => "conservatory.jpg",
+);
+$lounge = array(
+  'name'        => "Lounge",
+  'description' => "You are in a lounge decorated with many paintings, and nice comfortable searting.  There is a door to the east.",
+  'imageUrl'    => "lounge.jpg",
+  'items'       => array(
+    'lockedDoor'  => array(
+      'type'        => "lockedDoor",
+      'name'        => "door",
+      'direction'   => Direction::$e,
+      'key.name'    => $library['items']['rustyKey']['name'],
+      'key.secret'  => $library['items']['rustyKey']['secret'],
+    ),
+  ),
+);
+$butlersQuarters = array(
+  'name'        => "Butlers' Quarters",
+  'description' => "You are in the butler's quarters.  You see stairs that lead to nowhere, and some tables and chairs.  It seems the butler must be a lush since he has an entire tavern in his quarters!",
+  'imageUrl'    => "butlersQuarters.jpg",
+);
+$kitchen = array(
+  'name'        => "Kitchen",
+  'description' => "You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.",
+  'imageUrl'    => "kitchen.jpg",
+  'items'       => array(
+    //FYI: There is no room to the WEST of Kitchen
+    'door'        => array(
+      'type'        => "door",
+      'name'        => "door",
+      'direction'   => Direction::$w,
+    ),
+    'lambChop'  => array(
+      'type'        => "food",
+      'name'        => "lambChop",
+      'description' => "It's a chop of lamb."
+    ),
+  ),
+);
+$pantry = array(
+  'name'        => "Pantry",
+  'description' => "You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods.",
+  'imageUrl'    => "pantry_key.jpg",
+  'items'       => array(
+    'brassKey'    => array(
+      'type'                    => 'key',
+      'name'                    => "brassKey",
+      'secret'                  => "brassSecret",
+      'description'             => "It's a nice and shiny brass key.",
+      'onAssign.room.imageUrl'  => "pantry.jpg",
+    ),
+  ),
+);
+$banquetHall = array(
+  'name'        => "Banquet Hall",
+  'description' => "You are in the banquet hall.",
+  'imageUrl'    => "banquetHall.jpg",
+);
+$backHallway = array(
+  'name'        => "Back Hallway",
+  'description' => "You are in a hallway.",
+  'imageUrl'    => "halllway1.jpg",
+);
+$servantsQuarters = array(
+  'name'        => "Servants' Quarters",
+  'description' => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
+  'imageUrl'    => "servantsQuarters.jpg",
+  // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
+  //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
+  //                                                     ->setItem('lamp', \playable\Lamp::create())
+  //                     )
+);
+$taxidermyRoom = array(
+  'name'        => "Taxidermy Room",
+  'description' => "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.",
+  'imageUrl'    => "taxidermyRoom_dog.jpg",
+);
+$chessRoom = array(
+  'name'        => "Chess Room",
+  'description' => "This room is pitch black.  You can't see anything.",
+  'imageUrl'    => "darkRoom.jpg",
+);
 
-    // ->insertObstacleObjectInRoom('kitchen', Direction::$w, 'door', \playable\Door::create())
-
-    $lambChop = new Food("lambChop");
-    $lambChop->define(function ($lambChop) {
-      $inspector = $lambChop->getComponent('Inspector');
-      $inspector->onInspect(function ($inspector) {
-        return "It's a chop of lamb.";
-      });
-    });
-    $container->insertItem($lambChop);
-  }))
-  ->insertRoom((new Room('Pantry'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods.";
-    });
-    $room->setImageUrl('pantry_key.jpg');
-
-    $container = $room->getComponent('Container');
-    $brassKey = new Key('brassKey', 'brassKeySecret');
-    $brassKey->define(function ($brassKey) {
-      $inspector = $brassKey->getComponent('Inspector');
-      $inspector->onInspect(function ($inspector) {
-        return "It's a nice and shiny brass key.";
-      });
-    });
-    $container->insertItem($brassKey);
-  }))
-  ->insertRoom((new Room('Banquet Hall'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in the banquet hall.";
-    });
-    $room->setImageUrl('banquetHall.jpg');
-  }))
-  ->insertRoom((new Room('Back Hallway'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a hallway.";
-    });
-    $room->setImageUrl('hallway1.jpg');
-  }))
-  ->insertRoom((new Room("Servants' Quarters"))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.";
-    });
-    $room->setImageUrl('servantsQuarters.jpg');
+GameBuilder::newGame($gameName)
+  ->insertRoom(\game\initialRoom($forest))
+  ->insertRoom(\game\initialRoom($castleEntrance))
+  ->insertRoom(\game\initialRoom($foyer))
+  ->insertRoom(\game\initialRoom($tapestryE))
+  ->insertRoom(\game\initialRoom($tapestryW))
+  ->insertRoom(\game\initialRoom($study))
+  ->insertRoom(\game\initialRoom($library))
+  ->insertRoom(\game\initialRoom($conservatory))
+  ->insertRoom(\game\initialRoom($lounge))
+  ->insertRoom(\game\initialRoom($butlersQuarters))
+  ->insertRoom(\game\initialRoom($kitchen))
+  ->insertRoom(\game\initialRoom($pantry))
+  ->insertRoom(\game\initialRoom($banquetHall))
+  ->insertRoom(\game\initialRoom($backHallway))
+  ->insertRoom(\game\initialRoom($servantsQuarters)->define(function ($room) use ($servantsQuarters) {
     // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
     //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
     //                                                     ->setItem('lamp', \playable\Lamp::create())
     //                     )
   }))
-  ->insertRoom((new Room('Taxidermy Room'))->define(function ($room) {
+  ->insertRoom(\game\initialRoom($taxidermyRoom)->define(function ($room) use ($taxidermyRoom) {
     $stateOfDog = "hungry";
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.";
-    });
-    $room->setImageUrl('taxidermyRoom_dog.jpg');
     $room->getComponent('Container')->insertItem((new Dog('dog', Direction::$n))->define(function ($dog) use ($stateOfDog) {
       $foodConsumer = $dog->getComponent('FoodConsumer');
       $initialOnEat = $foodConsumer->onEat();
@@ -189,7 +206,7 @@ GameBuilder::newGame("Iteration 2")
         }
       });
     }));
-    $room->getComponent('Container')->insertItem((new BasicContainer('bowl'))->define(function ($bowl) use (&$stateOfDog) {
+    $room->getComponent('Container')->insertItem((new BasicContainer('bowl'))->define(function ($bowl) use ($stateOfDog) {
       $bowl->getComponent('Inspector')->onInspect(function ($inspector) use (&$stateOfDog) {
         $bowl = $inspector->getParent();
         $room = $bowl->getContainer();
@@ -208,7 +225,7 @@ GameBuilder::newGame("Iteration 2")
       });
     }));
   }))
-  ->insertRoom(constructBasicRoom('Chess Room', "This room is pitch black.  You can't see anything.", 'darkRoom.jpg'))
+  ->insertRoom(\game\initialRoom($chessRoom))
   ->insertRoom(constructBasicRoom('Vestibule', 'You are in a small vestibule.', 'vestibule.jpg'))
   ->insertRoom(constructBasicRoom('Art Gallery', 'You are in the castle art gallery.', 'artGallery.jpg'))
   ->insertRoom(constructBasicRoom('Base of Western Tower', 'You are in a circular room with a spiral staircase leading up to the right.', 'westTower1.jpg'))
@@ -218,7 +235,7 @@ GameBuilder::newGame("Iteration 2")
   ->insertRoom(constructBasicRoom('Courtyard', 'You are in the castle courtyard.', 'courtyard.jpg'))
   ->insertRoom(constructBasicRoom('Stable', 'You are in a stable.', 'stables.jpg'))
   ->insertRoom(constructBasicRoom('Smithery', 'You are in a smithery.', 'smithery.jpg'))
-  
+
   // Upper Floor
   ->insertRoom(constructBasicRoom('Grand Balcony', 'You are on a grand balcony that is overlooking the Grand Hall below.', 'grandBalcony.jpg'))
   ->insertRoom(constructBasicRoom('Billiards Room', 'You are in a billiards room.', 'billiardsRoom.jpg'))
@@ -255,33 +272,33 @@ GameBuilder::newGame("Iteration 2")
   }))*/
 
   // Iteration 1 Room Connections
-  ->connectRooms('Forest', Direction::$n, 'Castle Entrance')
-  ->connectRooms('Castle Entrance', Direction::$n, 'Foyer')
-  ->connectRooms('Foyer', Direction::$n, 'Eastern End of Tapestry Room')
-  ->connectRooms('Eastern End of Tapestry Room', Direction::$w, 'Western End of Tapestry Room')
-  ->connectRooms('Western End of Tapestry Room', Direction::$w, 'Study')
-  ->connectRooms('Study', Direction::$s, 'Library')
-  ->connectRooms('Foyer', Direction::$e, 'Conservatory')
-  ->connectRooms('Conservatory', Direction::$e, 'Lounge')
-  ->connectRooms('Lounge', Direction::$e, "Butlers' Quarters")
-  ->connectRooms("Butlers' Quarters", Direction::$n, 'Kitchen')
-  ->connectRooms('Kitchen', Direction::$n, 'Pantry')
-  ->connectRooms('Kitchen', Direction::$w, 'Banquet Hall')
-  ->connectRooms('Banquet Hall', Direction::$s, 'Conservatory')
-  ->connectRooms('Banquet Hall', Direction::$n, 'Back Hallway')
-  ->connectRooms('Back Hallway', Direction::$e, "Servants' Quarters")
-  ->connectRooms('Western End of Tapestry Room', Direction::$n, 'Taxidermy Room')
-  ->connectRooms('Taxidermy Room', Direction::$n, 'Chess Room')
+  ->connectRooms($forest,           Direction::$n,    $castleEntrance)
+  ->connectRooms($castleEntrance,   Direction::$n,    $foyer)
+  ->connectRooms($foyer,            Direction::$n,    $tapestryE)
+  ->connectRooms($tapestryE,        Direction::$w,    $tapestryW)
+  ->connectRooms($tapestryW,        Direction::$w,    $study)
+  ->connectRooms($study,            Direction::$s,    $library)
+  ->connectRooms($foyer,            Direction::$e,    $conservatory)
+  ->connectRooms($conservatory,     Direction::$e,    $lounge)
+  ->connectRooms($lounge,           Direction::$e,    $butlersQuarters)
+  ->connectRooms($butlersQuarters,  Direction::$n,    $kitchen)
+  ->connectRooms($kitchen,          Direction::$n,    $pantry)
+  ->connectRooms($kitchen,          Direction::$w,    $banquetHall)
+  ->connectRooms($banquetHall,      Direction::$s,    $conservatory)
+  ->connectRooms($banquetHall,      Direction::$n,    $backHallway)
+  ->connectRooms($backHallway,      Direction::$e,    $servantsQuarters)
+  ->connectRooms($tapestryW,        Direction::$n,    $taxidermyRoom)
+  ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
 
   // Iteration 2 Room Connections
-  ->connectRooms('Foyer', Direction::$w, 'Vestibule')
-  ->connectRooms('Vestibule', Direction::$w, 'Base of Western Tower')
+  ->connectRooms($foyer,            Direction::$w,    'Vestibule')
+  ->connectRooms('Vestibule',       Direction::$w,    'Base of Western Tower')
   ->connectRooms('Base of Western Tower', Direction::$u, 'Top of Western Tower')
-  ->connectRooms('Study', Direction::$n, 'Art Gallery')
-  ->connectRooms('Kitchen', Direction::$e, 'Courtyard')
+  ->connectRooms($study,            Direction::$n,    'Art Gallery')
+  ->connectRooms($kitchen,          Direction::$e,    'Courtyard')
   ->connectRooms('Courtyard', Direction::$e, 'Stable')
   ->connectRooms('Stable', Direction::$s, 'Smithery')
-  ->connectRooms('Banquet Hall', Direction::$w, 'Grand Hall')
+  ->connectRooms($banquetHall, Direction::$w, 'Grand Hall')
   ->connectRooms('Grand Hall', Direction::$s, 'Eastern End of Tapestry Room')
   ->connectRooms('Grand Hall', Direction::$n, 'Grand Staircase')
   ->connectRooms('Grand Staircase', Direction::$u, 'Grand Balcony')
@@ -307,6 +324,6 @@ GameBuilder::newGame("Iteration 2")
   ->connectRooms('', Direction::$, '')
   ->connectRooms('', Direction::$, '')
   */
-  
+
   ->setSpawnPoint('Castle Entrance')
 ;

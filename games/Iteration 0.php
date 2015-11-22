@@ -12,27 +12,37 @@ use \game\Direction;
 use \game\Game;
 use \game\Room;
 
-GameBuilder::newGame("Iteration 0")
-  ->insertRoom((new Room('Castle Entrance'))->define(function ($room) {
-      $room->getComponent("Inspector")->onInspect(function ($inspector) {
-        return 'You are standing at a castle door. A door lies to the north.';
-      });
-      $room->setImageUrl('background.jpg');
-    }))
-  ->insertRoom((new Room('Main Hall'))->define(function ($room) {
-      $room->getComponent("Inspector")->onInspect(function ($inspector) {
-        return 'You are in a lavishly decorated hallway. The kitchen lies to the west, and the door to the outside is to the south.';
-      });
-      $room->setImageUrl('mainHall.jpg');
-      // ->insertDoorObstacle('hall', Direction::$w, 'door')
-  }))
-  ->insertRoom((new Room('Kitchen'))->define(function ($room) {
-      $room->getComponent("Inspector")->onInspect(function ($inspector) {
-        return 'You are in a kitchen. Someone has been cooking here lately and the smell of mutton still hangs heavy in the air. The hallway lies to the east.';
-      });
-      $room->setImageUrl('CastleRoom.jpg');
-  }))
-  ->connectRooms('Castle Entrance', Direction::$north, 'Main Hall')
-  ->connectRooms('Main Hall', Direction::$west, 'Kitchen')
-  ->setSpawnPoint('Castle Entrance')
+/* SIMPLE ROOM DEFINITIONS */
+$gameName = pathinfo(__FILE__)['filename'];
+$castleEntrance = array(
+  'name'        => "Castle Entrance",
+  'description' => "You are standing at a castle door. A door lies to the north.",
+  'imageUrl'    => "background.jpg",
+);
+$mainHall = array(
+  'name'        => "Main Hall",
+  'description' => "You are in a lavishly decorated hallway. The kitchen lies to the west, and the door to the outside is to the south.",
+  'imageUrl'    => "mainHall.jpg",
+  'items'       => array(
+    'door'        => array(
+      'type'        => "door",
+      'name'        => "door",
+      'direction'   => Direction::$w,
+    )
+  ),
+);
+$kitchen = array(
+  'name'        => "Kitchen",
+  'description' => "You are in a kitchen. Someone has been cooking here lately and the smell of mutton still hangs heavy in the air. The hallway lies to the east.",
+  'imageUrl'    => "CastleRoom.jpg",
+);
+
+/* BUILD GAME */
+GameBuilder::newGame($gameName)
+  ->insertRoom(\game\initialRoom($castleEntrance))
+  ->insertRoom(\game\initialRoom($mainHall))
+  ->insertRoom(\game\initialRoom($kitchen))
+  ->connectRooms($castleEntrance, Direction::$north, $mainHall)
+  ->connectRooms($mainHall, Direction::$west, $kitchen)
+  ->setSpawnPoint($castleEntrance)
 ;

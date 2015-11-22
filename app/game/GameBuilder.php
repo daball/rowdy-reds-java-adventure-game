@@ -6,7 +6,77 @@ require_once 'Game.php';
 require_once 'Direction.php';
 require_once 'Room.php';
 require_once __DIR__.'/../playable/index.php';
+require_once __DIR__.'/../components/index.php';
+
 use \Exception;
+use \components\Assignable;
+use \playable\BasicContainer;
+use \playable\Key;
+use \playable\Food;
+use \playable\Door;
+use \playable\LockedDoor;
+use \playable\Dog;
+
+function initialRoom($room) {
+  $name = $room['name'];
+  $description = $room['description'];
+  $imageUrl = $room['imageUrl'];
+  $items = array_key_exists('items', $room) ? $room['items'] : array();
+
+  return (new Room($name))->define(function ($room) use ($description, $imageUrl, $items) {
+    $room->setImageUrl($imageUrl);
+    $room->getComponent("Inspector")->onInspect(function ($inspector) use ($description) {
+      return $description;
+    });
+    $container = $room->getComponent("Container");
+    foreach ($items as $item) {
+      switch ($item['type']) {
+        case 'note':
+          $container->insertItem((new GameObject($item['name']))->define(function ($note) use ($item) {
+            $note->addComponent(new Assignable());
+            $note->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
+              return $item['description'];
+            });
+          }));
+          break;
+        case 'door':
+          $container->insertItem(new Door($item['name'], $item['direction']));
+          break;
+        case 'lockedDoor':
+          $container->insertItem(new LockedDoor($item['name'], $item['direction'], new Key($item['key.name'], 'rustySecret')));
+          break;
+        case 'key':
+          $key = new Key($item['name'], $item['secret']);
+          $key->define(function ($key) use ($item) {
+            $inspector = $key->getComponent('Inspector');
+            $inspector->onInspect(function ($inspector) use ($item) {
+              return $item['description'];
+            });
+            if (array_key_exists('onAssign.room.imageUrl', $item)) {
+              $initialOnAssign = $key->getComponent('Assignable')->onAssign();
+              $key->getComponent('Assignable')->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
+                $room = $oldTarget;
+                $room->setImageUrl($item['onAssign.room.imageUrl']);
+                return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
+              });
+            }
+          });
+          $container->insertItem($key);
+          break;
+        case 'food':
+          $food = new Food($item['name']);
+          $food->define(function ($food) use ($item) {
+            $inspector = $food->getComponent('Inspector');
+            $inspector->onInspect(function ($inspector) use ($item) {
+              return $item['description'];
+            });
+          });
+          $container->insertItem($food);
+          break;
+      }
+    }
+  });
+}
 
 /**
  *  The GameBuilder class helps automate building a Game by using
@@ -59,6 +129,8 @@ class GameBuilder
 
   public function connectRooms($roomName1, $room1Direction, $roomName2)
   {
+    if (is_array($roomName1)) $roomName1 = $roomName1['name'];
+    if (is_array($roomName2)) $roomName2 = $roomName2['name'];
     $room1 = $this->game->getRoom($roomName1);
     if ($room1 == null)
       throw new Exception("Room '$roomName1' not found");
@@ -90,6 +162,7 @@ class GameBuilder
 
   public function setSpawnPoint($roomName)
   {
+    if (is_array($roomName)) $roomName = $roomName['name'];
     foreach ($this->game->rooms as $r => $room)
     {
       if ($room->getName() === $roomName)
