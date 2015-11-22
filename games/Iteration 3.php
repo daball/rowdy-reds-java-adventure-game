@@ -17,15 +17,25 @@ use \playable\Food;
 use \playable\LockedDoor;
 use \playable\Dog;
 
-function constructBasicRoom($name, $desc, $image) {
+/*function constructBasicRoom($name, $desc, $imageUrl) {
 
-  return (new Room($name))->define(function ($room) use ($desc, $image) {
-      $room->getComponent('Inspector')->onInspect(function ($inspector) use ($desc) {
-        return $desc;
-      });
-      $room->setImageUrl($image);
-    });
+  $room = new Room($name);
+  $room -> setDescription($desc);
+  $room -> setImageUrl($imageUrl);
+  
+  return $room;
 }
+*/
+
+/*$brassKey = new Key('brassKey', 'brassKeySecret');
+$brassKey->define(function ($brassKey) {
+  $inspector = $brassKey->getComponent('Inspector');
+  $inspector->onInspect(function ($inspector) {
+    return "It's a nice and shiny brass key.";
+  });
+});
+*/
+
 
 GameBuilder::newGame("Iteration 3")
   ->insertRoom((new Room('Forest'))->define(function ($room) {
@@ -117,14 +127,14 @@ GameBuilder::newGame("Iteration 3")
     $lambChop->define(function ($lambChop) {
       $inspector = $lambChop->getComponent('Inspector');
       $inspector->onInspect(function ($inspector) {
-        return "It's a chop of lamb.";
+        return "It's a warm and tasty looking chop of lamb, and it smells very good.  Your mouth is watering!";
       });
     });
     $container->insertItem($lambChop);
   }))
   ->insertRoom((new Room('Pantry'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods.";
+      return "You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods, and some kitchen supplies.";
     });
     $room->setImageUrl('pantry_key.jpg');
 
@@ -138,6 +148,21 @@ GameBuilder::newGame("Iteration 3")
     });
     $container->insertItem($brassKey);
   }))
+/*  ->insertRoom(
+    Room::constructBasicRoom('Pantry',
+      'You descend down some stairs into in the kitchen pantry.  The pantry is stocked with many dry goods, and some kitchen supplies.',
+      'pantry_key.jpg'))->define(function ($room) {
+    $container = $room->getComponent('Container');
+    $brassKey = new Key('brassKey', 'brassKeySecret');
+    $brassKey->define(function ($brassKey) {
+      $inspector = $brassKey->getComponent('Inspector');
+      $inspector->onInspect(function ($inspector) {
+        return "It's a nice and shiny brass key.";
+      });
+    });
+    $container->insertItem($brassKey);
+  })*/
+  
   ->insertRoom((new Room('Banquet Hall'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
       return "You are in the banquet hall.";
@@ -208,46 +233,46 @@ GameBuilder::newGame("Iteration 3")
       });
     }));
   }))
-  ->insertRoom(constructBasicRoom('Chess Room', "This room is pitch black.  You can't see anything.", 'darkRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Vestibule', 'You are in a small vestibule.', 'vestibule.jpg'))
-  ->insertRoom(constructBasicRoom('Art Gallery', 'You are in the castle art gallery.', 'artGallery.jpg'))
-  ->insertRoom(constructBasicRoom('Base of Western Tower', 'You are in a circular room with a spiral staircase leading up to the right.', 'westTower1.jpg'))
-  ->insertRoom(constructBasicRoom('Grand Hall', 'You are in the Grand Hall.', 'grandHall.jpg'))
-  ->insertRoom(constructBasicRoom('Grand Staircase', 'You are at a magnificant staircase at the north end of the Grand Hall.', 'grandStaircase.jpg'))
-  ->insertRoom(constructBasicRoom('Base of Eastern Tower', 'You are in a circular room with a spiral staircase leading up to the left.', 'eastTower1.jpg'))
-  ->insertRoom(constructBasicRoom('Courtyard', 'You are in the castle courtyard.', 'courtyard.jpg'))
-  ->insertRoom(constructBasicRoom('Stable', 'You are in a stable.', 'stables.jpg'))
-  ->insertRoom(constructBasicRoom('Smithery', 'You are in a smithery.', 'smithery.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Chess Room', "This room is pitch black.  You can't see anything.", 'darkRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Vestibule', 'You are in a small vestibule.', 'vestibule.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Art Gallery', 'You are in the castle art gallery.', 'artGallery.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Base of Western Tower', 'You are in a circular room with a spiral staircase leading up to the right.', 'westTower1.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Grand Hall', 'You are in the Grand Hall.', 'grandHall.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Grand Staircase', 'You are at a magnificant staircase at the north end of the Grand Hall.', 'grandStaircase.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Base of Eastern Tower', 'You are in a circular room with a spiral staircase leading up to the left.', 'eastTower1.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Courtyard', 'You are in the castle courtyard.', 'courtyard.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Stable', 'You are in a stable.', 'stables.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Smithery', 'You are in a smithery.', 'smithery.jpg'))
   
   // Upper Floor
-  ->insertRoom(constructBasicRoom('Grand Balcony', 'You are on a grand balcony that is overlooking the Grand Hall below.', 'grandBalcony.jpg'))
-  ->insertRoom(constructBasicRoom('Billiards Room', 'You are in a billiards room.', 'billiardsRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Map Room', 'You are in a strange room with several globes.  The walls are all covered with maps.', 'mapRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Drawing Room', 'You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.', 'drawingRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Observatory', 'You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.', 'observatory.jpg'))
-  ->insertRoom(constructBasicRoom('Master Bedchambers', 'You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.', 'masterBedchambers.jpg'))
-  ->insertRoom(constructBasicRoom('Bathroom', 'You are in a bathroom that is off the master bed chambers.', 'bathroom.jpg'))
-  ->insertRoom(constructBasicRoom('North End of Corridor', 'You are in the North End of the corridor.', 'corridor2fn.jpg'))
-  ->insertRoom(constructBasicRoom('South End of Corridor', 'You are in the South End of the corridor.', 'corridor2fs.jpg'))
-  ->insertRoom(constructBasicRoom('Odd Bedroom', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.', 'oddBedroom.jpg'))
-  ->insertRoom(constructBasicRoom('Top of Western Tower', 'You are in the top of a tower.', 'westTowerTop.jpg'))
-  ->insertRoom(constructBasicRoom('Top of Eastern Tower', 'You are in the top of a tower.', 'eastTowerTop.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Grand Balcony', 'You are on a grand balcony that is overlooking the Grand Hall below.', 'grandBalcony.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Billiards Room', 'You are in a billiards room.', 'billiardsRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Map Room', 'You are in a strange room with several globes.  The walls are all covered with maps.', 'mapRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Drawing Room', 'You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.', 'drawingRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Observatory', 'You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.', 'observatory.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Master Bedchambers', 'You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.', 'masterBedchambers.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Bathroom', 'You are in a bathroom that is off the master bed chambers.', 'bathroom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('North End of Corridor', 'You are in the North End of the corridor.', 'corridor2fn.jpg'))
+  ->insertRoom(Room::constructBasicRoom('South End of Corridor', 'You are in the South End of the corridor.', 'corridor2fs.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Odd Bedroom', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.', 'oddBedroom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Top of Western Tower', 'You are in the top of a tower.', 'westTowerTop.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Top of Eastern Tower', 'You are in the top of a tower.', 'eastTowerTop.jpg'))
   
   // Iteration 3 Main Floor Rooms:
-  ->insertRoom(constructBasicRoom('Infirmary', 'You are in an infirmary.', 'infirmary.jpg'))
-  ->insertRoom(constructBasicRoom('Pantry Storage Room', 'You are in what appears to be a storage room.', 'storageRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Cloak Room', 'You are in a small alcove for storing cloaks, gloves, and the like.', 'cloakRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Infirmary', 'You are in an infirmary.', 'infirmary.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Pantry Storage Room', 'You are in what appears to be a storage room.', 'storageRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Cloak Room', 'You are in a small alcove for storing cloaks, gloves, and the like.', 'cloakRoom.jpg'))
   
   // Iteration 3 Lower Level Rooms:
-  ->insertRoom(constructBasicRoom('Alcove', 'You are in a small alcove.  There is a large door to the south.', 'alcove.jpg'))
-  ->insertRoom(constructBasicRoom('Treasury Room', 'You are in a massive treasury room, and in front of you, guarding the treasure hoard, is a huge red dragon!', 'treasury.jpg'))
-  ->insertRoom(constructBasicRoom('Hall of Mirrors', 'You are in a hall of mirrors.', 'hallOfMirrors.jpg'))
-  ->insertRoom(constructBasicRoom('Rack Room', "You are in a rack room.  There are various devices of torture all around.  You really don't like being here.", 'rackRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Boiler Room', 'You are in a boiler boom.', 'boilerRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Portcullis', 'You are in a room with a portcullis on the southern side.  You also see a winch on the wall.', 'portcullis.jpg'))
-  ->insertRoom(constructBasicRoom('Armory', 'You are in an armory.', 'armory.jpg'))
-  ->insertRoom(constructBasicRoom('Wine Cellar', 'You are in a wine cellar.', 'wineCellar.jpg'))
-  ->insertRoom(constructBasicRoom('Cellar Storage Room', 'You are in a cellar storage room of sorts.', 'storageRoom2.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Alcove', 'You are in a small alcove.  There is a large door to the south.', 'alcove.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Treasury Room', 'You are in a massive treasury room, and in front of you, guarding the treasure hoard, is a huge red dragon!', 'treasury.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Hall of Mirrors', 'You are in a hall of mirrors.', 'hallOfMirrors.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Rack Room', "You are in a rack room.  There are various devices of torture all around.  You really don't like being here.", 'rackRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Boiler Room', 'You are in a boiler boom.', 'boilerRoom.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Portcullis', 'You are in a room with a portcullis on the southern side.  You also see a winch on the wall.', 'portcullis.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Armory', 'You are in an armory.', 'armory.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Wine Cellar', 'You are in a wine cellar.', 'wineCellar.jpg'))
+  ->insertRoom(Room::constructBasicRoom('Cellar Storage Room', 'You are in a cellar storage room of sorts.', 'storageRoom2.jpg'))
 //  ->insertRoom(constructBasicRoom('', '', ''))
 
 

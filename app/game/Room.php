@@ -36,23 +36,35 @@ class Room extends GameObject
    **/
   protected $directions;
 
+  // Should be a constructor that also requires a description, but PHP does not allow overloading.
+  // I didn't want to break all the game maps (major PITA factor), so I left this constructor in
   public function __construct($name)
   {
     parent::__construct($name);
     $this->directions = new RoomDirections();
-    $this->define(function ($room) {
-      $inspector = new Inspector();
-      $inspector->onInspect(function ($inspector) {
-        return "You enter into an empty room.";
-      });
-      $room->addComponent($inspector);
-    });
     $this->define(function ($room) {
       $container = new Container();
       $room->addComponent($container);
     });
   }
 
+  public static function constructBasicRoom($name, $desc, $imageUrl) {
+    $room = new Room($name);
+    $room -> setDescription($desc);
+    $room -> setImageUrl($imageUrl);
+    return $room;
+  }
+  
+  public function setDescription($description)
+  {
+    $inspector = new Inspector();
+    $inspector->onInspect(function () use ($description) {
+      return $description;
+    });
+    $this->addComponent($inspector);
+  }
+  
+  
   public function setSpawnPoint() {
     $this->spawn = true;
   }
