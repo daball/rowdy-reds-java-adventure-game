@@ -28,3 +28,4 @@ var app;
         domain.GamesList = GamesList;
     })(domain = app.domain || (app.domain = {}));
 })(app || (app = {}));
+//# sourceMappingURL=game.js.map

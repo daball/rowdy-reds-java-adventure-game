@@ -54,7 +54,7 @@ class Room extends GameObject
     $room -> setImageUrl($imageUrl);
     return $room;
   }
-  
+
   public function setDescription($description)
   {
     $inspector = new Inspector();
@@ -63,8 +63,8 @@ class Room extends GameObject
     });
     $this->addComponent($inspector);
   }
-  
-  
+
+
   public function setSpawnPoint() {
     $this->spawn = true;
   }

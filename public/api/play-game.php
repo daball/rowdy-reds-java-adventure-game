@@ -1,8 +1,10 @@
 <?php
 
-use \engine\GameEngine;
-
 require_once __DIR__.'/../../app/engine/GameEngine.php';
+require_once __DIR__.'/../../app/util/PubSubMessageQueue.php';
+
+use \engine\GameEngine;
+use \util\PubSubMessageQueue;
 
 /* CONFIGURATION */
 
@@ -46,6 +48,10 @@ $tabletCode = $gameState->getTabletCode();
 $commandProcessor = $gameEngine->getCommandProcessor();
 $commandInput = $commandProcessor->getCommandInput();
 $commandOutput = $commandProcessor->getCommandOutput();
+$logger = array();
+PubSubMessageQueue::subscribe("Logger", function ($sender, $queue, $message) use (&$logger) {
+	array_push($logger, $message);
+});
 
 $obviousDirections = array();
 if ($avatarRoom->getDirection('u')->isNextRoomObvious()) array_push($obviousDirections, 'U');
@@ -69,6 +75,7 @@ echo json_encode(array(
 	'moves' => $moves,
 	'isExiting' => $isExiting,
 	'tabletCode' => $tabletCode,
+	'logger' => $logger,
 ), JSON_PRETTY_PRINT);
 
 /* MAINTENANCE */

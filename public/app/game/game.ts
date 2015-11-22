@@ -10,6 +10,7 @@ module app.domain {
     imageUrl?: string;
     consoleHistory?: string;
     commandHistory?: string[];
+    logger?: string[];
     tabletCode?: string;
     eol?: string;
     prompt?: string;

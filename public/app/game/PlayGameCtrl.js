@@ -80,6 +80,9 @@ var app;
             };
             PlayGameCtrl.prototype.updateGame = function (game) {
                 var scope = this;
+                if (game.logger)
+                    for (var log in game.logger)
+                        console.log("Server logged:", game.logger[log]);
                 this.game = game;
                 if (this.tabletCode != game.tabletCode)
                     this.tabletCode = game.tabletCode;

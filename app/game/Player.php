@@ -12,6 +12,7 @@ use \game\Direction;
 use \engine\GameState;
 use \components\Container;
 use \components\Inspector;
+use \util\PubSubMessageQueue;
 
 /**
  * Player represents the player's avatar throughout the game.
@@ -136,7 +137,7 @@ class Player
       }
       else {
         //put the avatar in the next room
-        $this->location = $nextRoom->getName();
+        $this->setLocation($nextRoom->getName());
         //return next room description
         return $gameState->inspectRoom();
       }
