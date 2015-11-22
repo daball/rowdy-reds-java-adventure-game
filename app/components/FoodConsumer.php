@@ -22,13 +22,6 @@ class FoodConsumer extends BaseComponent
   /**
    * @ignore
    */
-   protected $onBeforeEat = null;
-   protected $onEat = null;
-   protected $onRefuseEat = null;
-
-  /**
-   * @ignore
-   */
   public function __construct() {
     $this->define(function ($foodConsumer) {
       $foodConsumer->setHungry(true);
@@ -91,41 +84,32 @@ class FoodConsumer extends BaseComponent
    * @ignore
    */
   public function eat($food) {
-    $onBeforeEat = $this->onBeforeEat();
-    $onEat = $this->onEat();
-
-    if ($onBeforeEat($this, $food)) {
+    if ($this->trigger('beforeEat', array($this, $food))) {
       $this->hungry = false;
       $food->getContainer()->removeItem($food);
-      return $onEat($this, $food);
+      return $this->trigger('eat', array($this, $food));
     }
-    return $onRefuseEat($this, $food);
+    return $this->trigger('refuseEat', array($this, $food));
   }
 
   /**
    * @ignore
    */
   public function onBeforeEat($closure=null) {
-    if ($closure)
-      $this->onBeforeEat = $this->serializableClosure($closure);
-    return $this->onBeforeEat;
+    return $this->on("beforeEat", $closure);
   }
 
   /**
    * @ignore
    */
   public function onEat($closure=null) {
-    if ($closure)
-      $this->onEat = $this->serializableClosure($closure);
-    return $this->onEat;
+    return $this->on("eat", $closure);
   }
 
   /**
    * @ignore
    */
   public function onRefuseEat($closure=null) {
-    if ($closure)
-      $this->onRefuseEat = $this->serializableClosure($closure);
-    return $this->onRefuseEat;
+    return $this->on("refuseEat", $closure);
   }
 }

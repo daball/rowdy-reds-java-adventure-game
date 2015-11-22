@@ -13,14 +13,6 @@ class Openable extends BaseComponent
 {
   protected $opened = false;
 
-  protected $onBeforeOpenClosure = null;
-  protected $onOpenClosure = null;
-  protected $onRefuseOpenClosure = null;
-
-  protected $onBeforeCloseClosure = null;
-  protected $onCloseClosure = null;
-  protected $onRefuseCloseClosure = null;
-
   public function __construct() {
     $this->define(function ($openable) {
       $openable->onBeforeOpen(function ($openable) {
@@ -60,29 +52,21 @@ class Openable extends BaseComponent
   /* Public API for Component */
 
   public function open() {
-    $onBeforeOpen = $this->onBeforeOpen();
-    $onOpen = $this->onOpen();
-    $onRefuseOpen = $this->onRefuseOpen();
-
-    if ($onBeforeOpen($this)) {
+    if ($this->trigger('beforeOpen', array($this))) {
       $this->setOpened();
-      return $onOpen($this);
+      return $this->trigger('open', array($this));
     }
     else
-      return $onRefuseOpen($this);
+      return $this->trigger('refuseOpen', array($this));
   }
 
   public function close() {
-    $onBeforeClose = $this->onBeforeClose();
-    $onClose = $this->onClose();
-    $onRefuseClose = $this->onRefuseClose();
-
-    if ($onBeforeClose($this)) {
+    if ($this->trigger('beforeClose', array($this))) {
       $this->setClosed();
-      return $onClose($this);
+      return $this->trigger('close', array($this));
     }
     else
-      return $onRefuseClose($this);
+      return $this->trigger('refuseClose', array($this));
   }
 
   public function isOpened() {
@@ -96,38 +80,26 @@ class Openable extends BaseComponent
   /* Event Closure Registration Functions */
 
   public function onBeforeOpen($closure=null) {
-    if ($closure)
-      $this->onBeforeOpenClosure = $this->serializableClosure($closure);
-    return $this->onBeforeOpenClosure;
+    return $this->on("beforeOpen", $closure);
   }
 
   public function onOpen($closure=null) {
-    if ($closure)
-      $this->onOpenClosure = $this->serializableClosure($closure);
-    return $this->onOpenClosure;
+    return $this->on("open", $closure);
   }
 
   public function onRefuseOpen($closure=null) {
-    if ($closure)
-      $this->onRefuseOpenClosure = $this->serializableClosure($closure);
-    return $this->onRefuseOpenClosure;
+    return $this->on("refuseOpen", $closure);
   }
 
   public function onBeforeClose($closure=null) {
-    if ($closure)
-      $this->onBeforeCloseClosure = $this->serializableClosure($closure);
-    return $this->onBeforeCloseClosure;
+    return $this->on("beforeClose", $closure);
   }
 
   public function onClose($closure=null) {
-    if ($closure)
-      $this->onCloseClosure = $this->serializableClosure($closure);
-    return $this->onCloseClosure;
+    return $this->on("close", $closure);
   }
 
   public function onRefuseClose($closure=null) {
-    if ($closure)
-      $this->onRefuseCloseClosure = $this->serializableClosure($closure);
-    return $this->onRefuseCloseClosure;
+    return $this->on("refuseClose", $closure);
   }
 }

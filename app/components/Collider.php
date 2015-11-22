@@ -30,12 +30,6 @@ class Collider extends BaseComponent
   /**
    * @ignore
    */
-   protected $onBeforeCollideClosure = null;
-   protected $onCollideClosure = null;
-
-  /**
-   * @ignore
-   */
   public function __construct($direction) {
     $this->define(function ($collider) use ($direction) {
       $collider->setDirection($direction);
@@ -53,7 +47,7 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function validateCollision($direction) {
-    return ($this->enabled && Direction::fullDirection($direction) == $this->direction);
+    return ($this->isEnabled() && Direction::fullDirection($direction) == $this->direction);
   }
 
   /**
@@ -96,13 +90,10 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function collide($direction) {
-    $onBeforeCollide = $this->onBeforeCollide();
-    $onCollide = $this->onCollide();
-
     $collisionEvent = false;
     $direction = Direction::fullDirection($direction);
-    if ($onBeforeCollide($this, $direction))
-      $collisionEvent = $onCollide($this, $direction);
+    if ($this->trigger('beforeCollide', array($this, $direction)))
+      $collisionEvent = $this->trigger('collide', array($this, $direction));
     return $collisionEvent;
   }
 
@@ -110,17 +101,13 @@ class Collider extends BaseComponent
    * @ignore
    */
   public function onBeforeCollide($closure=null) {
-    if ($closure)
-      $this->onBeforeCollideClosure = $this->serializableClosure($closure);
-    return $this->onBeforeCollideClosure;
+    return $this->on("beforeCollide", $closure);
   }
 
   /**
    * @ignore
    */
   public function onCollide($closure=null) {
-    if ($closure)
-      $this->onCollideClosure = $this->serializableClosure($closure);
-    return $this->onCollideClosure;
+    return $this->on("collide", $closure);
   }
 }

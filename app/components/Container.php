@@ -10,26 +10,20 @@ class Container extends BaseComponent
    * items is an array of GameObjects.
    **/
   protected $items = null;
+
   /**
    * maxItems is the maximum number of GameObjects that items can store, per
    * the game rules. If maxItems < 0, then you can fill items as full as you
    * want.
    **/
   protected $maxItems = -1;
+
   /**
    * validItemTypes is an array of GameObject types. It defaults to:
    * [ '\game\GameObject' ], but can be set so that only particular
    * objects can be inserted into the container.
    **/
   protected $validItemTypes = null;
-
-  protected $onBeforeSetClosure = null;
-  protected $onSetClosure = null;
-  protected $onRefuseSetClosure = null;
-
-  protected $onBeforeUnsetClosure = null;
-  protected $onUnsetClosure = null;
-  protected $onRefuseUnsetClosure = null;
 
   public function __construct() {
     $this->define(function ($container) {
@@ -94,10 +88,6 @@ class Container extends BaseComponent
   }
 
   public function setItemAt($index, $item) {
-    $onBeforeSet = $this->onBeforeSet();
-    $onSet = $this->onSet();
-    $onRefuseSet = $this->onRefuseSet();
-
     if ($index == -1) {
       $index = count($this->items);
       while ($this->hasItemAt($index)) { $index++; }
@@ -105,13 +95,13 @@ class Container extends BaseComponent
         $index = $this->getMaxItems()-1;
     }
 
-    if ($onBeforeSet($this, $index, $item)) {
+    if ($this->trigger('beforeSet', array($this, $index, $item))) {
       $this->items[$index] = $item;
       $item->setContainer($this->getParent());
-      return $onSet($this, $index, $item);
+      return $this->trigger('set', array($this, $index, $item));
     }
     else
-      return $onRefuseSet($this, $index, $item);
+      return $this->trigger('refuseSet', array($this, $index, $item));
   }
 
   public function unsetItemAt($index) {
@@ -121,12 +111,12 @@ class Container extends BaseComponent
 
     $item = $this->getItemAt($index);
 
-    if ($onBeforeUnset($this, $index, $item)) {
+    if ($this->trigger('beforeUnset', array($this, $index, $item))) {
       unset($this->items[$index]);
-      return $onUnset($this, $index, $item);
+      return $this->trigger('unset', array($this, $index, $item));
     }
     else
-      return $onRefuseUnset($this, $index, $item);
+      return $this->trigger('refuseUnset', array($this, $index, $item));
   }
 
   public function hasItemAt($index) {
@@ -222,38 +212,26 @@ class Container extends BaseComponent
   /* Event Closure Registration Functions */
 
   public function onBeforeSet($closure=null) {
-    if ($closure)
-      $this->onBeforeSetClosure = $this->serializableClosure($closure);
-    return $this->onBeforeSetClosure;
+    return $this->on("beforeSet", $closure);
   }
 
   public function onSet($closure=null) {
-    if ($closure)
-      $this->onSetClosure = $this->serializableClosure($closure);
-    return $this->onSetClosure;
+    return $this->on("set", $closure);
   }
 
   public function onRefuseSet($closure=null) {
-    if ($closure)
-      $this->onRefuseSetClosure = $this->serializableClosure($closure);
-    return $this->onRefuseSetClosure;
+    return $this->on("refuseSet", $closure);
   }
 
   public function onBeforeUnset($closure=null) {
-    if ($closure)
-      $this->onBeforeUnsetClosure = $this->serializableClosure($closure);
-    return $this->onBeforeUnsetClosure;
+    return $this->on("beforeUnset", $closure);
   }
 
   public function onUnset($closure=null) {
-    if ($closure)
-      $this->onUnsetClosure = $this->serializableClosure($closure);
-    return $this->onUnsetClosure;
+    return $this->on("unset", $closure);
   }
 
   public function onRefuseUnset($closure=null) {
-    if ($closure)
-      $this->onRefuseUnsetClosure = $this->serializableClosure($closure);
-    return $this->onRefuseSetClosure;
+    return $this->on("refuseUnset", $closure);
   }
 }

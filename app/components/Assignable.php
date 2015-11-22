@@ -6,10 +6,6 @@ require_once 'BaseComponent.php';
 
 class Assignable extends BaseComponent
 {
-  protected $onBeforeAssignClosure = null;
-  protected $onAssignClosure = null;
-  protected $onRefuseAssignClosure = null;
-
   public function __construct() {
     $this->define(function ($assignable) {
       $assignable->onBeforeAssign(function ($assignable, $oldTarget, $newTarget, $index) {
@@ -43,13 +39,9 @@ class Assignable extends BaseComponent
   }
 
   public function assignTo($target, $index = -1) {
-    $onBeforeAssign = $this->onBeforeAssign();
-    $onAssign = $this->onAssign();
-    $onRefuseAssign = $this->onRefuseAssign();
-
     $item = $this->getParent();
     $currentContainer = $item->getContainer();
-    if ($onBeforeAssign($this, $currentContainer, $target, $index))
+    if ($this->trigger('beforeAssign', array($this, $currentContainer, $target, $index)))
     {
       $output = "";
       if ($currentContainer) {
@@ -63,27 +55,21 @@ class Assignable extends BaseComponent
         $container = $target->getComponent('Container');
         $output .= $container->setItemAt($index, $item) . ' ';
       }
-      $output = $onAssign($this, $currentContainer, $target, $index) . ' ' . $output;
+      $output = $this->trigger('assign', array($this, $currentContainer, $target, $index)) . ' ' . $output;
       return trim($output);
     }
-    return $onRefuseAssign($this, $currentContainer, $target, $index);
+    return $this->trigger('refuseAssign', array($this, $currentContainer, $target, $index));
   }
 
   public function onBeforeAssign($closure=null) {
-    if ($closure)
-      $this->onBeforeAssignClosure = $this->serializableClosure($closure);
-    return $this->onBeforeAssignClosure;
+    return $this->on("beforeAssign", $closure);
   }
 
   public function onAssign($closure=null) {
-    if ($closure)
-      $this->onAssignClosure = $this->serializableClosure($closure);
-    return $this->onAssignClosure;
+    return $this->on("assign", $closure);
   }
 
   public function onRefuseAssign($closure=null) {
-    if ($closure)
-      $this->onRefuseAssignClosure = $this->serializableClosure($closure);
-    return $this->onRefuseAssignClosure;
+    return $this->on("refuseAssign", $closure);
   }
 }

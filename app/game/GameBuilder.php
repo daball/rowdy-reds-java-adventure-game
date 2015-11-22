@@ -18,14 +18,16 @@ use \playable\LockedDoor;
 use \playable\Dog;
 
 function initialRoom($room) {
-  $name = $room['name'];
-  $description = $room['description'];
-  $imageUrl = $room['imageUrl'];
+  $name = array_key_exists('name', $room) ? $room['name'] : 'A Room With No Name';
+  $description = array_key_exists('description', $room) ? $room['description'] : 'A Room With No Description';
+  $imageUrl = array_key_exists('description', $room) ? $room['imageUrl'] : 'null.png';
   $items = array_key_exists('items', $room) ? $room['items'] : array();
 
   return (new Room($name))->define(function ($room) use ($description, $imageUrl, $items) {
     $room->setImageUrl($imageUrl);
-    $room->getComponent("Inspector")->onInspect(function ($inspector) use ($description) {
+    $inspector = $room->getComponent("Inspector");
+    $inspector->popEventHandler('inspect');
+    $inspector->onInspect(function ($inspector) use ($description) {
       return $description;
     });
     $container = $room->getComponent("Container");

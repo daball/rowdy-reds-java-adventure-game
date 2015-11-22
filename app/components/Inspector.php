@@ -14,11 +14,6 @@ class Inspector extends BaseComponent
   /**
    * @ignore
    */
-  protected $onInspectClosure = null;
-
-  /**
-   * @ignore
-   */
   public function __construct() {
     $this->define(function ($inspector) {
       $inspector->onInspect(function ($inspector) {
@@ -31,16 +26,13 @@ class Inspector extends BaseComponent
    * @ignore
    */
   public function inspect() {
-    $onInspect = $this->onInspect();
-    return $onInspect($this);
+    return $this->trigger('inspect', array($this));
   }
 
   /**
    * @ignore
    */
   public function onInspect($closure=null) {
-    if ($closure)
-      $this->onInspectClosure = $this->serializableClosure($closure);
-    return $this->onInspectClosure;
+    return $this->on("inspect", $closure);
   }
 }

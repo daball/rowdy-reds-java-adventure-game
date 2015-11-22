@@ -15,22 +15,14 @@ use \playable\Key;
 class Lockable extends BaseComponent
 {
   protected $locked = true;
-  protected $key = null;
+  protected $secret = null;
 
-  protected $onBeforeLockClosure = null;
-  protected $onLockClosure = null;
-  protected $onRefuseLockClosure = null;
-
-  protected $onBeforeUnlockClosure = null;
-  protected $onUnlockClosure = null;
-  protected $onRefuseUnlockClosure = null;
-
-  public function __construct(Key $key) {
-    $this->define(function ($lockable) use ($key) {
-      $lockable->setKey($key);
+  public function __construct($secret) {
+    $this->define(function ($lockable) use ($secret) {
+      $lockable->setSecret($secret);
       //This defines the logic for locking/unlocking an object
       $lockLogic = function ($lockable, $keyProvided) {
-        return ($lockable->getKey()->getSecret() == $keyProvided->getSecret());
+        return ($lockable->getSecret() == $keyProvided->getSecret());
       };
       $lockable->onBeforeLock($lockLogic);
       $lockable->onBeforeUnlock($lockLogic);
@@ -58,12 +50,13 @@ class Lockable extends BaseComponent
 
   /* Property Getter/Setter */
 
-  public function setKey($key) {
-    $this->key = $key;
+  public function setSecret($secret) {
+    $this->secret = $secret;
+    return $this->getSecret();
   }
 
-  public function getKey() {
-    return $this->key;
+  public function getSecret() {
+    return $this->secret;
   }
 
   public function setLocked() {
@@ -77,29 +70,21 @@ class Lockable extends BaseComponent
   /* Public API for Component */
 
   public function lock(Key $key) {
-    $onBeforeLock = $this->onBeforeLock();
-    $onLock = $this->onLock();
-    $onRefuseLock = $this->onRefuseLock();
-
-    if ($onBeforeLock($this, $key)) {
+    if ($this->trigger('beforeLock', array($this, $key))) {
       $this->setLocked();
-      return $onLock($this, $key);
+      return $this->trigger('lock', array($this, $key));
     }
     else
-      return $onRefuseLock($this, $key);
+      return $this->trigger('refuseLock', array($this, $key));
   }
 
   public function unlock(Key $key) {
-    $onBeforeUnlock = $this->onBeforeUnlock();
-    $onUnlock = $this->onUnlock();
-    $onRefuseUnlock = $this->onRefuseUnlock();
-
-    if ($onBeforeUnlock($this, $key)) {
+    if ($this->trigger('beforeUnlock', array($this, $key))) {
       $this->setUnlocked();
-      return $onUnlock($this, $key);
+      return $this->trigger('unlock', array($this, $key));
     }
     else
-      return $onRefuseUnlock($this, $key);
+      return $this->trigger('refuseUnlock', array($this, $key));
   }
 
   public function isLocked() {
@@ -113,38 +98,26 @@ class Lockable extends BaseComponent
   /* Event Closure Registration Functions */
 
   public function onBeforeLock($closure=null) {
-    if ($closure)
-      $this->onBeforeLockClosure = $this->serializableClosure($closure);
-    return $this->onBeforeLockClosure;
+    return $this->on("beforeLock", $closure);
   }
 
   public function onLock($closure=null) {
-    if ($closure)
-      $this->onLockClosure = $this->serializableClosure($closure);
-    return $this->onLockClosure;
+    return $this->on("lock", $closure);
   }
 
   public function onRefuseLock($closure=null) {
-    if ($closure)
-      $this->onRefuseLockClosure = $this->serializableClosure($closure);
-    return $this->onRefuseLockClosure;
+    return $this->on("refuseLock", $closure);
   }
 
   public function onBeforeUnlock($closure=null) {
-    if ($closure)
-      $this->onBeforeUnlockClosure = $this->serializableClosure($closure);
-    return $this->onBeforeUnlockClosure;
+    return $this->on("beforeUnlock", $closure);
   }
 
   public function onUnlock($closure=null) {
-    if ($closure)
-      $this->onUnlockClosure = $this->serializableClosure($closure);
-    return $this->onUnlockClosure;
+    return $this->on("unlock", $closure);
   }
 
   public function onRefuseUnlock($closure=null) {
-    if ($closure)
-      $this->onRefuseUnlockClosure = $this->serializableClosure($closure);
-    return $this->onRefuseUnlockClosure;
+    return $this->on("refuseUnlock", $closure);
   }
 }

@@ -19,7 +19,7 @@ class LockableTest extends \PHPUnit_Framework_TestCase
   {
     $key = new Key("anyKey", "anySecret");
     $wrongKey = new Key("theWrongKey", "theWrongSecret");
-    $lockable = new Lockable($key);
+    $lockable = new Lockable($key->getSecret());
 
     $this->assertTrue(is_a($lockable, "\components\BaseComponent"));
 
@@ -35,25 +35,25 @@ class LockableTest extends \PHPUnit_Framework_TestCase
     $this->assertFalse($lockable->isUnlocked());
 
     //negative test: test unlocking with the wrong key
-    $this->assertNotEquals($wrongKey->getSecret(), $lockable->getKey()->getSecret());
+    $this->assertNotEquals($wrongKey->getSecret(), $lockable->getSecret());
     $this->assertTrue(!!$lockable->unlock($wrongKey));
     $this->assertTrue($lockable->isLocked());
     $this->assertFalse($lockable->isUnlocked());
 
     //positive test: test unlocking with the right key
-    $this->assertEquals($key->getSecret(), $lockable->getKey()->getSecret());
+    $this->assertEquals($key->getSecret(), $lockable->getSecret());
     $this->assertTrue(!!$lockable->unlock($key));
     $this->assertFalse($lockable->isLocked());
     $this->assertTrue($lockable->isUnlocked());
 
     //negative test: test locking with the wrong key
-    $this->assertNotEquals($wrongKey->getSecret(), $lockable->getKey()->getSecret());
+    $this->assertNotEquals($wrongKey->getSecret(), $lockable->getSecret());
     $this->assertTrue(!!$lockable->lock($wrongKey));
     $this->assertFalse($lockable->isLocked());
     $this->assertTrue($lockable->isUnlocked());
 
     //positive test: test locking with the right key
-    $this->assertEquals($key->getSecret(), $lockable->getKey()->getSecret());
+    $this->assertEquals($key->getSecret(), $lockable->getSecret());
     $this->assertTrue(!!$lockable->lock($key));
     $this->assertTrue($lockable->isLocked());
     $this->assertFalse($lockable->isUnlocked());
@@ -65,7 +65,7 @@ class LockableTest extends \PHPUnit_Framework_TestCase
     $this->assertTrue($openable->isClosed());
 
     $key = new Key("anyKey", "anySecret");
-    $lockable = new Lockable($key);
+    $lockable = new Lockable($key->getSecret());
     $this->assertTrue($lockable->isLocked());
 
     $parent = new GameObject("myGameObject");

@@ -3,10 +3,10 @@
 namespace components;
 
 require_once __DIR__.'/../util/TDefine.php';
-require_once __DIR__.'/../util/TSerializableClosure.php';
+require_once __DIR__.'/../util/TOnEvent.php';
 
 use \util\TDefine;
-use \util\TSerializableClosure;
+use \util\TOnEvent;
 
 /**
  * @ignore
@@ -14,7 +14,7 @@ use \util\TSerializableClosure;
 abstract class BaseComponent
 {
   use TDefine;
-  use TSerializableClosure;
+  use TOnEvent;
 
   /**
    * @ignore

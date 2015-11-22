@@ -65,9 +65,8 @@ class PubSubMessageQueue {
     foreach (self::$messageQueues[$queue]['subscribers'] as $subscriber) {
       $subscriber($sender, $queue, $message);
     }
-    if ($queue != "Logger" && $sender != "self") {
-      self::publish("self", "Logger", "PubSubMessageQueue::publish() - Queue $queue - Message " . var_export($message, true));
-    }
+    if ($queue != "Logger" && $sender != "self")
+      self::publish("self", "Logger", "PubSubMessageQueue::publish() - Queue $queue - Published message " . var_export($message, true));
   }
 
   public static function subscribe($queue, $subscriber)
@@ -75,10 +74,12 @@ class PubSubMessageQueue {
     self::registerQueue($queue);
     array_push(self::$messageQueues[$queue]['subscribers'], $subscriber);
     //post all prior messages to new subscriber
+    self::publish("self", "Logger", "PubSubMessageQueue::subscribe() - Queue $queue subscription registered.");
     foreach (self::$messageQueues[$queue]['messages'] as $message) {
       $subscriber($message['sender'], $queue, $message['message']);
+      if ($queue != "Logger" && $sender != "self")
+        self::publish("self", "Logger", "PubSubMessageQueue::subscribe() - Queue $queue - Published backlog message " . var_export($message['message'], true));
     }
-    self::publish("self", "Logger", "PubSubMessageQueue::subscribe() - Queue $queue subscription registered.");
   }
 
 }
