@@ -252,6 +252,11 @@ module app.game {
           return ">";
         }
       };
+      editor.keyBinding.origOnTextInput = editor.keyBinding.onTextInput;
+      editor.keyBinding.onTextInput = function(text) {
+        console.log("editor.keyBinding.onTextInput", arguments);
+        this.origOnTextInput(text);
+      }
     }
 
     onCommandLineChanged(e, scope) {

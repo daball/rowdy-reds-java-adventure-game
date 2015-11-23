@@ -192,6 +192,11 @@ var app;
                         return ">";
                     }
                 };
+                editor.keyBinding.origOnTextInput = editor.keyBinding.onTextInput;
+                editor.keyBinding.onTextInput = function (text) {
+                    console.log("editor.keyBinding.onTextInput", arguments);
+                    this.origOnTextInput(text);
+                };
             };
             PlayGameCtrl.prototype.onCommandLineChanged = function (e, scope) {
                 if (scope.commandLine.indexOf('\n') > -1) {

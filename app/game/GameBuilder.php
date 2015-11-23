@@ -166,6 +166,13 @@ class GameBuilder
     return $this;
   }
 
+  public function insertRoomAt($existingRoom, $direction, $newRoom)
+  {
+    $this->insertRoom($newRoom);
+    $this->connectRooms($existingRoom, $direction, $newRoom);
+    return $this;
+  }
+
   public function setSpawnPoint($roomName)
   {
     if (is_array($roomName)) $roomName = $roomName['name'];
