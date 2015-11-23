@@ -84,8 +84,7 @@ $lounge = array(
       'type'        => "lockedDoor",
       'name'        => "door",
       'direction'   => Direction::$e,
-      'key.name'    => $library['items']['rustyKey']['name'],
-      'key.secret'  => $library['items']['rustyKey']['secret'],
+      'secret'  => $library['items']['rustyKey']['secret'],
     ),
   ),
 );
@@ -163,28 +162,28 @@ $darkRoom = array(
 
 /* BUILD GAME */
 GameBuilder::newGame($gameName)
-  ->insertRoom(\game\initialRoom($forest))
-  ->insertRoom(\game\initialRoom($castleEntrance))
-  ->insertRoom(\game\initialRoom($foyer))
-  ->insertRoom(\game\initialRoom($tapestryE))
-  ->insertRoom(\game\initialRoom($tapestryW))
-  ->insertRoom(\game\initialRoom($study))
-  ->insertRoom(\game\initialRoom($library))
-  ->insertRoom(\game\initialRoom($conservatory))
-  ->insertRoom(\game\initialRoom($lounge))
-  ->insertRoom(\game\initialRoom($butlersQuarters))
-  ->insertRoom(\game\initialRoom($kitchen))
-  ->insertRoom(\game\initialRoom($pantry))
-  ->insertRoom(\game\initialRoom($banquetHall))
-  ->insertRoom(\game\initialRoom($hallwayS))
-  ->insertRoom(\game\initialRoom($hallwayN))
-  ->insertRoom(\game\initialRoom($servantsQuarters)->define(function ($room) use ($servantsQuarters) {
+  ->insertRoom(\game\assembleRoom($forest))
+  ->insertRoom(\game\assembleRoom($castleEntrance))
+  ->insertRoom(\game\assembleRoom($foyer))
+  ->insertRoom(\game\assembleRoom($tapestryE))
+  ->insertRoom(\game\assembleRoom($tapestryW))
+  ->insertRoom(\game\assembleRoom($study))
+  ->insertRoom(\game\assembleRoom($library))
+  ->insertRoom(\game\assembleRoom($conservatory))
+  ->insertRoom(\game\assembleRoom($lounge))
+  ->insertRoom(\game\assembleRoom($butlersQuarters))
+  ->insertRoom(\game\assembleRoom($kitchen))
+  ->insertRoom(\game\assembleRoom($pantry))
+  ->insertRoom(\game\assembleRoom($banquetHall))
+  ->insertRoom(\game\assembleRoom($hallwayS))
+  ->insertRoom(\game\assembleRoom($hallwayN))
+  ->insertRoom(\game\assembleRoom($servantsQuarters)->define(function ($room) use ($servantsQuarters) {
     // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
     //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
     //                                                     ->setItem('lamp', \playable\Lamp::create())
     //                     )
   }))
-  ->insertRoom(\game\initialRoom($taxidermyRoom)->define(function ($room) use ($taxidermyRoom) {
+  ->insertRoom(\game\assembleRoom($taxidermyRoom)->define(function ($room) use ($taxidermyRoom) {
     $stateOfDog = "hungry";
     $room->getComponent('Container')->insertItem((new Dog('dog', Direction::$n))->define(function ($dog) use ($stateOfDog) {
       $foodConsumer = $dog->getComponent('FoodConsumer');
@@ -228,7 +227,7 @@ GameBuilder::newGame($gameName)
       });
     }));
   }))
-  ->insertRoom(\game\initialRoom($darkRoom))
+  ->insertRoom(\game\assembleRoom($darkRoom))
 
   ->connectRooms($forest,           Direction::$n,    $castleEntrance)
   ->connectRooms($castleEntrance,   Direction::$n,    $foyer)

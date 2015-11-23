@@ -11,7 +11,9 @@ use \components\FoodConsumer;
 use \game\GameObject;
 
 /**
- * Dog obstacle.
+ * The Dog game object is an obstacle item, that once fed, will no longer
+ * prevent the Player from navigating past the dog. It can be fed because it
+ * implements the FoodConsumer component.
  */
 class Dog extends GameObject
 {
@@ -20,6 +22,7 @@ class Dog extends GameObject
     parent::__construct($name);
     $this->define(function ($dog) use ($direction) {
       $inspector = $dog->getComponent('Inspector');
+      $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
         $dog = $inspector->getParent();
         $foodConsumer = $dog->getComponent('FoodConsumer');

@@ -33,6 +33,7 @@ $prompt = "> ";
 // random comment
 $gameState = $gameEngine->getGameState();
 $game = $gameState->getGame();
+$player = $gameState->getPlayer();
 
 $avatarRoom = $gameState->getPlayerRoom();
 $moves = $gameState->getMoves();
@@ -41,6 +42,14 @@ $isExiting = $gameState->isExiting();
 $gameName = $game->getName();
 $roomName = $avatarRoom->getName();
 $imageUrl = $avatarRoom->getImageUrl();
+
+$leftHand = "";
+if ($player->getLeftHand()->getComponent('Container')->hasItemAt(0))
+	$leftHand = $player->getLeftHand()->getComponent('Container')->getItemAt(0)->getName();
+$rightHand = "";
+if ($player->getRightHand()->getComponent('Container')->hasItemAt(0))
+	$rightHand = $player->getRightHand()->getComponent('Container')->getItemAt(0)->getName();
+$equipment = $player->listEquipment();
 
 $consoleHistory = $gameState->getConsoleHistory();
 $commandHistory = $gameState->getCommandHistory();
@@ -64,18 +73,23 @@ if ($avatarRoom->getDirection('d')->isNextRoomObvious()) array_push($obviousDire
 /* RENDER MODEL TO VIEW AND OUTPUT RESPONSE */
 
 echo json_encode(array(
-	'gameName' => $gameName,
-	'roomName' => $roomName,
+	'gameName' 					=> $gameName,
+	'roomName' 					=> $roomName,
 	'obviousDirections' => $obviousDirections,
-	'imageUrl' => $imageUrl,
-  'consoleHistory' => $consoleHistory,
-  'commandHistory' => $commandHistory,
-	'eol' => $eol,
-  'prompt' => $prompt,
-	'moves' => $moves,
-	'isExiting' => $isExiting,
-	'tabletCode' => $tabletCode,
-	'logger' => $logger,
+	'imageUrl' 					=> $imageUrl,
+  'consoleHistory' 		=> $consoleHistory,
+  'commandHistory' 		=> $commandHistory,
+	'player' 						=> array(
+		'leftHand'					=> $leftHand,
+		'rightHand'					=> $rightHand,
+		'equipment' 				=> array('Tablet')//$equipment,
+	),
+	'eol' 						=> $eol,
+  'prompt' 					=> $prompt,
+	'moves' 					=> $moves,
+	'isExiting' 			=> $isExiting,
+	'tabletCode' 			=> $tabletCode,
+	'logger' 					=> $logger,
 ), JSON_PRETTY_PRINT);
 
 /* MAINTENANCE */

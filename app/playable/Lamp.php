@@ -16,7 +16,9 @@ class Lamp extends GameObject
     parent::__construct($name);
     $this->define(function ($lamp) {
       $lamp->addComponent(new Assignable());
-      $lamp->getComponent('Inspector')->onInspect(function ($inspector) {
+      $inspector = $lamp->getComponent('Inspector');
+      $inspector->popEventHandler('inspect');
+      $inspector->onInspect(function ($inspector) {
         return setDescription("You found a lamp.");
       });
     });

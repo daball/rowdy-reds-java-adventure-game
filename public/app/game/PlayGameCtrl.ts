@@ -111,6 +111,13 @@ module app.game {
       };
     }
 
+    playerHasEquipped(item) {
+      for (var i = 0; i < this.game.player.equipment.length; i++)
+        if (item == this.game.player.equipment[i])
+          return true;
+      return false;
+    }
+
     showTabletCode() {
       this.selectedTab = "tabletCode";
       console.log("showTabletCode()", this.consoleHistoryEditor);
@@ -249,7 +256,6 @@ module app.game {
 
     onCommandLineChanged(e, scope) {
       if (scope.commandLine.indexOf('\n') > -1) {
-        console.log('onCommandLineChanged() hit');
         scope.commandLineReadOnly = true;
         let onCommandLineProcessed = () => {
           scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n')+1);

@@ -34,6 +34,7 @@ class Key extends GameObject
     });
     $this->define(function ($key) {
       $inspector = new Inspector();
+      $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
         return "It's a key of some sort.";
       });

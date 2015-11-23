@@ -1,9 +1,0 @@
-#!/usr/bin/bash
-UNIT="unit"
-if [ -z "$1" ]
-then
-  UNIT="unit"
-else
-  UNIT="$1"
-fi
-../vendor/phpunit/phpunit/phpunit --colors --verbose --configuration ../phpunit.xml --testsuite "$UNIT" --coverage-html ../public/test-results/unit

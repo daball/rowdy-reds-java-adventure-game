@@ -12,7 +12,7 @@ use \components\Openable;
 use \game\GameObject;
 
 /**
- * A Door game item must be opened in order to pass to the next room.
+ * A Door game object is an obstacle must be opened in order to pass to the next room.
  */
 class Door extends GameObject
 {
@@ -29,6 +29,7 @@ class Door extends GameObject
     });
     $this->define(function ($door) {
       $inspector = new Inspector();
+      $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
        $door = $inspector->getParent();
        $collider = $door->getComponent('Collider');
@@ -43,6 +44,7 @@ class Door extends GameObject
     });
     $this->define(function ($door) {
       $openable = new Openable();
+      $openable->popEventHandler('open');
       $openable->onOpen(function ($openable) {
        $door = $openable->getParent();
        $collider = $door->getComponent('Collider');

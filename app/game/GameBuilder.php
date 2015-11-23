@@ -17,7 +17,7 @@ use \playable\Door;
 use \playable\LockedDoor;
 use \playable\Dog;
 
-function initialRoom($room) {
+function assembleRoom($room) {
   $name = array_key_exists('name', $room) ? $room['name'] : 'A Room With No Name';
   $description = array_key_exists('description', $room) ? $room['description'] : 'A Room With No Description';
   $imageUrl = array_key_exists('description', $room) ? $room['imageUrl'] : 'null.png';
@@ -45,20 +45,23 @@ function initialRoom($room) {
           $container->insertItem(new Door($item['name'], $item['direction']));
           break;
         case 'lockedDoor':
-          $container->insertItem(new LockedDoor($item['name'], $item['direction'], new Key($item['key.name'], 'rustySecret')));
+          $container->insertItem(new LockedDoor($item['name'], $item['direction'], $item['secret']));
           break;
         case 'key':
           $key = new Key($item['name'], $item['secret']);
           $key->define(function ($key) use ($item) {
             $inspector = $key->getComponent('Inspector');
+            $inspector->popEventHandler('inspect');
             $inspector->onInspect(function ($inspector) use ($item) {
               return $item['description'];
             });
             if (array_key_exists('onAssign.room.imageUrl', $item)) {
-              $initialOnAssign = $key->getComponent('Assignable')->onAssign();
-              $key->getComponent('Assignable')->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
+              $assignable = $key->getComponent('Assignable');
+              $initialOnAssign = $assignable->popEventHandler('assign');
+              $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
                 $room = $oldTarget;
-                $room->setImageUrl($item['onAssign.room.imageUrl']);
+                if (is_a($room, '\game\Room'))
+                  $room->setImageUrl($item['onAssign.room.imageUrl']);
                 return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
               });
             }
@@ -69,6 +72,7 @@ function initialRoom($room) {
           $food = new Food($item['name']);
           $food->define(function ($food) use ($item) {
             $inspector = $food->getComponent('Inspector');
+            $inspector->popEventHandler('inspect');
             $inspector->onInspect(function ($inspector) use ($item) {
               return $item['description'];
             });

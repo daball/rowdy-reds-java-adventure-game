@@ -62,6 +62,12 @@ var app;
                     }
                 };
             }
+            PlayGameCtrl.prototype.playerHasEquipped = function (item) {
+                for (var i = 0; i < this.game.player.equipment.length; i++)
+                    if (item == this.game.player.equipment[i])
+                        return true;
+                return false;
+            };
             PlayGameCtrl.prototype.showTabletCode = function () {
                 this.selectedTab = "tabletCode";
                 console.log("showTabletCode()", this.consoleHistoryEditor);
@@ -189,7 +195,6 @@ var app;
             };
             PlayGameCtrl.prototype.onCommandLineChanged = function (e, scope) {
                 if (scope.commandLine.indexOf('\n') > -1) {
-                    console.log('onCommandLineChanged() hit');
                     scope.commandLineReadOnly = true;
                     var onCommandLineProcessed = function () {
                         scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n') + 1);

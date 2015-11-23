@@ -10,6 +10,7 @@ module app.domain {
     imageUrl?: string;
     consoleHistory?: string;
     commandHistory?: string[];
+    player?: IPlayer;
     logger?: string[];
     tabletCode?: string;
     eol?: string;
@@ -17,6 +18,12 @@ module app.domain {
     moves?: number;
     isExiting?: boolean;
     error?: any;
+  }
+
+  export interface IPlayer {
+    leftHand?: string;
+    rightHand?: string;
+    equipment?: string[];
   }
 
   export class GameInProgress implements IGameInProgress {

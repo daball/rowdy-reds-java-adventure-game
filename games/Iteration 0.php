@@ -39,9 +39,9 @@ $kitchen = array(
 
 /* BUILD GAME */
 GameBuilder::newGame($gameName)
-  ->insertRoom(\game\initialRoom($castleEntrance))
-  ->insertRoom(\game\initialRoom($mainHall))
-  ->insertRoom(\game\initialRoom($kitchen))
+  ->insertRoom(\game\assembleRoom($castleEntrance))
+  ->insertRoom(\game\assembleRoom($mainHall))
+  ->insertRoom(\game\assembleRoom($kitchen))
   ->connectRooms($castleEntrance, Direction::$north, $mainHall)
   ->connectRooms($mainHall, Direction::$west, $kitchen)
   ->setSpawnPoint($castleEntrance)

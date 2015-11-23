@@ -17,6 +17,7 @@ class LockedDoor extends Door {
     //implement lockable
     $this->define(function ($lockedDoor) use ($name, $direction, $key) {
       $lockable = new Lockable($key);
+      $lockable->popEventHandler('unlock');
       $lockable->onUnlock(function ($lockable, $keyProvided) {
         $door = $lockable->getParent();
         $collider = $door->getComponent('Collider');
@@ -25,6 +26,7 @@ class LockedDoor extends Door {
         $openable->open();
         return "You unlocked the door to the $direction, and it swings open.";
       });
+      $lockable->popEventHandler('lock');
       $lockable->onLock(function ($lockable, $keyProvided) {
         $door = $lockable->getParent();
         $collider = $door->getComponent('Collider');

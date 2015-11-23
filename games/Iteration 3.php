@@ -17,15 +17,13 @@ use \playable\Food;
 use \playable\LockedDoor;
 use \playable\Dog;
 
-/*function constructBasicRoom($name, $desc, $imageUrl) {
-
-  $room = new Room($name);
-  $room -> setDescription($desc);
-  $room -> setImageUrl($imageUrl);
-  
-  return $room;
+function constructBasicRoom($n, $d, $i) {
+  return \game\assembleRoom(array('name'=>$n, 'description'=>$d, 'imageUrl'=>$i));
 }
-*/
+
+/* SIMPLE ROOM DEFINITIONS */
+$gameName = pathinfo(__FILE__)['filename'];
+
 
 /*$brassKey = new Key('brassKey', 'brassKeySecret');
 $brassKey->define(function ($brassKey) {
@@ -37,7 +35,7 @@ $brassKey->define(function ($brassKey) {
 */
 
 
-GameBuilder::newGame("Iteration 3")
+GameBuilder::newGame($gameName)
   ->insertRoom((new Room('Forest'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
       return "You are standing in a forest.  There are trees all around you.  A path leads north.";
@@ -162,7 +160,7 @@ GameBuilder::newGame("Iteration 3")
     });
     $container->insertItem($brassKey);
   })*/
-  
+
   ->insertRoom((new Room('Banquet Hall'))->define(function ($room) {
     $room->getComponent('Inspector')->onInspect(function ($inspector) {
       return "You are in the banquet hall.";
@@ -243,7 +241,7 @@ GameBuilder::newGame("Iteration 3")
   ->insertRoom(Room::constructBasicRoom('Courtyard', 'You are in the castle courtyard.', 'courtyard.jpg'))
   ->insertRoom(Room::constructBasicRoom('Stable', 'You are in a stable.', 'stables.jpg'))
   ->insertRoom(Room::constructBasicRoom('Smithery', 'You are in a smithery.', 'smithery.jpg'))
-  
+
   // Upper Floor
   ->insertRoom(Room::constructBasicRoom('Grand Balcony', 'You are on a grand balcony that is overlooking the Grand Hall below.', 'grandBalcony.jpg'))
   ->insertRoom(Room::constructBasicRoom('Billiards Room', 'You are in a billiards room.', 'billiardsRoom.jpg'))
@@ -257,12 +255,12 @@ GameBuilder::newGame("Iteration 3")
   ->insertRoom(Room::constructBasicRoom('Odd Bedroom', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.', 'oddBedroom.jpg'))
   ->insertRoom(Room::constructBasicRoom('Top of Western Tower', 'You are in the top of a tower.', 'westTowerTop.jpg'))
   ->insertRoom(Room::constructBasicRoom('Top of Eastern Tower', 'You are in the top of a tower.', 'eastTowerTop.jpg'))
-  
+
   // Iteration 3 Main Floor Rooms:
   ->insertRoom(Room::constructBasicRoom('Infirmary', 'You are in an infirmary.', 'infirmary.jpg'))
   ->insertRoom(Room::constructBasicRoom('Pantry Storage Room', 'You are in what appears to be a storage room.', 'storageRoom.jpg'))
   ->insertRoom(Room::constructBasicRoom('Cloak Room', 'You are in a small alcove for storing cloaks, gloves, and the like.', 'cloakRoom.jpg'))
-  
+
   // Iteration 3 Lower Level Rooms:
   ->insertRoom(Room::constructBasicRoom('Alcove', 'You are in a small alcove.  There is a large door to the south.', 'alcove.jpg'))
   ->insertRoom(Room::constructBasicRoom('Treasury Room', 'You are in a massive treasury room, and in front of you, guarding the treasure hoard, is a huge red dragon!', 'treasury.jpg'))
@@ -342,14 +340,14 @@ GameBuilder::newGame("Iteration 3")
   ->connectRooms('South End of Corridor', Direction::$w, 'Odd Bedroom')
   ->connectRooms('South End of Corridor', Direction::$e, 'Master Bedchambers')
   ->connectRooms('Master Bedchambers', Direction::$n, 'Bathroom')
-  
+
   // Iteration 3 Main Floor:
   ->connectRooms('Back Hallway', Direction::$w, 'Infirmary')
   ->connectRooms('Pantry', Direction::$e, 'Pantry Storage Room')
   ->connectRooms('Library', Direction::$e, 'Cloak Room')
   ->connectRooms('Cloak Room', Direction::$n, 'Western End of Tapestry Room')
   ->connectRooms('Chess Room', Direction::$d, 'Hall of Mirrors')
-  
+
   // Iteration 3 Lower Floor:
   ->connectRooms('Hall of Mirrors', Direction::$w, 'Alcove')
   ->connectRooms('Hall of Mirrors', Direction::$s, 'Rack Room')
@@ -359,6 +357,6 @@ GameBuilder::newGame("Iteration 3")
   ->connectRooms('Boiler Room', Direction::$s, 'Portcullis')
   ->connectRooms('Portcullis', Direction::$s, 'Armory')
   ->connectRooms('Wine Cellar', Direction::$s, 'Cellar Storage Room')
-  
+
   ->setSpawnPoint('Castle Entrance')
 ;

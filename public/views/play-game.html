@@ -14,21 +14,24 @@
   <div class="row disableMargins">
     <div class="col-xs-6 no-space" style="height:100%;background: url('./img/{{vm.game.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;"></div>
     <div class="col-xs-6 no-space">
-      <div class="row consoleHistory disableMargins" ng-class="{commandLineSelected: vm.selectedTab=='commandLine', tabletCodeSelected: vm.selectedTab=='tabletCode'}">
+      <div class="row consoleHistory disableMargins" ng-class="{commandLineSelected: vm.selectedTab=='commandLine',
+                                                                tabletCodeSelected: vm.selectedTab=='tabletCode'}">
         <div class="col-sm-12 no-space">
           <div ui-ace="vm.consoleHistoryAceOption" ng-model="vm.game.consoleHistory" readonly></div>
         </div>
       </div>
-      <div class="tabs row disableMargins" ng-class="{commandLineSelected: vm.selectedTab=='commandLine', tabletCodeSelected: vm.selectedTab=='tabletCode'}">
+      <div class="row disableMargins" ng-class="{tabs: playerHasEquipped('Tablet'),
+                                                commandLineSelected: vm.selectedTab=='commandLine',
+                                                tabletCodeSelected: vm.selectedTab=='tabletCode'}">
         <div class="commandLine col-sm-12 no-space" ng-show="vm.selectedTab=='commandLine'">
           <div ui-ace="vm.commandLineAceOption" ng-model="vm.commandLine"
           ng-readonly="vm.isLoading"></div>
         </div>
-        <div class="tabletCode col-sm-12 no-space" ng-show="vm.selectedTab=='tabletCode'">
+        <div class="tabletCode col-sm-12 no-space" ng-show="playerHasEquipped('Tablet') && vm.selectedTab=='tabletCode'">
           <div ui-ace="vm.tabletCodeAceOption" ng-model="vm.tabletCode"
           ng-readonly="vm.isLoading"></div>
         </div>
-        <nav class="navbar navbar-rowdyblack navbar-fixed-bottom">
+        <nav class="navbar navbar-rowdyblack navbar-fixed-bottom" ng-show="playerHasEquipped('Tablet')">
           <div class="container-fluid">
             <div class="btn-group">
               <label class="btn btn-sm btn-primary btn-radfordred" ng-model="vm.selectedTab" ng-click="vm.showCommandLine()" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
@@ -47,8 +50,16 @@
             <div class="navbar-brand">
               <span ng-if="vm.game.roomName">{{vm.game.roomName}} |</span>
               <span ng-if="vm.game.obviousDirections">Obvious Directions:
-                <span ng-repeat="d in vm.game.obviousDirections">{{d}}</span>
-              |
+                <span ng-repeat="D in vm.game.obviousDirections">{{D}}</span>
+                |
+              </span>
+              <span ng-if="vm.game.player.leftHand">LH {{vm.game.player.leftHand}} |</span>
+              <span ng-if="vm.game.player.rightHand">RH {{vm.game.player.rightHand}} |</span>
+              <span ng-if="vm.game.player.equipment.length">Equipped:
+                <span ng-repeat="equipped in vm.game.player.equipment">
+                  {{equipped}}
+                  <span ng-show="!$last">:</span>
+                </span> |
               </span>
               <span ng-if="vm.game.moves">{{vm.game.moves}} Moves |</span>
               <span ng-if="vm.game.commandHistory">{{vm.game.commandHistory.length}} Commands</span>

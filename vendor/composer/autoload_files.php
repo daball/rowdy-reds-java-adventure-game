@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/kriswallsmith/assetic/src/functions.php',
-    $vendorDir . '/nikic/php-parser/lib/bootstrap.php',
+    'ca9d398f6616917429ce25af33e0844c' => $vendorDir . '/herrera-io/json/src/lib/json_version.php',
+    'f35b286c926da4c808e70059fdca6992' => $vendorDir . '/herrera-io/phar-update/src/lib/constants.php',
 );

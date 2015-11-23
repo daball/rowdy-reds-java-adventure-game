@@ -70,7 +70,7 @@ trait TOnEvent
         else
           $gameObject = "unknown";
         $component = get_class($this);
-        PubSubMessageQueue::publish($this, 'Logger', "OnEvent: Event $event component $component in game object $gameObject dispatched event to event handler $e in the chain. It returned $output");
+        PubSubMessageQueue::publish($this, 'Logger', "OnEvent: Event $event component $component in game object $gameObject dispatched event to event handler $e in the chain. It returned: $output");
       }
     }
     return $output;

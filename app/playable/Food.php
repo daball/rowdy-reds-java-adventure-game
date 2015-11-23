@@ -11,7 +11,7 @@ use \components\Assignable;
 use \components\Inspector;
 
 /**
- * A Food item is used to feed a hungy Dog obstacle.
+ * A Food game object is used to feed a hungy Dog obstacle game object.
  */
 class Food extends GameObject
 {
@@ -23,6 +23,7 @@ class Food extends GameObject
     });
     $this->define(function ($food) {
       $inspector = new Inspector();
+      $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
         return "You have found food.";
       });

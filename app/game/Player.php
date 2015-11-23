@@ -39,6 +39,13 @@ class Player
    **/
   protected $location = null;
 
+  /**
+   * Player's location in the game.
+   * @var String
+   * @ignore
+   **/
+  protected $equipment = null;
+
   public function __construct() {
     $handDefinition = function ($which) {
       return function ($hand) use ($which) {
@@ -177,5 +184,26 @@ class Player
 
   public function getRightHand() {
     return $this->rightHand;
+  }
+
+  public function equipItem($item) {
+    if ($item->hasComponent('Equipment')) {
+      if (!isset($this->equipment))
+        $this->equipment = array();
+      $this->equipment[$item->getName()] = $item;
+      return $this->getEquipmentItem($item->getName());
+    }
+  }
+
+  public function listEquipment() {
+    if (isset($this->equipment))
+      return array_keys($this->equipment);
+    return array();
+  }
+
+  public function getEquipmentItem($itemName) {
+    if (isset($this->equipment)
+      && array_key_exists($itemName, $this->equipment))
+      return $this->equipment[$itemName];
   }
 }

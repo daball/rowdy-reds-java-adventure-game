@@ -10,6 +10,10 @@ use \game\GameObject;
 use \components\Container;
 use \components\Inspector;
 
+/**
+ * A BasicContainer game object stores items. It does so by implementing a
+ * Container component.
+ **/
 class BasicContainer extends GameObject
 {
   public function __construct($name) {
@@ -26,6 +30,7 @@ class BasicContainer extends GameObject
       $basicContainer->addComponent($container);
 
       $inspector = new Inspector();
+      $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
         $openable = $inspector->getParent()->getComponent('Openable');
         if ($openable->isOpened())
