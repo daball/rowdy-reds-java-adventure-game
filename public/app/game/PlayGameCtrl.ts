@@ -203,6 +203,7 @@ module app.game {
 
     onConsoleHistoryLoaded(editor, scope: PlayGameCtrl) {
       scope.consoleHistoryEditor = editor;
+      editor.setMode('text');
       editor.on('focus', function () {
         if (scope.selectedTab == 'commandLine')
           scope.commandLineEditor.env.editor.focus();
@@ -261,7 +262,10 @@ module app.game {
       // }
       editor.keyBinding.origOnCommandKey = editor.keyBinding.onCommandKey;
       editor.keyBinding.onCommandKey = function(e, hashId, keyCode) {
-        var KEYCODES = { ENTER: 13, UP_ARROW: 38, DOWN_ARROW: 40 };
+        var KEYCODES = { ENTER: 13, UP_ARROW: 38, DOWN_ARROW: 40,
+                        LEFT_ARROW: 37, RIGHT_ARROW: 39, HOME: 36, END: 35
+                      };
+        console.log(keyCode);
         if (scope.commandHistoryAt == scope.game.commandHistory.length) {
           //save the current command
           scope.commandInProgress = editor.getValue();
