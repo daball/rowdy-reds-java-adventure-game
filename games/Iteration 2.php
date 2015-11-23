@@ -26,7 +26,7 @@ $gameName = pathinfo(__FILE__)['filename'];
 $forest = array(
   'name'        => "Forest",
   'description' => "You are standing in a forest.  There are trees all around you.  A path leads north.",
-  'imageUrl'    => "forest.png",
+  'imageUrl'    => "forest.jpg",
 );
 $castleEntrance = array(
   'name'        => "Castle Entrance",
@@ -102,13 +102,7 @@ $kitchen = array(
   'description' => "You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.",
   'imageUrl'    => "kitchen.jpg",
   'items'       => array(
-    //FYI: There is no room to the WEST of Kitchen
-    'door'        => array(
-      'type'        => "door",
-      'name'        => "door",
-      'direction'   => Direction::$w,
-    ),
-    'lambChop'  => array(
+    'lambChop'    => array(
       'type'        => "food",
       'name'        => "lambChop",
       'description' => "It's a chop of lamb."
@@ -143,6 +137,15 @@ $servantsQuarters = array(
   'name'        => "Servants' Quarters",
   'description' => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
   'imageUrl'    => "servantsQuarters.jpg",
+  'items'       => array(
+    'brassKey'    => array(
+      'type'                    => 'footLocker',
+      'name'                    => "footLocker",
+      'secret'                  => $pantry['items']['brassKey']['secret'],
+      'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
+      'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
+    ),
+  ),
   // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
   //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
   //                                                     ->setItem('lamp', \playable\Lamp::create())
@@ -158,28 +161,136 @@ $chessRoom = array(
   'description' => "This room is pitch black.  You can't see anything.",
   'imageUrl'    => "darkRoom.jpg",
 );
+$vestibule = array(
+  'name'         => "Vestibule",
+  'description'  => "You are in a small vestibule.",
+  'imageUrl'     => "vestibule.jpg",
+);
+$artGallery = array(
+  'name'         => "Art Gallery",
+  'description'  => "You are in the castle art gallery.",
+  'imageUrl'     => "artGallery.jpg",
+);
+$wTowerBase = array(
+  'name'         => "Base of Western Tower",
+  'description'  => "You are in a circular room with a spiral staircase leading up to the right.",
+  'imageUrl'     => "westTower1.jpg",
+);
+$grandHall = array(
+  'name'         => "Grand Hall",
+  'description'  => "You are in the Grand Hall.",
+  'imageUrl'     => "grandHall.jpg",
+);
+$grandStaircase = array(
+  'name'         => "Grand Staircase",
+  'description'  => "You are at a magnificant staircase at the north end of the Grand Hall.",
+  'imageUrl'     => "grandStaircase.jpg",
+);
+$eTowerBase = array(
+  'name'         => "Base of Eastern Tower",
+  'description'  => "You are in a circular room with a spiral staircase leading up to the left.",
+  'imageUrl'     => "eastTower1.jpg",
+);
+$courtyard = array(
+  'name'         => "Courtyard",
+  'description'  => "You are in the castle courtyard.",
+  'imageUrl'     => "courtyard.jpg",
+);
+$stable = array(
+  'name'         => "Stable",
+  'description'  => "You are in a stable.",
+  'imageUrl'     => "stables.jpg",
+);
+$smithery = array(
+  'name'         => "Smithery",
+  'description'  => "You are in a smithery.",
+  'imageUrl'     => "smithery.jpg",
+);
+$balcony = array(
+  'name'         => "Grand Balcony",
+  'description'  => "You are on a grand balcony that is overlooking the Grand Hall below.",
+  'imageUrl'     => "grandBalcony.jpg",
+);
+$billiards = array(
+  'name'         => "Billiards Room",
+  'description'  => "You are in a billiards room.",
+  'imageUrl'     => "billiardsRoom.jpg",
+);
+$mapRoom = array(
+  'name'         => "Map Room",
+  'description'  => "You are in a strange room with several globes.  The walls are all covered with maps.",
+  'imageUrl'     => "mapRoom.jpg",
+);
+$drawing = array(
+  'name'         => "Drawing Room",
+  'description'  => "You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.",
+  'imageUrl'     => "drawingRoom.jpg",
+);
+$observatory = array(
+  'name'         => "Observatory",
+  'description'  => "You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.",
+  'imageUrl'     => "observatory.jpg",
+);
+$bedchambers = array(
+  'name'         => "Master Bedchambers",
+  'description'  => "You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.",
+  'imageUrl'     => "masterBedchambers.jpg",
+);
+$bathroom = array(
+  'name'         => "Bathroom",
+  'description'  => "You are in a bathroom that is off the master bed chambers.",
+  'imageUrl'     => "bathroom.jpg",
+);
+$corridorN = array(
+  'name'         => "North End of Corridor",
+  'description'  => "You are in the North End of the corridor.",
+  'imageUrl'     => "corridor2fn.jpg",
+);
+$corridorS = array(
+  'name'         => "South End of Corridor",
+  'description'  => "You are in the South End of the corridor.",
+  'imageUrl'     => "corridor2fs.jpg",
+);
+$beds = array(
+  'name'         => "Odd Bedroom",
+  'description'  => "You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.",
+  'imageUrl'     => "oddBedroom.jpg",
+);
+$wTowerTop = array(
+  'name'         => "Top of Western Tower",
+  'description'  => "You are in the top of a tower.",
+  'imageUrl'     => "westTowerTop.jpg",
+);
+$eTowerTop = array(
+  'name'         => "Top of Eastern Tower",
+  'description'  => "You are in the top of a tower.",
+  'imageUrl'     => "eastTowerTop.jpg",
+);
+
+//$ = array(
+//  'name'         => "",
+//  'description'  => "",
+//  'imageUrl'     => "",
+//);
 
 GameBuilder::newGame($gameName)
-  ->insertRoom(\game\assembleRoom($forest))
-  ->insertRoom(\game\assembleRoom($castleEntrance))
-  ->insertRoom(\game\assembleRoom($foyer))
-  ->insertRoom(\game\assembleRoom($tapestryE))
-  ->insertRoom(\game\assembleRoom($tapestryW))
-  ->insertRoom(\game\assembleRoom($study))
-  ->insertRoom(\game\assembleRoom($library))
-  ->insertRoom(\game\assembleRoom($conservatory))
-  ->insertRoom(\game\assembleRoom($lounge))
-  ->insertRoom(\game\assembleRoom($butlersQuarters))
-  ->insertRoom(\game\assembleRoom($kitchen))
-  ->insertRoom(\game\assembleRoom($pantry))
-  ->insertRoom(\game\assembleRoom($banquetHall))
-  ->insertRoom(\game\assembleRoom($backHallway))
-  ->insertRoom(\game\assembleRoom($servantsQuarters)->define(function ($room) use ($servantsQuarters) {
-    // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
-    //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
-    //                                                     ->setItem('lamp', \playable\Lamp::create())
-    //                     )
-  }))
+  ->insertRoom($forest)
+  ->insertRoomAt($forest,           Direction::$n,    $castleEntrance)
+  ->insertRoomAt($castleEntrance,   Direction::$n,    $foyer)
+  ->insertRoomAt($foyer,            Direction::$n,    $tapestryE)
+  ->insertRoomAt($tapestryE,        Direction::$w,    $tapestryW)
+  ->insertRoomAt($tapestryW,        Direction::$w,    $study)
+  ->insertRoomAt($study,            Direction::$s,    $library)
+  ->insertRoomAt($foyer,            Direction::$e,    $conservatory)
+  ->insertRoomAt($conservatory,     Direction::$e,    $lounge)
+  ->insertRoomAt($lounge,           Direction::$e,    $butlersQuarters)
+  ->insertRoomAt($butlersQuarters,  Direction::$n,    $kitchen)
+  ->insertRoomAt($kitchen,          Direction::$n,    $pantry)
+  ->insertRoomAt($kitchen,          Direction::$w,    $banquetHall)
+  ->connectRooms($banquetHall,      Direction::$s,    $conservatory)
+  ->insertRoomAt($banquetHall,      Direction::$n,    $backHallway)
+  ->insertRoomAt($backHallway,      Direction::$e,    $servantsQuarters)
+  
   ->insertRoom(\game\assembleRoom($taxidermyRoom)->define(function ($room) use ($taxidermyRoom) {
     $stateOfDog = "hungry";
     $room->getComponent('Container')->insertItem((new Dog('dog', Direction::$n))->define(function ($dog) use ($stateOfDog) {
@@ -224,105 +335,64 @@ GameBuilder::newGame($gameName)
       });
     }));
   }))
-  ->insertRoom(\game\assembleRoom($chessRoom))
-  ->insertRoom(constructBasicRoom('Vestibule', 'You are in a small vestibule.', 'vestibule.jpg'))
-  ->insertRoom(constructBasicRoom('Art Gallery', 'You are in the castle art gallery.', 'artGallery.jpg'))
-  ->insertRoom(constructBasicRoom('Base of Western Tower', 'You are in a circular room with a spiral staircase leading up to the right.', 'westTower1.jpg'))
-  ->insertRoom(constructBasicRoom('Grand Hall', 'You are in the Grand Hall.', 'grandHall.jpg'))
-  ->insertRoom(constructBasicRoom('Grand Staircase', 'You are at a magnificant staircase at the north end of the Grand Hall.', 'grandStaircase.jpg'))
-  ->insertRoom(constructBasicRoom('Base of Eastern Tower', 'You are in a circular room with a spiral staircase leading up to the left.', 'eastTower1.jpg'))
-  ->insertRoom(constructBasicRoom('Courtyard', 'You are in the castle courtyard.', 'courtyard.jpg'))
-  ->insertRoom(constructBasicRoom('Stable', 'You are in a stable.', 'stables.jpg'))
-  ->insertRoom(constructBasicRoom('Smithery', 'You are in a smithery.', 'smithery.jpg'))
-
-  // Upper Floor
-  ->insertRoom(constructBasicRoom('Grand Balcony', 'You are on a grand balcony that is overlooking the Grand Hall below.', 'grandBalcony.jpg'))
-  ->insertRoom(constructBasicRoom('Billiards Room', 'You are in a billiards room.', 'billiardsRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Map Room', 'You are in a strange room with several globes.  The walls are all covered with maps.', 'mapRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Drawing Room', 'You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.', 'drawingRoom.jpg'))
-  ->insertRoom(constructBasicRoom('Observatory', 'You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.', 'observatory.jpg'))
-  ->insertRoom(constructBasicRoom('Master Bedchambers', 'You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.', 'masterBedchambers.jpg'))
-  ->insertRoom(constructBasicRoom('Bathroom', 'You are in a bathroom that is off the master bed chambers.', 'bathroom.jpg'))
-  ->insertRoom(constructBasicRoom('North End of Corridor', 'You are in the North End of the corridor.', 'corridor2fn.jpg'))
-  ->insertRoom(constructBasicRoom('South End of Corridor', 'You are in the South End of the corridor.', 'corridor2fs.jpg'))
-  ->insertRoom(constructBasicRoom('Odd Bedroom', 'You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.', 'oddBedroom.jpg'))
-  ->insertRoom(constructBasicRoom('Top of Western Tower', 'You are in the top of a tower.', 'westTowerTop.jpg'))
-  ->insertRoom(constructBasicRoom('Top of Eastern Tower', 'You are in the top of a tower.', 'eastTowerTop.jpg'))
-//  ->insertRoom(constructBasicRoom('', '', ''))
-
-
-/*  ->insertRoom((new Room('Chess Room'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "This room is pitch black.  You can't see anything.";
-    });
-    $room->setImageUrl('darkRoom.jpg');
-  }))
-  ->insertRoom((new Room('Vestibule'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in a small vestibule.";
-    });
-    $room->setImageUrl('vestibule.jpg');
-  }))
-  ->insertRoom((new Room('Art Gallery'))->define(function ($room) {
-    $room->getComponent('Inspector')->onInspect(function ($inspector) {
-      return "You are in the castle art gallery.";
-    });
-    $room->setImageUrl('artGallery.jpg');
-  }))*/
-
-  // Iteration 1 Room Connections
-  ->connectRooms($forest,           Direction::$n,    $castleEntrance)
-  ->connectRooms($castleEntrance,   Direction::$n,    $foyer)
-  ->connectRooms($foyer,            Direction::$n,    $tapestryE)
-  ->connectRooms($tapestryE,        Direction::$w,    $tapestryW)
-  ->connectRooms($tapestryW,        Direction::$w,    $study)
-  ->connectRooms($study,            Direction::$s,    $library)
-  ->connectRooms($foyer,            Direction::$e,    $conservatory)
-  ->connectRooms($conservatory,     Direction::$e,    $lounge)
-  ->connectRooms($lounge,           Direction::$e,    $butlersQuarters)
-  ->connectRooms($butlersQuarters,  Direction::$n,    $kitchen)
-  ->connectRooms($kitchen,          Direction::$n,    $pantry)
-  ->connectRooms($kitchen,          Direction::$w,    $banquetHall)
-  ->connectRooms($banquetHall,      Direction::$s,    $conservatory)
-  ->connectRooms($banquetHall,      Direction::$n,    $backHallway)
-  ->connectRooms($backHallway,      Direction::$e,    $servantsQuarters)
   ->connectRooms($tapestryW,        Direction::$n,    $taxidermyRoom)
-  ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
-
-  // Iteration 2 Room Connections
-  ->connectRooms($foyer,            Direction::$w,    'Vestibule')
-  ->connectRooms('Vestibule',       Direction::$w,    'Base of Western Tower')
-  ->connectRooms('Base of Western Tower', Direction::$u, 'Top of Western Tower')
-  ->connectRooms($study,            Direction::$n,    'Art Gallery')
-  ->connectRooms($kitchen,          Direction::$e,    'Courtyard')
-  ->connectRooms('Courtyard', Direction::$e, 'Stable')
-  ->connectRooms('Stable', Direction::$s, 'Smithery')
-  ->connectRooms($banquetHall, Direction::$w, 'Grand Hall')
-  ->connectRooms('Grand Hall', Direction::$s, 'Eastern End of Tapestry Room')
-  ->connectRooms('Grand Hall', Direction::$n, 'Grand Staircase')
-  ->connectRooms('Grand Staircase', Direction::$u, 'Grand Balcony')
-  ->connectRooms("Servants' Quarters", Direction::$n, 'Base of Eastern Tower')
-  ->connectRooms('Base of Eastern Tower', Direction::$u, 'Top of Eastern Tower')
+  ->insertRoomAt($taxidermyRoom,    Direction::$n,    $chessRoom)
+  
+    // Iteration 2 Room Connections
+  ->insertRoomAt($foyer,            Direction::$w,    $vestibule)
+  ->insertRoomAt($vestibule,        Direction::$w,    $wTowerBase)
+  ->insertRoomAt($wTowerBase,       Direction::$u,    $wTowerTop)
+  ->insertRoomAt($study,            Direction::$n,    $artGallery)
+  ->insertRoomAt($kitchen,          Direction::$e,    $courtyard)
+  ->insertRoomAt($courtyard,        Direction::$e,    $stable)
+  ->insertRoomAt($stable,           Direction::$s,    $smithery)
+  ->insertRoomAt($banquetHall,      Direction::$w,    $grandHall)
+  ->connectRooms($grandHall,        Direction::$s,    $tapestryE)
+  ->insertRoomAt($grandHall,        Direction::$n,    $grandStaircase)
+  ->insertRoomAt($grandStaircase,   Direction::$u,    $balcony)
+  ->insertRoomAt($servantsQuarters, Direction::$n,    $eTowerBase)
+  ->insertRoomAt($eTowerBase,       Direction::$u,    $eTowerTop)
 
   // Second Floor:
-  ->connectRooms('Grand Balcony', Direction::$e, 'Drawing Room')
-  ->connectRooms('Grand Balcony', Direction::$w, 'Observatory')
-  ->connectRooms('Observatory', Direction::$s, 'Map Room')
-  ->connectRooms('Grand Balcony', Direction::$s, 'North End of Corridor')
-  ->connectRooms('North End of Corridor', Direction::$s, 'South End of Corridor')
-  ->connectRooms('North End of Corridor', Direction::$w, 'Map Room')
-  ->connectRooms('North End of Corridor', Direction::$e, 'Billiards Room')
-  ->connectRooms('South End of Corridor', Direction::$w, 'Odd Bedroom')
-  ->connectRooms('South End of Corridor', Direction::$e, 'Master Bedchambers')
-  ->connectRooms('Master Bedchambers', Direction::$n, 'Bathroom')
-  /*->connectRooms('', Direction::$, '')
-  ->connectRooms('', Direction::$, '')
-  ->connectRooms('', Direction::$, '')
-  ->connectRooms('', Direction::$, '')
-  ->connectRooms('', Direction::$, '')
-  ->connectRooms('', Direction::$, '')
-  ->connectRooms('', Direction::$, '')
-  */
+  ->insertRoomAt($balcony, Direction::$e, $drawing)
+  ->insertRoomAt($balcony, Direction::$w, $observatory)
+  ->insertRoomAt($observatory, Direction::$s, $mapRoom)
+  ->insertRoomAt($balcony, Direction::$s, $corridorN)
+  ->insertRoomAt($corridorN, Direction::$s, $corridorS)
+  ->insertRoomAt($corridorN, Direction::$w, $mapRoom)
+  ->insertRoomAt($corridorN, Direction::$e, $billiards)
+  ->insertRoomAt($corridorS, Direction::$w, $beds)
+  ->insertRoomAt($corridorS, Direction::$e, $bedchambers)
+  ->insertRoomAt($bedchambers, Direction::$n, $bathroom)
+
+  /*->insertRoom(\game\assembleRoom($chessRoom))
+  ->insertRoom(\game\assembleRoom($vestibule))
+  ->insertRoom(\game\assembleRoom($artGallery))
+  ->insertRoom(\game\assembleRoom($wTowerBase))
+  ->insertRoom(\game\assembleRoom($grandHall))
+  ->insertRoom(\game\assembleRoom($grandStaircase))
+  ->insertRoom(\game\assembleRoom($eTowerBase))
+  ->insertRoom(\game\assembleRoom($courtyard))
+  ->insertRoom(\game\assembleRoom($stable))
+  ->insertRoom(\game\assembleRoom($smithery))
+
+  // Upper Floor
+  ->insertRoom(\game\assembleRoom($balcony))
+  ->insertRoom(\game\assembleRoom($billiards))
+  ->insertRoom(\game\assembleRoom($mapRoom))
+  ->insertRoom(\game\assembleRoom($drawing))
+  ->insertRoom(\game\assembleRoom($observatory))
+  ->insertRoom(\game\assembleRoom($bedchambers))
+  ->insertRoom(\game\assembleRoom($bathroom))
+  ->insertRoom(\game\assembleRoom($corridorN))
+  ->insertRoom(\game\assembleRoom($corridorS))
+  ->insertRoom(\game\assembleRoom($beds))
+  ->insertRoom(\game\assembleRoom($wTowerTop))
+  ->insertRoom(\game\assembleRoom($eTowerTop))
+*/
+
+  // Iteration 1 Room Connections
+
 
   ->setSpawnPoint('Castle Entrance')
 ;

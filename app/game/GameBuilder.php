@@ -117,12 +117,18 @@ class GameBuilder
 
   public function insertRoom($room)
   {
-    $this->game->addRoom($room);
-    if (!$this->game->getSpawnPoint())
-      $room->define(function ($room) {
-        $room->setSpawnPoint();
-      });
-    return $this;
+    $roomName = "";
+    if (is_a($room, "\game\Room")) $roomName = $room->getName();
+    if (is_array($room)) $roomName = $room['name'];
+    if (!$this->game->getRoom($roomName)) {
+      if (is_array($room)) $room = assembleRoom($room);
+      $this->game->addRoom($room);
+      if (!$this->game->getSpawnPoint())
+        $room->define(function ($room) {
+          $room->setSpawnPoint();
+        });
+    }
+    return $this;  
   }
 
   // public function setRoomDirectionDescription($roomName, $roomDirection, $roomDirectionDescription)
@@ -136,7 +142,9 @@ class GameBuilder
   public function connectRooms($roomName1, $room1Direction, $roomName2)
   {
     if (is_array($roomName1)) $roomName1 = $roomName1['name'];
+    if (is_a($roomName1, "\game\Room")) $roomName1 = $roomName1->getName();
     if (is_array($roomName2)) $roomName2 = $roomName2['name'];
+    if (is_a($roomName2, "\game\Room")) $roomName2 = $roomName2->getName();
     $room1 = $this->game->getRoom($roomName1);
     if ($room1 == null)
       throw new Exception("Room '$roomName1' not found");
