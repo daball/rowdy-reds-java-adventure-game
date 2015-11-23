@@ -23,7 +23,7 @@ body {
 .tabs .navbar { min-height: 30px; border-top: 1px solid #fff; }
 .tabs .navbar.navbar-fixed-bottom { position: fixed; width: 50%; left: 50%; bottom: 51px; overflow: hidden; }
 .tabs .navbar.navbar-fixed-bottom .container-fluid { padding: 0px 0px 0px 0px; }
-.tabs { padding-bottom: 33px; }
+.tabs-shown { padding-bottom: 33px; }
 .tabs .navbar .btn { border-top-left-radius: 0px; border-top-right-radius: 0px; }
 
 .ace_editor { height: 100%; width: 100%; font: 12pt 'Source Code Pro', monospace !important; }

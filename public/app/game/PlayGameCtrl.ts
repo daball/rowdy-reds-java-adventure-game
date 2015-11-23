@@ -82,6 +82,7 @@ module app.game {
         useWrapMode: true,
         showGutter: true,
         theme: 'twilight',
+        mode: 'text',
         onLoad: function (_ace) {
           return scope.onConsoleHistoryLoaded(_ace, scope);
         },
@@ -94,6 +95,7 @@ module app.game {
         useWrapMode: true,
         showGutter: true,
         theme: 'twilight',
+        mode: 'text',
         onLoad: function (_ace) {
           return scope.onCommandLineLoaded(_ace, scope);
         },
@@ -116,16 +118,16 @@ module app.game {
       };
     }
 
-    playerHasEquipped(item) {
-      for (var i = 0; i < this.game.player.equipment.length; i++)
-        if (item == this.game.player.equipment[i])
-          return true;
+    playerHasEquipped(equipment, item) {
+      if (equipment)
+        for (var i = 0; i < equipment.length; i++)
+          if (item == equipment[i])
+            return true;
       return false;
     }
 
     showTabletCode() {
       this.selectedTab = "tabletCode";
-      console.log("showTabletCode()", this.consoleHistoryEditor);
       if (this.consoleHistoryEditor)
         this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
       if (this.tabletCodeEditor)
@@ -203,7 +205,6 @@ module app.game {
 
     onConsoleHistoryLoaded(editor, scope: PlayGameCtrl) {
       scope.consoleHistoryEditor = editor;
-      editor.setMode('text');
       editor.on('focus', function () {
         if (scope.selectedTab == 'commandLine')
           scope.commandLineEditor.env.editor.focus();
@@ -265,7 +266,6 @@ module app.game {
         var KEYCODES = { ENTER: 13, UP_ARROW: 38, DOWN_ARROW: 40,
                         LEFT_ARROW: 37, RIGHT_ARROW: 39, HOME: 36, END: 35
                       };
-        console.log(keyCode);
         if (scope.commandHistoryAt == scope.game.commandHistory.length) {
           //save the current command
           scope.commandInProgress = editor.getValue();
@@ -326,6 +326,7 @@ module app.game {
       });
       editor.session.gutterRenderer = {
         getWidth: function(session, lastLineNumber, config) {
+          // console.log(config)
           return 3 * config.characterWidth;
         },
         getText: function(session, row) {

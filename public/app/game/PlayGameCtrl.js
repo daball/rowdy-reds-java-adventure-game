@@ -32,6 +32,7 @@ var app;
                     useWrapMode: true,
                     showGutter: true,
                     theme: 'twilight',
+                    mode: 'text',
                     onLoad: function (_ace) {
                         return scope.onConsoleHistoryLoaded(_ace, scope);
                     },
@@ -43,6 +44,7 @@ var app;
                     useWrapMode: true,
                     showGutter: true,
                     theme: 'twilight',
+                    mode: 'text',
                     onLoad: function (_ace) {
                         return scope.onCommandLineLoaded(_ace, scope);
                     },
@@ -63,15 +65,15 @@ var app;
                     }
                 };
             }
-            PlayGameCtrl.prototype.playerHasEquipped = function (item) {
-                for (var i = 0; i < this.game.player.equipment.length; i++)
-                    if (item == this.game.player.equipment[i])
-                        return true;
+            PlayGameCtrl.prototype.playerHasEquipped = function (equipment, item) {
+                if (equipment)
+                    for (var i = 0; i < equipment.length; i++)
+                        if (item == equipment[i])
+                            return true;
                 return false;
             };
             PlayGameCtrl.prototype.showTabletCode = function () {
                 this.selectedTab = "tabletCode";
-                console.log("showTabletCode()", this.consoleHistoryEditor);
                 if (this.consoleHistoryEditor)
                     this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
                 if (this.tabletCodeEditor)
@@ -142,7 +144,6 @@ var app;
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
                 scope.consoleHistoryEditor = editor;
-                editor.setMode('text');
                 editor.on('focus', function () {
                     if (scope.selectedTab == 'commandLine')
                         scope.commandLineEditor.env.editor.focus();
@@ -196,7 +197,6 @@ var app;
                     var KEYCODES = { ENTER: 13, UP_ARROW: 38, DOWN_ARROW: 40,
                         LEFT_ARROW: 37, RIGHT_ARROW: 39, HOME: 36, END: 35
                     };
-                    console.log(keyCode);
                     if (scope.commandHistoryAt == scope.game.commandHistory.length) {
                         scope.commandInProgress = editor.getValue();
                     }
