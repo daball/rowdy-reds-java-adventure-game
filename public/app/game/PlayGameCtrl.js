@@ -12,6 +12,7 @@ var app;
                 this.$timeout = $timeout;
                 this.commandLine = "";
                 this.tabletCode = "";
+                this.commandHistoryAt = 1;
                 this.isLoading = false;
                 var scope = this;
                 this.gameName = $routeParams.gameName;
@@ -78,7 +79,6 @@ var app;
             };
             PlayGameCtrl.prototype.showCommandLine = function () {
                 this.selectedTab = "commandLine";
-                console.log("showCommandLine()", this.consoleHistoryEditor);
                 if (this.consoleHistoryEditor)
                     this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
                 if (this.commandLineEditor)
@@ -90,6 +90,7 @@ var app;
                     for (var log in game.logger)
                         console.log("Server logged:", game.logger[log]);
                 this.game = game;
+                this.commandHistoryAt = this.game.commandHistory.length;
                 if (this.tabletCode != game.tabletCode)
                     this.tabletCode = game.tabletCode;
                 this.isLoading = false;
@@ -141,9 +142,7 @@ var app;
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
                 scope.consoleHistoryEditor = editor;
-                console.log('onConsoleHistoryLoaded', scope);
                 editor.on('focus', function () {
-                    console.log('onConsoleHistoryFocus() hit', scope);
                     if (scope.selectedTab == 'commandLine')
                         scope.commandLineEditor.env.editor.focus();
                     else if (scope.selectedTab == 'tabletCode')
@@ -151,7 +150,6 @@ var app;
                 });
                 editor.setHighlightActiveLine(false);
                 scope.$window.$(function () {
-                    console.log("window loaded with editor", editor);
                     scope.$timeout(function () {
                         editor.env.editor.focus();
                     }, 50);
@@ -192,10 +190,42 @@ var app;
                         return ">";
                     }
                 };
-                editor.keyBinding.origOnTextInput = editor.keyBinding.onTextInput;
-                editor.keyBinding.onTextInput = function (text) {
-                    console.log("editor.keyBinding.onTextInput", arguments);
-                    this.origOnTextInput(text);
+                editor.keyBinding.origOnCommandKey = editor.keyBinding.onCommandKey;
+                editor.keyBinding.onCommandKey = function (e, hashId, keyCode) {
+                    var KEYCODES = { ENTER: 13, UP_ARROW: 38, DOWN_ARROW: 40 };
+                    if (scope.commandHistoryAt == scope.game.commandHistory.length) {
+                        scope.commandInProgress = editor.getValue();
+                    }
+                    var loadCommandFromHistory = function () {
+                        if (scope.commandHistoryAt != scope.game.commandHistory.length)
+                            editor.session.setValue(scope.game.commandHistory[scope.commandHistoryAt]);
+                        else
+                            editor.session.setValue(scope.commandInProgress);
+                        var row = 0;
+                        var column = editor.session.getLine(row).length;
+                        editor.gotoLine(row + 1, column);
+                    };
+                    switch (keyCode) {
+                        case KEYCODES.ENTER:
+                            var row = 0;
+                            var column = editor.session.getLine(row).length;
+                            editor.gotoLine(row + 1, column);
+                            editor.keyBinding.origOnCommandKey(e, hashId, keyCode);
+                            break;
+                        case KEYCODES.UP_ARROW:
+                            if (--scope.commandHistoryAt < 0)
+                                scope.commandHistoryAt = scope.game.commandHistory.length;
+                            loadCommandFromHistory();
+                            break;
+                        case KEYCODES.DOWN_ARROW:
+                            if (++scope.commandHistoryAt > scope.game.commandHistory.length)
+                                scope.commandHistoryAt = 0;
+                            loadCommandFromHistory();
+                            break;
+                        default:
+                            editor.keyBinding.origOnCommandKey(e, hashId, keyCode);
+                            break;
+                    }
                 };
             };
             PlayGameCtrl.prototype.onCommandLineChanged = function (e, scope) {

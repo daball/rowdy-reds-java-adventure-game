@@ -15,6 +15,8 @@ module app.game {
     commandLineEditor: any;
     tabletCodeEditor: any;
 
+    commandHistoryAt: number;
+
     consoleHistoryAceOption: any;
     commandLineAceOption: any;
     tabletCodeAceOption: any;
@@ -40,6 +42,9 @@ module app.game {
     consoleHistoryEditor: any;
     commandLineEditor: any;
     tabletCodeEditor: any;
+
+    commandHistoryAt: number = 1;
+    commandInProgress: string;
 
     consoleHistoryAceOption: any;
     commandLineAceOption: any;
@@ -129,7 +134,6 @@ module app.game {
 
     showCommandLine() {
       this.selectedTab = "commandLine";
-      console.log("showCommandLine()", this.consoleHistoryEditor);
       if (this.consoleHistoryEditor)
         this.consoleHistoryEditor.scrollToLine(this.consoleHistoryEditor.session.doc.getLength(), false, true);
       if (this.commandLineEditor)
@@ -142,6 +146,7 @@ module app.game {
         for (var log in game.logger)
           console.log("Server logged:", game.logger[log]);
       this.game = game;
+      this.commandHistoryAt = this.game.commandHistory.length;
       if (this.tabletCode != game.tabletCode)
         this.tabletCode = game.tabletCode;
       this.isLoading = false;
@@ -198,9 +203,7 @@ module app.game {
 
     onConsoleHistoryLoaded(editor, scope: PlayGameCtrl) {
       scope.consoleHistoryEditor = editor;
-      console.log('onConsoleHistoryLoaded', scope);
       editor.on('focus', function () {
-        console.log('onConsoleHistoryFocus() hit', scope);
         if (scope.selectedTab == 'commandLine')
           scope.commandLineEditor.env.editor.focus();
         else if (scope.selectedTab == 'tabletCode')
@@ -208,7 +211,6 @@ module app.game {
       });
       editor.setHighlightActiveLine(false);
       scope.$window.$(function () {
-        console.log("window loaded with editor", editor);
         scope.$timeout(function () {
           editor.env.editor.focus();
         }, 50);
@@ -252,10 +254,49 @@ module app.game {
           return ">";
         }
       };
-      editor.keyBinding.origOnTextInput = editor.keyBinding.onTextInput;
-      editor.keyBinding.onTextInput = function(text) {
-        console.log("editor.keyBinding.onTextInput", arguments);
-        this.origOnTextInput(text);
+      // editor.keyBinding.origOnTextInput = editor.keyBinding.onTextInput;
+      // editor.keyBinding.onTextInput = function(text) {
+      //   console.log("editor.keyBinding.onTextInput", arguments);
+      //   this.origOnTextInput(text);
+      // }
+      editor.keyBinding.origOnCommandKey = editor.keyBinding.onCommandKey;
+      editor.keyBinding.onCommandKey = function(e, hashId, keyCode) {
+        var KEYCODES = { ENTER: 13, UP_ARROW: 38, DOWN_ARROW: 40 };
+        if (scope.commandHistoryAt == scope.game.commandHistory.length) {
+          //save the current command
+          scope.commandInProgress = editor.getValue();
+        }
+        var loadCommandFromHistory = function () {
+          if (scope.commandHistoryAt != scope.game.commandHistory.length)
+            editor.session.setValue(scope.game.commandHistory[scope.commandHistoryAt]);
+          else
+            //recover the saved current command
+            editor.session.setValue(scope.commandInProgress);
+          var row = 0;
+          var column = editor.session.getLine(row).length;
+          editor.gotoLine(row + 1, column);
+        };
+        switch (keyCode) {
+          case KEYCODES.ENTER:
+            var row = 0;
+            var column = editor.session.getLine(row).length;
+            editor.gotoLine(row + 1, column);
+            editor.keyBinding.origOnCommandKey(e, hashId, keyCode);
+            break;
+          case KEYCODES.UP_ARROW:
+            if (--scope.commandHistoryAt < 0)
+              scope.commandHistoryAt = scope.game.commandHistory.length;
+            loadCommandFromHistory();
+            break;
+          case KEYCODES.DOWN_ARROW:
+            if (++scope.commandHistoryAt > scope.game.commandHistory.length)
+              scope.commandHistoryAt = 0;
+            loadCommandFromHistory();
+            break;
+          default:
+            editor.keyBinding.origOnCommandKey(e, hashId, keyCode);
+            break;
+        }
       }
     }
 
