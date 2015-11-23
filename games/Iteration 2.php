@@ -354,45 +354,16 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($eTowerBase,       Direction::$u,    $eTowerTop)
 
   // Second Floor:
-  ->insertRoomAt($balcony, Direction::$e, $drawing)
-  ->insertRoomAt($balcony, Direction::$w, $observatory)
-  ->insertRoomAt($observatory, Direction::$s, $mapRoom)
-  ->insertRoomAt($balcony, Direction::$s, $corridorN)
-  ->insertRoomAt($corridorN, Direction::$s, $corridorS)
-  ->insertRoomAt($corridorN, Direction::$w, $mapRoom)
-  ->insertRoomAt($corridorN, Direction::$e, $billiards)
-  ->insertRoomAt($corridorS, Direction::$w, $beds)
-  ->insertRoomAt($corridorS, Direction::$e, $bedchambers)
-  ->insertRoomAt($bedchambers, Direction::$n, $bathroom)
-
-  /*->insertRoom(\game\assembleRoom($chessRoom))
-  ->insertRoom(\game\assembleRoom($vestibule))
-  ->insertRoom(\game\assembleRoom($artGallery))
-  ->insertRoom(\game\assembleRoom($wTowerBase))
-  ->insertRoom(\game\assembleRoom($grandHall))
-  ->insertRoom(\game\assembleRoom($grandStaircase))
-  ->insertRoom(\game\assembleRoom($eTowerBase))
-  ->insertRoom(\game\assembleRoom($courtyard))
-  ->insertRoom(\game\assembleRoom($stable))
-  ->insertRoom(\game\assembleRoom($smithery))
-
-  // Upper Floor
-  ->insertRoom(\game\assembleRoom($balcony))
-  ->insertRoom(\game\assembleRoom($billiards))
-  ->insertRoom(\game\assembleRoom($mapRoom))
-  ->insertRoom(\game\assembleRoom($drawing))
-  ->insertRoom(\game\assembleRoom($observatory))
-  ->insertRoom(\game\assembleRoom($bedchambers))
-  ->insertRoom(\game\assembleRoom($bathroom))
-  ->insertRoom(\game\assembleRoom($corridorN))
-  ->insertRoom(\game\assembleRoom($corridorS))
-  ->insertRoom(\game\assembleRoom($beds))
-  ->insertRoom(\game\assembleRoom($wTowerTop))
-  ->insertRoom(\game\assembleRoom($eTowerTop))
-*/
-
-  // Iteration 1 Room Connections
-
+  ->insertRoomAt($balcony,          Direction::$e,    $drawing)
+  ->insertRoomAt($balcony,          Direction::$w,    $observatory)
+  ->insertRoomAt($observatory,      Direction::$s,    $mapRoom)
+  ->insertRoomAt($balcony,          Direction::$s,    $corridorN)
+  ->insertRoomAt($corridorN,        Direction::$s,    $corridorS)
+  ->connectRooms($corridorN,        Direction::$w,    $mapRoom)
+  ->insertRoomAt($corridorN,        Direction::$e,    $billiards)
+  ->insertRoomAt($corridorS,        Direction::$w,    $beds)
+  ->insertRoomAt($corridorS,        Direction::$e,    $bedchambers)
+  ->insertRoomAt($bedchambers,      Direction::$n,    $bathroom)
 
   ->setSpawnPoint('Castle Entrance')
 ;
