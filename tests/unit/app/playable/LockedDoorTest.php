@@ -19,7 +19,7 @@ class LockedDoorTest extends \PHPUnit_Framework_TestCase
     foreach ($directions as $direction) {
       $key = new Key("key_$direction", "secret_$direction");
       $doorName = $direction . "LockedDoor";
-      $door = new LockedDoor($doorName, $direction, $key);
+      $door = new LockedDoor($doorName, $direction, $key->getSecret());
       $this->assertTrue(is_a($door, '\game\GameObject'));
       $this->assertEquals($doorName, $door->getName());
 
@@ -87,25 +87,25 @@ class LockedDoorTest extends \PHPUnit_Framework_TestCase
       $this->assertTrue($lockable->isLocked());
       $this->assertTrue(!!$inspector->inspect());
 
-      // //break the door logic
-      // $openable->onBeforeOpen(function ($openable) {
-      //   return false;
-      // });
-      // $openable->onBeforeClose(function ($openable) {
-      //   return false;
-      // });
-      //
-      // //test broken close
-      // $openable->setOpened();
-      // $this->assertTrue($openable->isOpened());
-      // $this->assertTrue(!!$openable->close());
-      // $this->assertTrue($openable->isOpened());
-      //
-      // //test broken open
-      // $openable->setClosed();
-      // $this->assertTrue($openable->isClosed());
-      // $this->assertTrue(!!$openable->open());
-      // $this->assertTrue($openable->isClosed());
+      //break the door logic
+      $openable->onBeforeOpen(function ($openable) {
+        return false;
+      });
+      $openable->onBeforeClose(function ($openable) {
+        return false;
+      });
+
+      //test broken close
+      $openable->setOpened();
+      $this->assertTrue($openable->isOpened());
+      $this->assertTrue(!!$openable->close());
+      $this->assertTrue($openable->isOpened());
+
+      //test broken open
+      $openable->setClosed();
+      $this->assertTrue($openable->isClosed());
+      $this->assertTrue(!!$openable->open());
+      $this->assertTrue($openable->isClosed());
     }
   }
 }

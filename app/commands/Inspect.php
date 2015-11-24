@@ -44,41 +44,56 @@ class Inspect extends BaseCommandHandler
   public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
+    $player = $gameState->getPlayer();
+    $room = $gameState->getPlayerRoom();
     $inspectWhat = $this->getTargetName($commandLine);
     // echo $inspectWhat;
-    if ($inspectWhat === "" || strtolower($inspectWhat) == 'room' || strtolower($inspectWhat) == strtolower($gameState->getPlayerRoom()->getName()))
+    if ($inspectWhat === "" || strtolower($inspectWhat) == 'room' || strtolower($inspectWhat) == strtolower($room->getName()))
       //no parameters, inspect the room
       return $gameState->inspectRoom();
+
     else if (Direction::cardinalDirection($inspectWhat))
       //direction provided, inspect direction from inside room
-      return $gameState->getPlayerRoom()->inspectDirection($inspectWhat);
+      return $room->inspectDirection($inspectWhat);
+
     else if ($inspectWhat == 'leftHand'
           || $inspectWhat == 'me.leftHand')
       //left hand provided, inspect contents of left hand
-      return $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
-    else if ($gameState->getPlayer()->getLeftHand()->getComponent('Container')->countItems() > 0
-          && $gameState->getPlayer()->getLeftHand()->getComponent('Container')->getItemAt(0)->getName() == $inspectWhat)
+      return $player->getLeftHand()->getComponent('Inspector')->inspect();
+
+    else if ($player->getLeftHand()->getComponent('Container')->countItems() > 0
+          && $player->getLeftHand()->getComponent('Container')->getItemAt(0)->getName() == $inspectWhat)
       //left hand item provided, inspect contents of left hand
-      return "The $inspectWhat is in your " . $gameState->getPlayer()->getLeftHand()->getName() . ".  " . $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
+      return "The $inspectWhat is in your " . $player->getLeftHand()->getName() . ".  " . $player->getLeftHand()->getComponent('Inspector')->inspect();
+
     else if ($inspectWhat == 'rightHand'
           || $inspectWhat == 'me.rightHand')
       //right hand provided, inspect contents of right hand
-      return $gameState->getPlayer()->getRightHand()->getComponent('Inspector')->inspect();
-    else if ($gameState->getPlayer()->getRightHand()->getComponent('Container')->countItems() > 0
-          && $gameState->getPlayer()->getRightHand()->getComponent('Container')->getItemAt(0)->getName() == $inspectWhat)
+      return $player->getRightHand()->getComponent('Inspector')->inspect();
+
+    else if ($player->getRightHand()->getComponent('Container')->countItems() > 0
+          && $player->getRightHand()->getComponent('Container')->getItemAt(0)->getName() == $inspectWhat)
       //right hand item provided, inspect contents of left hand
-      return "The $inspectWhat is in your " . $gameState->getPlayer()->getRightHand()->getName() . ".  " . $gameState->getPlayer()->getLeftHand()->getComponent('Inspector')->inspect();
+      return "The $inspectWhat is in your " . $player->getRightHand()->getName() . ".  " . $player->getLeftHand()->getComponent('Inspector')->inspect();
+
+    else if ($player->hasEquipmentItem($inspectWhat))
+      //equipped item provided, inspect contents of left hand
+      return "You have equipped the $inspectWhat.  " . $player->getEquipmentItem($inspectWhat)->getComponent('Inspector')->inspect();
+
     else if (($inspectWhat == 'backpack'
           || $inspectWhat == 'me.backpack')
-          && $gameState->getPlayer()->getBackpack())
+          && $player->getBackpack())
       //backpack provided, inspect contents of backpack
-      return $gameState->getPlayer()->getBackpack()->getComponent('Inspector')->inspect();
-    else if (($item = $gameState->getPlayerRoom()->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
+      return $player->getBackpack()->getComponent('Inspector')->inspect();
+
+    else if (($item = $room->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
       //room item (or item within any container hierarchy in room) provided, inspect item
-      return $item->getComponent('Inspector')->inspect();
-    // else if ($item = $gameState->getPlayer()->getBackpack()->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
+      return $gameState->inspectRoomItem($item);
+
+    // else if ($item = $player->getBackpack()->getComponent('Container')->findNestedItemByName($inspectWhat)) != null)
       //backpack item provided, inspect contents of back pack
       // return $item->getComponent('Inspector')->inspect();
+
     // else {
     //   else if (($item = $isItemInContainerInRoom($itemInQuestion)) !== FALSE) {
     //     if (is_a($item, '\playable\IInspectable'))
@@ -86,6 +101,7 @@ class Inspect extends BaseCommandHandler
     //     else
     //       return "The item in the room is not inspectable.";
     //   }
+
     return "I don't know what " . insertAOrAn($inspectWhat) . " is.";
   }
 }

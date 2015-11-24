@@ -114,7 +114,7 @@ var app;
                 this.isLoading = true;
                 this.game.consoleHistory += "\n" + this.game.prompt + commandLine + "\nExecuting command on game service...";
                 this.gameResource.save({ gameName: this.gameName, commandLine: commandLine, tabletCode: tabletCode }, function (game) {
-                    if (game.error != undefined)
+                    if (game.error)
                         _this.handleError(game.error);
                     else
                         _this.updateGame(game);
@@ -125,8 +125,6 @@ var app;
                 });
             };
             PlayGameCtrl.prototype.handleError = function (error) {
-                if (error.xdebug_message)
-                    error = error.xdebug_message;
                 var modalInstance = this.$uibModal.open({
                     animation: true,
                     templateUrl: './views/modal-error.html',
@@ -233,7 +231,7 @@ var app;
                 };
             };
             PlayGameCtrl.prototype.onCommandLineChanged = function (e, scope) {
-                if (scope.commandLine.indexOf('\n') > -1) {
+                if (scope.commandLine.indexOf('\n') > -1 && !scope.commandLineReadOnly) {
                     scope.commandLineReadOnly = true;
                     var onCommandLineProcessed = function () {
                         scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n') + 1);

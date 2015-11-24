@@ -2,11 +2,13 @@
 
 namespace game;
 
-require_once __DIR__.'/../util/TDefine.php';
 require_once __DIR__.'/../components/Inspector.php';
+require_once __DIR__.'/../util/TDefine.php';
+require_once __DIR__.'/../util/TMessenger.php';
 
 use \components\Inspector;
 use \util\TDefine;
+use \util\TMessenger;
 
 /**
  * The GameObject represents almost any object in the game.
@@ -24,9 +26,10 @@ use \util\TDefine;
  * components in a certain way in order to achieve the game behavior
  * desired.
  **/
-class GameObject //implements \Serializable
+class GameObject
 {
   use TDefine;
+  use TMessenger;
 
   /**
    * The name of the GameObject.

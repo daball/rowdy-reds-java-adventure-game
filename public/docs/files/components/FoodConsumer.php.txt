@@ -29,19 +29,30 @@ class FoodConsumer extends BaseComponent
         return (is_a($food, "\playable\Food"));
       });
       $foodConsumer->onEat(function ($foodConsumer, $food) {
-        return "The " . $foodConsumer->getParent()->getName() . " ate the " . $food->getName() . ".";
+        if ($food) {
+          if ($foodConsumer && $foodConsumer->getParent())
+            return "The " . $foodConsumer->getParent()->getName() . " ate the " . $food->getName() . ".";
+          else
+            return "The food consumer ate the " . $food->getName() . ".";
+        }
+        else if ($foodConsumer && $foodConsumer->getParent())
+          return "You didn't send any food to the " . $foodConsumer->getParent()->getName() . ".";
+        else
+          return "Something is wrong with the food and the food consumer.";
       });
       $foodConsumer->onRefuseEat(function ($foodConsumer, $food) {
-        return "The " . $foodConsumer->getParent()->getName() . " did not eat the " . $food->getName() . ".";
+        if ($food) {
+          if ($foodConsumer && $foodConsumer->getParent())
+            return "The " . $foodConsumer->getParent()->getName() . " did not eat the " . $food->getName() . ".";
+          else
+            return "The food consumer did not eat the " . $food->getName() . ".";
+        }
+        else if ($foodConsumer && $foodConsumer->getParent())
+          return "You didn't send any food to the " . $foodConsumer->getParent()->getName() . ".";
+        else
+          return "Something is wrong with the food and the food consumer.";
       });
     });
-  }
-
-  /**
-   * @ignore
-   */
-  public function validateCollision($direction) {
-    return ($this->enabled && Direction::fullDirection($direction) == $this->direction);
   }
 
   /**
@@ -62,32 +73,14 @@ class FoodConsumer extends BaseComponent
   /**
    * @ignore
    */
-  public function enableCollisions() {
-    $this->enabled = true;
-  }
-
-  /**
-   * @ignore
-   */
-  public function isEnabled() {
-    return $this->enabled;
-  }
-
-  /**
-   * @ignore
-   */
-  public function disableCollisions() {
-    $this->enabled = false;
-  }
-
-  /**
-   * @ignore
-   */
   public function eat($food) {
     if ($this->trigger('beforeEat', array($this, $food))) {
-      $this->hungry = false;
-      $food->getContainer()->removeItem($food);
-      return $this->trigger('eat', array($this, $food));
+      $this->setHungry(false);
+      $foodsContainer = $food->getContainer();
+      if ($foodsContainer)
+        $foodsContainer->getComponent('Container')->removeItem($food);
+      $output = $this->trigger('eat', array($this, $food));
+      return $output;
     }
     return $this->trigger('refuseEat', array($this, $food));
   }

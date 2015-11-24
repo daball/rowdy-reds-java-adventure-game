@@ -82,7 +82,7 @@ echo json_encode(array(
 	'player' 						=> array(
 		'leftHand'					=> $leftHand,
 		'rightHand'					=> $rightHand,
-		'equipment' 				=> array('Tablet')//$equipment,
+		'equipment' 				=> $equipment,
 	),
 	'eol' 						=> $eol,
   'prompt' 					=> $prompt,

@@ -87,9 +87,13 @@ class Container extends BaseComponent
     return $this->setItemAt(-1, $item);
   }
 
+  public function removeItem($item) {
+    return $this->unsetItemAt($this->findItemIndexByName($item->getName()));
+  }
+
   public function setItemAt($index, $item) {
     if ($index == -1) {
-      $index = count($this->items);
+      $index = count($this->getAllItems());
       while ($this->hasItemAt($index)) { $index++; }
       if ($this->getMaxItems() != -1 && $index >= $this->getMaxItems())
         $index = $this->getMaxItems()-1;
@@ -120,7 +124,7 @@ class Container extends BaseComponent
   }
 
   public function hasItemAt($index) {
-    return $index >= 0 && isset($this->items[$index]);
+    return $index >= 0 && array_key_exists($index, $this->items);
   }
 
   public function getAllItems() {
@@ -169,7 +173,7 @@ class Container extends BaseComponent
   public function findNestedItemByName($itemName) {
     if (($item = $this->findItemByName($itemName)) != null)
       return $item;
-    else if ($this->getParent() && $this->getParent()->hasComponent('Container')) {
+    else {//if ($this->getParent() && $this->getParent()->hasComponent('Container')) {
       foreach ($this->getAllItems() as $searchable) {
         if ($searchable->hasComponent('Container')
         && ($item = $searchable->getComponent('Container')->findNestedItemByName($itemName)) != null) {

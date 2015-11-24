@@ -39,8 +39,8 @@ class Dog extends GameObject
         });
       }));
       $dog->addComponent((new FoodConsumer())->define(function ($foodConsumer) {
-        $foodConsumer->onEat(function () {
-          $dog = $inspector->getParent();
+        $foodConsumer->onEat(function ($foodConsumer) {
+          $dog = $foodConsumer->getParent();
           $collider = $dog->getComponent('Collider');
           $collider->disableCollisions();
           return "The dog is now happily eating from his bowl.";

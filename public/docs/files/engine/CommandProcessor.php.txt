@@ -2,7 +2,11 @@
 
 namespace engine;
 
+require_once __DIR__.'/../commands/AutoSuggest.php';
+require_once __DIR__.'/../util/PubSubMessageQueue.php';
+
 use \commands\AutoSuggest;
+use \util\PubSubMessageQueue;
 
 class CommandProcessor
 {
@@ -68,15 +72,27 @@ class CommandProcessor
   {
     $this->commandInput = trim($commandLine);
     $this->tabletInput = trim($tabletCode);
-    if (!$this->commandInput)
-    {
-      $this->commandInput = "";
-      $this->tabletCode = "";
-      $this->commandOutput = "";
-    }
-    else {
+    $this->commandOutput = "";
+    if ($this->commandInput)
       $this->commandOutput = $this->dispatchCommand($this->commandInput, $this->tabletInput);
-    }
+    $prependOutput = "";
+    $appendOutput = "";
+
+    //since the command processor is the last thing to run, there should be no messages
+    //arriving later than this, therefore we can assume that this callback will run immediately
+    //for each message hanging around in the pub/sub queue
+    PubSubMessageQueue::subscribe("System.out", function ($sender, $queue, $message) use (&$prependOutput, &$appendOutput) {
+      if (is_array($message)) {
+        if (array_key_exists('prepend', $message))
+          $prependOutput .= $message['prepend'] . '  ';
+        if (array_key_exists('append', $message))
+          $appendOutput .= '  ' . $message['append'];
+      }
+      else
+        $appendOutput .= '  ' . $message;
+    });
+    //multiplex command outputs
+    $this->commandOutput = $prependOutput . $this->commandOutput . $appendOutput;
     GameState::getInstance()->addCommandToHistory($this->commandInput, $this->commandOutput, $this->tabletInput);
   }
 }

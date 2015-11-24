@@ -20,23 +20,15 @@ class BasicContainer extends GameObject
     parent::__construct($name);
     $this->define(function ($basicContainer) {
       $container = new Container();
-      // $inspector->onInspect(function ($inspector) {
-      //   $openable = $inspector->getParent()->getComponent('Openable');
-      //   if ($openable->isOpened())
-      //     return "The container is open.";
-      //   else
-      //     return "The container is not open.";
-      // });
       $basicContainer->addComponent($container);
 
       $inspector = new Inspector();
       $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
-        $openable = $inspector->getParent()->getComponent('Openable');
-        if ($openable->isOpened())
-          return "The container is open.  You see inside ";
-        else
-          return "The container is not open.";
+        $container = $inspector->getParent()->getComponent('Container');
+        $output = "This is just a basic container.";
+        $items = $container->getAllItems();
+        return $output;
       });
       $basicContainer->addComponent($inspector);
     });

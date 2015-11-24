@@ -4,9 +4,11 @@ namespace components;
 
 require_once __DIR__.'/../util/TDefine.php';
 require_once __DIR__.'/../util/TOnEvent.php';
+require_once __DIR__.'/../util/TMessenger.php';
 
 use \util\TDefine;
 use \util\TOnEvent;
+use \util\TMessenger;
 
 /**
  * @ignore
@@ -15,6 +17,7 @@ abstract class BaseComponent
 {
   use TDefine;
   use TOnEvent;
+  use TMessenger;
 
   /**
    * @ignore

@@ -12,11 +12,11 @@ use \components\Lockable;
  * A LockedDoor game item must be opened in order to pass to the next room.
  */
 class LockedDoor extends Door {
-  public function __construct($name, $direction, $key) {
+  public function __construct($name, $direction, $secret) {
     parent::__construct($name, $direction);
     //implement lockable
-    $this->define(function ($lockedDoor) use ($name, $direction, $key) {
-      $lockable = new Lockable($key);
+    $this->define(function ($lockedDoor) use ($name, $direction, $secret) {
+      $lockable = new Lockable($secret);
       $lockable->popEventHandler('unlock');
       $lockable->onUnlock(function ($lockable, $keyProvided) {
         $door = $lockable->getParent();
@@ -39,7 +39,7 @@ class LockedDoor extends Door {
     });
 
     //override Door
-    $this->define(function ($lockedDoor) use ($name, $direction, $key) {
+    $this->define(function ($lockedDoor) {
       $lockedDoor->getComponent('Inspector')->onInspect(function ($inspector) {
         $door = $inspector->getParent();
         $lockable = $door->getComponent('Lockable');

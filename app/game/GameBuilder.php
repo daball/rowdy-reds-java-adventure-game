@@ -5,8 +5,8 @@ namespace game;
 require_once 'Game.php';
 require_once 'Direction.php';
 require_once 'Room.php';
-require_once __DIR__.'/../playable/index.php';
 require_once __DIR__.'/../components/index.php';
+require_once __DIR__.'/../playable/index.php';
 
 use \Exception;
 use \components\Assignable;
@@ -14,9 +14,15 @@ use \playable\BasicContainer;
 use \playable\Key;
 use \playable\Food;
 use \playable\Door;
+use \playable\Equipment;
 use \playable\LockedDoor;
 use \playable\Dog;
 
+/**
+ * Constructs a Door object based on the item definition.
+ *
+ * @param $room Room definition (associative array).
+ **/
 function assembleRoom($room) {
   $name = array_key_exists('name', $room) ? $room['name'] : 'A Room With No Name';
   $description = array_key_exists('description', $room) ? $room['description'] : 'A Room With No Description';
@@ -34,52 +40,132 @@ function assembleRoom($room) {
     foreach ($items as $item) {
       switch ($item['type']) {
         case 'note':
-          $container->insertItem((new GameObject($item['name']))->define(function ($note) use ($item) {
-            $note->addComponent(new Assignable());
-            $note->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
-              return $item['description'];
-            });
-          }));
+          $container->insertItem(assembleNote($room, $item));
           break;
         case 'door':
-          $container->insertItem(new Door($item['name'], $item['direction']));
+          $container->insertItem(assembleDoor($room, $item));
           break;
         case 'lockedDoor':
-          $container->insertItem(new LockedDoor($item['name'], $item['direction'], $item['secret']));
+          $container->insertItem(assembleLockedDoor($room, $item));
           break;
         case 'key':
-          $key = new Key($item['name'], $item['secret']);
-          $key->define(function ($key) use ($item) {
-            $inspector = $key->getComponent('Inspector');
-            $inspector->popEventHandler('inspect');
-            $inspector->onInspect(function ($inspector) use ($item) {
-              return $item['description'];
-            });
-            if (array_key_exists('onAssign.room.imageUrl', $item)) {
-              $assignable = $key->getComponent('Assignable');
-              $initialOnAssign = $assignable->popEventHandler('assign');
-              $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
-                $room = $oldTarget;
-                if (is_a($room, '\game\Room'))
-                  $room->setImageUrl($item['onAssign.room.imageUrl']);
-                return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
-              });
-            }
-          });
-          $container->insertItem($key);
+          $container->insertItem(assembleKey($room, $item));
           break;
         case 'food':
-          $food = new Food($item['name']);
-          $food->define(function ($food) use ($item) {
-            $inspector = $food->getComponent('Inspector');
-            $inspector->popEventHandler('inspect');
-            $inspector->onInspect(function ($inspector) use ($item) {
-              return $item['description'];
-            });
-          });
-          $container->insertItem($food);
+          $container->insertItem(assembleFood($room, $item));
+          break;
+        case 'equipment':
+          $container->insertItem(assembleEquipment($room, $item));
           break;
       }
+    }
+  });
+}
+
+/**
+ * Constructs a Note object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleNote($room, $item) {
+  return ((new GameObject($item['name']))->define(function ($note) use ($item) {
+    $note->addComponent(new Assignable());
+    $note->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+  }));
+}
+
+/**
+ * Constructs a Door object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleDoor($room, $item) {
+  return (new Door($item['name'], $item['direction']));
+}
+
+/**
+ * Constructs a LockedDoor object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleLockedDoor($room, $item) {
+  return (new LockedDoor($item['name'], $item['direction'], $item['secret']));
+}
+
+/**
+ * Constructs a Key object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleKey($room, $item) {
+  return (new Key($item['name'], $item['secret']))->define(function ($key) use ($item) {
+    $inspector = $key->getComponent('Inspector');
+    $inspector->popEventHandler('inspect');
+    $inspector->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+    if (array_key_exists('onAssign.room.imageUrl', $item)) {
+      $assignable = $key->getComponent('Assignable');
+      $initialOnAssign = $assignable->popEventHandler('assign');
+      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
+        $room = $oldTarget;
+        if (is_a($room, '\game\Room'))
+          $room->setImageUrl($item['onAssign.room.imageUrl']);
+        return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
+      });
+    }
+  });
+};
+
+/**
+ * Constructs a Food object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleFood($room, $item) {
+  return (new Food($item['name']))->define(function ($food) use ($item) {
+    $inspector = $food->getComponent('Inspector');
+    $inspector->popEventHandler('inspect');
+    $inspector->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+  });
+}
+
+/**
+ * Constructs an Equipment object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleEquipment($room, $item) {
+  return (new Equipment($item['name']))->define(function ($equipment) use ($item) {
+    $inspector = $equipment->getComponent('Inspector');
+    $inspector->popEventHandler('inspect');
+    $inspector->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+    if (array_key_exists('onEquip.description', $item)) {
+      $equippable = $equipment->getComponent('Equippable');
+      $initialOnEquip = $equippable->popEventHandler('equip');
+      $equippable->onEquip(function ($equippable) use ($item, $initialOnEquip) {
+        //after equipping, update the inspect call so that it tells the rest of the story
+        $equipment = $equippable->getParent();
+        $inspector = $equipment->getComponent('Inspector');
+        $initialOnInspect = $inspector->popEventHandler('inspect');
+        $inspector->onInspect(function ($inspector) use ($item, $initialOnInspect) {
+          return $initialOnInspect($inspector) . "  " . $item['onEquip.description'];
+        });
+
+        return $initialOnEquip($equippable) . "  " . $inspector->inspect();
+      });
     }
   });
 }
@@ -128,7 +214,7 @@ class GameBuilder
           $room->setSpawnPoint();
         });
     }
-    return $this;  
+    return $this;
   }
 
   // public function setRoomDirectionDescription($roomName, $roomDirection, $roomDirectionDescription)

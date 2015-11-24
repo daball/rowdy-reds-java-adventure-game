@@ -12,6 +12,7 @@ use \game\Direction;
 use \engine\GameState;
 use \components\Container;
 use \components\Inspector;
+use \playable\BasicContainer;
 use \util\PubSubMessageQueue;
 
 /**
@@ -40,7 +41,7 @@ class Player
   protected $location = null;
 
   /**
-   * Player's location in the game.
+   * Player's equipment equipped in the game.
    * @var String
    * @ignore
    **/
@@ -187,23 +188,36 @@ class Player
   }
 
   public function equipItem($item) {
-    if ($item->hasComponent('Equipment')) {
+    if ($item->hasComponent('Equippable')) {
       if (!isset($this->equipment))
-        $this->equipment = array();
-      $this->equipment[$item->getName()] = $item;
-      return $this->getEquipmentItem($item->getName());
+        $this->equipment = new BasicContainer('playerEquipment');
+      $output = $item->getComponent('Equippable')->equip();
+      $itemCurrentContainer = $item->getContainer();
+      if ($itemCurrentContainer != null)
+        $itemCurrentContainer->getComponent('Container')->removeItem($item);
+      $this->equipment->getComponent('Container')->insertItem($item);
+      return $output;
     }
+    return "";
   }
 
   public function listEquipment() {
-    if (isset($this->equipment))
-      return array_keys($this->equipment);
-    return array();
+    $output = array();
+    if (isset($this->equipment)) {
+      $items = $this->equipment->getComponent('Container')->getAllItems();
+      foreach ($items as $item)
+        array_push($output, $item->getName());
+    }
+    return $output;
+  }
+
+  public function hasEquipmentItem($itemName) {
+    return in_array($itemName, $this->listEquipment());
   }
 
   public function getEquipmentItem($itemName) {
-    if (isset($this->equipment)
-      && array_key_exists($itemName, $this->equipment))
-      return $this->equipment[$itemName];
+    if (isset($this->equipment))
+      return $this->equipment->getComponent('Container')->findItemByName($itemName);
+    return null;
   }
 }

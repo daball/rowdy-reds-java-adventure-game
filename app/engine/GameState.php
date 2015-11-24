@@ -6,12 +6,16 @@ require_once 'CommandProcessor.php';
 require_once __DIR__.'/../game/GameBuilder.php';
 require_once __DIR__.'/../game/Player.php';
 require_once __DIR__.'/../playable/index.php';
+require_once __DIR__.'/../util/PubSubMessageQueue.php';
 require_once __DIR__.'/../util/BasicEnglish.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 use \game\Game;
 use \game\GameBuilder;
 use \game\Player;
 use \playable\System;
+use \util\PubSubMessageQueue;
+use \Opis\Closure\SerializableClosure;
 
 final class GameState
 {
@@ -36,6 +40,8 @@ final class GameState
   protected $knownAPIClasses;
   protected $locals;
   protected $globals;
+
+  protected $messageQueues;
 
   public function getGame() {
     return $this->game;
@@ -129,16 +135,32 @@ final class GameState
     return $output;
   }
 
-  public function inspectItemInRoom($itemName) {
-    $room = $this->getPlayerRoom();
-    //inspect room
-    $roomItem = $room->getComponent('Container')->findItemByName($itemName);
-    // if ($roomItem)
+  public function inspectRoomItem($itemName) {
+    $roomItem = $itemName;
+    $output = "";
+    if (!is_a($itemName, '\game\GameObject')) {
+      $room = $this->getPlayerRoom();
+      $roomItem = $room->getComponent('Container')->findItemByName($itemName);
+    }
+    $output .= $roomItem->getComponent('Inspector')->inspect();
+    if ($roomItem->hasComponent('Container')
+      && (!$roomItem->hasComponent('Openable') || $roomItem->getComponent('Openable')->isOpened())
+      && (!$roomItem->hasComponent('Lockable') || $roomItem->getComponent('Openable')->isUnlocked())) {
+      $itemItems = $roomItem->getComponent('Container')->getAllItems();
+      $saItemItems = array();
+      foreach($itemItems as $value) { array_push($saItemItems, insertAOrAn($value->getName())); }
+      if (count($itemItems) > 0) {
+        $sItemItems = natural_language_join($saItemItems);
+        $output .= "  You see inside $sItemItems.";
+      }
+    }
+    return $output;
   }
 
   public function resetGameState()
   {
     $eol = "\n";
+    $this->messageQueues = null;
     $this->knownAPIClasses = array(
       //System classes
       'System', 'PrintStream', 'OutputStream',
@@ -167,6 +189,27 @@ final class GameState
     return $this->globals['me'];
   }
 
+  public function persistentSubscribe($queue, $subscriber) {
+    if (!isset($this->messageQueues))
+      $this->messageQueues = array();
+    if (!array_key_exists($queue, $this->messageQueues))
+      $this->messageQueues[$queue] = array (
+        'subscribers' => array(),
+      );
+    $subscriber = new SerializableClosure($subscriber);
+    array_push($this->messageQueues[$queue]['subscribers'], $subscriber);
+    PubSubMessageQueue::subscribe($queue, $subscriber);
+  }
+
+  protected function resubscribeAll() {
+    if ($this->messageQueues && count($this->messageQueues))
+      foreach($this->messageQueues as $queueName=>$queue) {
+        foreach($queue['subscribers'] as $subscriber) {
+          PubSubMessageQueue::subscribe($queueName, $subscriber);
+        }
+      }
+  }
+
   protected static $instance = null;
 
   /**
@@ -180,6 +223,10 @@ final class GameState
       }
       else {
         static::$instance = unserialize($data);
+        //wake up embedded subscriptions
+        static::$instance->resubscribeAll();
+        //notify late-binding persistent subscribers to begin working
+        PubSubMessageQueue::publish(static::$instance, "GameState", "ready");
       }
     }
     return static::$instance;
@@ -191,6 +238,8 @@ final class GameState
   public static function init($game) {
     if (GameEngine::isValidGame($game))
       static::$instance = new GameState($game);
+    //notify late-binding persistent subscribers to begin working
+    PubSubMessageQueue::publish(static::$instance, "GameState", "ready");
     return static::$instance;
   }
 

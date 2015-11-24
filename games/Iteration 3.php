@@ -17,14 +17,6 @@ use \playable\Food;
 use \playable\LockedDoor;
 use \playable\Dog;
 
-function constructBasicRoom($n, $d, $i) {
-  return \game\assembleRoom(array('name'=>$n, 'description'=>$d, 'imageUrl'=>$i));
-}
-
-/* SIMPLE ROOM DEFINITIONS */
-$gameName = pathinfo(__FILE__)['filename'];
-
-
 /* SIMPLE ROOM DEFINITIONS */
 $gameName = pathinfo(__FILE__)['filename'];
 $forest = array(
@@ -212,6 +204,14 @@ $stable = array(
   'name'         => "Stable",
   'description'  => "You are in a stable.",
   'imageUrl'     => "stables.jpg",
+  'items'       => array(
+    'Tablet'       => array(
+      'type'                    => "equipment",
+      'name'                    => "Tablet",
+      'description'             => "When equipped, the tablet allows you to type Java code in order to solve game puzzles.",
+      'onEquip.description'     => "In order to use the Tablet, click on the Tablet Code tab and type Java methods. Once you have your Java methods ready to run, go back to the Command Line tab and enter a method call.",
+    ),
+  ),
 );
 $smithery = array(
   'name'         => "Smithery",
@@ -356,54 +356,83 @@ GameBuilder::newGame($gameName)
   ->connectRooms($banquetHall,      Direction::$s,    $conservatory) // connected already existing rooms
   ->insertRoomAt($banquetHall,      Direction::$n,    $backHallway)
   ->insertRoomAt($backHallway,      Direction::$e,    $servantsQuarters)
-  
-  ->insertRoom(\game\assembleRoom($taxidermyRoom)->define(function ($room) use ($taxidermyRoom) {
-    $stateOfDog = "hungry";
-    $room->getComponent('Container')->insertItem((new Dog('dog', Direction::$n))->define(function ($dog) use ($stateOfDog) {
+
+  ->insertRoom(\game\assembleRoom($taxidermyRoom)->define(function ($room) use ($taxidermyRoom, $gameName) {
+    $roomName = $room->getName();
+    $dogUrl = "game://$gameName/$roomName/StateMachine:Dog+Bowl";
+    $room->publish($dogUrl, "hungry");
+    $room->getComponent('Container')->insertItem((new Dog('dog', Direction::$n))->define(function ($dog) use ($dogUrl, $room, $taxidermyRoom) {
       $foodConsumer = $dog->getComponent('FoodConsumer');
-      $initialOnEat = $foodConsumer->onEat();
-      $foodConsumer->onEat(function ($foodConsumer) use ($stateOfDog, $initialOnEat) {
+      $foodConsumer->onEat(function ($foodConsumer, $food) use ($taxidermyRoom) {
         $dog = $foodConsumer->getParent();
         $room = $dog->getContainer();
         $room->setImageUrl('taxidermyRoom.jpg');
-        $stateOfDog = "eating";
-        return $initialOnEat($foodConsumer);
       });
-      $inspector = $dog->getComponent('Inspector');
-      $initialOnInspect = $inspector->onInspect();
-      $inspector->onInspect(function ($inspector) use ($stateOfDog, $initialOnInspect) {
+      $dog->subscribe($dogUrl, function ($sender, $queue, $stateOfDog) use ($dogUrl, $room, $dog) {
+        $dogHungry = "It's a sizeable looking dog is sitting by the northern door, watching you alertly.";
+        $dogEating = "The dog is eating the lambChop.";
+        $dogHappy = "The dog is now satisfied from eating and smiles at you.  You are a new best friend.";
+        $lambChop = $room->getComponent('Container')->findNestedItemByName('lambChop');
+        $foodConsumer = $dog->getComponent('FoodConsumer');
+        $inspector = $dog->getComponent('Inspector');
+        $dogMessage = "";
         switch ($stateOfDog) {
           case "hungry":
-            return "It's a sizeable looking dog is sitting by the northern door, watching you alertly.";
+            $dogMessage = $dogHungry;
+            break;
+          case "eating":
+            $dogMessage = $dogEating;
+            $foodConsumer->eat($lambChop);
+            break;
           case "happy":
-            return "The dog is now satisfied from eating and smiles at you.  You are a new best friend.";
-          default:
-            return $initialOnInspect($inspector);
+            $dogMessage = $dogHappy;
+            break;
+        }
+        if ($dogMessage) {
+          $inspector->popEventHandler('inspect');
+          $inspector->onInspect(function ($inspector) use ($dogUrl, $dogMessage, $dogEating) {
+            if ($dogMessage == $dogEating)
+              $inspector->publish($dogUrl, "happy");
+            return $dogMessage;
+          });
         }
       });
     }));
-    $room->getComponent('Container')->insertItem((new BasicContainer('bowl'))->define(function ($bowl) use ($stateOfDog) {
-      $bowl->getComponent('Inspector')->onInspect(function ($inspector) use (&$stateOfDog) {
-        $bowl = $inspector->getParent();
-        $room = $bowl->getContainer();
-        $dog = $room->getComponent('Container')->findItemByName('dog');
-        $foodConsumer = $dog->getComponent('FoodConsumer');
-        if ($stateOfDog == "eating") {
-          $stateOfDog = "happy";
-          return "The dog is licking the bowl clean.";
+    $room->getComponent('Container')->insertItem((new BasicContainer('bowl'))->define(function ($bowl) use ($dogUrl) {
+      $dogHungry = "It's an empty bowl sitting on the floor.";
+      $dogEating = "The dog is licking the bowl clean.";
+      $dogHappy = "Only crumbs remain in the bowl.";
+      $bowl->subscribe($dogUrl, function ($sender, $queue, $message) use ($dogUrl, $bowl, $dogHungry, $dogEating, $dogHappy) {
+        $bowlMessage = "";
+        switch ($message) {
+          case "hungry": $bowlMessage = $dogHungry; break;
+          case "eating": $bowlMessage = $dogEating; break;
+          case "happy": $bowlMessage = $dogHappy; break;
         }
-        return "It's an empty bowl sitting on the floor.";
+        if ($bowlMessage) {
+          $inspector = $bowl->getComponent('Inspector');
+          $inspector->popEventHandler('inspect');
+          $inspector->onInspect(function ($inspector) use ($dogUrl, $bowlMessage, $dogEating) {
+            if ($bowlMessage == $dogEating)
+              $inspector->publish($dogUrl, "happy");
+            return $bowlMessage;
+          });
+        }
       });
       $bowl->getComponent('Container')->setValidItemTypes(array('\playable\Food'));
-      $bowl->getComponent('Container')->onSet(function () use (&$stateOfDog) {
-        $stateOfDog = "eating";
-        return "The dog runs over and starts eating from the bowl.";
+      $bowl->getComponent('Container')->onSet(function ($container, $index, $item) use ($dogUrl) {
+        $bowl = $container->getParent();
+        $bowl->publish($dogUrl, "eating");
+        $consumer = "dog";
+        $bowl = $bowl->getName();
+        $item = $item->getName();
+        return "The $consumer runs over and starts eating $item from the $bowl.";
       });
     }));
   }))
   ->connectRooms($tapestryW,        Direction::$n,    $taxidermyRoom)
   ->insertRoomAt($taxidermyRoom,    Direction::$n,    $chessRoom)
-  
+
     // Iteration 2 Room Connections
   ->insertRoomAt($foyer,            Direction::$w,    $vestibule)
   ->insertRoomAt($vestibule,        Direction::$w,    $wTowerBase)

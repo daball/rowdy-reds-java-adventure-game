@@ -23,7 +23,6 @@ namespace util;
  * @author David Ball <daball@email.radford.edu>
  **/
 class PubSubMessageQueue {
-
   /**
    * Message queues associative array
    * Queue name is the item index
@@ -42,11 +41,12 @@ class PubSubMessageQueue {
   public static function init()
   {
     self::$messageQueues = array();
-    self::registerQueue('default');
   }
 
   public static function registerQueue($queue)
   {
+    if (!isset(self::$messageQueues))
+      self::init();
     if (!array_key_exists($queue, self::$messageQueues))
       self::$messageQueues[$queue] = array (
         'messages' => array(),
@@ -77,12 +77,9 @@ class PubSubMessageQueue {
     self::publish("self", "Logger", "PubSubMessageQueue::subscribe() - Queue $queue subscription registered.");
     foreach (self::$messageQueues[$queue]['messages'] as $message) {
       $subscriber($message['sender'], $queue, $message['message']);
-      if ($queue != "Logger" && $sender != "self")
+      if ($queue != "Logger" && $message['sender'] != "self")
         self::publish("self", "Logger", "PubSubMessageQueue::subscribe() - Queue $queue - Published backlog message " . var_export($message['message'], true));
     }
   }
-
 }
-
-PubSubMessageQueue::init();
 

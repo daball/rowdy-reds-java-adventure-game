@@ -1,0 +1,48 @@
+<?php
+
+namespace playable;
+
+require_once __DIR__.'/../game/GameObject.php';
+require_once __DIR__.'/../components/Assignable.php';
+require_once __DIR__.'/../components/Equippable.php';
+require_once __DIR__.'/../util/BasicEnglish.php';
+
+use \game\GameObject;
+use \components\Equippable;
+use \components\Assignable;
+
+/**
+ * @author David Ball
+ * @ignore
+ **/
+class Equipment extends GameObject
+{
+  /**
+   * @ignore
+   */
+  public function __construct($name) {
+    parent::__construct($name);
+    $this->define(function ($equipment) {
+      $equippable = new Equippable();
+      $initialOnEquip = $equippable->popEventHandler('equip');
+      $equippable->onEquip(function ($equippable) use ($initialOnEquip) {
+        $equipment = $equippable->getParent();
+        return $initialOnEquip($equippable);
+      });
+      $equipment->addComponent($equippable);
+
+      $assignable = new Assignable();
+      $equipment->addComponent($assignable);
+
+      $inspector = $equipment->getComponent("Inspector");
+      $inspector->popEventHandler('inspect');
+      $inspector->onInspect(function ($inspector) {
+        $item = $inspector->getParent();
+        if ($item) $item = $item->getName();
+        if (!$item) $item = "equipment item";
+        $item = insertAOrAn($item);
+        return "It is $item.";
+      });
+    });
+  }
+}

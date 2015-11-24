@@ -173,7 +173,7 @@ module app.game {
       this.game.consoleHistory += "\n" + this.game.prompt + commandLine + "\nExecuting command on game service...";
       this.gameResource.save({gameName: this.gameName, commandLine: commandLine, tabletCode: tabletCode}, (game: app.domain.IGameInProgress) => {
         // console.log(game);
-        if (game.error != undefined)
+        if (game.error)
           this.handleError(game.error);
         else
           this.updateGame(game);
@@ -185,8 +185,6 @@ module app.game {
     }
 
     handleError(error) {
-      if (error.xdebug_message)
-        error = error.xdebug_message;
       var modalInstance = this.$uibModal.open({
         animation: true,
         templateUrl: './views/modal-error.html',
@@ -305,7 +303,7 @@ module app.game {
     }
 
     onCommandLineChanged(e, scope) {
-      if (scope.commandLine.indexOf('\n') > -1) {
+      if (scope.commandLine.indexOf('\n') > -1 && !scope.commandLineReadOnly) {
         scope.commandLineReadOnly = true;
         let onCommandLineProcessed = () => {
           scope.commandLine = scope.commandLine.substring(scope.commandLine.indexOf('\n')+1);

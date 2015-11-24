@@ -12,7 +12,7 @@ use \components\Openable;
 use \game\GameObject;
 
 /**
- * A Door game item must be opened in order to pass to the next room.
+ * A Door game object is an obstacle must be opened in order to pass to the next room.
  */
 class Door extends GameObject
 {

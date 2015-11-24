@@ -4,6 +4,9 @@ namespace components;
 
 require_once 'BaseComponent.php';
 
+/**
+ *
+ **/
 class Assignable extends BaseComponent
 {
   public function __construct() {
@@ -33,7 +36,10 @@ class Assignable extends BaseComponent
       });
       $assignable->onRefuseAssign(function ($assignable, $oldTarget, $newTarget, $index) {
         $item = $assignable->getParent();
-        return "The " . $item->getName() . " has not been assigned to your " . $newTarget->getName() . ".";
+        $yoursOrTheirs = "the";
+        if ($container && ($container->getName() == 'leftHand' || $container->getName() == 'rightHand' || $container->getName() == 'backpack'))
+          $yoursOrTheirs = "your";
+        return "The " . $item->getName() . " has not been assigned to $yoursOrTheirs " . $newTarget->getName() . ".";
       });
     });
   }
@@ -43,20 +49,21 @@ class Assignable extends BaseComponent
     $currentContainer = $item->getContainer();
     if ($this->trigger('beforeAssign', array($this, $currentContainer, $target, $index)))
     {
-      $output = "";
+      $unset = "";
+      $set = "";
       if ($currentContainer) {
         //unset existing item
-        $container = $currentContainer->getComponent('Container');
-        $index = $container->findIndexByItem($item);
-        $output = $container->unsetItemAt($index) . ' ';
+        $existingContainer = $currentContainer->getComponent('Container');
+        $existingIndex = $existingContainer->findIndexByItem($item);
+        $unset .= $existingContainer->unsetItemAt($existingIndex);
+        {
+          //set item
+          $container = $target->getComponent('Container');
+          $set .= $container->setItemAt($index, $item);
+        }
       }
-      {
-        //set item
-        $container = $target->getComponent('Container');
-        $output .= $container->setItemAt($index, $item) . ' ';
-      }
-      $output = $this->trigger('assign', array($this, $currentContainer, $target, $index)) . ' ' . $output;
-      return trim($output);
+      $output = $this->trigger('assign', array($this, $currentContainer, $target, $index)) . rtrim(' ' . $unset) . rtrim('  ' . $set);
+      return $output;
     }
     return $this->trigger('refuseAssign', array($this, $currentContainer, $target, $index));
   }

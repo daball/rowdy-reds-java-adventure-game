@@ -23,7 +23,8 @@ class AutoSuggest extends BaseCommandHandler
       'unset',
       'set',
       'move',
-      'navigate'
+      'navigate',
+      'equip',
     );
   }
 
@@ -57,10 +58,12 @@ class AutoSuggest extends BaseCommandHandler
       case 'assign':
       case 'set':
       case 'unset':
-        return "In order to assign something, you might try target = item; For example, me.leftHand = item;";
+        return "In order to assign something, you might try target = item; For example, me.leftHand = item; or anyContainer = anyItem;";
       case 'move':
       case 'navigate':
         return "In order to navigate, you might try the commands up, west, north, east, south, down.";
+      case 'equip':
+        return "In order to equip an item, you might try equip(item); or me.equip(item);";
     }
     return "I don't understand.";
   }
