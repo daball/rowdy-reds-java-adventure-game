@@ -1,5 +1,5 @@
 module app {
-  var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ngSanitize", "ui.bootstrap", "ui.ace" ]);
+  var main = angular.module("RowdyRedApp", ["ngRoute", "ngResource", "ngSanitize", "ui.bootstrap", "ui.ace", "ng-showdown" ]);
 
   main.config(routeConfig);
 
@@ -21,6 +21,10 @@ module app {
       .when('/game/:gameName/thank-you', {
         templateUrl: "./views/thank-you.html",
         controller: "ThankYouCtrl as vm"
+      })
+      .when('/docs/:docName', {
+        templateUrl: "./views/view-manual.html",
+        controller: "UserManualCtrl as vm"
       })
       .otherwise("/");
   }

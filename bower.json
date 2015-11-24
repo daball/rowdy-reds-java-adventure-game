@@ -29,6 +29,7 @@
     "angular-sanitize": "~1.4.7",
     "angular-ui": "~0.4.0",
     "angular-ui-ace": "~0.2.3",
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "ng-showdown": "~1.1.0"
   }
 }
