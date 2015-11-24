@@ -444,8 +444,8 @@ GameBuilder::newGame($gameName)
             $bowlMessage = $taxidermyRoom['states']['dogEating']['bowl.description'];
             break;
           case $taxidermyRoom['states']['dogHappy']['state']:
-          $bowlMessage = $taxidermyRoom['states']['dogHappy']['bowl.description'];
-          break;
+            $bowlMessage = $taxidermyRoom['states']['dogHappy']['bowl.description'];
+            break;
         }
         if ($bowlMessage) {
           $inspector = $bowl->getComponent('Inspector');

@@ -357,9 +357,15 @@ GameBuilder::newGame($gameName)
       $bowl->subscribe($dogUrl, function ($sender, $queue, $message) use ($dogUrl, $bowl, $taxidermyRoom) {
         $bowlMessage = "";
         switch ($message) {
-          case $taxidermyRoom['states']['dogHungry']['state']: $bowlMessage = $taxidermyRoom['states']['dogHungry']['bowl.description']; break;
-          case $taxidermyRoom['states']['dogEating']['state']: $bowlMessage = $taxidermyRoom['states']['dogEating']['bowl.description']; break;
-          case $taxidermyRoom['states']['dogHappy']['state']: $bowlMessage = $taxidermyRoom['states']['dogHappy']['bowl.description']; break;
+          case $taxidermyRoom['states']['dogHungry']['state']:
+            $bowlMessage = $taxidermyRoom['states']['dogHungry']['bowl.description'];
+            break;
+          case $taxidermyRoom['states']['dogEating']['state']:
+            $bowlMessage = $taxidermyRoom['states']['dogEating']['bowl.description'];
+            break;
+          case $taxidermyRoom['states']['dogHappy']['state']:
+            $bowlMessage = $taxidermyRoom['states']['dogHappy']['bowl.description'];
+            break;
         }
         if ($bowlMessage) {
           $inspector = $bowl->getComponent('Inspector');
