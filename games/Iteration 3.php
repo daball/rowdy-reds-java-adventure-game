@@ -23,11 +23,29 @@ $forest = array(
   'name'        => "Forest",
   'description' => "You are standing in a forest.  There are trees all around you.  A path leads north.",
   'imageUrl'    => "forest.jpg",
+  'items'       => array(
+    'note'       => array(
+      'type'                    => 'note',
+      'name'                    => "sign",
+      'description'             => "The sign reads:\n ->  Beware! You only have two hands - they are your local variables, leftHand and rightHand. " .
+                                   "If you pick up an item when you're already holding another item in that hand, then the Java garbage collector will garbage " .
+                                   "collect the old item, and it is lost forever! (or at least till you type 'reset')\n\n" .
+                                   "Hmm... Seems kind of wordy for an old wooden sign in the creepy old woods in the creepy country wherever we are that " .
+                                   "nobody goes on the a tail on the frog on the bump on the log in the hole in the bottom of the sea.",
+    ),
+  ),
 );
 $castleEntrance = array(
   'name'        => "Castle Entrance",
   'description' => "You are at the edge of a forest and are standing at a grand castle.  The castle's door lies to the north.",
   'imageUrl'    => "castleEntrance.png",
+  'items'       => array(
+    'note'       => array(
+      'type'                    => 'note',
+      'name'                    => "sign",
+      'description'             => "The sign reads:\n ->  Warning - Beware of the...\n\nThe rest of the sign appears to be burned away.",
+    ),
+  ),
 );
 $foyer = array(
   'name'        => "Foyer",
