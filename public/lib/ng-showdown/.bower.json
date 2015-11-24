@@ -47,6 +47,5 @@
   },
   "_source": "git://github.com/showdownjs/ng-showdown.git",
   "_target": "~1.1.0",
-  "_originalSource": "ng-showdown",
-  "_direct": true
+  "_originalSource": "ng-showdown"
 }
