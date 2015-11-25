@@ -21,14 +21,14 @@ class Resolver
   const PLAYER_BACKPACK_INDEX       = 64;
   const PLAYER_BACKPACK_ITEM        = 128;
   const PLAYER_EQUIPMENT_ITEM       = 256;
-  const PLAYER_ANY                  = self::PLAYER | self::PLAYER_LEFT_HAND | self::PLAYER_LEFT_HAND_ITEM | self::PLAYER_RIGHT_HAND | self::PLAYER_RIGHT_HAND_ITEM | self::PLAYER_BACKPACK | self::PLAYER_BACKPACK_ITEM | self::PLAYER_EQUIPMENT_ITEM;
+  const PLAYER_ANY                  = 511;//self::PLAYER | self::PLAYER_LEFT_HAND | self::PLAYER_LEFT_HAND_ITEM | self::PLAYER_RIGHT_HAND | self::PLAYER_RIGHT_HAND_ITEM | self::PLAYER_BACKPACK | self::PLAYER_BACKPACK_ITEM | self::PLAYER_EQUIPMENT_ITEM;
 
   const ROOM                        = 512;
   const ROOM_DIRECTION              = 1024;
   const ROOM_ITEM                   = 2048;
-  const ROOM_ANY                    = self::ROOM | self::ROOM_DIRECTION | self::ROOM_ITEM;
+  const ROOM_ANY                    = 3584; //self::ROOM | self::ROOM_DIRECTION | self::ROOM_ITEM;
 
-  const ANY                         = self::PLAYER_ANY | self::ROOM_ANY;
+  const ANY                         = 4095; //self::PLAYER_ANY | self::ROOM_ANY;
 
   const REGEX_PLAYER                = '/^me$/';
   const REGEX_PLAYER_LEFT_HAND      = '/^(?:me.){0,1}(leftHand)$/';
