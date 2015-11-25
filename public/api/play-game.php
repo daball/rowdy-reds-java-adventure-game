@@ -38,6 +38,7 @@ $player = $gameState->getPlayer();
 $avatarRoom = $gameState->getPlayerRoom();
 $moves = $gameState->getMoves();
 $isExiting = $gameState->isExiting();
+$showManual = $gameState->showManual();
 
 $gameName = $game->getName();
 $roomName = $avatarRoom->getName();
@@ -88,6 +89,7 @@ echo json_encode(array(
   'prompt' 					=> $prompt,
 	'moves' 					=> $moves,
 	'isExiting' 			=> $isExiting,
+	'showManual' 			=> $showManual,
 	'tabletCode' 			=> $tabletCode,
 	'logger' 					=> $logger,
 ), JSON_PRETTY_PRINT);
@@ -100,6 +102,11 @@ if ($gameEngine->getGameState()->isExiting()) {
 	//unset isExiting for next time
 	//$gameEngine->gameState = new GameState();
 	$gameEngine->getGameState()->isExiting(false);
+}
+if ($gameEngine->getGameState()->showManual()) {
+	//unset isExiting for next time
+	//$gameEngine->gameState = new GameState();
+	$gameEngine->getGameState()->showManual(false);
 }
 
 //always save the session state

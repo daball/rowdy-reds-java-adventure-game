@@ -98,7 +98,7 @@ class Direction extends GameObject
   protected $obvious = true;
 
   public function __construct($name) {
-    $name = self::cardinalDirection($name);
+    $name = self::fullDirection($name);
     parent::__construct($name);
     $this->define(function ($direction) {
       $inspector = new Inspector();

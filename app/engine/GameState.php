@@ -36,7 +36,8 @@ final class GameState
    **/
   protected $consoleHistory;
   protected $moves;
-  protected $exiting;
+  protected $_isExiting;
+  protected $_showManual;
   protected $knownAPIClasses;
   protected $locals;
   protected $globals;
@@ -91,8 +92,14 @@ final class GameState
 
   public function isExiting($isExiting=null) {
     if ($isExiting !== null)
-      $this->exiting = $isExiting;
-    return $this->exiting;
+      $this->_isExiting = $isExiting;
+    return $this->_isExiting;
+  }
+
+  public function showManual($showManual=null) {
+    if ($showManual !== null)
+      $this->_showManual = $showManual;
+    return $this->_showManual;
   }
 
   public function isKnownAPIClass($className)
@@ -176,7 +183,8 @@ final class GameState
     $this->consoleHistory = $this->inspectRoom();
     $this->tabletCode = "";
     $this->moves = 0;
-    $this->exiting = false;
+    $this->_isExiting = false;
+    $this->_showManual = false;
   }
 
   public function getPlayerRoom()

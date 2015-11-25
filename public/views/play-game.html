@@ -10,7 +10,7 @@
     </div>
 </nav>
 
-<div class="container-fluid no-space game-container">
+<div class="container-fluid no-space game-container pad-bottom">
   <div class="row disableMargins">
     <div class="col-xs-6 no-space" style="height:100%;background: url('./img/{{vm.game.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;"></div>
     <div class="col-xs-6 no-space">
@@ -20,7 +20,7 @@
           <div ui-ace="vm.consoleHistoryAceOption" ng-model="vm.game.consoleHistory" readonly></div>
         </div>
       </div>
-      <div class="row disableMargins tabs" ng-class="{tabsShown: vm.playerHasEquipped(vm.game.player.equipment, 'Tablet'),
+      <div class="row disableMargins tabs" ng-class="{'tabs-shown': vm.playerHasEquipped(vm.game.player.equipment, 'Tablet'),
                                                       commandLineSelected: vm.selectedTab=='commandLine',
                                                       tabletCodeSelected: vm.selectedTab=='tabletCode'}">
         <div class="commandLine col-sm-12 no-space" ng-show="vm.selectedTab=='commandLine'">
@@ -35,8 +35,8 @@
         <nav class="navbar navbar-rowdyblack navbar-fixed-bottom" ng-show="vm.playerHasEquipped(vm.game.player.equipment, 'Tablet')">
           <div class="container-fluid">
             <div class="btn-group">
-              <label class="btn btn-sm btn-primary btn-radfordred" ng-model="vm.selectedTab" ng-click="vm.showCommandLine()" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
-              <label class="btn btn-sm btn-primary btn-radfordred" ng-model="vm.selectedTab" ng-click="vm.showTabletCode()" uib-btn-radio="'tabletCode'"><code><small>&lt;/&gt;</small></code> Tablet Code</label>
+              <label class="btn btn-sm btn-primary radfordred" ng-model="vm.selectedTab" ng-click="vm.showCommandLine()" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
+              <label class="btn btn-sm btn-primary radfordred" ng-model="vm.selectedTab" ng-click="vm.showTabletCode()" uib-btn-radio="'tabletCode'"><code><small>&lt;/&gt;</small></code> Tablet Code</label>
             </div>
           </div>
         </nav>

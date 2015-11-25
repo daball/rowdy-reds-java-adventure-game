@@ -33,6 +33,9 @@ var app;
                     showGutter: true,
                     theme: 'twilight',
                     mode: 'text',
+                    highlightActiveLine: false,
+                    highlightGutterLine: false,
+                    readOnly: true,
                     onLoad: function (_ace) {
                         return scope.onConsoleHistoryLoaded(_ace, scope);
                     },
@@ -96,6 +99,8 @@ var app;
                 if (this.tabletCode != game.tabletCode)
                     this.tabletCode = game.tabletCode;
                 this.isLoading = false;
+                if (game.showManual)
+                    this.showManual();
             };
             PlayGameCtrl.prototype.reconnectGame = function () {
                 var _this = this;
@@ -139,6 +144,16 @@ var app;
                 });
                 var scope = this;
                 modalInstance.result.then(function () { scope.reconnectGame(); }, function () { scope.reconnectGame(); });
+            };
+            PlayGameCtrl.prototype.showManual = function () {
+                var modalInstance = this.$uibModal.open({
+                    animation: true,
+                    templateUrl: './views/modal-embed-manual.html',
+                    controller: 'ModalManualCtrl',
+                    controllerAs: 'vm',
+                    size: 'lg',
+                });
+                var scope = this;
             };
             PlayGameCtrl.prototype.onConsoleHistoryLoaded = function (editor, scope) {
                 scope.consoleHistoryEditor = editor;

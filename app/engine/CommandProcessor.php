@@ -2,6 +2,7 @@
 
 namespace engine;
 
+require_once 'Router.php';
 require_once __DIR__.'/../commands/AutoSuggest.php';
 require_once __DIR__.'/../util/PubSubMessageQueue.php';
 
@@ -33,17 +34,17 @@ class CommandProcessor
     $this->commandInput = $commandLine;
     $this->tabletInput = $tabletCode;
     $commandLine = trim($commandLine);
-    $commandOutput = "";
-    if ($commandLine !== "")
-    {
-      foreach (self::$commandHandlers as $commandHandler)
-      {
-        if ($commandHandler->validateCommand($commandLine, $tabletCode))
-        {
-          $commandOutput = $commandHandler->executeCommand($commandLine, $tabletCode);
-          break; //stop foreach
-        }
-      }
+    $commandOutput = Router::dispatch($commandLine, $tabletCode);
+    // if ($commandLine !== "")
+    // {
+    //   foreach (self::$commandHandlers as $commandHandler)
+    //   {
+    //     if ($commandHandler->validateCommand($commandLine, $tabletCode))
+    //     {
+    //       $commandOutput = $commandHandler->executeCommand($commandLine, $tabletCode);
+    //       break; //stop foreach
+    //     }
+    //   }
       if ($commandOutput === "")
       {
         $autoSuggest = new AutoSuggest();
@@ -52,10 +53,10 @@ class CommandProcessor
         }
       }
       if ($commandOutput === "")
-      {
         $commandOutput = "I do not understand.";
-      }
-    }
+      if ($commandOutput === null)
+        $commandOutput = "";
+    // }
     $this->commandOutput = trim($commandOutput);
     return $this->commandOutput;
   }

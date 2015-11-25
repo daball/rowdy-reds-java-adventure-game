@@ -160,18 +160,21 @@ $servantsQuarters = array(
   'description' => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
   'imageUrl'    => "servantsQuarters.jpg",
   'items'       => array(
-    'brassKey'    => array(
-      'type'                    => 'footLocker',
-      'name'                    => "footLocker",
-      'secret'                  => $pantry['items']['brassKey']['secret'],
-      'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
-      'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
-    ),
+    // 'footLocker'  => array(
+    //   'type'                    => 'footLocker',
+    //   'name'                    => "footLocker",
+    //   'secret'                  => $pantry['items']['brassKey']['secret'],
+    //   'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
+    //   'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
+    //   'items'                   => array(
+        'lamp'                    => array(
+          'type'                    => 'lamp',
+          'name'                    => 'lamp',
+          'description'             => "You found a lamp.  A lamp can light your way through dark places."
+        ),
+    //   ),
+    // ),
   ),
-  // ->insertObjectInRoom('servantsQuarters', 'footLocker', $footLocker = \playable\FootLocker::create($brassKey)
-  //                                                     ->setDescription("It's a servant's simple footLocker chest that is sitting on the floor.")
-  //                                                     ->setItem('lamp', \playable\Lamp::create())
-  //                     )
 );
 $taxidermyRoom = array(
   'name'        => "Taxidermy Room",
@@ -199,9 +202,12 @@ $taxidermyRoom = array(
   ),
 );
 $chessRoom = array(
-  'name'        => "Chess Room",
-  'description' => "This room is pitch black.  You can't see anything.",
-  'imageUrl'    => "darkRoom.jpg",
+  'name'                  => "Chess Room",
+  'description'           => "This room is pitch black.  You can't see anything.",
+  'imageUrl'              => "darkRoom.jpg",
+  'dark'                  => true,
+  'lamp.wind.imageUrl'    => "chessRoomlit.jpg",
+  'lamp.unwind.imageUrl'  => "darkRoom.jpg",
 );
 $vestibule = array(
   'name'         => "Vestibule",

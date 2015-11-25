@@ -2,14 +2,14 @@
 
 namespace game;
 
+require_once 'GameObject.php';
 require_once __DIR__.'/../game/Direction.php';
 require_once __DIR__.'/../engine/GameState.php';
-require_once 'GameObject.php';
 require_once __DIR__.'/../components/index.php';
 require_once __DIR__.'/../util/PubSubMessageQueue.php';
 
-use \game\Direction;
 use \engine\GameState;
+use \game\Direction;
 use \components\Container;
 use \components\Inspector;
 use \playable\BasicContainer;
@@ -19,13 +19,19 @@ use \util\PubSubMessageQueue;
  * Player represents the player's avatar throughout the game.
  * @author David Ball
  */
-class Player
+class Player extends GameObject
 {
   /**
    * Player's left hand.
    * @var GameObject
    **/
   public $leftHand = null;
+
+  /**
+   * Player's backpack.
+   * @var GameObject
+   **/
+  public $backpack = null;
 
   /**
    * Player's right hand.
@@ -48,6 +54,7 @@ class Player
   protected $equipment = null;
 
   public function __construct() {
+    parent::__construct("Rowdy Red");
     $handDefinition = function ($which) {
       return function ($hand) use ($which) {
         $hand->addComponent(new Container())->define(function ($container) {
@@ -185,6 +192,14 @@ class Player
 
   public function getRightHand() {
     return $this->rightHand;
+  }
+
+  public function getBackpack() {
+    return $this->backpack;
+  }
+
+  public function getEquipment() {
+    return $this->equipment;
   }
 
   public function equipItem($item) {

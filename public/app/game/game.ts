@@ -17,6 +17,7 @@ module app.domain {
     prompt?: string;
     moves?: number;
     isExiting?: boolean;
+    showManual?: boolean;
     error?: any;
   }
 

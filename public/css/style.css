@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500|Chelsea+Market|Play:400,700|Rokkitt);
 
 body {
-	padding-top: 50px; font-family: Play, sans-serif;
+	font-family: Play, sans-serif;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#232323+0,0e0e0e+100 */
 	background: #232323; /* Old browsers */
 	background: -moz-linear-gradient(top,  #232323 0%, #0e0e0e 100%); /* FF3.6-15 */
@@ -11,7 +11,10 @@ body {
 	color: #fff;
 }
 
-.game-container { height: 100%; padding-bottom: 50px; }
+.pad-top { padding-top: 50px; }
+.pad-bottom { padding-bottom: 50px; }
+
+.game-container { height: 100%; }
 .disableMargins { margin-right: auto !important; margin-left: auto !important; } /* Fixes horizontal scrollbar issue */
 
 .consoleHistory.commandLineSelected { height: 85%; }
@@ -23,14 +26,14 @@ body {
 .tabs .navbar { min-height: 30px; border-top: 1px solid #fff; }
 .tabs .navbar.navbar-fixed-bottom { position: fixed; width: 50%; left: 50%; bottom: 51px; overflow: hidden; }
 .tabs .navbar.navbar-fixed-bottom .container-fluid { padding: 0px 0px 0px 0px; }
-.tabs-shown { padding-bottom: 33px; }
 .tabs .navbar .btn { border-top-left-radius: 0px; border-top-right-radius: 0px; }
+.tabs-shown { padding-bottom: 33px; }
 
 .ace_editor { height: 100%; width: 100%; font: 12pt 'Source Code Pro', monospace !important; }
 .ace_editor.commandLine, .ace_editor.tabletCode { font: 12pt 'Source Code Pro', monospace !important; }
 .no-space { padding-left: 0px; padding-right: 0px; }
 .semi-transparent {   background: rgba(0,0,0,0.5); }
-.navbar-radfordred {
+.navbar-radfordred, .radfordred .breadcrumb {
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c2011b+65,a50002+100 */
 	background: #c2011b; /* Old browsers */
 	background: -moz-linear-gradient(top,  #c2011b 65%, #a50002 100%); /* FF3.6-15 */
@@ -41,6 +44,13 @@ body {
 	color: #fff;
   border-radius: 0px;
 }
+.radfordred .breadcrumb li, .radfordred .breadcrumb li a, .radfordred .breadcrumb li a:visited, .radfordred .breadcrumb li a:active, .radfordred .breadcrumb li a:hover {
+	color: #fff;
+}
+.radfordred .breadcrumb li.active a:active, .radfordred .breadcrumb li a:active, .radfordred .breadcrumb li a:hover {
+	color: #fff;
+}
+
 .navbar-radfordred .navbar-nav > .open > a,
 .navbar-radfordred .navbar-nav > .active > a {
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c2011b+65,a50002+100 */
@@ -65,49 +75,71 @@ body {
 	font-style: italic;
 }
 
-.btn-radfordred {
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c2011b+65,a50002+100 */
-	background: #c2011b; /* Old browsers */
-	background: -moz-linear-gradient(top,  #c2011b 65%, #a50002 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top,  #c2011b 65%,#a50002 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom,  #c2011b 65%,#a50002 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2011b', endColorstr='#a50002',GradientType=0 ); /* IE6-9 */
-	background-repeat: repeat-x;
-	border-color: #c2011b;
+.btn:focus, .btn:active:focus, .btn.active:focus {
+  outline: 0 none;
 }
-.btn-radfordred code {
+
+/* Red Buttons */
+
+.btn.radfordred {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c2011b+65,a50002+100 */
+  background: #c2011b; /* Old browsers */
+  background: -moz-linear-gradient(top,  #c2011b 65%, #a50002 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #c2011b 65%,#a50002 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #c2011b 65%,#a50002 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2011b', endColorstr='#a50002',GradientType=0 ); /* IE6-9 */
+  background-repeat: repeat-x;
+  border-color: #c2011b;
+  color: #fff;
+}
+
+.btn.radfordred:hover, .btn.radfordred:focus, .btn.radfordred:active, .btn.radfordred.active, .open > .dropdown-toggle.btn.radfordred {
+  background: #fff;
+	border-color: #c2011b;
+  color: #c2011b;
+}
+
+.btn.radfordred:active, .btn.radfordred.active {
+  background: #fff;
+  box-shadow: none;
+	border: 0px solid transparent;
+}
+
+.btn.radfordred code,
+.btn.radfordred.inverted:hover code, .btn.radfordred.inverted:focus code, .btn.radfordred.inverted:active code, .btn.radfordred.inverted.active code, .open > .dropdown-toggle.btn.radfordred.inverted code {
 	color: #c2011b;
 	background-color: #fff;
 }
 
-.btn-radfordred.active, .btn-radfordred:active {
-  background-color: #fff;
+
+/* White Buttons */
+
+.btn.radfordred.inverted {
+  background: #fff;
   border-color: #fff;
-	color: #c2011b;
+  color: #c2011b;
 }
-.btn-radfordred.active code {
+
+.btn.radfordred.inverted:hover, .btn.radfordred.inverted:focus, .btn.radfordred.inverted:active, .btn.radfordred.inverted.active, .open > .dropdown-toggle.btn.radfordred.inverted {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c2011b+65,a50002+100 */
+  background: #c2011b; /* Old browsers */
+  background: -moz-linear-gradient(top,  #c2011b 65%, #a50002 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #c2011b 65%,#a50002 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #c2011b 65%,#a50002 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2011b', endColorstr='#a50002',GradientType=0 ); /* IE6-9 */
+  background-repeat: repeat-x;
+	color: #fff;
+}
+
+.btn.radfordred.inverted:active, .btn.radfordred.inverted.active {
+  background: #fff;
+  box-shadow: none;
+}
+
+.btn.radfordred.inverted code,
+.btn.radfordred:hover code, .btn.radfordred:focus code, .btn.radfordred:active code, .btn.radfordred.active code, .open > .dropdown-toggle.btn.radfordred code {
 	color: #fff;
 	background-color: #c2011b;
-}
-
-.btn-radfordred:hover {
-  color: #fff;
-	background-color: #c2011b;
-  border-color: #c2011b;
-}
-
-.btn-radfordred:active:hover,
-.btn-radfordred.active:hover,
-.open > .dropdown-toggle.btn-radfordred:hover,
-.btn-radfordred:active:focus,
-.btn-radfordred.active:focus,
-.open > .dropdown-toggle.btn-radfordred:focus,
-.btn-radfordred:active.focus,
-.btn-radfordred.active.focus,
-.open > .dropdown-toggle.btn-radfordred.focus {
-  color: #c2011b;
-	background-color: #fff;
-  border-color: #fff;
 }
 
 .rowdyblack {
@@ -172,7 +204,64 @@ body {
 }
 
 .modal-content { background: transparent; color: white; }
-.modal-error { background: rgba(194,1,27,0.75); border: 1px solid black; border-radius: 1.22em; }
-.modal-error table tbody tr td, .modal-error table tbody tr th { color: black; }
+.modal-rowdyred { background: rgba(194,1,27,0.75); border: 1px solid black; border-radius: 1.22em; }
+.modal-rowdyred .modal-header, .modal-rowdyred .modal-footer { border: 0px solid transparent; }
+.modal-rowdyred table tbody tr td, .modal-error table tbody tr th { color: black; }
+.modal-content .margin-top { margin-top: 10px; }
 
 .float-right { float: right; }
+
+iframe[seamless] {
+	background-color: transparent;
+	border: 0px none transparent;
+	padding: 0px;
+	overflow: hidden;
+}
+
+.inline-manual {
+	height: 60%;
+	position: relative;
+}
+
+.inline-manual iframe {
+	height: 100%;
+	width: 100%;
+}
+
+/* Scrollbars */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-button {
+  width: 23px;
+  height: 23px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border: 54px none #ffffff;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c2011b;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #ffffff;
+}
+::-webkit-scrollbar-track {
+  background: #c2011b;
+  border: 38px none #ffffff;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+::-webkit-scrollbar-track:active {
+  background: #c2011b;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+a, a:link, a:visited, a:active, a:hover { color: #fff; }

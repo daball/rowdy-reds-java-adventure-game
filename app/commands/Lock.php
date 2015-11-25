@@ -10,7 +10,7 @@ require_once __DIR__.'/../util/BasicEnglish.php';
 require_once 'BaseCommandHandler.php';
 require_once 'TUsesItems.php';
 
-class Unlock extends BaseCommandHandler
+class Lock extends BaseCommandHandler
 {
 
   use TUsesItems;
@@ -19,14 +19,14 @@ class Unlock extends BaseCommandHandler
   {
     $gameState = GameState::getInstance();
     $matches = array();
-    return preg_match('/([\w$_]+[\w\d$_]*)\.unlock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches);
+    return preg_match('/([\w$_]+[\w\d$_]*)\.lock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches);
   }
 
   public function executeCommand($commandLine, $tabletCode)
   {
     $gameState = GameState::getInstance();
     $matches = array();
-    if (preg_match('/([\w$_]+[\w\d$_]*)\.unlock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches))
+    if (preg_match('/([\w$_]+[\w\d$_]*)\.lock\(([\w$_]*[\w\d$_\.]*)\);/', $commandLine, $matches))
     {
       $target = $matches[1];
       $keyAt = $matches[2];
@@ -40,21 +40,21 @@ class Unlock extends BaseCommandHandler
       else if ($keyAt == "rightHand" || $keyAt == "me.rightHand")
           $keyAt = $gameState->getPlayer()->getRightHand();
       else
-        return "Cannot unlock " . insertAOrAn($target->getName()) . " with $keyAt.";
+        return "Cannot lock " . insertAOrAn($target->getName()) . " with $keyAt.";
       if (!$target->hasComponent('Lockable'))
-        return "You cannot unlock " . $target->getName() . ".";
+        return "You cannot lock " . $target->getName() . ".";
       if (!$keyAt->getComponent('Container')->hasItemAt(0))
         return "Your " . $keyAt->getName() . " is empty.";
       $candidateKey = $keyAt->getComponent('Container')->getItemAt(0);
       if (!is_a($candidateKey, '\playable\Key'))
-        return "You cannot unlock " . $target->getName() . " with " . $candidateKey->getName() . ".";
+        return "You cannot lock " . $target->getName() . " with " . $candidateKey->getName() . ".";
       $key = $candidateKey;
       $gameState->incrementMoves();
-      return $target->getComponent('Lockable')->unlock($key);
+      return $target->getComponent('Lockable')->lock($key);
     }
     return "You can not do that.";
   }
 
 }
 
-CommandProcessor::addCommandHandler(new Unlock());
+CommandProcessor::addCommandHandler(new Lock());

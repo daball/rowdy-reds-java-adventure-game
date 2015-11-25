@@ -17,6 +17,7 @@ use \playable\Door;
 use \playable\Equipment;
 use \playable\LockedDoor;
 use \playable\Dog;
+use \playable\Lamp;
 
 /**
  * Constructs a Door object based on the item definition.
@@ -25,11 +26,16 @@ use \playable\Dog;
  **/
 function assembleRoom($room) {
   $name = array_key_exists('name', $room) ? $room['name'] : 'A Room With No Name';
-  $description = array_key_exists('description', $room) ? $room['description'] : 'A Room With No Description';
-  $imageUrl = array_key_exists('description', $room) ? $room['imageUrl'] : 'null.png';
-  $items = array_key_exists('items', $room) ? $room['items'] : array();
+  $meta = $room;
 
-  return (new Room($name))->define(function ($room) use ($description, $imageUrl, $items) {
+  return (new Room($name))->define(function ($room) use ($meta) {
+    $description = array_key_exists('description', $meta) ? $meta['description'] : 'A Room With No Description';
+    $imageUrl = array_key_exists('description', $meta) ? $meta['imageUrl'] : 'null.png';
+    $items = array_key_exists('items', $meta) ? $meta['items'] : array();
+    $dark = array_key_exists('dark', $meta) ? $meta['dark'] : false;
+    $lampOnWindImageUrl = array_key_exists('lamp.wind.imageUrl', $meta) ? $meta['lamp.wind.imageUrl'] : "";
+    $lampOnUnwindImageUrl = array_key_exists('lamp.unwind.imageUrl', $meta) ? $meta['lamp.unwind.imageUrl'] : "";
+
     $room->setImageUrl($imageUrl);
     $inspector = $room->getComponent("Inspector");
     $inspector->popEventHandler('inspect');
@@ -37,29 +43,47 @@ function assembleRoom($room) {
       return $description;
     });
     $container = $room->getComponent("Container");
-    foreach ($items as $item) {
-      switch ($item['type']) {
-        case 'note':
-          $container->insertItem(assembleNote($room, $item));
-          break;
-        case 'door':
-          $container->insertItem(assembleDoor($room, $item));
-          break;
-        case 'lockedDoor':
-          $container->insertItem(assembleLockedDoor($room, $item));
-          break;
-        case 'key':
-          $container->insertItem(assembleKey($room, $item));
-          break;
-        case 'food':
-          $container->insertItem(assembleFood($room, $item));
-          break;
-        case 'equipment':
-          $container->insertItem(assembleEquipment($room, $item));
-          break;
-      }
-    }
+    $container = assembleItemsIntoContainer($container, $items);
+    if ($lampOnWindImageUrl)
+      $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $lampOnWindImageUrl) {
+        if ($message == "wind")
+          $room->setImageUrl($lampOnWindImageUrl);
+      });
+    if ($lampOnUnwindImageUrl)
+      $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $lampOnUnwindImageUrl) {
+        if ($message == "unwind")
+          $room->setImageUrl($lampOnUnwindImageUrl);
+      });
   });
+}
+
+function assembleItemsIntoContainer($container, $items) {
+  foreach ($items as $item) {
+    switch ($item['type']) {
+      case 'note':
+        $container->insertItem(assembleNote($container, $item));
+        break;
+      case 'door':
+        $container->insertItem(assembleDoor($container, $item));
+        break;
+      case 'lockedDoor':
+        $container->insertItem(assembleLockedDoor($container, $item));
+        break;
+      case 'key':
+        $container->insertItem(assembleKey($container, $item));
+        break;
+      case 'food':
+        $container->insertItem(assembleFood($container, $item));
+        break;
+      case 'lamp':
+        $container->insertItem(assembleLamp($container, $item));
+        break;
+      case 'equipment':
+        $container->insertItem(assembleEquipment($container, $item));
+        break;
+    }
+  }
+  return $container;
 }
 
 /**
@@ -137,6 +161,20 @@ function assembleFood($room, $item) {
       return $item['description'];
     });
   });
+}
+
+/**
+ * Constructs a Lamp object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleLamp($room, $item) {
+  return ((new Lamp($item['name']))->define(function ($lamp) use ($item) {
+    $lamp->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+  }));
 }
 
 /**
