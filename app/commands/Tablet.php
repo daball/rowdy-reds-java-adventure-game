@@ -12,7 +12,6 @@ require_once __DIR__.'/../engine/CommandProcessor.php';
 require_once __DIR__.'/../java/JavaReflection.php';
 
 
-///Handles help command.
 class JavadocCommandHandler extends BaseCommandHandler
 {
   private function isClassSpecified($commandLine)

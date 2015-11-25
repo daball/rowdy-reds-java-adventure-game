@@ -1,5 +1,4 @@
 <ol class="breadcrumb">
-  <!-- <li><a href="#/">Rowdy Red's Java Adventures</a></li> -->
   <li class="active">User Manual</li>
 </ol>
 
@@ -7,6 +6,10 @@
 
 The player types commands followed by the `Enter` key in order to play the game.
 
-### Table of Contents
+### Contents
 
 - [Commands](#/docs/commands)
+- [Rooms](#/docs/rooms)
+- [Obstacles](#/docs/obstacles)
+- [Game Items](#/docs/items)
+- [Player Equipment](#/docs/equipment)

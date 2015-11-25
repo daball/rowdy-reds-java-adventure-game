@@ -1,15 +1,31 @@
 <ol class="breadcrumb">
-  <!-- <li><a href="#/">Rowdy Red's Java Adventures</a></li> -->
-  <li><a href="#/docs/manual">User Manual</a></li>
-  <li><a href="#/docs/rooms">Rooms</a></li>
+  <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/commands">Commands</a></li>
-  <li class="active">Left Hand</li>
+  <li class="active">Assign</li>
 </ol>
 
-## leftHand
+## ASSIGN
+
+### Description
+
+Assigns object to player's left hand or right hand.
+
+### Syntax
+
+    leftHand = gameObject;
+    rightHand = gameObject;
+    me.leftHand = gameObject;
+    me.rightHand = gameObject;
 
 
-Assigns object to players left hand.
+### Examples
 
-## Examples of using handVariable
-handVariable = object | object.unlock(handvariable); | System.out.println(handVariable); | bowl = handVariable | footLocker.unlock(handVariable);
+    handVariable = object;
+
+    object.unlock(handvariable);
+
+    System.out.println(handVariable);
+
+    bowl = handVariable;
+
+    footLocker.unlock(handVariable);
