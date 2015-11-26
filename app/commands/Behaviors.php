@@ -5,10 +5,12 @@ namespace commands;
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/Router.php';
 require_once __DIR__.'/../util/Resolver.php';
+require_once __DIR__.'/../java/TabletCompilerService.php';
 
 use \engine\GameState;
 use \engine\Router;
 use \util\Resolver;
+use \TabletCompilerService;
 
 //reusable no matching result output
 function noResult($provided) {
@@ -248,4 +250,13 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*wind\s*\(\s*\)\s*;\s*$/', function
     return "You cannot wind " . $resolution->getName() . ".";
   $gameState->incrementMoves();
   return $resolution->getComponent('Windable')->close();
+});
+
+Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/', function ($command, $code, $pattern, $matches) {
+  $output = "player trying to run a method call with " . var_export($matches, true) . "\n";
+  $compiler = new TabletCompilerService($code);
+  $output .= "wrapped up code:\n" . $compiler->sourceCode;
+  $cls = $compiler->compile();
+  $output = $compiler->invoke($matches[1], array());
+  return $output;
 });
