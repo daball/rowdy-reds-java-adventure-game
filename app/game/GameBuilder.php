@@ -18,6 +18,7 @@ use \playable\Equipment;
 use \playable\LockedDoor;
 use \playable\Dog;
 use \playable\Lamp;
+use \playable\GeneralObject;
 
 /**
  * Constructs a Door object based on the item definition.
@@ -81,6 +82,8 @@ function assembleItemsIntoContainer($container, $items) {
       case 'equipment':
         $container->insertItem(assembleEquipment($container, $item));
         break;
+      case 'generalObject':
+        $container->insertItem(assembleGeneralObject($container, $item));
     }
   }
   return $container;
@@ -134,16 +137,7 @@ function assembleKey($room, $item) {
     $inspector->onInspect(function ($inspector) use ($item) {
       return $item['description'];
     });
-    if (array_key_exists('onAssign.room.imageUrl', $item)) {
-      $assignable = $key->getComponent('Assignable');
-      $initialOnAssign = $assignable->popEventHandler('assign');
-      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
-        $room = $oldTarget;
-        if (is_a($room, '\game\Room'))
-          $room->setImageUrl($item['onAssign.room.imageUrl']);
-        return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
-      });
-    }
+    imageChangerHelper($item, $key);
   });
 };
 
@@ -160,6 +154,37 @@ function assembleFood($room, $item) {
     $inspector->onInspect(function ($inspector) use ($item) {
       return $item['description'];
     });
+    imageChangerHelper($item, $food);
+  });
+}
+
+function imageChangerHelper($item, $object) {
+  if (array_key_exists('onAssign.room.imageUrl', $item)) {
+      $assignable = $object->getComponent('Assignable');
+      $initialOnAssign = $assignable->popEventHandler('assign');
+      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
+        $room = $oldTarget;
+        if (is_a($room, '\game\Room'))
+          $room->setImageUrl($item['onAssign.room.imageUrl']);
+        return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
+      });
+    }
+}
+
+/**
+ * Constructs a General Object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleGeneralObject($room, $item) {
+  return (new GeneralObject($item['name']))->define(function ($generalObject) use ($item) {
+    $inspector = $generalObject->getComponent('Inspector');
+    $inspector->popEventHandler('inspect');
+    $inspector->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+    imageChangerHelper($item, $generalObject);
   });
 }
 
