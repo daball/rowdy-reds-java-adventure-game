@@ -26,7 +26,7 @@ class Lamp extends GameObject
       });
       $lamp->addComponent(new Assignable());
       $lamp->addComponent((new Windable())->define(function ($windable) use ($lamp) {
-        $windable->onWind(function ($windable) {
+        $windable->onWind(function ($windable) use ($lamp) {
           $windable->publish('Lamp', "wind");
           return "You wind the " . $lamp->getName() . " and it now shines brightly and lights up the darkness.";
         });
