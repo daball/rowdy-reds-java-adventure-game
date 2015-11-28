@@ -1,7 +1,7 @@
 <?php
 
 //TODO: determine which deployment to use based on APPLICATION_ENV parameter
-require_once("http://localhost:8081/cc-development/java/Java.inc");
+//require_once("http://localhost:8081/cc-development/java/Java.inc");
 
 // class CompilerException extends Exception {
 //   public function __construct($message) {
