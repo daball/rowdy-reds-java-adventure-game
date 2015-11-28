@@ -16,6 +16,8 @@ class TabletCompilerService {
 
   public function __construct() {
     $cachePath = Path::combine(__DIR__, "..", "..", "__player_tablet_cache");
+    if (DIRECTORY_SEPARATOR != "/")
+      $cachePath = str_replace("/", DIRECTORY_SEPARATOR, $cachePath);
     $this->javaCompilerService = new java("edu.radford.rowdyred.internal.TabletCompilerService", session_id(), $cachePath, null);
   }
 
