@@ -20,6 +20,7 @@ class AutoSuggest extends BaseCommandHandler
       'unlock',
       'lock',
       'assign',
+      '=',
       'unset',
       'set',
       'move',
@@ -58,6 +59,7 @@ class AutoSuggest extends BaseCommandHandler
       case 'assign':
       case 'set':
       case 'unset':
+      case '=':
         return "In order to assign something, you might try target = item; For example, me.leftHand = item; or anyContainer = anyItem;";
       case 'move':
       case 'navigate':

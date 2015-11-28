@@ -30,56 +30,58 @@ function assembleRoom($room) {
 
   return (new Room($name))->define(function ($room) use ($meta) {
     $description = array_key_exists('description', $meta) ? $meta['description'] : 'A Room With No Description';
-    $imageUrl = array_key_exists('description', $meta) ? $meta['imageUrl'] : 'null.png';
+    $imageUrl = array_key_exists('imageUrl', $meta) ? $meta['imageUrl'] : 'null.png';
     $items = array_key_exists('items', $meta) ? $meta['items'] : array();
     $dark = array_key_exists('dark', $meta) ? $meta['dark'] : false;
-    $lampOnWindImageUrl = array_key_exists('lamp.wind.imageUrl', $meta) ? $meta['lamp.wind.imageUrl'] : "";
-    $lampOnUnwindImageUrl = array_key_exists('lamp.unwind.imageUrl', $meta) ? $meta['lamp.unwind.imageUrl'] : "";
 
     $room->setImageUrl($imageUrl);
+    $room->setDark($dark);
     $inspector = $room->getComponent("Inspector");
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($description) {
       return $description;
     });
     $container = $room->getComponent("Container");
-    $container = assembleItemsIntoContainer($container, $items);
-    if ($lampOnWindImageUrl)
-      $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $lampOnWindImageUrl) {
-        if ($message == "wind")
-          $room->setImageUrl($lampOnWindImageUrl);
+    $container = assembleItemsIntoContainer($meta, $room, $items);
+    if ($dark) {
+      $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $imageUrl) {
+        if ($message == "wind") {
+          $room->setDark(true);
+        }
       });
-    if ($lampOnUnwindImageUrl)
-      $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $lampOnUnwindImageUrl) {
-        if ($message == "unwind")
-          $room->setImageUrl($lampOnUnwindImageUrl);
+      $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room) {
+        if ($message == "unwind") {
+          $room->setDark(false);
+        }
       });
+    }
   });
 }
 
-function assembleItemsIntoContainer($container, $items) {
+function assembleItemsIntoContainer($roomDefinition, $gameObject, $items) {
+  $container = $gameObject->getComponent("Container");
   foreach ($items as $item) {
     switch ($item['type']) {
       case 'note':
-        $container->insertItem(assembleNote($container, $item));
+        $container->insertItem(assembleNote($roomDefinition, $gameObject, $item));
         break;
       case 'door':
-        $container->insertItem(assembleDoor($container, $item));
+        $container->insertItem(assembleDoor($roomDefinition, $gameObject, $item));
         break;
       case 'lockedDoor':
-        $container->insertItem(assembleLockedDoor($container, $item));
+        $container->insertItem(assembleLockedDoor($roomDefinition, $gameObject, $item));
         break;
       case 'key':
-        $container->insertItem(assembleKey($container, $item));
+        $container->insertItem(assembleKey($roomDefinition, $gameObject, $item));
         break;
       case 'food':
-        $container->insertItem(assembleFood($container, $item));
+        $container->insertItem(assembleFood($roomDefinition, $gameObject, $item));
         break;
       case 'lamp':
-        $container->insertItem(assembleLamp($container, $item));
+        $container->insertItem(assembleLamp($roomDefinition, $gameObject, $item));
         break;
       case 'equipment':
-        $container->insertItem(assembleEquipment($container, $item));
+        $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
         break;
     }
   }
@@ -92,7 +94,7 @@ function assembleItemsIntoContainer($container, $items) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleNote($room, $item) {
+function assembleNote($roomDefinition, $room, $item) {
   return ((new GameObject($item['name']))->define(function ($note) use ($item) {
     $note->addComponent(new Assignable());
     $note->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
@@ -107,7 +109,7 @@ function assembleNote($room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleDoor($room, $item) {
+function assembleDoor($roomDefinition, $room, $item) {
   return (new Door($item['name'], $item['direction']));
 }
 
@@ -117,7 +119,7 @@ function assembleDoor($room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleLockedDoor($room, $item) {
+function assembleLockedDoor($roomDefinition, $room, $item) {
   return (new LockedDoor($item['name'], $item['direction'], $item['secret']));
 }
 
@@ -127,8 +129,8 @@ function assembleLockedDoor($room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleKey($room, $item) {
-  return (new Key($item['name'], $item['secret']))->define(function ($key) use ($item) {
+function assembleKey($roomDefinition, $room, $item) {
+  return (new Key($item['name'], $item['secret']))->define(function ($key) use ($roomDefinition, $room, $item) {
     $inspector = $key->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
@@ -137,10 +139,11 @@ function assembleKey($room, $item) {
     if (array_key_exists('onAssign.room.imageUrl', $item)) {
       $assignable = $key->getComponent('Assignable');
       $initialOnAssign = $assignable->popEventHandler('assign');
-      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
-        $room = $oldTarget;
-        if (is_a($room, '\game\Room'))
-          $room->setImageUrl($item['onAssign.room.imageUrl']);
+      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($roomDefinition, $room, $initialOnAssign, $item) {
+        if (is_a($oldTarget, '\game\Room') && $oldTarget->getImageUrl() == $room->getImageUrl())
+          $oldTarget->setImageUrl($item['onAssign.room.imageUrl']);
+        else if (is_a($newTarget, '\game\Room') && $newTarget->getImageUrl() == $room->getImageUrl())
+          $newTarget->setImageUrl($roomDefinition['imageUrl']);
         return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
       });
     }
@@ -153,7 +156,7 @@ function assembleKey($room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleFood($room, $item) {
+function assembleFood($roomDefinition, $room, $item) {
   return (new Food($item['name']))->define(function ($food) use ($item) {
     $inspector = $food->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
@@ -169,7 +172,7 @@ function assembleFood($room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleLamp($room, $item) {
+function assembleLamp($roomDefinition, $room, $item) {
   return ((new Lamp($item['name']))->define(function ($lamp) use ($item) {
     $lamp->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
       return $item['description'];
@@ -183,7 +186,7 @@ function assembleLamp($room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleEquipment($room, $item) {
+function assembleEquipment($roomDefinition, $room, $item) {
   return (new Equipment($item['name']))->define(function ($equipment) use ($item) {
     $inspector = $equipment->getComponent('Inspector');
     $inspector->popEventHandler('inspect');

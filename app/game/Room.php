@@ -7,10 +7,12 @@ require_once 'GameObject.php';
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../components/Inspector.php';
 require_once __DIR__.'/../components/Container.php';
+require_once __DIR__.'/../util/PubSubMessageQueue.php';
 
 use \components\Container;
 use \components\Inspector;
 use \engine\GameState;
+use \util\PubSubMessageQueue;
 
 /**
  * Defines a Room in the Game
@@ -23,6 +25,18 @@ class Room extends GameObject
    * @ignore
    **/
   protected $imageUrl = "";
+
+  /**
+   * Is the room dark?
+   **/
+  protected $dark = false;
+
+  /**
+   * When you enter the room, the last room you were in.
+   * Required for navigation purposes in terms of the darkness,
+   * which, while not an obstacle, modifies game engine behavior.
+   **/
+  protected $lastRoom = "";
 
   /**
    * Is this the spawn point?
@@ -45,6 +59,12 @@ class Room extends GameObject
     $this->define(function ($room) {
       $container = new Container();
       $room->addComponent($container);
+      $room->subscribe("Player", function ($sender, $queue, $message) use ($room) {
+        if (!is_array($message)) return;
+        if ($message['action'] == 'setLocation' && $message['newLocation'] == $room->getName()) {
+          $room->setLastRoomName($message['oldLocation']);
+        }
+      });
     });
   }
 
@@ -78,11 +98,41 @@ class Room extends GameObject
   }
 
   public function getImageUrl() {
-    return $this->imageUrl;
+    if ($this->isDark())
+      return "darkRoom.jpg";
+    else
+      return $this->imageUrl;
   }
 
   public function setImageUrl($imageUrl) {
     $this->imageUrl = $imageUrl;
+  }
+
+  public function isDark() {
+    return $this->dark;
+  }
+
+  public function setDark($dark) {
+    $this->dark = $dark;
+    return $this->isDark();
+  }
+
+  public function getLastRoomName() {
+    return $this->lastRoom;
+  }
+
+  public function setLastRoomName($lastRoom) {
+    $this->lastRoom = $lastRoom;
+    return $this->getLastRoomName();
+  }
+
+  public function getLastRoomDirection() {
+    $directions = array(Direction::$n, Direction::$s, Direction::$e, Direction::$w, Direction::$u, Direction::$d);
+    foreach ($directions as $direction) {
+      if ($this->getRoomNameAtDirection($direction) == $this->getLastRoom()) {
+        return $direction;
+      }
+    }
   }
 
   public function getDirection($direction) {

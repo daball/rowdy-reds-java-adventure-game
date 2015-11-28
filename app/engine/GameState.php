@@ -122,7 +122,7 @@ final class GameState
     $roomItems = $room->getComponent('Container')->getAllItems();
     $saRoomItems = array();
     foreach($roomItems as $value) { array_push($saRoomItems, insertAOrAn($value->getName())); }
-    if (count($roomItems) > 0) {
+    if (!$room->isDark() && count($roomItems) > 0) {
       $sRoomItems = natural_language_join($saRoomItems);
       $output .= "  You see here $sRoomItems.";
     }
@@ -135,10 +135,12 @@ final class GameState
     if ($room->getDirection('s')->isNextRoomObvious()) array_push($obviousExits, "south");
     if ($room->getDirection('d')->isNextRoomObvious()) array_push($obviousExits, "down");
     $sObviousExits = natural_language_join($obviousExits);
-    if (count($obviousExits) == 1)
-      $output .= "  The obvious exit is $sObviousExits.";
-    else if (count($obviousExits) > 1)
-      $output .= "  The obvious exits are $sObviousExits.";
+    if (!$room->isDark()) {
+      if (count($obviousExits) == 1)
+        $output .= "  The obvious exit is $sObviousExits.";
+      else if (count($obviousExits) > 1)
+        $output .= "  The obvious exits are $sObviousExits.";
+    }
     return $output;
   }
 

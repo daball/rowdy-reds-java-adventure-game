@@ -139,16 +139,22 @@ class Player extends GameObject
   public function navigate($direction)
   {
     $gameState = GameState::getInstance();
+    $room = $gameState->getPlayerRoom();
     //sanitize direction
     $direction = Direction::cardinalDirection($direction);
     //get adjacent room
-    $directionInfo = $gameState->getPlayerRoom()->getDirection($direction);
-    $nextRoom = $gameState->getGame()->getRoom($directionInfo->getNextRoomName());
+    $directionInfo = $room->getDirection($direction);
+    //get next room
+    $nextRoom = $room->getRoom($directionInfo->getNextRoomName());
+    //is the room dark? if so you can only go back where you came from
+    if ($room->isDark() && $room->getLastRoomName() != $nextRoom->getName()) {
+      return "The room is too dark to see where you are going.";
+    }
     //make sure this is valid
     if ($nextRoom) {
-      if ($this->validateCollision($gameState->getPlayerRoom(), $direction))
+      if ($this->validateCollision($room, $direction))
       {
-        return $this->explainCollision($gameState->getPlayerRoom(), $direction);
+        return $this->explainCollision($room, $direction);
       }
       else {
         //put the avatar in the next room
@@ -164,11 +170,7 @@ class Player extends GameObject
         //return description of the direction
         return $nextDirection;
       //direction did not have a description, return generic error
-      return "You cannot go " .
-        ($direction == Direction::$n ? 'north' : '') .
-        ($direction == Direction::$s ? 'south' : '') .
-        ($direction == Direction::$e ? 'east' : '') .
-        ($direction == Direction::$w ? 'west' : '') . '.';
+      return "You cannot go " . Direction::fullDirection($direction) . '.';
     }
   }
 
