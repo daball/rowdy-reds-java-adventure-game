@@ -315,7 +315,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*wind\s*\(\s*\)\s*;\s*$/', function
   if (!$resolution->hasComponent('Windable'))
     return "You cannot wind " . $resolution->getName() . ".";
   GameState::getInstance()->incrementMoves();
-  return $resolution->getComponent('Windable')->wind();
+  return $resolution->getComponent('Windable')->wind() + "  " + GameState::getInstance()->inspectRoom();
 });
 
 Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/', function ($command, $code, $pattern, $matches) {
