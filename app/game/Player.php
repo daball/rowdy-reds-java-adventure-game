@@ -145,7 +145,7 @@ class Player extends GameObject
     //get adjacent room
     $directionInfo = $room->getDirection($direction);
     //get next room
-    $nextRoom = $gameState->getRoom($directionInfo->getNextRoomName());
+    $nextRoom = $gameState->getGame()->getRoom($directionInfo->getNextRoomName());
     //is the room dark? if so you can only go back where you came from
     if ($room->isDark() && $room->getLastRoomName() != $nextRoom->getName()) {
       return "The room is too dark to see where you are going.";
