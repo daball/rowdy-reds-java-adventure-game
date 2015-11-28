@@ -191,6 +191,12 @@ $banquetHall = array(
       'direction'   => Direction::$e,
       'secret'  => "NoKeyExists",
     ),
+    'doorsPoster1'    => array(
+      'type'                    => 'note',
+      'name'                    => "poster",
+      'description'             => "You examine the poster and are puzzled. It appears to be a poster for the band \"The Doors\" for their album \"Strange Days\"..." .
+                                   "\n\nWhat in the world is a poster for The Doors doing in a medieval castle, and why on Earth is it in the banquet hall????",
+    ),   
   ),
 );
 $backHallway = array(
@@ -221,7 +227,9 @@ $servantsQuarters = array(
 );
 $taxidermyRoom = array(
   'name'        => "Taxidermy Room",
-  'description' => "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter.  One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.",
+  'description' => "You are in a trophy room, filled with many mounted exotic animals from all over the world.  The master of the castle must be quite the hunter. " .
+                   "One animal in particular catches your eye, particularly because it is not a taxidermy trophy.  It is a sizeable dog sitting squarely in the way " .
+                   "of the northern exit, and he's watching you intently.  A bowl also sits on the floor nearby.",
   'imageUrl'    => "taxidermyRoom_dog.jpg",
   'dog.name'    => "dog",
   'bowl.name'   => "bowl",
@@ -371,18 +379,57 @@ $drawing = array(
 );
 $observatory = array(
   'name'         => "Observatory",
-  'description'  => "You are in a sophisticated observatory. An large telescope sits on the floor looking towards the heavens. Books line the walls with information on the constellations.",
+  'description'  => "You are in a sophisticated observatory. A large telescope sits on the floor looking towards the heavens. Books line the walls with information on the constellations.",
   'imageUrl'     => "observatory.jpg",
+    'items'       => array(
+    'telescope'    => array(
+      'type'                    => 'note',
+      'name'                    => "telescope",
+      'description'             => "You peer into the telescope and expect to see brilliant stars, constellations, and other heavenly bodies, but much " .
+                                   "to your surprise, you see that the telescope instead shows you the following:\n\n" .
+                                   "Class Key\n" .
+                                   "public class Key\n" .
+                                   "extends Object\n\n" .
+                                   "Key is a class used to unlock any LockableObject.  In order for a LockableObject to be unlocked with a given key " .
+                                   "the secretPhrase must match the secretPhrase already within the LockableObject.\n\n" .
+                                   "Constructor Summary\n===================\n" .
+                                   "Key(String secretPhrase)\n" .
+                                   "Constructs a new key with the provided secretPhrase."
+    ),
+  ),
 );
 $bedchambers = array(
   'name'         => "Master Bedchambers",
   'description'  => "You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.",
   'imageUrl'     => "masterBedchambers.jpg",
+  'items'       => array(
+    'doorsPoster2'    => array(
+      'type'                    => 'note',
+      'name'                    => "poster",
+      'description'             => "A curious poster it is.  It's for the band \"The Doors\" for the album titled \"Other Voices\"",
+    ),
+  ),
 );
 $bathroom = array(
   'name'         => "Bathroom",
   'description'  => "You are in a bathroom that is off the master bed chambers.",
   'imageUrl'     => "bathroom.jpg",
+  'items'       => array(
+    'javadocLamp'    => array(
+      'type'                    => 'note',
+      'name'                    => "bathroomReader",
+      'description'             => "You open the Bathroom Reader, expecting to see all kinds of interesting articles of fascination that surely accompanies the " .
+                                   "King while he sits on his throne, but instead you're startled to find that book only contains blank pages, except for only one:\n\n" .
+                                   "Class Lamp\n" .
+                                   "public class Lamp\n" .
+                                   "extends Object\n\n" .
+                                   "Lamp class is able to bring light to other objects to make things more visible.  This implementation of a lamp is " .
+                                   "a magical implementation in that the lamp must be wound in order to produce light.\n\n".
+                                   "Method Summary\n==============\n" .
+                                   "void               wind()\n" .
+                                   "                   Powers the lamp so it will be lit for a short while."
+    ),
+  ),  
 );
 $corridorN = array(
   'name'         => "North End of Corridor",
@@ -420,8 +467,32 @@ $wTowerTop = array(
 );
 $eTowerTop = array(
   'name'         => "Top of Eastern Tower",
-  'description'  => "You are in the top of a tower inside a graceful room containing beautiful glass doors.",
+  'description'  => "You are in the top of a tower inside a graceful room containing beautiful glass doors.  It's strange, because The Doors look like they " .
+                    "would open to nowehere, since you're in the top of a tower!",
   'imageUrl'     => "eastTowerTop.jpg",
+  'items'        => array(
+    'westDoor'    => array(
+      'type'         => "lockedDoor",
+      'name'         => "westDoor",
+//      'description'  => "It's a beautiful glass door which you clearly see opens to the outside.",
+      'direction'   => Direction::$w,
+      'secret'  => "Other Voices",
+    ),
+    'northDoor'    => array(
+      'type'         => "lockedDoor",
+      'name'         => "northDoor",
+//      'description'  => "It's a beautiful glass door which you clearly see opens to the outside.",
+      'direction'   => Direction::$n,
+      'secret'  => "Strange Days",
+    ),
+    'eastDoor'    => array(
+      'type'         => "lockedDoor",
+      'name'         => "eastDoor",
+//      'description'  => "It's a beautiful glass door which you clearly see opens to the outside.",
+      'direction'   => Direction::$e,
+      'secret'  => "Full Circle",
+    ),    
+  ),
 );
 $infirmary = array(
   'name'         => "Infirmary",
@@ -477,6 +548,14 @@ $boiler = array(
   'name'         => "Boiler Room",
   'description'  => "You are in a boiler boom. Strange noises come from all the weird machinery. ",
   'imageUrl'     => "boilerRoom.jpg",
+  'items'       => array(
+    'doorsPoster3'    => array(
+      'type'                    => 'note',
+      'name'                    => "poster",
+      'description'             => "A boiler room is such an odd place for a poster!  It's for the band \"The Doors\" for the album titled \"Full Circle\"",
+    ),
+  ),
+  
 );
 $portcullis = array(
   'name'         => "Portcullis",
