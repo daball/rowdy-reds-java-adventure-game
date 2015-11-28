@@ -178,7 +178,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*lock\s*\(\s*([\w$_]*[\w\d$_\.]*)\s
     case Resolver::PLAYER_RIGHT_HAND:
       $keyInHand = Resolver::resolveHandContents($keyResolver->result());
       if (!$keyInHand)
-        return "Your " . $keyResolution->getName() . " is empty.";
+        return "Your " . $resolution->getName() . " is empty.";
       else
         $keyResolution = $keyInHand;
   }
@@ -205,7 +205,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*unlock\s*\(\s*([\w$_]*[\w\d$_\.]*)
     case Resolver::PLAYER_RIGHT_HAND:
       $keyInHand = Resolver::resolveHandContents($keyResolver->result());
       if (!$keyInHand)
-        return "Your " . $keyResolution->getName() . " is empty.";
+        return "Your " . $resolution->getName() . " is empty.";
       else
         $keyResolution = $keyInHand;
   }
