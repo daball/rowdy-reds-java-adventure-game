@@ -85,7 +85,8 @@ function assembleItemsIntoContainer($roomDefinition, $gameObject, $items) {
         $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
         break;
       case 'generalObject':
-        $container->insertItem(assembleGeneralObject($container, $item));
+        $container->insertItem(assembleGeneralObject($roomDefinition, $gameObject, $item));
+        break;
     }
   }
   return $container;
@@ -139,7 +140,7 @@ function assembleKey($roomDefinition, $room, $item) {
     $inspector->onInspect(function ($inspector) use ($item) {
       return $item['description'];
     });
-    imageChangerHelper($item, $key);
+    imageChanger($roomDefinition, $room, $item, $key);
   });
 };
 
@@ -149,30 +150,17 @@ function assembleKey($roomDefinition, $room, $item) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleFood($room, $item) {
+function assembleFood($roomDefinition, $room, $item) {
   return (new Food($item['name']))->define(function ($food) use ($item) {
     $inspector = $food->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
       return $item['description'];
     });
-    imageChangerHelper($item, $food);
+    imageChanger($roomDefinition, $room, $item, $food);
   });
 }
 
-function imageChangerHelper($item, $object) {
-  if (array_key_exists('onAssign.room.imageUrl', $item)) {
-      $assignable = $object->getComponent('Assignable');
-      $initialOnAssign = $assignable->popEventHandler('assign');
-      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
-        $room = $oldTarget;
-        if (is_a($room, '\game\Room'))
-          $room->setImageUrl($item['onAssign.room.imageUrl']);
-        return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
-      });
-    }
-  });
-};
 
 /**
  * Constructs a General Object based on the item definition.
@@ -180,14 +168,14 @@ function imageChangerHelper($item, $object) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
-function assembleGeneralObject($room, $item) {
+function assembleGeneralObject($roomDefinition, $room, $item) {
   return (new GeneralObject($item['name']))->define(function ($generalObject) use ($item) {
     $inspector = $generalObject->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
       return $item['description'];
     });
-    imageChangerHelper($item, $generalObject);
+    imageChanger($roomDefinition, $room, $item, $generalObject);
   });
 }
 
@@ -235,6 +223,21 @@ function assembleEquipment($roomDefinition, $room, $item) {
     }
   });
 }
+
+function imageChanger($roomDefinition, $room, $item, $gameObject) {
+  if (array_key_exists('onAssign.room.imageUrl', $item)) {
+    $assignable = $gameObject->getComponent('Assignable');
+    $initialOnAssign = $assignable->popEventHandler('assign');
+    $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($roomDefinition, $room, $initialOnAssign, $item) {
+      if (is_a($oldTarget, '\game\Room') && $oldTarget->getImageUrl() == $room->getImageUrl())
+        $oldTarget->setImageUrl($item['onAssign.room.imageUrl']);
+      else if (is_a($newTarget, '\game\Room') && $newTarget->getImageUrl() == $room->getImageUrl())
+        $newTarget->setImageUrl($roomDefinition['imageUrl']);
+      return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
+    });
+  }
+};
+
 
 /**
  *  The GameBuilder class helps automate building a Game by using
