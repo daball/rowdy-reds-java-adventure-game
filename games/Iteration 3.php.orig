@@ -190,6 +190,7 @@ $servantsQuarters = array(
   'description' => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
   'imageUrl'    => "servantsQuarters.jpg",
   'items'       => array(
+<<<<<<< HEAD
     'footLocker'  => array(
       'type'                    => 'lockableContainer',
       'name'                    => "footLocker",
@@ -197,6 +198,15 @@ $servantsQuarters = array(
       'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
       'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
       'items'                   => array(
+=======
+     'footLocker'  => array(
+       'type'                    => 'footLocker',
+       'name'                    => "footLocker",
+       'secret'                  => $pantry['items']['brassKey']['secret'],
+       'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
+       'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
+       'items'                   => array(
+>>>>>>> f90ceb1f594bf2f32bc72634c4b026b1a889abc4
         'lamp'                    => array(
           'type'                    => 'lamp',
           'name'                    => 'lamp',
