@@ -30,7 +30,7 @@ class Lamp extends GameObject
           $windable->publish('Lamp', "wind");
           return "You wind the " . $lamp->getName() . " and it now shines brightly and lights up the darkness.";
         });
-        $windable->onUnwind(function ($windable) {
+        $windable->onUnwind(function ($windable) use ($lamp) {
           $windable->publish('Lamp', "unwind");
           return "You unwind the " . $lamp->getName() . " and it no longer lights up the darkness.";
         });
