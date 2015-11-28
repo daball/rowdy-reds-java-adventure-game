@@ -68,13 +68,6 @@ class Room extends GameObject
     });
   }
 
-  public static function constructBasicRoom($name, $desc, $imageUrl) {
-    $room = new Room($name);
-    $room -> setDescription($desc);
-    $room -> setImageUrl($imageUrl);
-    return $room;
-  }
-
   public function setDescription($description)
   {
     $inspector = new Inspector();
