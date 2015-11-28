@@ -516,6 +516,23 @@ $cloakRoom = array(
   'name'         => "Cloak Room",
   'description'  => "You are in a small alcove for storing cloaks, gloves, and the like.",
   'imageUrl'     => "cloakRoom.jpg",
+  'items'       => array(
+    'clothCloak'       => array(
+      'type'                    => "equipment",
+      'name'                    => "clothCloak",
+      'description'             => "It's an old cloth cloak.",
+      'onEquip.description'     => "You put on the old cloth cloak.  It makes you feel warm.",
+    ),
+    
+    'crystalCloak'     => array(
+      'type'                    => "equipment",
+      'name'                    => "crystalCloak",
+      'description'             => "It's a magically enchanted cloak.  It almost looks transparent and the cloth feels light and airy.  There's not really " .
+                                   "any other way to describe it other than calling it a crystal cloak.  The very curious thing is that when you run your hand " .
+                                   "behind the cloak, it looks like your hand disappears!  Very curious!",
+      'onEquip.description'     => "You put on the crystal cloak.  Somehow you feel lighter and more nimble.",
+    ),
+  ),
 );
 $hallMirrors = array(
   'name'         => "Hall of Mirrors",
