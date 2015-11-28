@@ -146,12 +146,12 @@ class Player extends GameObject
     $directionInfo = $room->getDirection($direction);
     //get next room
     $nextRoom = $gameState->getGame()->getRoom($directionInfo->getNextRoomName());
-    //is the room dark? if so you can only go back where you came from
-    if ($room->isDark() && $room->getLastRoomName() != $nextRoom->getName()) {
-      return "The room is too dark to see where you are going.";
-    }
     //make sure this is valid
     if ($nextRoom) {
+      //is the room dark? if so you can only go back where you came from
+      if ($room->isDark() && $room->getLastRoomName() != $nextRoom->getName()) {
+        return "The room is too dark to see where you are going.";
+      }
       if ($this->validateCollision($room, $direction))
       {
         return $this->explainCollision($room, $direction);
