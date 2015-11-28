@@ -92,6 +92,35 @@ $conservatory = array(
   'name'        => "Conservatory",
   'description' => "You are in a beautiful conservatory with many exotic plants and a greenhouse ceiling.",
   'imageUrl'    => "conservatory.jpg",
+  'items'       => array(
+    'note'       => array(
+      'type'                    => 'note',
+      'name'                    => "javadoc",
+      'description'             => "Class Player\n" .
+                                   "public class Player\n" .
+                                   "extends Object\n\n" .
+                                   "Field Summary\n=============\n" .
+                                   "protected Object   leftHand\n" .
+                                   "protected Object   rightHand\n\n" .
+                                   "Method Summary\n==============\n" .
+                                   "void               moveNorth()\n" .
+                                   "                   Moves player to a room in the Northern direction, if a room exists in that direction.\n" .
+                                   "void               moveEast()\n" .
+                                   "                   Moves player to a room in the Eastern direction, if a room exists in that direction.\n" .
+                                   "void               moveSouth()\n" .
+                                   "                   Moves player to a room in the Southern direction, if a room exists in that direction.\n" .
+                                   "void               moveWest()\n" .
+                                   "                   Moves player to a room in the Western direction, if a room exists in that direction.\n" .
+                                   "void               moveUp()\n" .
+                                   "                   Moves player to a room above current position, if a such a passage exists in that direction (i.e. stairs).\n" .
+                                   "void               moveDown()\n" .
+                                   "                   Moves player to a room below current position, if a such a passage exists in that direction (i.e. stairs).\n" .
+                                   "void               equip(Equipment item)\n" .
+                                   "                   Allows player to wear a piece of equipment (i.e. wearable items or items with shoulder straps)\n" .
+                                   "int                getHealthPoints()\n" .
+                                   "                   Returns the number of health points the player has, which can be between 100 and 0.  When player health points reach zero, then the player dies and the game is over.\n"
+        ),                                   
+    ),
 );
 $lounge = array(
   'name'        => "Lounge",
@@ -317,6 +346,20 @@ $wTowerTop = array(
   'name'         => "Top of Western Tower",
   'description'  => "You are in the top of a tower.",
   'imageUrl'     => "westTowerTop.jpg",
+  'items'       => array(
+    'note'       => array(
+      'type'                    => 'note',
+      'name'                    => "javadoc",
+      'description'             => "Class Bed\n" .
+                                   "public class Bed\n" .
+                                   "extends Object\n\n" .
+                                   "Method Summary\n==============\n" .
+                                   "boolean            isTooSoft()\n" .
+                                   "                   Returns whether or not the bed it too soft.\n" .
+                                   "boolean            isTooHard()\n" .
+                                   "                   Returns whether or not the bed it too soft.\n"
+        ),                                   
+    ),  
 );
 $eTowerTop = array(
   'name'         => "Top of Eastern Tower",
