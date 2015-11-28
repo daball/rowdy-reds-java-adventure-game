@@ -151,7 +151,7 @@ function assembleKey($roomDefinition, $room, $item) {
  * @param $item Item definition (associative array)
  **/
 function assembleFood($roomDefinition, $room, $item) {
-  return (new Food($item['name']))->define(function ($food) use ($item) {
+  return (new Food($item['name']))->define(function ($food) use ($roomDefinition, $room, $item) {
     $inspector = $food->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
@@ -169,7 +169,7 @@ function assembleFood($roomDefinition, $room, $item) {
  * @param $item Item definition (associative array)
  **/
 function assembleGeneralObject($roomDefinition, $room, $item) {
-  return (new GeneralObject($item['name']))->define(function ($generalObject) use ($item) {
+  return (new GeneralObject($item['name']))->define(function ($generalObject) use ($roomDefinition, $room, $item) {
     $inspector = $generalObject->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
