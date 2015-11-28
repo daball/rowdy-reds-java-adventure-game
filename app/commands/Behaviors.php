@@ -161,7 +161,8 @@ Router::route(array(
     // case Resolver::PLAYER_LEFT_HAND:
     // case Resolver::PLAYER_RIGHT_HAND:
     // case Resolver::PLAYER_BACKPACK:
-    // case Resolver::ROOM:
+    case Resolver::ROOM:
+      return GameState::getInstance()->inspectRoom();
     // case Resolver::ROOM_DIRECTION:
     // case Resolver::ROOM_ITEM:
     default:
