@@ -169,6 +169,8 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*lock\s*\(\s*([\w$_]*[\w\d$_\.]*)\s
   $keyResolver = Resolver::what($keyProvided, Resolver::ANY, false);
   $resolution = $resolver->resolve();
   $keyResolution = $keyResolver->resolve();
+  if ($resolver->result() == Resolver::NO_RESULT)
+    return noResult($provided);
   switch ($keyResolver->result()) {
     case Resolver::NO_RESULT:
       return noResult($keyProvided);
@@ -194,6 +196,8 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*unlock\s*\(\s*([\w$_]*[\w\d$_\.]*)
   $keyResolver = Resolver::what($keyProvided, Resolver::ANY, false);
   $resolution = $resolver->resolve();
   $keyResolution = $keyResolver->resolve();
+  if ($resolver->result() == Resolver::NO_RESULT)
+    return noResult($provided);
   switch ($keyResolver->result()) {
     case Resolver::NO_RESULT:
       return noResult($keyProvided);
