@@ -42,7 +42,7 @@ function assembleRoom($room) {
     $inspector->onInspect(function ($inspector) use ($description) {
       $room = $inspector->getParent();
       if ($room->isDark())
-        return "You can't see a damn thing.";
+        return "The room is so dark you can't see anything.";
       else
         return $description;
     });
@@ -51,12 +51,12 @@ function assembleRoom($room) {
     if ($dark) {
       $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $imageUrl) {
         if ($message == "wind") {
-          $room->setDark(true);
+          $room->setDark(false);
         }
       });
       $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room) {
         if ($message == "unwind") {
-          $room->setDark(false);
+          $room->setDark(true);
         }
       });
     }
