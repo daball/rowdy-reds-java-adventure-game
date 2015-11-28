@@ -164,15 +164,15 @@ function imageChangerHelper($item, $object) {
   if (array_key_exists('onAssign.room.imageUrl', $item)) {
       $assignable = $object->getComponent('Assignable');
       $initialOnAssign = $assignable->popEventHandler('assign');
-      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($initialOnAssign, $item) {
-        $room = $oldTarget;
-        if (is_a($room, '\game\Room'))
-          $room->setImageUrl($item['onAssign.room.imageUrl']);
+      $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($roomDefinition, $room, $initialOnAssign, $item) {
+        if (is_a($oldTarget, '\game\Room') && $oldTarget->getImageUrl() == $room->getImageUrl())
+          $oldTarget->setImageUrl($item['onAssign.room.imageUrl']);
+        else if (is_a($newTarget, '\game\Room') && $newTarget->getImageUrl() == $room->getImageUrl())
+          $newTarget->setImageUrl($roomDefinition['imageUrl']);
         return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
       });
     }
-  });
-};
+}
 
 /**
  * Constructs a General Object based on the item definition.
@@ -180,9 +180,15 @@ function imageChangerHelper($item, $object) {
  * @param $room Room instance.
  * @param $item Item definition (associative array)
  **/
+<<<<<<< HEAD
+function assembleFood($roomDefinition, $room, $item) {
+  return (new Food($item['name']))->define(function ($food) use ($item) {
+    $inspector = $food->getComponent('Inspector');
+=======
 function assembleGeneralObject($room, $item) {
   return (new GeneralObject($item['name']))->define(function ($generalObject) use ($item) {
     $inspector = $generalObject->getComponent('Inspector');
+>>>>>>> 31bce3bb5c0840629c3a1c1c7cdbf3e366540444
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
       return $item['description'];

@@ -114,12 +114,13 @@ $butlersQuarters = array(
 $kitchen = array(
   'name'        => "Kitchen",
   'description' => "You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.",
-  'imageUrl'    => "kitchen.jpg",
+  'imageUrl'    => "kitchen_lambChop.jpg",
   'items'       => array(
     'lambChop'    => array(
       'type'        => "food",
       'name'        => "lambChop",
-      'description' => "It's a chop of lamb."
+      'description' => "It's a chop of lamb.",
+      'onAssign.room.imageUrl'  => "kitchen.jpg",
     ),
   ),
 );
@@ -196,17 +197,17 @@ $taxidermyRoom = array(
     ),
     'dogHappy'      => array(
       'state'                   => "happy",
-      'dog.description'         => "The dog is now satisfied from eating and smiles at you.  You are a new best friend.",
+      'dog.description'         => "The dog is now satisfied from eating and smiles at you. You are a new best friend.",
       'bowl.description'        => "Only crumbs remain in the bowl.",
     ),
   ),
 );
 $chessRoom = array(
   'name'                  => "Chess Room",
-  'description'           => "This room is pitch black.  You can't see anything.",
-  'imageUrl'              => "darkRoom.jpg",
+  'description'           => "You see a room with a chess board on the floor in front of you.",
+  'imageUrl'              => "chessRoomlit.jpg",
   'dark'                  => true,
-  'lamp.wind.imageUrl'    => "chessRoomlit.jpg",
+  'lamp.wind.imageUrl'    => "",
   'lamp.unwind.imageUrl'  => "darkRoom.jpg",
 );
 $vestibule = array(
@@ -330,7 +331,15 @@ $infirmary = array(
 $pantryStorage = array(
   'name'         => "Pantry Storage Room",
   'description'  => "You are in what appears to be a storage room.",
-  'imageUrl'     => "pantryStorage.jpg",
+  'imageUrl'     => "pantryStorage_handle.jpg",
+    'items'       => array(
+     'handle'      => array(
+      'type'                    => "generalObject",
+      'name'                    => "handle",
+      'description'             => "It is a handle of some sort.  I wonder what it goes to?",
+      'onAssign.room.imageUrl'  => "pantryStorage.jpg",
+    ),
+  ),
 );
 $cloakRoom = array(
   'name'         => "Cloak Room",
@@ -506,7 +515,7 @@ GameBuilder::newGame($gameName)
 
   // Iteration 3 Main Floor:
   ->insertRoomAt($backHallway,      Direction::$w,    $infirmary)
-  ->insertRoomAt($pantry,           Direction::$e,    $pantryStorage)
+  ->insertRoomAt($pantry,           Direction::$w,    $pantryStorage)
   ->insertRoomAt($library,          Direction::$e,    $cloakRoom)
   ->connectRooms($cloakRoom,        Direction::$n,    $tapestryW)
   ->insertRoomAt($chessRoom,        Direction::$d,    $hallMirrors)
