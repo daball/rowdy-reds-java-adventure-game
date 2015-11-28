@@ -182,6 +182,16 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*lock\s*\(\s*([\w$_]*[\w\d$_\.]*)\s
   $keyResolution = $keyResolver->resolve();
   if ($resolver->result() == Resolver::NO_RESULT)
     return noResult($provided);
+  //resolve item if leftHand or rightHand is the source
+  else switch ($resolver->result()) {
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $itemInHand = Resolver::resolveHandContents($resolver->result());
+      if (!$itemInHand)
+        return "Your " . $resolution->getName() . " is empty.";
+      else
+        $resolution = $itemInHand;
+  }
   switch ($keyResolver->result()) {
     case Resolver::NO_RESULT:
       return noResult($keyProvided);
@@ -209,6 +219,16 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*unlock\s*\(\s*([\w$_]*[\w\d$_\.]*)
   $keyResolution = $keyResolver->resolve();
   if ($resolver->result() == Resolver::NO_RESULT)
     return noResult($provided);
+  //resolve item if leftHand or rightHand is the source
+  else switch ($resolver->result()) {
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $itemInHand = Resolver::resolveHandContents($resolver->result());
+      if (!$itemInHand)
+        return "Your " . $resolution->getName() . " is empty.";
+      else
+        $resolution = $itemInHand;
+  }
   switch ($keyResolver->result()) {
     case Resolver::NO_RESULT:
       return noResult($keyProvided);
@@ -235,6 +255,16 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*open\s*\(\s*\)\s*;\s*$/', function
   $resolution = $resolver->resolve();
   if ($resolver->result() == Resolver::NO_RESULT)
     return noResult($provided);
+  //resolve item if leftHand or rightHand is the source
+  else switch ($resolver->result()) {
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $itemInHand = Resolver::resolveHandContents($resolver->result());
+      if (!$itemInHand)
+        return "Your " . $resolution->getName() . " is empty.";
+      else
+        $resolution = $itemInHand;
+  }
   if (!$resolution->hasComponent('Openable'))
     return "You cannot open " . $target->getName() . ".";
   GameState::getInstance()->incrementMoves();
@@ -248,6 +278,16 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*close\s*\(\s*\)\s*;\s*$/', functio
   $resolution = $resolver->resolve();
   if ($resolver->result() == Resolver::NO_RESULT)
     return noResult($provided);
+  //resolve item if leftHand or rightHand is the source
+  else switch ($resolver->result()) {
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $itemInHand = Resolver::resolveHandContents($resolver->result());
+      if (!$itemInHand)
+        return "Your " . $resolution->getName() . " is empty.";
+      else
+        $resolution = $itemInHand;
+  }
   if (!$resolution->hasComponent('Openable'))
     return "You cannot close " . $resolution->getName() . ".";
   GameState::getInstance()->incrementMoves();
@@ -261,10 +301,20 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*wind\s*\(\s*\)\s*;\s*$/', function
   $resolution = $resolver->resolve();
   if ($resolver->result() == Resolver::NO_RESULT)
     return noResult($provided);
+  //resolve item if leftHand or rightHand is the source
+  else switch ($resolver->result()) {
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $itemInHand = Resolver::resolveHandContents($resolver->result());
+      if (!$itemInHand)
+        return "Your " . $resolution->getName() . " is empty.";
+      else
+        $resolution = $itemInHand;
+  }
   if (!$resolution->hasComponent('Windable'))
     return "You cannot wind " . $resolution->getName() . ".";
   GameState::getInstance()->incrementMoves();
-  return $resolution->getComponent('Windable')->close();
+  return $resolution->getComponent('Windable')->wind();
 });
 
 Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/', function ($command, $code, $pattern, $matches) {
