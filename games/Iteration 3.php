@@ -190,20 +190,20 @@ $servantsQuarters = array(
   'description' => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
   'imageUrl'    => "servantsQuarters.jpg",
   'items'       => array(
-    // 'footLocker'  => array(
-    //   'type'                    => 'footLocker',
-    //   'name'                    => "footLocker",
-    //   'secret'                  => $pantry['items']['brassKey']['secret'],
-    //   'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
-    //   'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
-    //   'items'                   => array(
+     'footLocker'  => array(
+       'type'                    => 'footLocker',
+       'name'                    => "footLocker",
+       'secret'                  => $pantry['items']['brassKey']['secret'],
+       'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
+       'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
+       'items'                   => array(
         'lamp'                    => array(
           'type'                    => 'lamp',
           'name'                    => 'lamp',
           'description'             => "You found a lamp.  A lamp can light your way through dark places."
         ),
-    //   ),
-    // ),
+      ),
+    ),
   ),
 );
 $taxidermyRoom = array(
@@ -237,7 +237,7 @@ $chessRoom = array(
   'imageUrl'              => "chessRoomlit.jpg",
   'dark'                  => true,
   'lamp.wind.imageUrl'    => "",
-  'lamp.unwind.imageUrl'  => "darkRoom.jpg",
+  'lamp.unwind.imageUrl'  => "chessRoom.jpg",
 );
 $vestibule = array(
   'name'         => "Vestibule",
@@ -393,6 +393,13 @@ $hallMirrors = array(
   'name'         => "Hall of Mirrors",
   'description'  => "You are in a hall of mirrors. If you look to closely your eyes will deceive you making it difficult to figure out what the true dimensions of this room really are.",
   'imageUrl'     => "hallOfMirrors.jpg",
+  'items'       => array(
+    'backpack'       => array(
+      'type'                    => 'backpack',
+      'name'                    => "backpack",
+      'description'             => "It is a Java backpack (Use like an Array)"
+        ),                                   
+    ),    
 );
 $alcove = array(
   'name'         => "Alcove",
