@@ -18,6 +18,7 @@ use \playable\Equipment;
 use \playable\LockedDoor;
 use \playable\Dog;
 use \playable\Lamp;
+use \playable\LockableContainer;
 use \playable\GeneralObject;
 
 /**
@@ -86,6 +87,9 @@ function assembleItemsIntoContainer($roomDefinition, $gameObject, $items) {
         $container->insertItem(assembleLamp($roomDefinition, $gameObject, $item));
         break;
       case 'equipment':
+        $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
+        break;
+      case 'lockableContainer':
         $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
         break;
       case 'generalObject':
@@ -165,6 +169,24 @@ function assembleFood($roomDefinition, $room, $item) {
   });
 }
 
+/**
+ * Constructs a General Object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleLockableContainer($roomDefinition, $room, $item) {
+  return (new LockableContainer($item['name'], $item['secret']))->define(function ($lockableContainer) use ($roomDefinition, $room, $item) {
+    $inspector = $lockableContainer->getComponent('Inspector');
+    $inspector->popEventHandler('inspect');
+    $inspector->onInspect(function ($inspector) use ($item) {
+      return $item['description'];
+    });
+    imageChanger($roomDefinition, $room, $item, $lockableContainer);
+    $container = $room->getComponent("Container");
+    $container = assembleItemsIntoContainer($item, $lockableContainer, $item['items']);
+  });
+}
 
 /**
  * Constructs a General Object based on the item definition.

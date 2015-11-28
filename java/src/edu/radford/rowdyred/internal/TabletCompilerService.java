@@ -47,7 +47,9 @@ public class TabletCompilerService {
     + "\n"
       + "public class Tablet /*extends Scope*/ {\n"
       + "\n"
+      + "  private "//replace setout
       + "  public Tablet(/*Scope scope*/) {\n"
+      + "   System.out.setOut\n"
 //      + "    //copy Scope to Tablet\n"
 //      + "    this.me = scope.me;\n"
 //      + "    this.room = scope.room;\n"

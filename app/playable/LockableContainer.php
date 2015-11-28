@@ -4,20 +4,25 @@ namespace playable;
 
 require_once "OpenableContainer.php";
 
-class UnlockableContainer extends OpenableContainer
+class LockableContainer extends OpenableContainer
 {
-  public function __construct($name, $key) {
+  public function __construct($name, $secret) {
     parent::__construct($name);
     //implement lockable
-    $this->define(function ($unlockableContainer) use ($name, $key) {
-      $lockable = new Lockable($key);
+    $this->define(function ($unlockableContainer) use ($name, $secret) {
+      $lockable = new Lockable($secret);
       $lockable->onLock(function ($lockable) {
+        return "You turn the key and the container locks.";
       });
       $lockable->onRefuseLock(function ($lockable) {
+        return "You turn the key and nothing happens.";
       });
       $lockable->onUnlock(function ($lockable) {
+        return "You turn the key and the container unlocks.";
+        //You see inside: ... ...
       });
       $lockable->onRefuseUnlock(function ($lockable) {
+        return "You turn the key and nothing happens.";
       });
       $unlockableContainer->addComponent($lockable);
     });
