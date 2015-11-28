@@ -40,7 +40,11 @@ function assembleRoom($room) {
     $inspector = $room->getComponent("Inspector");
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($description) {
-      return $description;
+      $room = $inspector->getParent();
+      if ($room->isDark())
+        return "You can't see a damn thing.";
+      else
+        return $description;
     });
     $container = $room->getComponent("Container");
     $container = assembleItemsIntoContainer($meta, $room, $items);
