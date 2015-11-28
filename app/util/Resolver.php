@@ -4,6 +4,7 @@ namespace util;
 
 require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../game/Direction.php';
+require_once 'PubSubMessageQueue.php';
 
 use \engine\GameState;
 use \game\Direction;
@@ -188,6 +189,7 @@ class Resolver
       if ($hand && $hand->getComponent('Container')->hasItemAt(0)) {
         $item = $hand->getComponent('Container')->getItemAt(0);
       }
+      return $item;
     }
     return self::NO_RESULT;
   }

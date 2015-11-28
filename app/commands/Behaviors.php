@@ -182,7 +182,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*lock\s*\(\s*([\w$_]*[\w\d$_\.]*)\s
   }
   if (!$resolution->hasComponent('Lockable'))
     return "You cannot lock " . $resolution->getName() . ".";
-  $gameState->incrementMoves();
+  GameState::getInstance()->incrementMoves();
   return $resolution->getComponent('Lockable')->lock($keyResolution);
 });
 
@@ -207,7 +207,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*unlock\s*\(\s*([\w$_]*[\w\d$_\.]*)
   }
   if (!$resolution->hasComponent('Lockable'))
     return "You cannot unlock " . $resolution->getName() . ".";
-  $gameState->incrementMoves();
+  GameState::getInstance()->incrementMoves();
   return $resolution->getComponent('Lockable')->unlock($keyResolution);
 });
 
@@ -222,7 +222,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*open\s*\(\s*\)\s*;\s*$/', function
     return noResult($provided);
   if (!$resolution->hasComponent('Openable'))
     return "You cannot open " . $target->getName() . ".";
-  $gameState->incrementMoves();
+  GameState::getInstance()->incrementMoves();
   return $resolution->getComponent('Openable')->open();
 });
 
@@ -235,7 +235,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*close\s*\(\s*\)\s*;\s*$/', functio
     return noResult($provided);
   if (!$resolution->hasComponent('Openable'))
     return "You cannot close " . $resolution->getName() . ".";
-  $gameState->incrementMoves();
+  GameState::getInstance()->incrementMoves();
   return $resolution->getComponent('Openable')->close();
 });
 
@@ -248,15 +248,14 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*wind\s*\(\s*\)\s*;\s*$/', function
     return noResult($provided);
   if (!$resolution->hasComponent('Windable'))
     return "You cannot wind " . $resolution->getName() . ".";
-  $gameState->incrementMoves();
+  GameState::getInstance()->incrementMoves();
   return $resolution->getComponent('Windable')->close();
 });
 
 Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/', function ($command, $code, $pattern, $matches) {
   $output = "player trying to run a method call with " . var_export($matches, true) . "\n";
-  $compiler = new TabletCompilerService($code);
-  $output .= "wrapped up code:\n" . $compiler->sourceCode;
-  $cls = $compiler->compile();
-  $output = $compiler->invoke($matches[1], array());
+  $compiler = new TabletCompilerService();
+  $cls = $compiler->compile($code);
+  // $output = $compiler->invoke($matches[1], array());
   return $output;
 });
