@@ -119,7 +119,7 @@ $conservatory = array(
                                    "                   Allows player to wear a piece of equipment (i.e. wearable items or items with shoulder straps)\n" .
                                    "int                getHealthPoints()\n" .
                                    "                   Returns the number of health points the player has, which can be between 100 and 0.  When player health points reach zero, then the player dies and the game is over.\n"
-        ),                                   
+        ),
     ),
 );
 $lounge = array(
@@ -190,20 +190,20 @@ $servantsQuarters = array(
   'description' => "You are in a humble servant's quarters.  The furniture is meager, and the only item of note is an old wooden footLocker sitting on the floor.",
   'imageUrl'    => "servantsQuarters.jpg",
   'items'       => array(
-    // 'footLocker'  => array(
-    //   'type'                    => 'footLocker',
-    //   'name'                    => "footLocker",
-    //   'secret'                  => $pantry['items']['brassKey']['secret'],
-    //   'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
-    //   'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
-    //   'items'                   => array(
+    'footLocker'  => array(
+      'type'                    => 'lockableContainer',
+      'name'                    => "footLocker",
+      'secret'                  => $pantry['items']['brassKey']['secret'],
+      'description'             => "It's a servant's simple footLocker chest that is sitting on the floor.",
+      'onOpen.room.imageUrl'    => "servantsQuarters_lamp.jpg",
+      'items'                   => array(
         'lamp'                    => array(
           'type'                    => 'lamp',
           'name'                    => 'lamp',
           'description'             => "You found a lamp.  A lamp can light your way through dark places."
         ),
-    //   ),
-    // ),
+      ),
+    ),
   ),
 );
 $taxidermyRoom = array(
@@ -358,8 +358,8 @@ $wTowerTop = array(
                                    "                   Returns whether or not the bed it too soft.\n" .
                                    "boolean            isTooHard()\n" .
                                    "                   Returns whether or not the bed it too soft.\n"
-        ),                                   
-    ),  
+        ),
+    ),
 );
 $eTowerTop = array(
   'name'         => "Top of Eastern Tower",

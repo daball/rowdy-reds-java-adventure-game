@@ -51,7 +51,6 @@ public class InlineCompiler {
         optionList.add("-d");
         optionList.add(destDir);
 //        optionList.add("-classpath");
-//        throw new CompilationException("class path = "+  System.getProperty("java.class.path"), "( :-))");
 //        optionList.add(System.getProperty("java.class.path") );//+ ";dist/InlineCompiler.jar");
 //
         Iterable<? extends JavaFileObject> compilationUnit
