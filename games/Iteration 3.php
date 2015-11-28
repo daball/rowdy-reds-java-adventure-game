@@ -37,7 +37,7 @@ $forest = array(
 );
 $castleEntrance = array(
   'name'        => "Castle Entrance",
-  'description' => "You are at the edge of a forest and are standing at a grand castle.  The castle's door lies to the north.",
+  'description' => "You are at the edge of a forest and are standing in front of a castle.  This castle is a grand residence contain many magnificent rooms to explore. The castle's door lies to the north.",
   'imageUrl'    => "castleEntrance.png",
   'items'       => array(
     'note'       => array(
@@ -49,7 +49,7 @@ $castleEntrance = array(
 );
 $foyer = array(
   'name'        => "Foyer",
-  'description' => "You are in a foyer. Intricate stonework decorates the foyer and lamps line the wall.",
+  'description' => "You are in a foyer. Intricate stonework flooring and the stone walls have been polished until it shines. Decorative lamps line the walls.",
   'imageUrl'    => "foyer.jpg",
 );
 $tapestryE = array(
@@ -95,7 +95,7 @@ $conservatory = array(
 );
 $lounge = array(
   'name'        => "Lounge",
-  'description' => "You are in a lounge decorated with many paintings, and nice comfortable searting.  There is a door to the east.",
+  'description' => "You are in a lounge decorated with many paintings, and nice comfortable seating.  There is a door to the east.",
   'imageUrl'    => "lounge.jpg",
   'items'       => array(
     'lockedDoor'  => array(
@@ -139,7 +139,7 @@ $pantry = array(
 );
 $banquetHall = array(
   'name'        => "Banquet Hall",
-  'description' => "You are in the banquet hall.",
+  'description' => "You are in the banquet hall. Life of the Medieval castle revolves around the Banquet Hall and its festivities",
   'imageUrl'    => "banquetHall.jpg",
   'items'       => array(
     'lockedDoor'  => array(
@@ -226,40 +226,40 @@ $wTowerBase = array(
 );
 $grandHall = array(
   'name'         => "Grand Hall",
-  'description'  => "You are in the Grand Hall.",
+  'description'  => "You are in the Grand Hall. Beautiful high ceiling and a grand statue give this room its name",
   'imageUrl'     => "grandHall.jpg",
 );
 $grandStaircase = array(
   'name'         => "Grand Staircase",
-  'description'  => "You are at a magnificant staircase at the north end of the Grand Hall.",
+  'description'  => "You are at a magnificent staircase at the north end of the Grand Hall. The steps are made of decorative marble where king and queens have passed",
   'imageUrl'     => "grandStaircase.jpg",
 );
 $eTowerBase = array(
   'name'         => "Base of Eastern Tower",
-  'description'  => "You are in a circular room with a spiral staircase leading up to the left.",
+  'description'  => "You are in a circular room with a spiral staircase leading up to the left. The towers are the highest part of the castle were you can see for long distances at the top",
   'imageUrl'     => "eastTower1.jpg",
 );
 $courtyard = array(
   'name'         => "Courtyard",
-  'description'  => "You are in the castle courtyard.",
+  'description'  => "You are in the castle courtyard. This Courtyards provide great comforts which include light, privacy, security, and tranquillity. ",
   'imageUrl'     => "courtyard.jpg",
 );
 $stable = array(
   'name'         => "Stable",
-  'description'  => "You are in a stable.",
+  'description'  => "You are in a stable. The horses are all out in the pasture. ",
   'imageUrl'     => "stables.jpg",
   'items'       => array(
-    'Tablet'       => array(
+    'tablet'       => array(
       'type'                    => "equipment",
-      'name'                    => "Tablet",
+      'name'                    => "tablet",
       'description'             => "When equipped, the tablet allows you to type Java code in order to solve game puzzles.",
-      'onEquip.description'     => "In order to use the Tablet, click on the Tablet Code tab and type Java methods. Once you have your Java methods ready to run, go back to the Command Line tab and enter a method call.",
+      'onEquip.description'     => "In order to use the tablet, click on the Tablet Code tab and type Java methods. Once you have your Java methods ready to run, go back to the Command Line tab and enter a method call.",
     ),
   ),
 );
 $smithery = array(
   'name'         => "Smithery",
-  'description'  => "You are in a smithery.",
+  'description'  => "You are in a smithery. Here the blacksmith would work with a forge making iron utensils, horseshoes, weapons and repairing armour.",
   'imageUrl'     => "smithery.jpg",
 );
 $balcony = array(
@@ -274,17 +274,17 @@ $billiards = array(
 );
 $mapRoom = array(
   'name'         => "Map Room",
-  'description'  => "You are in a strange room with several globes.  The walls are all covered with maps.",
+  'description'  => "You are in a strange room were maps once hung on the walls and stories were once told of great travel adventures.",
   'imageUrl'     => "mapRoom.jpg",
 );
 $drawing = array(
   'name'         => "Drawing Room",
-  'description'  => "You are in a room with several musical instruments, an easel, some jars of paint, a tilted table, and various drawing utensils.",
+  'description'  => "You are in a Drawing it houses numerous family portraits created by famous painters. Artisans would frequent this room.",
   'imageUrl'     => "drawingRoom.jpg",
 );
 $observatory = array(
   'name'         => "Observatory",
-  'description'  => "You are in a run down obervatory.  The walls are peeling, and old drapes cover tall floor to ceiling windows.  An old telescope sits on the floor.",
+  'description'  => "You are in a sophisticated observatory. An large telescope sits on the floor looking towards the heavens. Books line the walls with information on the constellations.",
   'imageUrl'     => "observatory.jpg",
 );
 $bedchambers = array(
@@ -319,12 +319,12 @@ $wTowerTop = array(
 );
 $eTowerTop = array(
   'name'         => "Top of Eastern Tower",
-  'description'  => "You are in the top of a tower.",
+  'description'  => "You are in the top of a tower inside a graceful room containing beautiful glass doors.",
   'imageUrl'     => "eastTowerTop.jpg",
 );
 $infirmary = array(
   'name'         => "Infirmary",
-  'description'  => "You are in an infirmary.",
+  'description'  => "You are in an infirmary. After large epic battles this room would be care for the injured and dying.",
   'imageUrl'     => "infirmary.jpg",
 );
 $pantryStorage = array(
@@ -339,7 +339,7 @@ $cloakRoom = array(
 );
 $hallMirrors = array(
   'name'         => "Hall of Mirrors",
-  'description'  => "You are in a hall of mirrors.",
+  'description'  => "You are in a hall of mirrors. If you look to closely your eyes will deceive you making it difficult to figure out what the true dimensions of this room really are.",
   'imageUrl'     => "hallOfMirrors.jpg",
 );
 $alcove = array(
@@ -359,17 +359,17 @@ $rackRoom = array(
 );
 $boiler = array(
   'name'         => "Boiler Room",
-  'description'  => "You are in a boiler boom.",
+  'description'  => "You are in a boiler boom. Strange noises come from all the weird machinery. ",
   'imageUrl'     => "boilerRoom.jpg",
 );
 $portcullis = array(
   'name'         => "Portcullis",
-  'description'  => "You are in a room with a portcullis on the southern side.  You also see a winch on the wall.",
+  'description'  => "You are in a room with a portcullis (large gate) on the southern side.  You also see a winch on the wall.",
   'imageUrl'     => "portcullis.jpg",
 );
 $armory = array(
   'name'         => "Armory",
-  'description'  => "You are in an armory.",
+  'description'  => "You are in an armory. Knights used the the equipment in epic battles. ",
   'imageUrl'     => "armory_shield.jpg",
 );
 $wineCellar  = array(
@@ -521,5 +521,4 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($portcullis,       Direction::$s,    $armory)
   ->insertRoomAt($wineCellar,       Direction::$s,    $cellarStorage)
 
-  ->setSpawnPoint('Castle Entrance')
-;
+  ->setSpawnPoint('Castle Entrance');
