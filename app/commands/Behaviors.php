@@ -72,6 +72,17 @@ Router::route('/^\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;\s*$/', function ($comman
   if ($targetResolver->result() == Resolver::PLAYER_BACKPACK_INDEX)
     $index = $matches[2];
 
+  //resolve item if leftHand or rightHand is the source
+  switch ($sourceResolver->result()) {
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $itemInHand = Resolver::resolveHandContents($sourceResolver->result());
+      if (!$itemInHand)
+        return "Your " . $source->getName() . " is empty.";
+      else
+        $source = $itemInHand;
+  }
+
   //pre-assignment check
   if (!$source->hasComponent('Assignable'))
     return $source->getName() . " is not an assignable item.";
