@@ -322,6 +322,6 @@ Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/'
   $output = "player trying to run a method call with " . var_export($matches, true) . "\n";
   $compiler = new TabletCompilerService();
   $cls = $compiler->compile($code);
-  // $output = $compiler->invoke($matches[1], array());
+  $output = $compiler->invoke($matches[1], array());
   return $output;
 });

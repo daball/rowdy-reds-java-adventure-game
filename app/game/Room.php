@@ -68,6 +68,12 @@ class Room extends GameObject
     });
   }
 
+  public function connectToRoom($direction, $nextRoom) {
+    $this->getDirection($direction)->setNextRoomName($nextRoom->getName());
+    $nextRoom->getDirection(Direction::oppositeDirection($direction))->setNextRoomName($this->getName());
+  }
+
+
   public function setDescription($description)
   {
     $inspector = new Inspector();

@@ -20,11 +20,11 @@ class TabletCompilerService {
   }
 
   public function compile($sourceCode) {
-    $this->javaCompilerService->compile($sourceCode);
+    return $this->javaCompilerService->compile($sourceCode);
   }
 
   public function invoke($methodName, $parameters) {
-    $this->javaCompilerService->invokeMethod($methodName, $parameters);
+    return $this->javaCompilerService->invokeMethod($methodName, $parameters);
   }
 }
 

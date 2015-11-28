@@ -3,12 +3,15 @@ package edu.radford.rowdyred.internal;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
@@ -16,12 +19,14 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-public class InlineCompiler {
 
-  public static void compile(String packageName, String className, String sourceCode) {
-    File sourceFile = new File("/tmp/edu.rowdyred.players/" + packageName + "/" + className + ".java");
+public class InlineCompiler {
+  
+  public static Class<?> compile(String basePath, String packageName, String className, String sourceCode) throws IOException, ClassNotFoundException {
+    File sourceFile = Paths.get(basePath, packageName, className + ".java").toFile();
+    String destDir = Paths.get(basePath).toString();
     if (sourceFile.getParentFile().exists() || sourceFile.getParentFile().mkdirs()) {
-      try {
+//      try {
         Writer writer = null;
         try {
           writer = new FileWriter(sourceFile);
@@ -37,20 +42,23 @@ public class InlineCompiler {
         /** Compilation Requirements *********************************************************************************************/
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+        //StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
 
         // This sets up the class path that the compiler will use.
         // I've added the .jar file that contains the DoStuff interface within in it...
         List<String> optionList = new ArrayList<String>();
         optionList.add("-d");
-        optionList.add("/tmp/edu.rowdyred.players/" + packageName + "/");
-        optionList.add("-classpath");
-        optionList.add(System.getProperty("java.class.path") );//+ ";dist/InlineCompiler.jar");
-
+        optionList.add(destDir);
+//        optionList.add("-classpath");
+//        throw new CompilationException("class path = "+  System.getProperty("java.class.path"), "( :-))");
+//        optionList.add(System.getProperty("java.class.path") );//+ ";dist/InlineCompiler.jar");
+//
         Iterable<? extends JavaFileObject> compilationUnit
-            = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
+            = fileManager.getJavaFileObjects(sourceFile);
+        StringWriter output = new StringWriter();
         JavaCompiler.CompilationTask task = compiler.getTask(
-          null,
+          output,
           fileManager,
           diagnostics,
           optionList,
@@ -58,14 +66,17 @@ public class InlineCompiler {
           compilationUnit);
         /********************************************************************************************* Compilation Requirements **/
         if (task.call()) {
+          fileManager.close();
           /** Load and execute *************************************************************************************************/
           // Create a new custom class loader, pointing to the directory that contains the compiled
           // classes, this should point to the top of the package structure!
-          URLClassLoader classLoader = new URLClassLoader(new URL[]{new File("/tmp/edu.rowdyred.players/").toURI().toURL()});
+          URLClassLoader classLoader = new URLClassLoader(new URL[]{new File(destDir).toURI().toURL()});
           // Load the class from the classloader by name....
           Class<?> loadedClass = classLoader.loadClass(packageName + "." + className);
+//          Class<?> loadedClass = Class.forName(packageName + "." + className);
+          return loadedClass;
           // Create a new instance...
-          Object obj = loadedClass.newInstance();
+//          Object obj = loadedClass.newInstance();
           // Santity check
           // if (obj instanceof DoStuff) {
           //   // Cast to the DoStuff interface
@@ -75,17 +86,30 @@ public class InlineCompiler {
           // }
           /************************************************************************************************* Load and execute **/
         } else {
-          for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-            System.out.format("Error on line %d in %s%n",
-                diagnostic.getLineNumber(),
-                diagnostic.getSource().toUri());
-          }
+          fileManager.close();
+          throw new CompilationException("Failed to compile: " + sourceFile.toString(), output.toString());
+//          for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+//            System.out.format("Error on line %d in %s%n",
+//                diagnostic.getLineNumber(),
+//                diagnostic.getSource().toUri());
+//          }
         }
-        fileManager.close();
-      } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException exp) {
-        exp.printStackTrace();
-      }
+//        fileManager.close();
+//      } catch (IOException | ClassNotFoundException /*| InstantiationException | IllegalAccessException*/ exp) {
+//        exp.printStackTrace();
+//      }
     }
+    return null;
   }
 
 }
+
+final class CompilationException extends RuntimeException {
+
+  private static final long serialVersionUID = 1L;
+
+  public CompilationException(String message, String output) {
+      super(message + "; caused by:\n\n" + output);
+  }
+}
+
