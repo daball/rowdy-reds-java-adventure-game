@@ -27,11 +27,11 @@ $forest = array(
     'note'       => array(
       'type'                    => 'note',
       'name'                    => "sign",
-      'description'             => "The sign reads:\n ->  Beware! You only have two hands - they are your local variables, leftHand and rightHand. " .
-                                   "If you pick up an item when you're already holding another item in that hand, then the Java garbage collector will garbage " .
-                                   "collect the old item, and it is lost forever! (or at least till you type 'reset')\n\n" .
-                                   "Hmm... Seems kind of wordy for an old wooden sign in the creepy old woods in the creepy country wherever we are that " .
-                                   "nobody goes on the a tail on the frog on the bump on the log in the hole in the bottom of the sea.",
+      'description'             => "The sign reads:\n\nI'm a lonely, lonely sign in a lonely, old, creepy forest, and nobody ever visits me. Since you are so very " .
+                                   "nice to visit me, I will let you in on a tiny little secret. A lamp can be used for more than just lighting up dark rooms. " .
+                                   "Sometimes the extra light can help you see other things hidden in the shadows!  I hope that helps!  Thank you for visiting me!\n\n" .
+                                   "Hmm... Seems kind of wordy for an old wooden sign in the creepy old woods, by the craggy cliff, in the creepy country wherever you " .
+                                   "are, that nobody goes to, on the a tail on the frog on the bump on the log in the hole in the bottom of the sea.",
     ),
   ),
 );
@@ -70,7 +70,10 @@ $study = array(
     'note'       => array(
       'type'                    => 'note',
       'name'                    => "note",
-      'description'             => "I'm a note!",
+      'description'             => "The note reads:\n\nTo whom it may concern,\n\nIt's worthwhile to make sure you don't pick up too many items of limited usefulness. " .
+                                   "You can only carry just a couple items at a time, and if you pick up an item in your hand (variable) where you're already carrying " .
+                                   "something then the old item is lost forever, possibly leaving you unable to complete your quest.  If that happens, then you can type 'reset' and try your quest again." .
+                                   "\n\n You think to yourself that seems kind of limiting..  Sure would be nice if you had a bag or something to carry more stuff.",
     ),
   ),
 );
@@ -86,6 +89,16 @@ $library = array(
       'description'             => "It's a dingy rusty key.",
       'onAssign.room.imageUrl'  => "library.jpg",
     ),
+    'javadocTablet'    => array(
+      'type'                    => 'note',
+      'name'                    => "javadoc",
+      'description'             => "Class Tablet\n" .
+                                   "public class Tablet\n" .
+                                   "extends Object\n\n" .
+                                   "This class is empty, but can be used to type in Java methods to be used in the game.\n\n" .
+                                   "Method Summary\n==============\n" .
+                                   "No Methods Exist Yet"
+    ),
   ),
 );
 $conservatory = array(
@@ -93,7 +106,7 @@ $conservatory = array(
   'description' => "You are in a beautiful conservatory with many exotic plants and a greenhouse ceiling.",
   'imageUrl'    => "conservatory.jpg",
   'items'       => array(
-    'note'       => array(
+    'javadocPlayer'    => array(
       'type'                    => 'note',
       'name'                    => "javadoc",
       'description'             => "Class Player\n" .
@@ -248,6 +261,24 @@ $artGallery = array(
   'name'         => "Art Gallery",
   'description'  => "You are in the castle art gallery.",
   'imageUrl'     => "artGallery.jpg",
+  'items'       => array(
+    'javadocDoor'    => array(
+      'type'                    => 'note',
+      'name'                    => "javadoc",
+      'description'             => "Class Door\n" .
+                                   "public class Door\n" .
+                                   "extends LockableObject\n\n" .
+                                   "Method Summary\n==============\n" .
+                                   "void               close()\n" .
+                                   "                   Closes the door.\n" .
+                                   "void               lock(Key key)\n" .
+                                   "                   Closes and locks the door with the provided key.\n" .
+                                   "void               open()\n" .
+                                   "                   Opens the door if it is closed and unlocked.\n" .
+                                   "void               unlock(Key key)\n" .
+                                   "                   Unlocks door with provided key and opens it.\n"
+    ),
+  ),
 );
 $wTowerBase = array(
   'name'         => "Base of Western Tower",
@@ -301,6 +332,23 @@ $billiards = array(
   'name'         => "Billiards Room",
   'description'  => "You are in a billiards room.",
   'imageUrl'     => "billiardsRoom.jpg",
+  'items'       => array(
+    'javadocCrank'    => array(
+      'type'                    => 'note',
+      'name'                    => "javadoc",
+      'description'             => "Class Crank\n" .
+                                   "public class Crank\n" .
+                                   "extends Object\n\n" .
+                                   "Method Summary\n==============\n" .
+                                   "void               setHandle(Handle handle)\n" .
+                                   "                   Puts handle in position so the crank can be turned.\n" .
+                                   "void               turnCrank()\n" .
+                                   "                   Turns the crank one turn.\n" .
+                                   "boolean            isOpen()\n" .
+                                   "                   Returns true if the crank's portcullis is open and locked into place."
+
+    ),
+  ),
 );
 $mapRoom = array(
   'name'         => "Map Room",
@@ -311,6 +359,15 @@ $drawing = array(
   'name'         => "Drawing Room",
   'description'  => "You are in a Drawing it houses numerous family portraits created by famous painters. Artisans would frequent this room.",
   'imageUrl'     => "drawingRoom.jpg",
+  'items'       => array(
+    'chessClue'    => array(
+      'type'                    => 'note',
+      'name'                    => "note",
+      'description'             => "The note reads:\n\n" .
+                                   "The queen, rooks, and bishops hold considerable power.  They are able to advance across all ranks of the board " .
+                                   "in a single move.  Anyone who is able to advance all the ranks on the board in one move is bound to find something special."
+    ),
+  ),  
 );
 $observatory = array(
   'name'         => "Observatory",
