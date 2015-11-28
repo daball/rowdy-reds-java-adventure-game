@@ -53,7 +53,7 @@ class Windable extends BaseComponent
    * @ignore
    */
   public function unwind() {
-    $this->wound = true;
+    $this->wound = false;
     return $this->trigger('unwind', array($this));
   }
 
