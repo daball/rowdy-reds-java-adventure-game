@@ -2,6 +2,7 @@
 
 //TODO: determine which deployment to use based on APPLICATION_ENV parameter
 require_once("http://localhost:8081/cc-development/java/Java.inc");
+require_once(__DIR__."/../util/Path.php");
 
 // class CompilerException extends Exception {
 //   public function __construct($message) {
@@ -13,13 +14,13 @@ class TabletCompilerService {
   private $javaCompilerService = null;
   public $sourceCode = "";
 
-  public function __construct($sourceCode) {
-    $this->javaCompilerService = new java("edu.radford.rowdyred.internal.TabletCompilerService", session_id(), null, $sourceCode);
-    $this->sourceCode = $this->javaCompilerService->sourceCode;
+  public function __construct() {
+    $cachePath = Path::combine(__DIR__, "..", "..", "__player_tablet_cache");
+    $this->javaCompilerService = new java("edu.radford.rowdyred.internal.TabletCompilerService", session_id(), $cachePath, null);
   }
 
-  public function compile() {
-    $this->javaCompilerService->compile();
+  public function compile($sourceCode) {
+    $this->javaCompilerService->compile($sourceCode);
   }
 
   public function invoke($methodName, $parameters) {
