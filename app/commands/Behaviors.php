@@ -21,7 +21,7 @@ function noResult($provided) {
 /* Assignable */
 
 //assign: target = source;
-Router::route('/^\s*([\w\d$_.]+)\s*=\s*([\w\d$_.]+)\s*;\s*$/', function ($command, $code, $pattern, $matches) {
+Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*([\w\d$_.\[\]]+)\s*;\s*$/', function ($command, $code, $pattern, $matches) {
   $target = $matches[1];
   $source = $matches[2];
   $index = -1; //index in container to assign, this is variable for backpack
@@ -157,7 +157,8 @@ Router::route(array(
       $where = $resolution->getContainer()->getName();
       return "The $provided is in your $where.  " . $inspector->inspect();
     case Resolver::PLAYER_EQUIPMENT_ITEM:
-      return "You have equipped the $provided.  " . $player->getEquipmentItem($inspectWhat)->getComponent('Inspector')->inspect();
+      $player = GameState::getInstance()->getPlayer();
+      return "You have equipped the $provided.  " . $player->getEquipmentItem($provided)->getComponent('Inspector')->inspect();
     case Resolver::PLAYER:
       return "What? You are Rowdy Red! (TODO: Make Player a GameObject. Add Inspector override.)";
     // case Resolver::PLAYER_LEFT_HAND:
