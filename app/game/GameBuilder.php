@@ -50,6 +50,7 @@ function assembleRoom($room) {
     });
     $container = $room->getComponent("Container");
     $container = assembleItemsIntoContainer($meta, $room, $items);
+
     if ($dark) {
       $room->subscribe('Lamp', function ($sender, $queue, $message) use ($room, $imageUrl) {
         if ($message == "wind") {
@@ -227,10 +228,11 @@ function assembleGeneralObject($roomDefinition, $room, $item) {
  * @param $item Item definition (associative array)
  **/
 function assembleLamp($roomDefinition, $room, $item) {
-  return ((new Lamp($item['name']))->define(function ($lamp) use ($item) {
+  return ((new Lamp($item['name']))->define(function ($lamp) use ($roomDefinition, $room, $item) {
     $lamp->getComponent('Inspector')->onInspect(function ($inspector) use ($item) {
       return $item['description'];
     });
+    imageChanger($roomDefinition, $room, $item, $lamp);
   }));
 }
 
@@ -270,11 +272,22 @@ function imageChanger($roomDefinition, $room, $item, $gameObject) {
     $assignable = $gameObject->getComponent('Assignable');
     $initialOnAssign = $assignable->popEventHandler('assign');
     $assignable->onAssign(function ($assignable, $oldTarget, $newTarget, $index) use ($roomDefinition, $room, $initialOnAssign, $item) {
-      if (is_a($oldTarget, '\game\Room') && $oldTarget->getImageUrl() == $room->getImageUrl())
+      if (is_a($oldTarget, '\game\Room') && $oldTarget->getImageUrl() == $roomDefinition['imageUrl'])
         $oldTarget->setImageUrl($item['onAssign.room.imageUrl']);
-      else if (is_a($newTarget, '\game\Room') && $newTarget->getImageUrl() == $room->getImageUrl())
+      else if (is_a($newTarget, '\game\Room') && $newTarget->getImageUrl() == $item['onAssign.room.imageUrl'])
         $newTarget->setImageUrl($roomDefinition['imageUrl']);
       return $initialOnAssign($assignable, $oldTarget, $newTarget, $index);
+    });
+  }
+  if (array_key_exists('onOpen.room.imageUrl', $item)) {
+    $openable = $gameObject->getComponent('Openable');
+    $initialOnOpen = $openable->popEventHandler('open');
+    $openable->onOpen(function ($openable) use ($roomDefinition, $room, $initialOnOpen, $item) {
+      if ($openable->isOpened())
+        $room->setImageUrl($item['onOpen.room.imageUrl']);
+      else
+        $room->setImageUrl($roomDefinition['imageUrl']);
+      return $initialOnOpen($openable);
     });
   }
 };

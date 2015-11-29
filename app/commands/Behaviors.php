@@ -317,7 +317,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*wind\s*\(\s*\)\s*;\s*$/', function
   if (!$resolution->hasComponent('Windable'))
     return "You cannot wind " . $resolution->getName() . ".";
   GameState::getInstance()->incrementMoves();
-  return $resolution->getComponent('Windable')->wind() + "  " + GameState::getInstance()->inspectRoom();
+  return $resolution->getComponent('Windable')->wind() . "  " . GameState::getInstance()->inspectRoom();
 });
 
 Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/', function ($command, $code, $pattern, $matches) {
@@ -325,6 +325,7 @@ Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/'
   $parameters = array();
   $output = "player trying to run a method call with " . var_export($matches, true) . "\n";
   $compiler = new TabletCompilerService();
+  $room = GameState::getInstance()->getPlayerRoom();
   if ($room->hasComponent("Puzzle")) {
     $code = $room->getComponent("Puzzle")->getHeaderCode() . $code;
   }
