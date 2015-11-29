@@ -19,10 +19,13 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.junit.experimental.theories.Theories;
+
 
 public class InlineCompiler {
   
-  public static Class<?> compile(String basePath, String packageName, String className, String sourceCode) throws IOException, ClassNotFoundException {
+  public static Class<?> compile(String basePath, String classPath, String packageName, String className, String sourceCode) throws Exception {
+//    throw new Exception(System.getProperty("java.class.path"));
     File sourceFile = Paths.get(basePath, packageName, className + ".java").toFile();
     String destDir = Paths.get(basePath).toString();
     if (sourceFile.getParentFile().exists() || sourceFile.getParentFile().mkdirs()) {
@@ -50,8 +53,8 @@ public class InlineCompiler {
         List<String> optionList = new ArrayList<String>();
         optionList.add("-d");
         optionList.add(destDir);
-//        optionList.add("-classpath");
-//        optionList.add(System.getProperty("java.class.path") );//+ ";dist/InlineCompiler.jar");
+        optionList.add("-classpath");
+        optionList.add(classPath + ":" + System.getProperty("java.class.path"));//+ ";dist/InlineCompiler.jar");
 //
         Iterable<? extends JavaFileObject> compilationUnit
             = fileManager.getJavaFileObjects(sourceFile);
@@ -69,7 +72,10 @@ public class InlineCompiler {
           /** Load and execute *************************************************************************************************/
           // Create a new custom class loader, pointing to the directory that contains the compiled
           // classes, this should point to the top of the package structure!
-          URLClassLoader classLoader = new URLClassLoader(new URL[]{new File(destDir).toURI().toURL()});
+          URLClassLoader classLoader = new URLClassLoader(new URL[]{
+              new File(destDir).toURI().toURL(),
+              new File(classPath).toURI().toURL()
+              }, Thread.currentThread().getContextClassLoader());
           // Load the class from the classloader by name....
           Class<?> loadedClass = classLoader.loadClass(packageName + "." + className);
 //          Class<?> loadedClass = Class.forName(packageName + "." + className);
@@ -86,12 +92,12 @@ public class InlineCompiler {
           /************************************************************************************************* Load and execute **/
         } else {
           fileManager.close();
+          for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+            output.append(String.format("Error on line %d in %s%n",
+                diagnostic.getLineNumber(),
+                diagnostic.getSource().toUri()));
+          }
           throw new CompilationException("Failed to compile: " + sourceFile.toString(), output.toString());
-//          for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-//            System.out.format("Error on line %d in %s%n",
-//                diagnostic.getLineNumber(),
-//                diagnostic.getSource().toUri());
-//          }
         }
 //        fileManager.close();
 //      } catch (IOException | ClassNotFoundException /*| InstantiationException | IllegalAccessException*/ exp) {
