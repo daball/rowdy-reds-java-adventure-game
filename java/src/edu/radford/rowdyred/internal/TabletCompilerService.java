@@ -85,4 +85,8 @@ public class TabletCompilerService {
     }
     return "Method name " + methodName + " not found in class " + this.compiledClass.getName() + ". Methods available:\n" + methodsAvailable;
   }
+  
+  public Object getField(String fieldName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+    return this.compiledClass.getField(fieldName).get(this.tabletInstance);
+  }
 }

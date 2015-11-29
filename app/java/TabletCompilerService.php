@@ -28,8 +28,12 @@ class TabletCompilerService {
   public function invoke($methodName, $parameters) {
     return $this->javaCompilerService->invokeMethod($methodName, $parameters);
   }
-}
 
-// $Player = new java("RowdyRed.Player");
-// echo $Player->inspect('something');
-// echo $Player->equip('something else');
+  public function getInstance() {
+    return $this->javaCompilerService->tabletInstance;
+  }
+
+  public function getClass() {
+    return $this->javaCompilerService->compiledClass;
+  }
+}
