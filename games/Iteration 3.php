@@ -259,10 +259,10 @@ $taxidermyRoom = array(
 $chessRoom = array(
   'name'                  => "Chess Room",
   'description'           => "You see a room with a chess board on the floor in front of you.",
-  'imageUrl'              => "chessRoomlit.jpg",
+  'imageUrl'              => "chessRoom.jpg",
   'dark'                  => true,
   'lamp.wind.imageUrl'    => "",
-  'lamp.unwind.imageUrl'  => "chessRoom.jpg",
+  'lamp.unwind.imageUrl'  => "darkRoom.jpg",
 );
 $vestibule = array(
   'name'         => "Vestibule",
