@@ -37,3 +37,5 @@ n
 bowl=leftHand;
 n
 rightHand.wind();
+d
+equip(backpack);
