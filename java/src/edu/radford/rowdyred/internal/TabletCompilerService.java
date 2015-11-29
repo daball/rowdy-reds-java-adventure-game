@@ -2,6 +2,7 @@ package edu.radford.rowdyred.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.*;
 import java.nio.file.Paths;
 
@@ -47,9 +48,9 @@ public class TabletCompilerService {
     + "\n"
       + "public class Tablet /*extends Scope*/ {\n"
       + "\n"
-      + "  private "//replace setout
+//      + "  private "//replace setout
       + "  public Tablet(/*Scope scope*/) {\n"
-      + "   System.out.setOut\n"
+//      + "   System.out.setOut\n"
 //      + "    //copy Scope to Tablet\n"
 //      + "    this.me = scope.me;\n"
 //      + "    this.room = scope.room;\n"

@@ -138,7 +138,8 @@ Router::route('/^\s*(?:me\s*.\s*){0,1}equip\s*\(\s*([\w$_]*[\w\d$_\.]*)\s*\)\s*;
 //inspect|look object || [me.]inspect(object);
 Router::route(array(
     '/^\s*(?:(?:inspect)|(?:look))(.*)$/i',
-    '/^(?:me\s*.\s*){0,1}\s*(?:inspect\s*\(\s*)([\w$_]+[\w\d$_]*)(?:\s*\)\s*;\s*)$/'
+    '/^(?:me\s*.\s*){0,1}\s*(?:inspect\s*\(\s*)([\w$_]+[\w\d$_]*)(?:\s*\)\s*;\s*)$/',
+    '/^\s*System\s*.\s*out\s*.\s*print(?:ln){0,1}\s*\(\s*([\w$_]+[\w\d$_]*)\s*\)\s*;\s*$/',
   ), function ($command, $code, $pattern, $matches) {
   $provided = $matches[1];
   if ($provided == "") $provided = 'room';
