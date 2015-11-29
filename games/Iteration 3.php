@@ -312,6 +312,27 @@ $courtyard = array(
   'name'         => "Courtyard",
   'description'  => "You are in the castle courtyard. This Courtyards provide great comforts which include light, privacy, security, and tranquillity. ",
   'imageUrl'     => "courtyard.jpg",
+  'items'       => array(
+    'javadocDragon'    => array(
+      'type'                    => 'note',
+      'name'                    => "javadoc",
+      'description'             => "Class Dragon\n" .
+                                   "public class Dragon\n" .
+                                   "extends Enemy\n\n" .
+                                   "Method Summary\n==============\n" .
+                                   "boolean            isFlying()\n" .
+                                   "                   Returns true if the dragon is flying\n" .
+                                   "boolean            isInhaling()\n" .
+                                   "                   Returns true if the dragon is inhaling so that it may breathe fire.\n" .
+                                   "boolean            isAlive()\n" .
+                                   "                   Returns true if the dragon is alive."
+    ),
+    'flower'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "flower",
+      'description'             => "It's a beautiful flower with a pleasant aroma.",
+    ),    
+  ),
 );
 $stable = array(
   'name'         => "Stable",
@@ -321,8 +342,23 @@ $stable = array(
     'tablet'       => array(
       'type'                    => "equipment",
       'name'                    => "tablet",
-      'description'             => "When equipped, the tablet allows you to type Java code in order to solve game puzzles.",
+      'description'             => "When equipped, the tablet allows you a place to type full Java methods.",
       'onEquip.description'     => "In order to use the tablet, click on the Tablet Code tab and type Java methods. Once you have your Java methods ready to run, go back to the Command Line tab and enter a method call.",
+    ),
+    'horseShoe'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "horseShoe",
+      'description'             => "It's a horse shoe.  You wonder if a horse threw it, or if it's just here for luck.",
+    ),
+    'saddle'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "saddle",
+      'description'             => "It's a well cared for and oiled saddle complete with a saddle blanket.",
+    ),
+    'whip'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "whip",
+      'description'             => "It's a horse whip.",
     ),
   ),
 );
@@ -330,6 +366,23 @@ $smithery = array(
   'name'         => "Smithery",
   'description'  => "You are in a smithery. Here the blacksmith would work with a forge making iron utensils, horseshoes, weapons and repairing armour.",
   'imageUrl'     => "smithery.jpg",
+  'items'        => array(
+    'hammer'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "hammer",
+      'description'             => "It's a good heavy hammer.",
+    ),
+    'anvil'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "anvil",
+      'description'             => "It's a well used anvil.",
+    ),
+    'sword'       => array(
+      'type'                    => "generalObject",
+      'name'                    => "sword",
+      'description'             => "It's a basic sword.",
+    ),
+  ),  
 );
 $balcony = array(
   'name'         => "Grand Balcony",
@@ -550,11 +603,26 @@ $alcove = array(
   'name'         => "Alcove",
   'description'  => "You are in a small alcove.  There is a large door to the south.",
   'imageUrl'     => "alcove.jpg",
+  'items'       => array(
+    'lockedDoor'  => array(
+      'type'        => "lockedDoor",
+      'name'        => "door",
+      'direction'   => Direction::$s,
+      'secret'  => "Goldilocks Sleeps",
+    ),
+  ),  
 );
 $treasury = array(
   'name'         => "Treasury Room",
   'description'  => "You are in a massive treasury room, and in front of you, guarding the treasure hoard, is a huge red dragon!",
   'imageUrl'     => "treasury.jpg",
+  'items'       => array(
+    'dragon'    => array(
+      'type'                    => 'dragon',
+      'name'                    => "dragon",
+      'description'             => "It's a massive red dragon!",
+    ),
+  ),
 );
 $rackRoom = array(
   'name'         => "Rack Room",
@@ -572,17 +640,36 @@ $boiler = array(
       'description'             => "A boiler room is such an odd place for a poster!  It's for the band \"The Doors\" for the album titled \"Full Circle\"",
     ),
   ),
-  
 );
 $portcullis = array(
   'name'         => "Portcullis",
   'description'  => "You are in a room with a portcullis (large gate) on the southern side.  You also see a winch on the wall.",
   'imageUrl'     => "portcullis.jpg",
+  'items'       => array(
+    'portcullis'  => array(
+      'type'        => "lockedDoor",
+      'name'        => "portcullis",
+      'direction'   => Direction::$s,
+      'secret'  => "arbitrary password",
+    ),
+    'crank'  => array(
+      'type'        => "generalObject",
+      'name'        => "crank",
+    ),
+  ),
 );
 $armory = array(
   'name'         => "Armory",
   'description'  => "You are in an armory. Knights used the the equipment in epic battles. ",
   'imageUrl'     => "armory_shield.jpg",
+  'items'       => array(
+    'shield'    => array(
+      'type'                    => 'generalObject',
+      'name'                    => "shield",
+      'description'             => "It's a beautiful black shield with a red incription of a dragon's head.",
+      'onAssign.room.imageUrl'  => "armory.jpg",
+    ),
+  ),
 );
 $wineCellar  = array(
   'name'         => "Wine Cellar",
