@@ -213,6 +213,8 @@ class Player extends GameObject
       if ($itemCurrentContainer != null)
         $itemCurrentContainer->getComponent('Container')->removeItem($item);
       $this->equipment->getComponent('Container')->insertItem($item);
+      if ($item->getName() == "backpack")
+        $this->backpack = $item;
       return $output;
     }
     return "";

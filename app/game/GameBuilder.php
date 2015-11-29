@@ -10,6 +10,7 @@ require_once __DIR__.'/../playable/index.php';
 
 use \Exception;
 use \components\Assignable;
+use \components\Container;
 use \components\Puzzle;
 use \playable\BasicContainer;
 use \playable\Key;
@@ -90,6 +91,9 @@ function assembleItemsIntoContainer($roomDefinition, $gameObject, $items) {
         break;
       case 'equipment':
         $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
+        break;
+      case 'backpack':
+        $container->insertItem(assembleBackpack($roomDefinition, $gameObject, $item));
         break;
       case 'lockableContainer':
         $container->insertItem(assembleLockableContainer($roomDefinition, $gameObject, $item));
@@ -261,6 +265,20 @@ function assembleEquipment($roomDefinition, $room, $item) {
         return $initialOnEquip($equippable) . "  " . $inspector->inspect();
       });
     }
+  });
+}
+
+/**
+ * Constructs an Equipment object based on the item definition.
+ *
+ * @param $room Room instance.
+ * @param $item Item definition (associative array)
+ **/
+function assembleBackpack($roomDefinition, $room, $item) {
+  return assembleEquipment($roomDefinition, $room, $item)->define(function ($equipment) use ($item) {
+    $container = new Container();
+    $container->setMaxItems(5);
+    $equipment->addComponent($container);
   });
 }
 

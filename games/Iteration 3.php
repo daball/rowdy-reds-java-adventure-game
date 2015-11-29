@@ -221,7 +221,8 @@ $servantsQuarters = array(
         'lamp'                    => array(
           'type'                    => 'lamp',
           'name'                    => 'lamp',
-          'description'             => "You found a lamp.  A lamp can light your way through dark places."
+          'description'             => "You found a lamp.  A lamp can light your way through dark places.",
+          'onAssign.room.imageUrl'  => "servantsQuarters.jpg",
         ),
       ),
     ),
