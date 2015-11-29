@@ -2,12 +2,10 @@ package edu.radford.rowdyred.puzzles;
 
 public class Dragon extends Enemy {
 
-	private static final int MAX_HEALTH = 1000;
 	private boolean flying, inhaling;
 	
-	public Dragon() {
-		super();
-		healthPoints = MAX_HEALTH;
+	public Dragon(int initialHealth) {
+		super(initialHealth);
 		flying = false;
 		inhaling = false;
 	}
