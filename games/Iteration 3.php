@@ -7,6 +7,8 @@ require_once __DIR__.'/../app/game/Direction.php';
 require_once __DIR__.'/../app/playable/index.php';
 require_once __DIR__.'/../app/components/index.php';
 
+use \components\Assignable;
+use \components\Puzzle;
 use \game\GameBuilder;
 use \game\Direction;
 use \game\Map;
@@ -196,7 +198,7 @@ $banquetHall = array(
       'name'                    => "poster",
       'description'             => "You examine the poster and are puzzled. It appears to be a poster for the band \"The Doors\" for their album \"Strange Days\"..." .
                                    "\n\nWhat in the world is a poster for The Doors doing in a medieval castle, and why on Earth is it in the banquet hall????",
-    ),   
+    ),
   ),
 );
 $backHallway = array(
@@ -331,7 +333,7 @@ $courtyard = array(
       'type'                    => "generalObject",
       'name'                    => "flower",
       'description'             => "It's a beautiful flower with a pleasant aroma.",
-    ),    
+    ),
   ),
 );
 $stable = array(
@@ -382,7 +384,7 @@ $smithery = array(
       'name'                    => "sword",
       'description'             => "It's a basic sword.",
     ),
-  ),  
+  ),
 );
 $balcony = array(
   'name'         => "Grand Balcony",
@@ -428,7 +430,7 @@ $drawing = array(
                                    "The queen, rooks, and bishops hold considerable power.  They are able to advance across all ranks of the board " .
                                    "in a single move.  Anyone who is able to advance all the ranks on the board in one move is bound to find something special."
     ),
-  ),  
+  ),
 );
 $observatory = array(
   'name'         => "Observatory",
@@ -482,7 +484,7 @@ $bathroom = array(
                                    "void               wind()\n" .
                                    "                   Powers the lamp so it will be lit for a short while."
     ),
-  ),  
+  ),
 );
 $corridorN = array(
   'name'         => "North End of Corridor",
@@ -544,7 +546,7 @@ $eTowerTop = array(
 //      'description'  => "It's a beautiful glass door which you clearly see opens to the outside.",
       'direction'   => Direction::$e,
       'secret'  => "Full Circle",
-    ),    
+    ),
   ),
 );
 $infirmary = array(
@@ -576,7 +578,7 @@ $cloakRoom = array(
       'description'             => "It's an old cloth cloak.",
       'onEquip.description'     => "You put on the old cloth cloak.  It makes you feel warm.",
     ),
-    
+
     'crystalCloak'     => array(
       'type'                    => "equipment",
       'name'                    => "crystalCloak",
@@ -596,8 +598,8 @@ $hallMirrors = array(
       'type'                    => 'backpack',
       'name'                    => "backpack",
       'description'             => "It is a Java backpack (Use like an Array)"
-        ),                                   
-    ),    
+        ),
+    ),
 );
 $alcove = array(
   'name'         => "Alcove",
@@ -610,7 +612,7 @@ $alcove = array(
       'direction'   => Direction::$s,
       'secret'  => "Goldilocks Sleeps",
     ),
-  ),  
+  ),
 );
 $treasury = array(
   'name'         => "Treasury Room",
@@ -774,7 +776,17 @@ GameBuilder::newGame($gameName)
     }));
   }))
   ->connectRooms($tapestryW,        Direction::$n,    $taxidermyRoom)
-  ->insertRoomAt($taxidermyRoom,    Direction::$n,    $chessRoom)
+  ->insertRoom(\game\assembleRoom($chessRoom)->define(function ($room) use ($chessRoom, $gameName) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) {
+      $puzzle->setHeaderCode(function ($puzzle) {
+        return "public ChessBoard board = new ChessBoard();\n";
+      });
+      $puzzle->setIsSolved(function ($puzzle, $javaTabletInstance) {
+        return $javaTabletInstance->board->isSolved();
+      });
+    }));
+  }))
+  ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
 
     // Iteration 2 Room Connections
   ->insertRoomAt($foyer,            Direction::$w,    $vestibule)

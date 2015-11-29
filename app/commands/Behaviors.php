@@ -320,9 +320,23 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*wind\s*\(\s*\)\s*;\s*$/', function
 });
 
 Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/', function ($command, $code, $pattern, $matches) {
+  $methodName = $matches[1];
+  $parameters = array();
   $output = "player trying to run a method call with " . var_export($matches, true) . "\n";
   $compiler = new TabletCompilerService();
-  $cls = $compiler->compile($code);
-  $output = $compiler->invoke($matches[1], array());
+  if ($room->hasComponent("Puzzle")) {
+    $code = $room->getComponent("Puzzle")->getHeaderCode() . $code;
+  }
+  $compiler->compile($code);
+  $cls = $compiler->getClass();
+  $instance = $compiler->getInstance();
+  $output = $compiler->invoke($methodName, $parameters);
+  if ($room->hasComponent("Puzzle")) {
+    $isSolved = $room->getComponent("Puzzle")->isSolved($instance);
+    if ($isSolved)
+      $output = "You have solved the puzzle in the room.  " . $output;
+    else
+      $output = "You ran some Java code but it didn't seem to have any effect.  " . $output;
+  }
   return $output;
 });

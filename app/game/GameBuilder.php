@@ -10,6 +10,7 @@ require_once __DIR__.'/../playable/index.php';
 
 use \Exception;
 use \components\Assignable;
+use \components\Puzzle;
 use \playable\BasicContainer;
 use \playable\Key;
 use \playable\Food;
