@@ -597,9 +597,9 @@ $hallMirrors = array(
   'imageUrl'     => "hallOfMirrors.jpg",
   'items'       => array(
     'backpack'       => array(
-      'type'                    => 'backpack',
+      'type'                    => 'equipment',
       'name'                    => "backpack",
-      'description'             => "It is a Java backpack (Use like an Array)"
+      'description'             => "It is a backpack.  You can use it like a Java array when equipped."
         ),
     ),
 );
