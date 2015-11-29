@@ -779,12 +779,20 @@ GameBuilder::newGame($gameName)
   }))
   ->connectRooms($tapestryW,        Direction::$n,    $taxidermyRoom)
   ->insertRoom(\game\assembleRoom($chessRoom)->define(function ($room) use ($chessRoom, $gameName) {
-    $room->addComponent((new Puzzle())->define(function ($puzzle) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($chessRoom) {
+      $puzzle->popEventHandler('headerCode');
       $puzzle->setHeaderCode(function ($puzzle) {
         return "public ChessBoard board = new ChessBoard();\n";
       });
-      $puzzle->setIsSolved(function ($puzzle, $javaTabletInstance) {
+      $puzzle->popEventHandler('beforeSolve');
+      $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
         return java_values($javaTabletInstance->board->isSolved());
+      });
+      $initialOnSolve = $puzzle->popEventHandler('solve');
+      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($chessRoom, $initialOnSolve) {
+        //setup the room connection here
+        //$puzzle->getParent()->connectRoom($d, $room);
+        return $initialOnSolve($puzzle, $javaTabletInstance);
       });
     }));
   }))

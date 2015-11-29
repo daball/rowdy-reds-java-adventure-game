@@ -335,11 +335,7 @@ Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/'
   $instance = $compiler->getInstance();
   $output = $compiler->invoke($methodName, $parameters);
   if ($room->hasComponent("Puzzle")) {
-    $isSolved = $room->getComponent("Puzzle")->isSolved($instance);
-    if ($isSolved)
-      $output = "You have solved the puzzle in the room.  " . $output;
-    else
-      $output = "You ran some Java code but it didn't seem to have any effect.  " . $output;
+    $output = $room->getComponent("Puzzle")->solve($instance) . "  " . $output;
   }
   return $output;
 });
