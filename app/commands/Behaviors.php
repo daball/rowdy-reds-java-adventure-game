@@ -114,6 +114,7 @@ Router::route('/^\s*(?:me\s*.\s*){0,1}equip\s*\(\s*([\w$_]*[\w\d$_\.]*)\s*\)\s*;
         $item = $hand->getComponent('Container')->getItemAt(0);
       else
         return "You cannot do that, your " . $hand->getName() . " is empty.";
+      break;
     case Resolver::PLAYER_BACKPACK_INDEX:
       $index = $matches[2];
       if ($resolution) {
@@ -190,7 +191,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*lock\s*\(\s*([\w$_]*[\w\d$_\.]*)\s
     case Resolver::PLAYER_RIGHT_HAND:
       $itemInHand = Resolver::resolveHandContents($resolver->result());
       if (!$itemInHand)
-        return "Your " . $resolution->getName() . " is empty.";
+        return "Your " . $keyResolution->getName() . " is empty.";
       else
         $resolution = $itemInHand;
   }
@@ -201,7 +202,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*lock\s*\(\s*([\w$_]*[\w\d$_\.]*)\s
     case Resolver::PLAYER_RIGHT_HAND:
       $keyInHand = Resolver::resolveHandContents($keyResolver->result());
       if (!$keyInHand)
-        return "Your " . $resolution->getName() . " is empty.";
+        return "Your " . $keyResolution->getName() . " is empty.";
       else
         $keyResolution = $keyInHand;
   }
@@ -227,7 +228,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*unlock\s*\(\s*([\w$_]*[\w\d$_\.]*)
     case Resolver::PLAYER_RIGHT_HAND:
       $itemInHand = Resolver::resolveHandContents($resolver->result());
       if (!$itemInHand)
-        return "Your " . $resolution->getName() . " is empty.";
+        return "Your " . $keyResolution->getName() . " is empty.";
       else
         $resolution = $itemInHand;
   }
@@ -238,7 +239,7 @@ Router::route('/^\s*([\w$_]+[\w\d$_]*)\s*\.\s*unlock\s*\(\s*([\w$_]*[\w\d$_\.]*)
     case Resolver::PLAYER_RIGHT_HAND:
       $keyInHand = Resolver::resolveHandContents($keyResolver->result());
       if (!$keyInHand)
-        return "Your " . $resolution->getName() . " is empty.";
+        return "Your " . $keyResolution->getName() . " is empty.";
       else
         $keyResolution = $keyInHand;
   }

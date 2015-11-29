@@ -171,9 +171,10 @@ class Container extends BaseComponent
   }
 
   public function findNestedItemByName($itemName) {
-    if (($item = $this->findItemByName($itemName)) != null)
+    if (($item = $this->findItemByName($itemName)) != null &&
+        (!$this->getParent() || !$this->getParent()->hasComponent('Openable') || !$this->getParent()->getComponent('Openable')->isClosed()))
       return $item;
-    else {//if ($this->getParent() && $this->getParent()->hasComponent('Container')) {
+    else {
       foreach ($this->getAllItems() as $searchable) {
         if ($searchable->hasComponent('Container')
         && ($item = $searchable->getComponent('Container')->findNestedItemByName($itemName)) != null) {

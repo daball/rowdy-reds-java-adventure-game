@@ -91,7 +91,7 @@ function assembleItemsIntoContainer($roomDefinition, $gameObject, $items) {
         $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
         break;
       case 'lockableContainer':
-        $container->insertItem(assembleEquipment($roomDefinition, $gameObject, $item));
+        $container->insertItem(assembleLockableContainer($roomDefinition, $gameObject, $item));
         break;
       case 'generalObject':
         $container->insertItem(assembleGeneralObject($roomDefinition, $gameObject, $item));
@@ -181,7 +181,18 @@ function assembleLockableContainer($roomDefinition, $room, $item) {
     $inspector = $lockableContainer->getComponent('Inspector');
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
-      return $item['description'];
+      if ($inspector->getParent()->getComponent("Openable")->isOpened()) {
+        $items = $inspector->getParent()->getComponent('Container')->getAllItems();
+        $saItems = array();
+        foreach($items as $value) { array_push($saItems, insertAOrAn($value->getName())); }
+        if (count($roomItems) > 0) {
+          $sItems = natural_language_join($saItems);
+          $output .= "  You see here $sItems.";
+        }
+        return $item['description'] . $output;
+      }
+      else
+        return $item['description'];
     });
     imageChanger($roomDefinition, $room, $item, $lockableContainer);
     $container = $room->getComponent("Container");
