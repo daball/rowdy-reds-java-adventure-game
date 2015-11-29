@@ -18,7 +18,10 @@ class TabletCompilerService {
     $cachePath = Path::combine(__DIR__, "..", "..", "__player_tablet_cache");
     if (DIRECTORY_SEPARATOR != "/")
       $cachePath = trim(str_replace("/", DIRECTORY_SEPARATOR, $cachePath), "\\");
-    $this->javaCompilerService = new java("edu.radford.rowdyred.internal.TabletCompilerService", session_id(), $cachePath, null);
+    $classPath = Path::combine(__DIR__, "..", "..", "java", "war-template", "WEB-INF", "lib", "edu.radford.rowdyred.jar");
+    if (DIRECTORY_SEPARATOR != "/")
+      $classPath = trim(str_replace("/", DIRECTORY_SEPARATOR, $classPath), "\\");
+    $this->javaCompilerService = new java("edu.radford.rowdyred.internal.TabletCompilerService", session_id(), $cachePath, $classPath, null);
   }
 
   public function compile($sourceCode) {

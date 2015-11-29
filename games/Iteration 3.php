@@ -6,6 +6,7 @@ require_once __DIR__.'/../app/game/GameBuilder.php';
 require_once __DIR__.'/../app/game/Direction.php';
 require_once __DIR__.'/../app/playable/index.php';
 require_once __DIR__.'/../app/components/index.php';
+require_once __DIR__.'/../app/java/TabletCompilerService.php';
 
 use \components\Assignable;
 use \components\Puzzle;
@@ -783,7 +784,7 @@ GameBuilder::newGame($gameName)
         return "public ChessBoard board = new ChessBoard();\n";
       });
       $puzzle->setIsSolved(function ($puzzle, $javaTabletInstance) {
-        return $javaTabletInstance->board->isSolved();
+        return java_values($javaTabletInstance->board->isSolved());
       });
     }));
   }))

@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 public class TabletCompilerService {
   public String phpSessionId;
   public String cachePath;
+  public String classPath;
   public String packageName;
   public String sourceCode;
   public Class<?> compiledClass;
@@ -29,9 +30,10 @@ public class TabletCompilerService {
   }
 
 
-  public TabletCompilerService(String phpSessionId, String cachePath, Object phpGameState) {
+  public TabletCompilerService(String phpSessionId, String cachePath, String classPath, Object phpGameState) {
     this.phpSessionId = phpSessionId;
     this.cachePath = cachePath;
+    this.classPath = classPath;
     this.packageName = "player_" + this.phpSessionId;
   }
 
@@ -45,6 +47,7 @@ public class TabletCompilerService {
 //    + "import edu.radford.rowdyred.game.*;\n"
 //    + "import edu.radford.rowdyred.items.*;\n"
 //    + "import edu.radford.rowdyred.obstacles.*;\n"
+    + "import edu.radford.rowdyred.puzzles.*;\n"
     + "\n"
       + "public class Tablet /*extends Scope*/ {\n"
       + "\n"
@@ -64,7 +67,7 @@ public class TabletCompilerService {
       + "  /* END PLAYER'S CODE */\n"
       + "}\n";//end class
     
-    this.compiledClass = InlineCompiler.compile(this.cachePath, this.packageName, "Tablet", sourceCode);
+    this.compiledClass = InlineCompiler.compile(this.cachePath, this.classPath, this.packageName, "Tablet", sourceCode);
     this.tabletInstance = this.compiledClass.newInstance();
 //    CompilerEngine engine = new CompilerEngine();
 //    this.compiledClass = engine.compile(this.packageName, "Tablet", this.sourceCode);
