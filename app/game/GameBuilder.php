@@ -96,6 +96,9 @@ function assembleItemsIntoContainer($roomDefinition, $gameObject, $items) {
       case 'generalObject':
         $container->insertItem(assembleGeneralObject($roomDefinition, $gameObject, $item));
         break;
+//      case 'backpack':
+//        $container->insertItem(assembleGeneralObject($roomDefinition, $gameObject, $item));
+//        break;
     }
   }
   return $container;
