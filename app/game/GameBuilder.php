@@ -170,7 +170,7 @@ function assembleFood($roomDefinition, $room, $item) {
 }
 
 /**
- * Constructs a General Object based on the item definition.
+ * Constructs a Lockable Container based on the item definition.
  *
  * @param $room Room instance.
  * @param $item Item definition (associative array)
