@@ -34,8 +34,8 @@ class Resolver
   const REGEX_PLAYER                = '/^me$/';
   const REGEX_PLAYER_LEFT_HAND      = '/^(?:me.){0,1}(leftHand)$/';
   const REGEX_PLAYER_RIGHT_HAND     = '/^(?:me.){0,1}(rightHand)$/';
-  const REGEX_PLAYER_BACKPACK       = '/^(?:me.){0,1}(backPack)$/';
-  const REGEX_PLAYER_BACKPACK_INDEX  = '/^(?:me.){0,1}(backPack)\[(\d+)\]$/';
+  const REGEX_PLAYER_BACKPACK       = '/^(?:me.){0,1}(backpack)$/';
+  const REGEX_PLAYER_BACKPACK_INDEX  = '/^(?:me.){0,1}(backpack)\[(\d+)\]$/';
 
   const REGEX_ROOM                  = '/^(room)$/';
 
@@ -167,6 +167,8 @@ class Resolver
         case self::PLAYER_RIGHT_HAND_ITEM:
         case self::PLAYER_BACKPACK_ITEM:
           return $this->matches()[2];
+        case self::PLAYER_BACKPACK_INDEX:
+          return $backpack->getItemAt($this->matches()[2]);
         case self::NO_RESULT:
         default:
           return null;
