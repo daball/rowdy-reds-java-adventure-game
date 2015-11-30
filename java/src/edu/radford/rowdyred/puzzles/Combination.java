@@ -3,7 +3,7 @@ package edu.radford.rowdyred.puzzles;
 import java.util.Random;
 
 public class Combination {
-  public static final int START_VALUE = new Random().nextInt(1000);
+  private final int START_VALUE = new Random().nextInt(1000);
   private boolean isOpen = false;
   
   public boolean open(int c1, int c2, int c3) {

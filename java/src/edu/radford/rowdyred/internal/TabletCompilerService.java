@@ -63,6 +63,8 @@ public class TabletCompilerService {
       + "public Portcullis portcullis;"
       + "public Crank crank;"
       + "public Handle handle;"
+      + "public Combination safe;"
+      + "public int c1, c2, c3;"
 //      + "  private "//replace setout
       + "  public Tablet(/*Scope scope*/) {"
       + constructorCode

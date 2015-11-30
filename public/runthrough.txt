@@ -59,6 +59,15 @@ public void raisePortcullis() {
   }
 }
 
+public void enterCombination() {
+    c1 = c1 + 143;
+    c2 = c1 * 3 - 77;
+    c3 = c1 * c2;
+    c2 = c2 / 2 - c1;
+    c3 += c1 + c2;
+    safe.open(c1, c2, c3);
+}
+
 public void fightDragon() {
   while (dragon.isAlive()) {
     if (me.getHealthPoints() <= 30) {

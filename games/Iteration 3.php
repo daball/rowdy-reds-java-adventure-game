@@ -692,6 +692,25 @@ $cellarStorage = array(
   'name'         => "Cellar Storage Room",
   'description'  => "You are in a cellar storage room of sorts.",
   'imageUrl'     => "cellarStorage.jpg",
+  'items'       => array(
+    'safe'  => array(
+      'type'                    => 'lockableContainer',
+      'name'                    => "safe",
+      'secret'                  => "o[sidfgj120454121hosidfjh]osidf&^%*&%*jiosdfjibosdfjoisdj",
+      'description'             => "It's a decent sized heavy safe.  There's three combination digits on there, but you can't see the numbers for some reason. " .
+                                   "You can only see ??? where the numbers are supposed to be. " .
+                                   "They are inscribed as:\n\nint c1 = ??? , c2 = ???, c3 = ???;  // combination digits",
+//      'onOpen.room.imageUrl'    => "cellarStorage_crossbow.jpg",
+      'items'                   => array(
+        'lamp'                    => array(
+          'type'                    => 'generalObject',
+          'name'                    => 'crossbow',
+          'description'             => "It's an awesome looking magical crossbow!  There's no bolts needed with this crossbow, as it fires magical bolts.",
+          'onAssign.room.imageUrl'  => "cellarStorage.jpg",
+        ),
+      ),
+    ),
+  ),  
 );
 $limbo = array(
   'name'         => "Limbo",
@@ -929,6 +948,33 @@ GameBuilder::newGame($gameName)
   ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
   ->connectRooms($boiler,           Direction::$s,    $portcullis)
   ->insertRoomAt($portcullis,       Direction::$s,    $armory)
-  ->insertRoomAt($wineCellar,       Direction::$s,    $cellarStorage)
+  ->insertRoom(\game\assembleRoom($cellarStorage)->define(function ($room) use ($cellarStorage, $gameName) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($cellarStorage) {
+      $puzzle->popEventHandler('headerCode');
+      $puzzle->setHeaderCode(function ($puzzle) {
+        return "safe = new Combination();\n" .
+               "c1 = safe.getStart();\n" .
+               "c2 = 0;\n" .
+               "c3 = 0;\n";
+      });
+      $puzzle->popEventHandler('beforeSolve');
+      $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
+        return java_values($javaTabletInstance->safe->isOpen());
+      });
+      $initialOnSolve = $puzzle->popEventHandler('solve');
+      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($cellarStorage, $initialOnSolve) {
+        $room = $puzzle->getParent();
+        $container = $room->getComponent("Container");
+        $safe = $container->findItemByName("safe");
+        $lockable = $safe->getComponent("Lockable");
+        $openable = $safe->getComponent("Openable");
+        $lockable->setUnlocked();
+        $openable->setOpened();
+//        $room->setImageUrl('cellarStorage.jpg');
+        return $initialOnSolve($puzzle, $javaTabletInstance);
+      });
+    }));
+  }))
+  ->connectRooms($wineCellar,       Direction::$s,    $cellarStorage)
 
   ->setSpawnPoint('Castle Entrance');
