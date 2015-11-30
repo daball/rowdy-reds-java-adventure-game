@@ -691,6 +691,17 @@ $limbo = array(
   'description'  => "You are floating in limbo.  The feeling of death is all around you, but, you feel that you may still have a way.  Perhaps you have another chance?",
   'imageUrl'     => "limbo.jpg",
 );
+$allPuzzleHeaders = "ChessBoard chessBoard;\n" .
+                    "Dragon dragon;\n" .
+                    "Player me;\n" .
+                    "Salve salve;\n" .
+                    "Weapon sword;\n" .
+                    "Shield shield;\n" .
+                    "Weapon crossbow;\n" .
+                    "String key = \"efsdg908hn3rv0tyobri7oirgfoli\";\n" .
+                    "Portcullis portcullis;\n" .
+                    "Crank crank;\n" .
+                    "Handle handle;\n"
 
 GameBuilder::newGame($gameName)
   ->insertRoom($forest)
@@ -788,7 +799,8 @@ GameBuilder::newGame($gameName)
     $room->addComponent((new Puzzle())->define(function ($puzzle) use ($chessRoom, $hallMirrors) {
       $puzzle->popEventHandler('headerCode');
       $puzzle->setHeaderCode(function ($puzzle) {
-        return "public ChessBoard board = new ChessBoard();\n";
+        return $allPuzzleHeaders .
+               "chessBoard = new ChessBoard();\n";
       });
       $puzzle->popEventHandler('beforeSolve');
       $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
@@ -853,7 +865,30 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($hallMirrors,      Direction::$e,    $boiler)
   ->insertRoomAt($alcove,           Direction::$s,    $treasury)
   ->insertRoomAt($boiler,           Direction::$e,    $wineCellar)
-  ->insertRoomAt($boiler,           Direction::$s,    $portcullis)
+  ->insertRoom(\game\assembleRoom($portcullis)->define(function ($room) use ($portcullis, $gameName) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($portcullis) {
+      $puzzle->popEventHandler('headerCode');
+      $puzzle->setHeaderCode(function ($puzzle) {
+        return $allPuzzleHeaders .               
+               "portcullis = new Portcullis(key);\n" .
+               "crank = new Crank(portcullis, key);\n" .
+               "handle = new Handle();\n"
+      });
+      $puzzle->popEventHandler('beforeSolve');
+      $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
+        return java_values($javaTabletInstance->board->isSolved());
+      });
+      $initialOnSolve = $puzzle->popEventHandler('solve');
+      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnSolve) {
+        //setup the room connection here
+//        $puzzle->getParent()->connectToRoom("down", $hallMirrors['name']);
+//        $puzzle->getParent()->setImageUrl('chessRoom_stairs.jpg');
+        return $initialOnSolve($puzzle, $javaTabletInstance);
+      });
+    }));
+  }))
+  ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
+  ->connectRooms($boiler,           Direction::$s,    $portcullis)
   ->insertRoomAt($portcullis,       Direction::$s,    $armory)
   ->insertRoomAt($wineCellar,       Direction::$s,    $cellarStorage)
 
