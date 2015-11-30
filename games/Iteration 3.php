@@ -685,9 +685,14 @@ $cellarStorage = array(
   'description'  => "You are in a cellar storage room of sorts.",
   'imageUrl'     => "cellarStorage.jpg",
 );
+$limbo = array(
+  'name'         => "Limbo",
+  'description'  => "You are floating in limbo.  The feeling of death is all around you, but, you feel that you may still have a way.  Perhaps you have another chance?",
+  'imageUrl'     => "limbo.jpg",
+);
 
 GameBuilder::newGame($gameName)
-->insertRoom($forest)
+  ->insertRoom($forest)
   ->insertRoomAt($forest,           Direction::$n,    $castleEntrance)
   ->insertRoomAt($castleEntrance,   Direction::$n,    $foyer)
   ->insertRoomAt($foyer,            Direction::$n,    $tapestryE)
@@ -791,13 +796,21 @@ GameBuilder::newGame($gameName)
       $initialOnSolve = $puzzle->popEventHandler('solve');
       $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($chessRoom, $initialOnSolve) {
         //setup the room connection here
-        //$puzzle->getParent()->connectRoom($d, $room);
+        $puzzle->getParent()->connectRoom($d, $room);
+        $puzzle->getParent()->setImageUrl($item['onAssign.room.imageUrl'])->setImageUrl('chessRoom_stairs.jpg');
         return $initialOnSolve($puzzle, $javaTabletInstance);
       });
     }));
   }))
   ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
 
+  ->insertRoom($limbo)
+  ->oneWayConnectRoom($limbo,       Direction::$n,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$e,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$s,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$w,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$u,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$d,    $forest)
     // Iteration 2 Room Connections
   ->insertRoomAt($foyer,            Direction::$w,    $vestibule)
   ->insertRoomAt($vestibule,        Direction::$w,    $wTowerBase)
@@ -830,7 +843,8 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($pantry,           Direction::$w,    $pantryStorage)
   ->insertRoomAt($library,          Direction::$e,    $cloakRoom)
   ->connectRooms($cloakRoom,        Direction::$n,    $tapestryW)
-  ->insertRoomAt($chessRoom,        Direction::$d,    $hallMirrors)
+//  ->insertRoomAt($chessRoom,        Direction::$d,    $hallMirrors)
+  ->insertRoom($hallMirrors)
 
   // Iteration 3 Lower Floor:
   ->insertRoomAt($hallMirrors,      Direction::$w,    $alcove)
