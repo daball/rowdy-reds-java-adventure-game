@@ -49,7 +49,7 @@ equip(backpack);
 
 public void solveChessPuzzle() {
   for (int i = 1; i <= 8; i++)
-    board.stepOnRank(i);
+    chessBoard.stepOnRank(i);
 }
 
 public void fightDragon() {
