@@ -37,5 +37,35 @@ n
 bowl=leftHand;
 n
 rightHand.wind();
+tablet.solveChessPuzzle();
 d
 equip(backpack);
+
+
+
+
+
+//Solutions in tablet:
+
+public void solveChessPuzzle() {
+  for (int i = 1; i <= 8; i++)
+    board.stepOnRank(i);
+}
+
+public void fightDragon() {
+  while (dragon.isAlive()) {
+    if (me.getHealthPoints() <= 30) {
+    me.heal(salve);
+    }
+    else if (dragon.isInhaling()) {
+    me.block(shield);
+    }
+    else if (dragon.isFlying()) {
+    me.attack(dragon, crossbow);
+    }
+    else {
+    me.attack(dragon, sword);
+    }
+  }
+}
+

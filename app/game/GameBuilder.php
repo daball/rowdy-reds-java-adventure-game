@@ -417,6 +417,23 @@ class GameBuilder
     // }
     return $this;
   }
+  
+  public function oneWayConnectRoom($roomName1, $room1Direction, $roomName2)
+  {
+    if (is_array($roomName1)) $roomName1 = $roomName1['name'];
+    if (is_a($roomName1, "\game\Room")) $roomName1 = $roomName1->getName();
+    if (is_array($roomName2)) $roomName2 = $roomName2['name'];
+    if (is_a($roomName2, "\game\Room")) $roomName2 = $roomName2->getName();
+    $room1 = $this->game->getRoom($roomName1);
+    if ($room1 == null)
+      throw new Exception("Room '$roomName1' not found");
+    $room2 = $this->game->getRoom($roomName2);
+    if ($room2 == null)
+      throw new Exception("Room '$roomName2' not found");
+    $room1Direction = Direction::cardinalDirection($room1Direction);
+    $room1->getDirection($room1Direction)->setNextRoom($room2);
+    return $this;
+  }
 
   public function insertRoomAt($existingRoom, $direction, $newRoom)
   {
