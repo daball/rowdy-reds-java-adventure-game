@@ -259,10 +259,9 @@ function assembleEquipment($roomDefinition, $room, $item) {
         $inspector = $equipment->getComponent('Inspector');
         $initialOnInspect = $inspector->popEventHandler('inspect');
         $inspector->onInspect(function ($inspector) use ($item, $initialOnInspect) {
-          return $initialOnInspect($inspector) . "  " . $item['onEquip.description'];
+          return $item['onEquip.description'];
         });
-
-        return $initialOnEquip($equippable) . "  " . $inspector->inspect();
+        return /*$initialOnEquip($equippable) . "  " .*/ $inspector->inspect();
       });
     }
   });
@@ -279,6 +278,27 @@ function assembleBackpack($roomDefinition, $room, $item) {
     $container = new Container();
     $container->setMaxItems(5);
     $equipment->addComponent($container);
+    $equippable = $equipment->getComponent('Equippable');
+    $initialOnEquip = $equippable->popEventHandler('equip');
+    $equippable->onEquip(function ($equippable) use ($item, $initialOnEquip) {
+      $equipOutput = $initialOnEquip($equippable);
+      $equipment = $equippable->getParent();
+      $inspector = $equipment->getComponent('Inspector');
+      $initialOnInspect = $inspector->popEventHandler('inspect');
+      $inspector->onInspect(function ($inspector) use ($item, $initialOnInspect) {
+        $container = $inspector->getParent()->getComponent("Container");
+        $output = "";
+        foreach ($container->getAllItems() as $key => $value) {
+          $output .= "  backpack[$key] = ";
+          if ($value) $output .= $value->getName() . ";";
+          else $output .= "null;";
+          $output .= "\n";
+        }
+        $output = $initialOnInspect($inspector) . "  The contents of your backpack are:\n" . $output;
+        return $output;
+      });
+      return $equipOutput;
+    });
   });
 }
 

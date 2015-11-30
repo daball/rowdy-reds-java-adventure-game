@@ -31,7 +31,10 @@ class Assignable extends BaseComponent
         $yoursOrTheirs = "the";
         if ($container && ($container->getName() == 'leftHand' || $container->getName() == 'rightHand' || $container->getName() == 'backpack'))
           $yoursOrTheirs = "your";
-        return "The " . $item->getName() . " has been assigned to $yoursOrTheirs " . $newTarget->getName() . ".";
+        if ($container && $container->getName() == 'backpack')
+          return "The " . $item->getName() . " has been assigned to $yoursOrTheirs " . $newTarget->getName() . " into slot $index.";
+        else
+          return "The " . $item->getName() . " has been assigned to $yoursOrTheirs " . $newTarget->getName() . ".";
         // return "You $item->getName() has replaced the $oldItem->getName() in your $newTarget->getName().";
       });
       $assignable->onRefuseAssign(function ($assignable, $oldTarget, $newTarget, $index) {

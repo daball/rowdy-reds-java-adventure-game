@@ -32,9 +32,28 @@ Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*([\w\d$_.\[\]]+)\s*;\s*$/', function 
   $source = $sourceResolver->resolve();
 
   $targetResolver = Resolver::what($target);
-  if ($targetResolver->result() == Resolver::NO_RESULT)
-    return noResult($target);
-  $target = $targetResolver->resolve();
+  switch ($targetResolver->result()) {
+    case Resolver::NO_RESULT:
+      return noResult($target);
+    case Resolver::PLAYER_BACKPACK:
+    case Resolver::PLAYER_BACKPACK_INDEX:
+      if (!GameState::getInstance()->getPlayer()->hasEquipmentItem("backpack"))
+        return noResult($target);
+      $target = GameState::getInstance()->getPlayer()->getBackpack();
+      if ($targetResolver->result() == Resolver::PLAYER_BACKPACK_INDEX) {
+        $index = $targetResolver->resolveBackpackIndex();
+      }
+      break;
+    default:
+      $target = $targetResolver->resolve();
+  }
+  if ($target->getName() == "backpack" && !GameState::getInstance()->getPlayer()->hasEquipmentItem("backpack"))
+    return "You must equip the " . $target->getName() . " first.";
+  if ($source->getName() == "backpack" && !GameState::getInstance()->getPlayer()->hasEquipmentItem("backpack"))
+    return "You must equip the " . $target->getName() . " first.";
+  if ($targetResolver->result() == Resolver::PLAYER_BACKPACK
+    || $sourceResolver->result() == Resolver::PLAYER_BACKPACK)
+    return "You must use the backpack like an array, as in backpack[0], backpack[1], and so on. The backpack will only hold 5 items.";
 
   //special condition: when both sides of the = are the same item name within the same container
   if ($target->getName() == $source->getName()) {
@@ -67,10 +86,6 @@ Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*([\w\d$_.\[\]]+)\s*;\s*$/', function 
       $right->setItemAt(0, $leftItem);
       return "The contents of your hands were swapped.";
   }
-
-  //backpack index condition
-  if ($targetResolver->result() == Resolver::PLAYER_BACKPACK_INDEX)
-    $index = $matches[2];
 
   //resolve item if leftHand or rightHand is the source
   switch ($sourceResolver->result()) {
@@ -155,7 +170,12 @@ Router::route(array(
       $provided = $resolution->getName();
       $inspector = $resolution->getComponent('Inspector');
       $where = $resolution->getContainer()->getName();
-      return "The $provided is in your $where.  " . $inspector->inspect();
+      if ($resolver->result() == Resolver::PLAYER_BACKPACK_ITEM) {
+        $index = $resolver->resolveBackpackIndex();
+        return "The $provided is in slot $index of your $where.  " . $inspector->inspect();
+      }
+      else
+        return "The $provided is in your $where.  " . $inspector->inspect();
     case Resolver::PLAYER_EQUIPMENT_ITEM:
       $player = GameState::getInstance()->getPlayer();
       return "You have equipped the $provided.  " . $player->getEquipmentItem($provided)->getComponent('Inspector')->inspect();

@@ -597,11 +597,12 @@ $hallMirrors = array(
   'imageUrl'     => "hallofMirrors.jpg",
   'items'       => array(
     'backpack'       => array(
-      'type'                    => 'equipment',
+      'type'                    => 'backpack',
       'name'                    => "backpack",
-      'description'             => "It is a backpack.  You can use it like a Java array when equipped."
-        ),
+      'description'             => "It is a backpack.  You can use it like a Java array when equipped.",
+      'onEquip.description'     => "You have equipped the backpack. You can use it like a Java array.",
     ),
+  ),
 );
 $alcove = array(
   'name'         => "Alcove",
