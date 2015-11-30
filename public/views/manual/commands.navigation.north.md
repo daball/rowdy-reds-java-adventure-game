@@ -1,7 +1,6 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/commands">Commands</a></li>
-  <li><a href="#/docs/navigation">Navigation</a></li>
   <li class="active">North</li>
 </ol>
 
@@ -17,3 +16,11 @@ Navigate north to access other rooms, or a wall.
     NORTH
     moveNorth();
     me.moveNorth();
+
+### Parameters
+
+<dl>
+  <dt>northCode</dt>
+  <dd>An integer indicating the north code for the application.</dd>
+</dl>
+

@@ -4,6 +4,20 @@
   <li class="active">Help</li>
 </ol>
 
-## Help
+## HELP
 
-help menu that displays a list of commands the player can use in the game
+### Description
+
+Help menu displays a list of commands the player can use in the game.
+
+### Syntax
+
+    HELP
+
+
+### Parameters
+
+<dl>
+  <dt>helpCode</dt>
+  <dd>An integer indicating the help code for the application.</dd>
+</dl>

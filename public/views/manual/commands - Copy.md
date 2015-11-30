@@ -16,7 +16,7 @@
 
 - [me.leftHand](#/docs/commands.me.leftHand)
 - [me.rightHand](#/docs/commands.me.rightHand)
-
+- [me.backpack](#/docs/commands.me.backpack)
 
 ### Player Navigation
 

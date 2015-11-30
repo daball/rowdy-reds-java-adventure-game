@@ -13,3 +13,11 @@ Pick up backpack to store other objects inside.
 ### Syntax:
 
     me.equip(backpack);
+
+### Parameters
+
+<dl>
+  <dt>equipCode</dt>
+  <dd>An integer indicating the equip code for the application.</dd>
+</dl>
+

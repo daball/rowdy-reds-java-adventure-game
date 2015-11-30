@@ -1,7 +1,6 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/commands">Commands</a></li>
-  <li><a href="#/docs/navigation">Navigation</a></li>
   <li class="active">South</li>
 </ol>
 
@@ -17,3 +16,12 @@ Navigate south to access other rooms, or a wall.
     SOUTH
     moveSouth();
     me.moveSouth();
+
+
+### Parameters
+
+<dl>
+  <dt>southCode</dt>
+  <dd>An integer indicating the south code for the application.</dd>
+</dl>
+
