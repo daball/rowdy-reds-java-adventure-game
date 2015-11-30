@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -93,11 +94,12 @@ public class InlineCompiler {
         } else {
           fileManager.close();
           for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-            output.append(String.format("Error on line %d in %s%n",
+            output.append(String.format("Error on line %d: %s",
                 diagnostic.getLineNumber(),
-                diagnostic.getSource().toUri()));
+                //diagnostic.getSource().toUri(),
+                diagnostic.getMessage(Locale.ENGLISH)));
           }
-          throw new CompilationException("Failed to compile: " + sourceFile.toString(), output.toString());
+          throw new CompilationException("Failed to compile", output.toString());
         }
 //        fileManager.close();
 //      } catch (IOException | ClassNotFoundException /*| InstantiationException | IllegalAccessException*/ exp) {

@@ -7,6 +7,7 @@ require_once __DIR__.'/../app/game/Direction.php';
 require_once __DIR__.'/../app/playable/index.php';
 require_once __DIR__.'/../app/components/index.php';
 require_once __DIR__.'/../app/java/TabletCompilerService.php';
+require_once __DIR__.'/../app/util/Resolver.php';
 
 use \components\Assignable;
 use \components\Puzzle;
@@ -19,6 +20,7 @@ use \playable\Key;
 use \playable\Food;
 use \playable\LockedDoor;
 use \playable\Dog;
+use \util\Resolver;
 
 /* SIMPLE ROOM DEFINITIONS */
 $gameName = pathinfo(__FILE__)['filename'];
@@ -550,6 +552,11 @@ $eTowerTop = array(
       'secret'  => "Full Circle",
     ),
   ),
+  'puzzleReward' => array(
+    'type'        => "generalObject",
+    'name'        => "magicSword",
+    'description' => "Beats the shit out of a dragon.",
+  ),
 );
 $infirmary = array(
   'name'         => "Infirmary",
@@ -825,7 +832,40 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($grandHall,        Direction::$n,    $grandStaircase)
   ->insertRoomAt($grandStaircase,   Direction::$u,    $balcony)
   ->insertRoomAt($servantsQuarters, Direction::$n,    $eTowerBase)
-  ->insertRoomAt($eTowerBase,       Direction::$u,    $eTowerTop)
+  ->insertRoom(\game\assembleRoom($eTowerTop)->define(function ($room) use ($eTowerTop, $gameName) {
+    $container = $room->getComponent("Container");
+    $westDoor = $container->findItemByName("westDoor");
+    $westDoorInitialOnUnlock = $westDoor->getComponent("Lockable")->popEventHandler('unlock');
+    $westDoor->getComponent("Lockable")->onUnlock(function ($lockable) use ($westDoorInitialOnUnlock) {
+      $lockable->publish("TheDoorsPuzzle", $lockable->getParent()->getName());
+      $westDoorInitialOnUnlock($lockable);
+    });
+    $eastDoor = $container->findItemByName("eastDoor");
+    $eastDoorInitialOnUnlock = $eastDoor->getComponent("Lockable")->popEventHandler('unlock');
+    $eastDoor->getComponent("Lockable")->onUnlock(function ($lockable) use ($eastDoorInitialOnUnlock) {
+      $lockable->publish("TheDoorsPuzzle", $lockable->getParent()->getName());
+      $eastDoorInitialOnUnlock($lockable);
+    });
+    $northDoor = $container->findItemByName("northDoor");
+    $northDoorInitialOnUnlock = $eastDoor->getComponent("Lockable")->popEventHandler('unlock');
+    $northDoor->getComponent("Lockable")->onUnlock(function ($lockable) use ($northDoorInitialOnUnlock) {
+      $lockable->publish("TheDoorsPuzzle", $lockable->getParent()->getName());
+      $northDoorInitialOnUnlock($lockable);
+    });
+    $doorsToGo = 3;
+    $room->subscribe("TheDoorsPuzzle", function ($sender, $queue, $message) use ($room, $eTowerTop, &$doorsToGo) {
+      $doorsToGo--;
+      if ($doorsToGo > 0) {
+        $room->publish("System.out", "$doorsToGo doors to go.");
+      }
+      else if ($doorsToGo == 0) {
+        $container = $room->getComponent("Container");
+        $container->insertItem(assembleGeneralObject($eTowerTop, $room, $item));
+        $room->publish("System.out", "You have solved the puzzle.  What's that you see over there?");
+      }
+    });
+  }))
+  ->connectRooms($eTowerBase,       Direction::$u,    $eTowerTop)
 
   // Second Floor:
   ->insertRoomAt($balcony,          Direction::$e,    $drawing)
@@ -863,14 +903,26 @@ GameBuilder::newGame($gameName)
       });
       $puzzle->popEventHandler('beforeSolve');
       $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
-        return java_values($javaTabletInstance->portcullis->isRaised());
+        $resolver = $this->resolve("handle");
+        return (/*$resolver->result() &&*/ java_values($javaTabletInstance->portcullis->isRaised()));
       });
       $initialOnSolve = $puzzle->popEventHandler('solve');
       $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnSolve) {
-        //setup the room connection here
-//        $puzzle->getParent()->connectToRoom("down", $hallMirrors['name']);
-//        $puzzle->getParent()->setImageUrl('chessRoom_stairs.jpg');
+        $room = $puzzle->getParent();
+        $container = $room->getComponent("Container");
+        $door = $container->findItemByName("portcullis");
+        $lockable = $door->getComponent("Lockable");
+        $openable = $door->getComponent("Openable");
+        $lockable->setUnlocked();
+        $openable->setOpened();
+        $room->setImageUrl('portcullis_open.jpg');
         return $initialOnSolve($puzzle, $javaTabletInstance);
+      });
+      $initialOnRefuseSolve = $puzzle->popEventHandler('refuseSolve');
+      $puzzle->onRefuseSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnRefuseSolve) {
+        // if (!$resolver->result())
+        //   return "It looks like there is a place for a handle.  You can't possibly turn the crank without a handle.";
+        return $initialOnRefuseSolve($puzzle, $javaTabletInstance);
       });
     }));
   }))
