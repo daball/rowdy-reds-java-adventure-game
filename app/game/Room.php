@@ -72,7 +72,7 @@ class Room extends GameObject
     if (is_a($nextRoom, '\game\Room')) $nextRoom = $nextRoom->getName();
     $direction = Direction::cardinalDirection($direction);
     $this->getDirection($direction)->setNextRoomName($nextRoom);
-    GameState::getInstance()->getRoom($nextRoom)->getDirection(Direction::oppositeDirection($direction))->setNextRoomName($this->getName());
+    GameState::getInstance()->getGame()->getRoom($nextRoom)->getDirection(Direction::oppositeDirection($direction))->setNextRoomName($this->getName());
   }
 
 
