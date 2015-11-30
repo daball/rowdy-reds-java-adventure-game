@@ -69,9 +69,10 @@ class Room extends GameObject
   }
 
   public function connectToRoom($direction, $nextRoom) {
+    if (is_a($nextRoom, '\game\Room')) $nextRoom = $nextRoom->getName();
     $direction = Direction::cardinalDirection($direction);
-    $this->getDirection($direction)->setNextRoomName($nextRoom->getName());
-    $nextRoom->getDirection(Direction::oppositeDirection($direction))->setNextRoomName($this->getName());
+    $this->getDirection($direction)->setNextRoomName($nextRoom);
+    GameState::getInstance()->getRoom($nextRoom)->getDirection(Direction::oppositeDirection($direction))->setNextRoomName($this->getName());
   }
 
 
