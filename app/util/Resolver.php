@@ -84,9 +84,6 @@ class Resolver
     //backpack[i]
     if (($flags & self::PLAYER_BACKPACK_INDEX) && preg_match(self::REGEX_PLAYER_BACKPACK_INDEX, $question, $matches))
       return new Resolver(self::PLAYER_BACKPACK_INDEX, $matches);
-    //backpack
-    if (($flags & self::PLAYER_BACKPACK) && preg_match(self::REGEX_PLAYER_BACKPACK, $question, $matches))
-      return new Resolver(self::PLAYER_BACKPACK, $matches);
     //me
     if (($flags & self::PLAYER) && preg_match(self::REGEX_PLAYER, $question, $matches))
       return new Resolver(self::PLAYER, $matches);
@@ -105,6 +102,9 @@ class Resolver
       $equipment = $player->getEquipment();
       $room = $gameState->getPlayerRoom();
 
+      //backpack
+      if (($flags & self::PLAYER_BACKPACK) && preg_match(self::REGEX_PLAYER_BACKPACK, $question, $matches) && $backpack)
+        return new Resolver(self::PLAYER_BACKPACK, $matches);
       //n,s,e,w,u,d,north,south,east,west,up,down
       if (($flags & self::ROOM_DIRECTION) && ($direction = Direction::cardinalDirection($question)))
         return new Resolver(self::ROOM_DIRECTION, array($question, $direction, $room->getDirection($direction)));
