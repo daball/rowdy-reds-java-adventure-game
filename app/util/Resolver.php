@@ -168,7 +168,7 @@ class Resolver
         case self::PLAYER_BACKPACK_ITEM:
           return $this->matches()[2];
         case self::PLAYER_BACKPACK_INDEX:
-          return $backpack->getItemAt($this->matches()[2]);
+          return $backpack->getComponent("Container")->getItemAt($this->matches()[2]);
         case self::NO_RESULT:
         default:
           return null;
@@ -182,10 +182,10 @@ class Resolver
     if ($gameState) {
       $player = $gameState->getPlayer();
       $rightHand = null;
-      if ($whichHand & Resolver::PLAYER_LEFT_HAND) {
+      if ($whichHand & self::PLAYER_LEFT_HAND) {
         $hand = $player->getLeftHand();
       }
-      else if ($whichHand & Resolver::PLAYER_RIGHT_HAND) {
+      else if ($whichHand & self::PLAYER_RIGHT_HAND) {
         $hand = $player->getRightHand();
       }
       if ($hand && $hand->getComponent('Container')->hasItemAt(0)) {
@@ -194,5 +194,27 @@ class Resolver
       return $item;
     }
     return self::NO_RESULT;
+  }
+
+  public function resolveBackpackIndex() {
+    if ($this->result() == self::PLAYER_BACKPACK_INDEX)
+      return $this->matches()[2];
+    else if ($this->result() == self::PLAYER_BACKPACK_ITEM) {
+      $backpack = GameState::getInstance()->getPlayer()->getBackpack();
+      $item = $itemCandidate = $backpack->getComponent('Container')->findNestedItemByName($this->matches()[1]);
+      while ($itemCandidate && $itemCandidate->getContainer() && $itemCandidate->getContainer()->getName() != "backpack")
+      {
+        $itemCandidate = $itemCandidate->getContainer();
+      }
+      if ($itemCandidate) {
+        $item = $itemCandidate;
+        return $backpack->getComponent("Container")->findItemIndexByName($item->getName());
+      }
+    }
+    return -1;
+  }
+
+  public function resolveBackpackItem() {
+    return GameState::getInstance()->getPlayer()->getBackpack()->getComponent("Container")->getItemAt($this->resolveBackpackIndex());
   }
 }
