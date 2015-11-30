@@ -11,8 +11,11 @@ public class PortcullisTest {
     String key = "efsdg908hn3rv0tyobri7oirgfoli";
     Portcullis portcullis = new Portcullis(key);
     Crank crank = new Crank(portcullis, key);
+    Handle handle = new Handle();
     
+    crank.setHandle(handle);
     while (!portcullis.isRaised()) {
+      assertFalse(portcullis.isRaised());
       crank.turn();
     }
     assertTrue(portcullis.isRaised());

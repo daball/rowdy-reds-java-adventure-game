@@ -17,9 +17,10 @@ public class Crank {
   }
   
   public void turn() {
-    if (handle != null) {
+    if (handle != null)
       portcullis.raise(this);
-    }
+    else
+      throw new NoHandleOnCrankException();
   }
   
   public boolean auth(String key) {
