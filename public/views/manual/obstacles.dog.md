@@ -14,11 +14,14 @@ When encountering the dog, feed the dog the lamb chop so you can access the next
 
     bowl = handVariable;
 
-
 ### Parameters
 
 <dl>
-  <dt>dogCode</dt>
-  <dd>An integer indicating the dog code for the application.</dd>
+  <dt>bowl:</dt>
+  <dd>Is a game object.</dd>
 </dl>
 
+<dl>
+  <dt>handVariable:</dt>
+  <dd>Consists of left or right hand.</dd>
+</dl>

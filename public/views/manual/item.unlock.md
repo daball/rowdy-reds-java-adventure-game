@@ -1,18 +1,19 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
-  <li><a href="#/docs/obstacles">Obstacles</a></li>
-  <li class="active">Locked Door</li>
+  <li><a href="#/docs/item">Item Behaviors</a></li>
+  <li class="active">Unlock</li>
 </ol>
 
-## Locked Door
+## unlock
 
 ### Description
 
-When encountering a locked door. You need to have the correct key, and type the correct java code to open the door.
+The capability to unlock a locked door, or footlocker.
 
 ### Syntax
 
-    gameobject.unlock(handVariable);
+	gameobject.unlock(handvariable);
+	footLocker.unlock(handVariable);
 
 ### Parameters
 
@@ -29,4 +30,9 @@ When encountering a locked door. You need to have the correct key, and type the 
 <dl>
   <dt>handVariable:</dt>
   <dd>Consist of left or right hand.</dd>
+</dl>
+
+<dl>
+  <dt>footLocker:</dt>
+  <dd>Consist of a game object.</dd>
 </dl>

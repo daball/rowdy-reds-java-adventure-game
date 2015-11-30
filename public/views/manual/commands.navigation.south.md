@@ -18,10 +18,4 @@ Navigate south to access other rooms, or a wall.
     me.moveSouth();
 
 
-### Parameters
-
-<dl>
-  <dt>southCode</dt>
-  <dd>An integer indicating the south code for the application.</dd>
-</dl>
 
