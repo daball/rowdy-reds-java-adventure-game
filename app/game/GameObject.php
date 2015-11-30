@@ -31,6 +31,11 @@ class GameObject
   use TDefine;
   use TMessenger;
 
+  public function resolve($what) {
+    return Resolver::what($what);
+  }
+
+
   /**
    * The name of the GameObject.
    **/

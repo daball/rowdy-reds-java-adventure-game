@@ -19,6 +19,11 @@ Gives a description of an room, and an object.
 ### Parameters
 
 <dl>
-  <dt>inspectObjectCode</dt>
-  <dd>An integer indicating the inspect object code for the application.</dd>
+  <dt>inspect:</dt>
+  <dd>Gives description of room.</dd>
+</dl>
+
+<dl>
+  <dt>object:</dt>
+  <dd>Gives description of an object.</dd>
 </dl>

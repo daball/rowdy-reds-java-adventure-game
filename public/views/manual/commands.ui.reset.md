@@ -16,10 +16,3 @@ Reset the game to the front Entrance of Castle.
     RESTART
     
     
-
-### Parameters
-
-<dl>
-  <dt>resetCode</dt>
-  <dd>An integer indicating the reset, and restart code for the application.</dd>
-</dl>

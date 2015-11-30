@@ -18,10 +18,5 @@ Navigate west to access other rooms, or a wall.
     me.moveWest();
 
 
-### Parameters
 
-<dl>
-  <dt>westCode</dt>
-  <dd>An integer indicating the west code for the application.</dd>
-</dl>
 

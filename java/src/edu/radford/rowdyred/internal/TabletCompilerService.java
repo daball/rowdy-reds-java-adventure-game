@@ -40,39 +40,40 @@ public class TabletCompilerService {
   public void compile(String constructorCode, String sourceCode) throws Exception {
     //Wrap sourceCode
     this.sourceCode = sourceCode = ""
-    + "package " + this.packageName + ";\n"
-    + "\n"
+    + "package " + this.packageName + ";"
+    + ""
 //    + "import edu.radford.rowdyred.behaviors.*;\n"
 //    + "import edu.radford.rowdyred.equipment.*;\n"
 //    + "import edu.radford.rowdyred.game.*;\n"
 //    + "import edu.radford.rowdyred.items.*;\n"
 //    + "import edu.radford.rowdyred.obstacles.*;\n"
-    + "import edu.radford.rowdyred.puzzles.*;\n"
-    + "\n"
-      + "public class Tablet /*extends Scope*/ {\n"
-      + "\n"
-      + "public ChessBoard chessBoard;\n"
-      + "public Dragon dragon;\n"
-      + "public Player me;\n"
-      + "public Salve salve;\n"
-      + "public Weapon sword;\n"
-      + "public Shield shield;\n"
-      + "public Weapon crossbow;\n"
-      + "public String key = \"efsdg908hn3rv0tyobri7oirgfoli\";\n"
-      + "public Portcullis portcullis;\n"
-      + "public Crank crank;\n"
-      + "public Handle handle;\n"
-//      + "  private "//replace setout
-      + "  public Tablet(/*Scope scope*/) {\n"
-      + constructorCode
-      + "  }\n"
-      + "\n"
-      + "  /* BEGIN PLAYER'S CODE */\n"
+    + "import edu.radford.rowdyred.puzzles.*;"
+    + ""
+      + "public class Tablet /*extends Scope*/ {"
       + sourceCode
-      + "  /* END PLAYER'S CODE */\n"
-      + "}\n";//end class
+      + "\n"
+      + "public ChessBoard chessBoard;"
+      + "public Dragon dragon;"
+      + "public Player me;"
+      + "public Salve salve;"
+      + "public Weapon sword;"
+      + "public Shield shield;"
+      + "public Weapon crossbow;"
+      + "public String key = \"efsdg908hn3rv0tyobri7oirgfoli\";"
+      + "public Portcullis portcullis;"
+      + "public Crank crank;"
+      + "public Handle handle;"
+//      + "  private "//replace setout
+      + "  public Tablet(/*Scope scope*/) {"
+      + constructorCode
+      + "  }"
+      + ""
+//      + "  /* BEGIN PLAYER'S CODE */\n"
+//      + sourceCode
+//      + "  /* END PLAYER'S CODE */\n"
+      + "}";//end class
     
-    this.compiledClass = InlineCompiler.compile(this.cachePath, this.classPath, this.packageName, "Tablet", sourceCode);
+    this.compiledClass = InlineCompiler.compile(this.cachePath, this.classPath, this.packageName, "Tablet", this.sourceCode);
     this.tabletInstance = this.compiledClass.newInstance();
 //    CompilerEngine engine = new CompilerEngine();
 //    this.compiledClass = engine.compile(this.packageName, "Tablet", this.sourceCode);
@@ -85,13 +86,13 @@ public class TabletCompilerService {
     String methodsAvailable = "";
     for (int m = 0; m < methods.length; m++) {
         Method method = methods[m];
-        methodsAvailable += "tablet." + method.getName() + "\n";
+        if (method.isAccessible())
+          methodsAvailable += "tablet." + method.getName() + "()\n";
         if (method.getName().equals(methodName)) {
-            methodsAvailable += "Found method in class.";
             return method.invoke(this.tabletInstance, parameters);
         }
     }
-    return "Method name " + methodName + " not found in class " + this.compiledClass.getName() + ". Methods available:\n" + methodsAvailable;
+    return "Method name " + methodName + " not found in class " + this.compiledClass.getSimpleName() + ". Accessible methods:\n" + methodsAvailable;
   }
   
   public Object getField(String fieldName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {

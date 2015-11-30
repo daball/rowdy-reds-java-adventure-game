@@ -1,0 +1,34 @@
+<ol class="breadcrumb">
+  <li><a href="#/docs/contents">User Manual</a></li>
+  <li><a href="#/docs/player">Player Behaviors</a></li>
+  <li class="active">Assign Right Hand</li>
+</ol>
+
+## ASSIGN TO RIGHT HAND
+
+### Description
+
+Assigns object to player's right hand.
+
+### Syntax
+
+    rightHand = gameObject;
+    me.rightHand = gameObject;
+
+
+### Parameters
+
+<dl>
+  <dt>rightHand:</dt>
+  <dd>Consist of players right hand.</dd>
+</dl>
+
+<dl>
+  <dt>me:</dt>
+  <dd>Consist of the player.</dd>
+</dl>
+
+<dl>
+  <dt>gameobject:</dt>
+  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+</dl>

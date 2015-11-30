@@ -42,9 +42,16 @@ class Resolver
   private $_result = 0;
   private $_matches = null;
 
-  private function __construct($result, $matches=null) {
-    $this->_result = $result;
-    $this->_matches = $matches;
+  public function __construct($result, $matches=null) {
+    if (is_string($result) && $matches == null) {
+      $instance = self::what($result);
+      $this->_result = $instance->result();
+      $this->_matches = $instance->matches();
+    }
+    else {
+      $this->_result = $result;
+      $this->_matches = $matches;
+    }
   }
 
   /**
