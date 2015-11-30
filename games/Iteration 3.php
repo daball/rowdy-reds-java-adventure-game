@@ -796,7 +796,7 @@ GameBuilder::newGame($gameName)
       $initialOnSolve = $puzzle->popEventHandler('solve');
       $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($chessRoom, $initialOnSolve) {
         //setup the room connection here
-        $puzzle->getParent()->connectRoom($d, $room);
+//        $puzzle->getParent()->connectRoom($d, $room);
         $puzzle->getParent()->setImageUrl($item['onAssign.room.imageUrl'])->setImageUrl('chessRoom_stairs.jpg');
         return $initialOnSolve($puzzle, $javaTabletInstance);
       });
