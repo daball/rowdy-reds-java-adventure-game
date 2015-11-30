@@ -24,8 +24,8 @@ class TabletCompilerService {
     $this->javaCompilerService = new java("edu.radford.rowdyred.internal.TabletCompilerService", session_id(), $cachePath, $classPath, null);
   }
 
-  public function compile($sourceCode) {
-    return $this->javaCompilerService->compile($sourceCode);
+  public function compile($constructorCode, $sourceCode) {
+    return $this->javaCompilerService->compile($constructorCode, $sourceCode);
   }
 
   public function invoke($methodName, $parameters) {

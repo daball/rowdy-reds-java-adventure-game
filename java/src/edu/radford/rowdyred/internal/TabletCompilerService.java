@@ -37,7 +37,7 @@ public class TabletCompilerService {
     this.packageName = "player_" + this.phpSessionId;
   }
 
-  public void compile(String sourceCode) throws Exception {
+  public void compile(String constructorCode, String sourceCode) throws Exception {
     //Wrap sourceCode
     this.sourceCode = sourceCode = ""
     + "package " + this.packageName + ";\n"
@@ -51,15 +51,20 @@ public class TabletCompilerService {
     + "\n"
       + "public class Tablet /*extends Scope*/ {\n"
       + "\n"
+      + "ChessBoard chessBoard;\n"
+      + "Dragon dragon;\n"
+      + "Player me;\n"
+      + "Salve salve;\n"
+      + "Weapon sword;\n"
+      + "Shield shield;\n"
+      + "Weapon crossbow;\n"
+      + "String key = \"efsdg908hn3rv0tyobri7oirgfoli\";\n"
+      + "Portcullis portcullis;\n"
+      + "Crank crank;\n"
+      + "Handle handle;\n"
 //      + "  private "//replace setout
       + "  public Tablet(/*Scope scope*/) {\n"
-//      + "   System.out.setOut\n"
-//      + "    //copy Scope to Tablet\n"
-//      + "    this.me = scope.me;\n"
-//      + "    this.room = scope.room;\n"
-//      + "    this.leftHand = scope.leftHand;\n"
-//      + "    this.rightHand = scope.rightHand;\n"
-//      + "    this.backpack = scope.backpack;\n"
+      + constructorCode
       + "  }\n"
       + "\n"
       + "  /* BEGIN PLAYER'S CODE */\n"

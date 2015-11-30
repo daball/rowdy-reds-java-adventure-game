@@ -429,9 +429,11 @@ Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/'
   $compiler = new TabletCompilerService();
   $room = GameState::getInstance()->getPlayerRoom();
   if ($room->hasComponent("Puzzle")) {
-    $code = $room->getComponent("Puzzle")->getHeaderCode() . $code;
+    $compiler->compile($room->getComponent("Puzzle")->getHeaderCode(), $code);
   }
-  $compiler->compile($code);
+  else {
+    $compiler->compile("", $code);
+  }
   $cls = $compiler->getClass();
   $instance = $compiler->getInstance();
   $output = $compiler->invoke($methodName, $parameters);
