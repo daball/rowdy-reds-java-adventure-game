@@ -1,7 +1,6 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/commands">Commands</a></li>
-  <li><a href="#/docs/navigation">Navigation</a></li>
   <li class="active">Up</li>
 </ol>
 
@@ -17,3 +16,13 @@ Navigate Up to access upper level rooms, or go up stairs, or a ceiling.
     UP
     moveUp();
     me.moveUp();
+
+
+
+### Parameters
+
+<dl>
+  <dt>upCode</dt>
+  <dd>An integer indicating the up code for the application.</dd>
+</dl>
+

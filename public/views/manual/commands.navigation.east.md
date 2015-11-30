@@ -1,7 +1,6 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/commands">Commands</a></li>
-  <li><a href="#/docs/navigation">Navigation</a></li>
   <li class="active">East</li>
 </ol>
 
@@ -17,3 +16,11 @@ Navigate east to access other rooms, or a wall.
     EAST
     moveEast();
     me.moveEast();
+
+### Parameters
+
+<dl>
+  <dt>eastCode</dt>
+  <dd>An integer indicating the east code for the application.</dd>
+</dl>
+
