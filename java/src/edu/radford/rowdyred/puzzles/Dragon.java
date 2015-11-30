@@ -77,10 +77,8 @@ public class Dragon extends Enemy {
 	public void takeYourTurnStupid(GameCharacter sender) {
 	  if (isAlive())
 	    nextTurn(sender);
-	  else {
+	  else
 	    System.out.println("The " + name + " is defeated!  Victory is yours!");
-	    System.out.println(adversary.getHealthPoints());
-	  }
 	}
 	
 }
