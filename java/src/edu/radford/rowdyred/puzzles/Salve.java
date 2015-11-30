@@ -1,12 +1,11 @@
 package edu.radford.rowdyred.puzzles;
 
-public class Salve implements Healer {
+public class Salve implements HealingItem {
+  int uses;
 
-	int uses;
-	
-	public Salve() {
+  public Salve() {
 		super();
-		uses = 10;
+		uses = 7;
 	}
 	
 	public Salve(int uses) {
@@ -18,10 +17,15 @@ public class Salve implements Healer {
 	public int getHealthPoints() {
 		if (uses > 0) {
 			uses--;
-			return 75;
+			return 50;
 		}
 		
 		return 0;
 	}
 
+	@Override
+	public int getUsesLeft() {
+    return uses;
+  }
+	
 }
