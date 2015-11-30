@@ -28,12 +28,6 @@ class Player extends GameObject
   public $leftHand = null;
 
   /**
-   * Player's backpack.
-   * @var GameObject
-   **/
-  public $backpack = null;
-
-  /**
    * Player's right hand.
    * @var GameObject
    **/
@@ -197,7 +191,7 @@ class Player extends GameObject
   }
 
   public function getBackpack() {
-    return $this->backpack;
+    return $this->getEquipmentItem("backpack");
   }
 
   public function getEquipment() {
@@ -213,8 +207,6 @@ class Player extends GameObject
       if ($itemCurrentContainer != null)
         $itemCurrentContainer->getComponent('Container')->removeItem($item);
       $this->equipment->getComponent('Container')->insertItem($item);
-      if ($item->getName() == "backpack")
-        $this->backpack = $item;
       return $output;
     }
     return "";

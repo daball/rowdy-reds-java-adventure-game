@@ -159,7 +159,7 @@ $butlersQuarters = array(
 $kitchen = array(
   'name'        => "Kitchen",
   'description' => "You are in the kitchen.  The smell of freshly cooked meat still lingers heavily in the air.",
-  'imageUrl'    => "kitchen_lambChop.jpg",
+  'imageUrl'    => "kitchen_lambchop.jpg",
   'items'       => array(
     'lambChop'    => array(
       'type'        => "food",
@@ -259,10 +259,10 @@ $taxidermyRoom = array(
 $chessRoom = array(
   'name'                  => "Chess Room",
   'description'           => "You see a room with a chess board on the floor in front of you.",
-  'imageUrl'              => "chessRoomlit.jpg",
+  'imageUrl'              => "chessRoom.jpg",
   'dark'                  => true,
   'lamp.wind.imageUrl'    => "",
-  'lamp.unwind.imageUrl'  => "chessRoom.jpg",
+  'lamp.unwind.imageUrl'  => "darkRoom.jpg",
 );
 $vestibule = array(
   'name'         => "Vestibule",
@@ -594,7 +594,7 @@ $cloakRoom = array(
 $hallMirrors = array(
   'name'         => "Hall of Mirrors",
   'description'  => "You are in a hall of mirrors. If you look to closely your eyes will deceive you making it difficult to figure out what the true dimensions of this room really are.",
-  'imageUrl'     => "hallOfMirrors.jpg",
+  'imageUrl'     => "hallofMirrors.jpg",
   'items'       => array(
     'backpack'       => array(
       'type'                    => 'equipment',
@@ -685,9 +685,14 @@ $cellarStorage = array(
   'description'  => "You are in a cellar storage room of sorts.",
   'imageUrl'     => "cellarStorage.jpg",
 );
+$limbo = array(
+  'name'         => "Limbo",
+  'description'  => "You are floating in limbo.  The feeling of death is all around you, but, you feel that you may still have a way.  Perhaps you have another chance?",
+  'imageUrl'     => "limbo.jpg",
+);
 
 GameBuilder::newGame($gameName)
-->insertRoom($forest)
+  ->insertRoom($forest)
   ->insertRoomAt($forest,           Direction::$n,    $castleEntrance)
   ->insertRoomAt($castleEntrance,   Direction::$n,    $foyer)
   ->insertRoomAt($foyer,            Direction::$n,    $tapestryE)
@@ -791,13 +796,21 @@ GameBuilder::newGame($gameName)
       $initialOnSolve = $puzzle->popEventHandler('solve');
       $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($chessRoom, $initialOnSolve) {
         //setup the room connection here
-        //$puzzle->getParent()->connectRoom($d, $room);
+        $puzzle->getParent()->connectRoom($d, $room);
+        $puzzle->getParent()->setImageUrl($item['onAssign.room.imageUrl'])->setImageUrl('chessRoom_stairs.jpg');
         return $initialOnSolve($puzzle, $javaTabletInstance);
       });
     }));
   }))
   ->connectRooms($taxidermyRoom,    Direction::$n,    $chessRoom)
 
+  ->insertRoom($limbo)
+  ->oneWayConnectRoom($limbo,       Direction::$n,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$e,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$s,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$w,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$u,    $forest)
+  ->oneWayConnectRoom($limbo,       Direction::$d,    $forest)
     // Iteration 2 Room Connections
   ->insertRoomAt($foyer,            Direction::$w,    $vestibule)
   ->insertRoomAt($vestibule,        Direction::$w,    $wTowerBase)
@@ -830,7 +843,8 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($pantry,           Direction::$w,    $pantryStorage)
   ->insertRoomAt($library,          Direction::$e,    $cloakRoom)
   ->connectRooms($cloakRoom,        Direction::$n,    $tapestryW)
-  ->insertRoomAt($chessRoom,        Direction::$d,    $hallMirrors)
+//  ->insertRoomAt($chessRoom,        Direction::$d,    $hallMirrors)
+  ->insertRoom($hallMirrors)
 
   // Iteration 3 Lower Floor:
   ->insertRoomAt($hallMirrors,      Direction::$w,    $alcove)
