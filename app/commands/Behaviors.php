@@ -6,11 +6,13 @@ require_once __DIR__.'/../engine/GameState.php';
 require_once __DIR__.'/../engine/Router.php';
 require_once __DIR__.'/../util/Resolver.php';
 require_once __DIR__.'/../java/TabletCompilerService.php';
+require_once __DIR__.'/../playable/Key.php';
 
 use \engine\GameState;
 use \engine\Router;
 use \util\Resolver;
 use \TabletCompilerService;
+use \playable\Key;
 
 //reusable no matching result output
 function noResult($provided) {
@@ -18,7 +20,86 @@ function noResult($provided) {
   return "I don't know what $provided is.";
 }
 
+/**
+   * Source: http://php.net/manual/en/function.ucwords.php
+   * Convert string to in camel-case, useful for class name patterns.
+   *
+   * @param $string
+   *   Target string.
+   *
+   * @return string
+   *   Camel-case string.
+   */
+function toCamelCase($string){
+    $string = str_replace('-', ' ', $string);
+    $string = str_replace('_', ' ', $string);
+    $string = ucwords(strtolower($string));
+    $string = str_replace(' ', '', $string);
+    return lcfirst($string);
+}
+
 /* Assignable */
+
+Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*new\s+([\w\d$_.\[\]]+)\s*\(([\w\d\s$_.\-,\[\]\"\']*)\)\s*;\s*$/', function ($command, $code, $pattern, $matches) {
+  $target = $matches[1];
+  $cls = $matches[2];
+  $params = $matches[3];
+  $index = -1; //index in container to assign, this is variable for backpack
+
+  $allowedClasses = array("Key");
+  if (!in_array($cls, $allowedClasses))
+    return "You cannot instantiate " . insertAOrAn($cls) . ".";
+
+  if (!$params || strlen($params) < 2 || substr($params, 0, 1) != "\"" || substr($params, -1) != "\"")
+    return "You must pass in a plaintext secret as a String in order to instantiate " . insertAOrAn($cls) . ".";
+
+  $targetResolver = Resolver::what($target);
+  switch ($targetResolver->result()) {
+    case Resolver::NO_RESULT:
+      return noResult($target);
+    case Resolver::PLAYER_BACKPACK:
+    case Resolver::PLAYER_BACKPACK_INDEX:
+      if (!GameState::getInstance()->getPlayer()->hasEquipmentItem("backpack"))
+        return noResult($target);
+      $target = GameState::getInstance()->getPlayer()->getBackpack();
+      if ($targetResolver->result() == Resolver::PLAYER_BACKPACK_INDEX) {
+        $index = $targetResolver->resolveBackpackIndex();
+      }
+      break;
+    default:
+      $target = $targetResolver->resolve();
+  }
+  if ($target->getName() == "backpack" && !GameState::getInstance()->getPlayer()->hasEquipmentItem("backpack"))
+    return "You must equip the " . $target->getName() . " first.";
+  if ($targetResolver->result() == Resolver::PLAYER_BACKPACK)
+    return "You must use the backpack like an array, as in backpack[0], backpack[1], and so on. The backpack will only hold 5 items.";
+
+  $secret = trim($params, "\"");
+  $keyName = toCamelCase($secret . " Key");
+  $key = new Key($keyName, $secret);
+
+  $yoursOrTheirs = "the";
+  $indexText = "";
+  switch ($targetResolver->result()) {
+    case Resolver::PLAYER_BACKPACK_INDEX:
+      $indexText = " at slot $index";
+      //don't break yet, keep on trucking
+    case Resolver::PLAYER_LEFT_HAND:
+    case Resolver::PLAYER_RIGHT_HAND:
+      $yoursOrTheirs = "your";
+  }
+
+  //pre-assignment check
+  if (!$key->hasComponent('Assignable'))
+    return $source->getName() . " is not an assignable item.";
+  if (!$target->hasComponent('Container'))
+    return $target->getName() . " is no place for " . insertAOrAn($source->getName()) . ".";
+
+  return "You have instantianted a new $cls called $keyName with the secret $secret.  "
+        . $target->getComponent("Container")->setItemAt($index, $key)
+        . $key->getComponent('Assignable')->assignTo($target, $index);
+
+});
 
 //assign: target = source;
 Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*([\w\d$_.\[\]]+)\s*;\s*$/', function ($command, $code, $pattern, $matches) {

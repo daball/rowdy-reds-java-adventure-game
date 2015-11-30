@@ -88,7 +88,7 @@ $library = array(
     'rustyKey'    => array(
       'type'                    => 'key',
       'name'                    => "rustyKey",
-      'secret'                  => "rustySecret",
+      'secret'                  => "rusty",
       'description'             => "It's a dingy rusty key.",
       'onAssign.room.imageUrl'  => "library.jpg",
     ),
@@ -177,7 +177,7 @@ $pantry = array(
     'brassKey'    => array(
       'type'                    => 'key',
       'name'                    => "brassKey",
-      'secret'                  => "brassSecret",
+      'secret'                  => "brass",
       'description'             => "It's a nice and shiny brass key.",
       'onAssign.room.imageUrl'  => "pantry.jpg",
     ),
