@@ -1,10 +1,8 @@
 package edu.radford.rowdyred.puzzles.tests;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
-
-import edu.radford.rowdyred.puzzles.ChessBoard;
+import edu.radford.rowdyred.puzzles.*;
 
 public class ChessBoardTest {
 

@@ -19,7 +19,6 @@ public class DragonFightTester {
       else if (dragon.isInhaling()) {
         me.block(shield);
       }
-      //else 
       else if (dragon.isFlying()) {
         me.attack(dragon, crossbow);
       }
