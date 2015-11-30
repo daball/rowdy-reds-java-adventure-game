@@ -52,6 +52,13 @@ public void solveChessPuzzle() {
     chessBoard.stepOnRank(i);
 }
 
+public void raisePortcullis() {
+  crank.setHandle(handle);
+  while (!portcullis.isRaised()) {
+    crank.turn();
+  }
+}
+
 public void fightDragon() {
   while (dragon.isAlive()) {
     if (me.getHealthPoints() <= 30) {
