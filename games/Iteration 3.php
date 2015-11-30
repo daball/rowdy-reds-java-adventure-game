@@ -701,7 +701,7 @@ $allPuzzleHeaders = "ChessBoard chessBoard;\n" .
                     "String key = \"efsdg908hn3rv0tyobri7oirgfoli\";\n" .
                     "Portcullis portcullis;\n" .
                     "Crank crank;\n" .
-                    "Handle handle;\n"
+                    "Handle handle;\n";
 
 GameBuilder::newGame($gameName)
   ->insertRoom($forest)
@@ -872,7 +872,7 @@ GameBuilder::newGame($gameName)
         return $allPuzzleHeaders .               
                "portcullis = new Portcullis(key);\n" .
                "crank = new Crank(portcullis, key);\n" .
-               "handle = new Handle();\n"
+               "handle = new Handle();\n";
       });
       $puzzle->popEventHandler('beforeSolve');
       $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
