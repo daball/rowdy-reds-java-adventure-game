@@ -597,11 +597,12 @@ $hallMirrors = array(
   'imageUrl'     => "hallofMirrors.jpg",
   'items'       => array(
     'backpack'       => array(
-      'type'                    => 'equipment',
+      'type'                    => 'backpack',
       'name'                    => "backpack",
-      'description'             => "It is a backpack.  You can use it like a Java array when equipped."
-        ),
+      'description'             => "It is a backpack.  You can use it like a Java array when equipped.",
+      'onEquip.description'     => "You have equipped the backpack. You can use it like a Java array.",
     ),
+  ),
 );
 $alcove = array(
   'name'         => "Alcove",
@@ -783,8 +784,8 @@ GameBuilder::newGame($gameName)
     }));
   }))
   ->connectRooms($tapestryW,        Direction::$n,    $taxidermyRoom)
-  ->insertRoom(\game\assembleRoom($chessRoom)->define(function ($room) use ($chessRoom, $gameName) {
-    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($chessRoom) {
+  ->insertRoom(\game\assembleRoom($chessRoom)->define(function ($room) use ($chessRoom, $gameName, $hallMirrors) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($chessRoom, $hallMirrors) {
       $puzzle->popEventHandler('headerCode');
       $puzzle->setHeaderCode(function ($puzzle) {
         return "public ChessBoard board = new ChessBoard();\n";
@@ -794,10 +795,10 @@ GameBuilder::newGame($gameName)
         return java_values($javaTabletInstance->board->isSolved());
       });
       $initialOnSolve = $puzzle->popEventHandler('solve');
-      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($chessRoom, $initialOnSolve) {
+      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($chessRoom, $initialOnSolve, $hallMirrors) {
         //setup the room connection here
-        $puzzle->getParent()->connectRoom($d, $room);
-        $puzzle->getParent()->setImageUrl($item['onAssign.room.imageUrl'])->setImageUrl('chessRoom_stairs.jpg');
+        $puzzle->getParent()->connectToRoom("down", $hallMirrors['name']);
+        $puzzle->getParent()->setImageUrl('chessRoom_stairs.jpg');
         return $initialOnSolve($puzzle, $javaTabletInstance);
       });
     }));

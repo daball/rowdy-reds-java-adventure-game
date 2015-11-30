@@ -58,7 +58,7 @@ class Player extends GameObject
           $inspector->onInspect(function ($inspector) use ($which) {
             $hand = $inspector->getParent();
             $container = $hand->getComponent('Container');
-            if (!$container->countItems())
+            if (!$container->countItems() && !$container->getItemAt(0))
               return "Your $which hand is empty.";
             else {
               $item = $container->getItemAt(0);

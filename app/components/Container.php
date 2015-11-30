@@ -146,7 +146,7 @@ class Container extends BaseComponent
   }
 
   public function countItems() {
-    return count($this->items);
+    return max($this->maxItems, count($this->items));
   }
 
   public function findItemIndexByName($itemName) {
