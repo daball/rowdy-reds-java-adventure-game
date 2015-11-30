@@ -19,10 +19,5 @@ Navigate Up to access upper level rooms, or go up stairs, or a ceiling.
 
 
 
-### Parameters
 
-<dl>
-  <dt>upCode</dt>
-  <dd>An integer indicating the up code for the application.</dd>
-</dl>
 

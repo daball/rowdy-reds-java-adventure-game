@@ -17,10 +17,5 @@ Navigate east to access other rooms, or a wall.
     moveEast();
     me.moveEast();
 
-### Parameters
 
-<dl>
-  <dt>eastCode</dt>
-  <dd>An integer indicating the east code for the application.</dd>
-</dl>
 

@@ -17,10 +17,4 @@ Navigate down to access lower level rooms, or go down a set of stairs, or fall o
     moveDown();
     me.moveDown();
 
-### Parameters
-
-<dl>
-  <dt>downCode</dt>
-  <dd>An integer indicating the down code for the application.</dd>
-</dl>
 

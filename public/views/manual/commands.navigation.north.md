@@ -17,10 +17,4 @@ Navigate north to access other rooms, or a wall.
     moveNorth();
     me.moveNorth();
 
-### Parameters
-
-<dl>
-  <dt>northCode</dt>
-  <dd>An integer indicating the north code for the application.</dd>
-</dl>
 

@@ -18,6 +18,6 @@ Exit the game to the main menu.
 ### Parameters
 
 <dl>
-  <dt>exitCode</dt>
-  <dd>An integer indicating the exit code for the application.</dd>
+  <dt>exitCode:</dt>
+  <dd>Required to exit the game.</dd>
 </dl>

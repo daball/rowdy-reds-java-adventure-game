@@ -15,9 +15,3 @@ Help menu displays a list of commands the player can use in the game.
     HELP
 
 
-### Parameters
-
-<dl>
-  <dt>helpCode</dt>
-  <dd>An integer indicating the help code for the application.</dd>
-</dl>
