@@ -40,6 +40,7 @@ rightHand.wind();
 tablet.solveChessPuzzle();
 d
 equip(backpack);
+backpack[0] = rightHand;
 
 
 
@@ -84,4 +85,3 @@ public void fightDragon() {
     }
   }
 }
-
