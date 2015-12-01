@@ -70,19 +70,58 @@ s
 w
 w
 backpack[1]=healingSalve;
+e
+s
+s
+e
+e
+n
+n
+w
+leftHand=handle;
+e
+s
+w
 
+
+w
+n
+u
+s
+s
+w
+tablet.goldilocks();
+backpack[2]=new Key("Goldilocks Sleeps");
+e
+n
+n
+d
+s
+s
+w
+n
+n
+lamp.wind();
+d
 e
 s
 tablet.raisePortcullis();
 s
-leftHand=sheild;
+leftHand=shield;
 n
 n
 e
 s
-tablet.enterCombination();
+tablet.openSafe();
+backpack[3]=crossbow;
 
-
+n
+w
+w
+w
+door.unlock(goldilocksSleepsKey);
+s
+tablet.fightDragon();
 
 
 
@@ -108,6 +147,10 @@ public void openSafe() {
     c2 = c2 / 2 - c1;
     c3 += c1 + c2;
     safe.open(c1, c2, c3);
+}
+
+public void goldilocks() {
+
 }
 
 public void fightDragon() {
