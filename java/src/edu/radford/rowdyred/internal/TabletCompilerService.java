@@ -11,8 +11,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import edu.radford.rowdyred.puzzles.CharacterDeadException;
-
 public class TabletCompilerService {
   public String phpSessionId;
   public String cachePath;
@@ -95,11 +93,11 @@ public class TabletCompilerService {
 //    this.singletonInstance = ctor.newInstance();
   }
 
-  public Object invokeMethod(String methodName, Object[] parameters) throws Throwable {
+  public Object invokeMethod(String methodName, final Object[] parameters) throws Throwable {
     Method[] methods = this.compiledClass.getDeclaredMethods();
     String methodsAvailable = "";
     for (int m = 0; m < methods.length; m++) {
-        Method method = methods[m];
+        final Method method = methods[m];
         if (method.isAccessible())
           methodsAvailable += "tablet." + method.getName() + "()\n";
         if (method.getName().equals(methodName)) {
