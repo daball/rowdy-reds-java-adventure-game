@@ -917,7 +917,29 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($hallMirrors,      Direction::$w,    $alcove)
   ->insertRoomAt($hallMirrors,      Direction::$s,    $rackRoom)
   ->insertRoomAt($hallMirrors,      Direction::$e,    $boiler)
-  ->insertRoomAt($alcove,           Direction::$s,    $treasury)
+  ->insertRoom(\game\assembleRoom($treasury)->define(function ($room) use ($treasury) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($portcullis) {
+      $puzzle->popEventHandler('headerCode');
+      $puzzle->setHeaderCode(function ($puzzle) {
+        $initCode = 'dragon = new Dragon("dragon", 1000);'
+                  . 'me = new Player("player", 100);'
+                  . 'salve = new Salve(7, 50);'
+                  . 'sword = new Weapon("sword", 75, 0, me);'
+                  . 'shield = new Shield(0.91, 0.80);'
+                  . 'crossbow = new Weapon("crossbow", 40, 35, me);'
+              ;
+        return $initCode;
+      });
+      $puzzle->popEventHandler('beforeSolve');
+      $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
+        //$resolver = $puzzle->resolve("handle");
+        return (/*$resolver->result() &&*/ java_values($javaTabletInstance->dragon->isRaised()));
+      });
+      $initialOnSolve = $puzzle->popEventHandler('solve');
+      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnSolve) {
+      });
+  }))
+  ->connectRooms($alcove,           Direction::$s,    $treasury)
   ->insertRoomAt($boiler,           Direction::$e,    $wineCellar)
   ->insertRoom(\game\assembleRoom($portcullis)->define(function ($room) use ($portcullis, $gameName) {
     $room->addComponent((new Puzzle())->define(function ($puzzle) use ($portcullis) {

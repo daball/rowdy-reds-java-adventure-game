@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.*;
-import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +40,10 @@ public class TabletCompilerService {
     this.cachePath = cachePath;
     this.classPath = classPath;
     this.packageName = "player_" + this.phpSessionId;
+  }
+  
+  public void clean() {
+    InlineCompiler.clean(this.cachePath, this.packageName);
   }
 
   public void compile(String constructorCode, String sourceCode) throws Exception {

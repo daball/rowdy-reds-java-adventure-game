@@ -452,5 +452,6 @@ Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/'
   if ($room->hasComponent("Puzzle")) {
     $output = $room->getComponent("Puzzle")->solve($instance) . "  " . $output;
   }
+  $compiler->clean();
   return $output;
 });

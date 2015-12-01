@@ -28,6 +28,10 @@ class TabletCompilerService {
     return $this->javaCompilerService->compile($constructorCode, $sourceCode);
   }
 
+  public function clean() {
+    return $this->javaCompilerService->clean();
+  }
+
   public function invoke($methodName, $parameters) {
     return $this->javaCompilerService->invokeMethod($methodName, $parameters);
   }
