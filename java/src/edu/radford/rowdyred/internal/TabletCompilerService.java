@@ -69,7 +69,7 @@ public class TabletCompilerService {
       + "public ChessBoard chessBoard;"
       + "public Dragon dragon;"
       + "public Player me;"
-      + "public Salve salve;"
+      + "public Salve healingSalve;"
       + "public Weapon sword;"
       + "public Weapon magicSword;"
       + "public Shield shield;"
