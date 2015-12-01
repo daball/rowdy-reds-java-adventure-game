@@ -16,6 +16,12 @@ public class GameCharacter implements Healable, Attackable {
     this.meleeEngageable = true;
   }
 
+  private String s(int value) {
+    if (value == 1)
+      return "";
+    return "s";
+  }
+  
   @Override
   public void heal(HealingItem healingItem) {
     if (!isAlive())
@@ -25,7 +31,9 @@ public class GameCharacter implements Healable, Attackable {
     currentHealth += healingItem.getHealthPoints();
     if (currentHealth > initHealth)
       currentHealth = initHealth;
-    System.out.println(name + " healed and now has " + currentHealth + " HP." + " you have " + healingItem.getUsesLeft() + " heals left");
+    int uses = healingItem.getUsesLeft();
+    System.out.println(name + " healed and now has " + currentHealth + " HP." + " Salve has " 
+      + uses + " heal" + s(uses) + " left.");
     if (adversary != null)
       adversary.takeYourTurnStupid(this);
 
@@ -37,7 +45,7 @@ public class GameCharacter implements Healable, Attackable {
     shield = null;
     adversary = target;
     this.engage();
-    System.out.println(name + " attacks with " + weapon.getName());
+    System.out.println(name + " attacks " + adversary.getName() + " with " + weapon.getName() + "!");
     target.receiveDamage(weapon, this);
     adversary.takeYourTurnStupid(this);
 
@@ -58,7 +66,7 @@ public class GameCharacter implements Healable, Attackable {
 //      throw new CharacterDeadException();
     if (!engaged) {
       engaged = true;
-      System.out.println(name + " engaged!");
+      System.out.println(name + " engages in battle!");
     }
   }
 
@@ -82,7 +90,7 @@ public class GameCharacter implements Healable, Attackable {
     if (damage == 0)
       System.out.println(weapon.getWielder().getName() + " missed the " + name + "!");
     else
-      System.out.println(name + " took " + damage + " points of damage and now has " + currentHealth + " HP");    
+      System.out.println(name + " took " + damage + " points of damage and now has " + currentHealth + " HP.");    
   }
 
   public int getHealthPoints() {
