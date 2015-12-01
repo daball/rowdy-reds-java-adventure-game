@@ -43,4 +43,8 @@ class TabletCompilerService {
   public function getClass() {
     return $this->javaCompilerService->compiledClass;
   }
+
+  public function getConsoleOutput() {
+    return java_values($this->javaCompilerService->getConsoleOutput());
+  }
 }

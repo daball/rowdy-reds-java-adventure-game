@@ -2,14 +2,16 @@ package edu.radford.rowdyred.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import edu.radford.rowdyred.puzzles.CharacterDeadException;
 
 public class TabletCompilerService {
   public String phpSessionId;
@@ -19,6 +21,8 @@ public class TabletCompilerService {
   public String sourceCode;
   public Class<?> compiledClass;
   public Object tabletInstance;
+  public ConsoleOutputCapturer outputCapturer;
+  public String consoleOutput = "";
 
   /**
    * Source http://stackoverflow.com/questions/1554252/how-do-i-create-a-directory-within-the-current-working-directory-in-java
@@ -40,10 +44,15 @@ public class TabletCompilerService {
     this.cachePath = cachePath;
     this.classPath = classPath;
     this.packageName = "player_" + this.phpSessionId;
+    this.outputCapturer = new ConsoleOutputCapturer();
   }
   
   public void clean() {
     InlineCompiler.clean(this.cachePath, this.packageName);
+  }
+  
+  public String getConsoleOutput() {
+    return this.consoleOutput;
   }
 
   public void compile(String constructorCode, String sourceCode) throws Exception {
@@ -57,10 +66,8 @@ public class TabletCompilerService {
 //    + "import edu.radford.rowdyred.items.*;\n"
 //    + "import edu.radford.rowdyred.obstacles.*;\n"
     + "import edu.radford.rowdyred.puzzles.*;"
-    + ""
-      + "public class Tablet /*extends Scope*/ {"
+      + "public class Tablet {"
       + sourceCode
-      + "\n"
       + "public ChessBoard chessBoard;"
       + "public Dragon dragon;"
       + "public Player me;"
@@ -74,14 +81,10 @@ public class TabletCompilerService {
       + "public Handle handle;"
       + "public Combination safe;"
       + "public int c1, c2, c3;"
-//      + "  private "//replace setout
-      + "  public Tablet(/*Scope scope*/) {"
+      + "public Tablet(/*Scope scope*/) {"
       + constructorCode
       + "  }"
       + ""
-//      + "  /* BEGIN PLAYER'S CODE */\n"
-//      + sourceCode
-//      + "  /* END PLAYER'S CODE */\n"
       + "}";//end class
     
     this.compiledClass = InlineCompiler.compile(this.cachePath, this.classPath, this.packageName, "Tablet", this.sourceCode);
@@ -92,7 +95,7 @@ public class TabletCompilerService {
 //    this.singletonInstance = ctor.newInstance();
   }
 
-  public Object invokeMethod(String methodName, Object[] parameters) throws Exception {
+  public Object invokeMethod(String methodName, Object[] parameters) throws Throwable {
     Method[] methods = this.compiledClass.getDeclaredMethods();
     String methodsAvailable = "";
     for (int m = 0; m < methods.length; m++) {
@@ -104,7 +107,21 @@ public class TabletCompilerService {
           Future<Object> future = executor.submit(new Callable<Object>() {
               @Override
               public Object call() throws Exception {
-                return method.invoke(tabletInstance, parameters);
+                outputCapturer.start();
+                try {
+                  Object done = method.invoke(tabletInstance, parameters);
+                  System.out.flush();
+                  System.err.flush();
+                  consoleOutput = outputCapturer.stop();
+                  return done;
+                } catch (InvocationTargetException e) {
+                  if (e.getCause() != null)
+                    throw((Exception)e.getCause());
+                  else
+                    throw e;
+                } catch (Exception e) {
+                  throw e;
+                }
               }
             });
 
@@ -113,9 +130,28 @@ public class TabletCompilerService {
             executor.shutdownNow();
             return val;
           } catch (TimeoutException e) {
+              System.out.flush();
+              System.err.flush();
+              consoleOutput = outputCapturer.stop();
               future.cancel(true);
               executor.shutdownNow();
               throw(e);
+          } catch (ExecutionException e) {
+            System.out.flush();
+            System.err.flush();
+            consoleOutput = outputCapturer.stop();
+            future.cancel(true);
+            executor.shutdownNow();
+            if (e.getCause() != null)
+              throw(e.getCause());
+            throw (e);
+          } catch (Exception e) {
+            System.out.flush();
+            System.err.flush();
+            consoleOutput = outputCapturer.stop();
+            future.cancel(true);
+            executor.shutdownNow();
+            throw(e);
           }
 
         }

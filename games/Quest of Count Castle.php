@@ -12,6 +12,7 @@ require_once __DIR__.'/../app/util/Resolver.php';
 use \components\Assignable;
 use \components\Puzzle;
 use \game\GameBuilder;
+use \game\GameState;
 use \game\Direction;
 use \game\Map;
 use \game\Room;
@@ -601,7 +602,7 @@ $cloakRoom = array(
 );
 $hallMirrors = array(
   'name'         => "Hall of Mirrors",
-  'description'  => "You are in a hall of mirrors. If you look to closely your eyes will deceive you making it difficult to figure out what the true dimensions of this room really are.",
+  'description'  => "You are in a hall of mirrors. If you look too closely your eyes will deceive you making it difficult to figure out what the true dimensions of this room really are.",
   'imageUrl'     => "hallofMirrors.jpg",
   'items'       => array(
     'backpack'       => array(
@@ -717,6 +718,11 @@ $limbo = array(
   'name'         => "Limbo",
   'description'  => "You are floating in limbo.  The feeling of death is all around you, but, you feel that you may still have a way.  Perhaps you have another chance?",
   'imageUrl'     => "limbo.jpg",
+);
+$gameOver = array(
+  'name'         => "Certificate of Completion",
+  'description'  => "Congratulations on your defeat of the dragon.  You have been awarded the Certificate of Excellence for defeating the dragon.\nGame credits: David A. Ball, Richard Hay, Brittany Lester, Sean Rider, Steven Tanner, Brandon Wilcox.  You may exit or restart the game.",
+  'imageUrl'     => "Certificate.png",
 );
 
 GameBuilder::newGame($gameName)
@@ -917,37 +923,102 @@ GameBuilder::newGame($gameName)
   ->insertRoomAt($hallMirrors,      Direction::$w,    $alcove)
   ->insertRoomAt($hallMirrors,      Direction::$s,    $rackRoom)
   ->insertRoomAt($hallMirrors,      Direction::$e,    $boiler)
-  ->insertRoom(\game\assembleRoom($treasury)->define(function ($room) use ($treasury) {
-    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($portcullis) {
+  ->insertRoom(\game\assembleRoom($gameOver))
+  ->insertRoom(\game\assembleRoom($treasury)->define(function ($room) use ($treasury, $limbo, $gameOver) {
+    $room->addComponent((new Puzzle())->define(function ($puzzle) use ($treasury, $limbo, $gameOver) {
       $puzzle->popEventHandler('headerCode');
-      $puzzle->setHeaderCode(function ($puzzle) {
+      $puzzle->setHeaderCode(function ($puzzle) use ($limbo) {
+        $swordResolver = $puzzle->resolve("sword");
+        $magicSwordResolver = $puzzle->resolve("magicSword");
+        $shieldResolver = $puzzle->resolve("shield");
+        $crossbowResolver = $puzzle->resolve("crossbow");
+
         $initCode = 'dragon = new Dragon("dragon", 1000);'
                   . 'me = new Player("player", 100);'
                   . 'salve = new Salve(7, 50);'
-                  . 'sword = new Weapon("sword", 75, 0, me);'
-                  . 'shield = new Shield(0.91, 0.80);'
-                  . 'crossbow = new Weapon("crossbow", 40, 35, me);'
-              ;
+                  ;
+        //init sword
+        if ($swordResolver->result()
+          // && ($swordResolver->resolve()->getContainer()->getName() == 'leftHand'
+          //   || $swordResolver->resolve()->getContainer()->getName() == 'rightHand')
+            )
+            //init standard issue sword
+            $initCode .= 'sword = new Weapon("sword", 45, 0, me);';
+        //init magic sword
+        else if ($magicSwordResolver->result()
+          // && ($magicSwordResolver->resolve()->getContainer()->getName() == 'leftHand'
+          //   || $magicSwordResolver->resolve()->getContainer()->getName() == 'rightHand')
+          )
+            //init ass kicking sword
+            $initCode .= 'sword = new Weapon("sword", 75, 0, me);';
+        //init no sword
+        else
+            //init no sword, just an empty fist
+            $initCode .= 'sword = new Weapon("sword", 1, 0, me);';
+        //init shield
+        if ($shieldResolver->result()
+          // && ($shieldResolver->resolve()->getContainer()->getName() == 'leftHand'
+          //   || $shieldResolver->resolve()->getContainer()->getName() == 'rightHand')
+            )
+            //init shield
+            $initCode .= 'shield = new Shield(0.91, 0.80);';
+        //init no shield, only block, not effective
+        else
+            $initCode .= 'shield = new Shield(0.02, 0.01);';
+        //init crossbow
+        if ($crossbowResolver->result()
+          // && ($crossbowResolver->resolve()->getContainer()->getName() == 'leftHand'
+          //   || $crossbowResolver->resolve()->getContainer()->getName() == 'rightHand')
+            )
+            //init crossbow
+            $initCode .= 'crossbow = new Weapon("crossbow", 40, 35, me);';
+        //init no crossbow, only throw rocks
+        else
+            $initCode .= 'crossbow = new Weapon("crossbow", 8, 5, me);';
         return $initCode;
       });
       $puzzle->popEventHandler('beforeSolve');
       $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
         //$resolver = $puzzle->resolve("handle");
-        return (/*$resolver->result() &&*/ java_values($javaTabletInstance->dragon->isRaised()));
+        return (/*$resolver->result() &&*/ !java_values($javaTabletInstance->dragon->isAlive()));
       });
       $initialOnSolve = $puzzle->popEventHandler('solve');
-      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnSolve) {
+      $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($initialOnSolve, $gameOver) {
+        $room = $puzzle->getParent();
+        $puzzle->publish("Player", array(
+          'action' => 'setLocation',
+          'oldLocation' => $room->getName(),
+          'newLocation' => $gameOver['name'],
+        ));
+        return "You defeated the dragon!";
       });
+      $puzzle->popEventHandler('refuseSolve');
+      $puzzle->onRefuseSolve(function ($puzzle, $javaTabletInstance) use ($initialOnSolve, $limbo) {
+        $room = $puzzle->getParent();
+        $puzzle->publish("Player", array(
+          'action' => 'setLocation',
+          'oldLocation' => $room->getName(),
+          'newLocation' => $limbo['name'],
+        ));
+        return "\nYou died!\n" ; //. GameState::getInstance()->inspectRoom();
+      });
+    }));
   }))
-  ->connectRooms($alcove,           Direction::$s,    $treasury)
+  ->connectRooms($alcove,           Direction::$s,    $treasury['name'])
   ->insertRoomAt($boiler,           Direction::$e,    $wineCellar)
   ->insertRoom(\game\assembleRoom($portcullis)->define(function ($room) use ($portcullis, $gameName) {
+    $door = $room->getComponent("Container")->findItemByName($portcullis['items']['portcullis']['name']);
+    $lockable = $door->getComponent("Lockable");
+    $lockable->popEventHandler('beforeUnlock');
+    $lockable->popEventHandler('beforeLock');
+    $lockable->onLock(function ($lockable, $key) { return true; });
+    $lockable->onUnlock(function ($lockable, $key) { return false; });
     $room->addComponent((new Puzzle())->define(function ($puzzle) use ($portcullis) {
       $puzzle->popEventHandler('headerCode');
       $puzzle->setHeaderCode(function ($puzzle) {
-        return "portcullis = new Portcullis(key);\n" .
-               "crank = new Crank(portcullis, key);\n" .
-               "handle = new Handle();\n";
+        return "portcullis = new Portcullis(key);" .
+               "crank = new Crank(portcullis, key);" .
+               "handle = new Handle();";
       });
       $puzzle->popEventHandler('beforeSolve');
       $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {

@@ -75,6 +75,14 @@ class Player extends GameObject
 
     $this->leftHand = (new GameObject('leftHand'))->define($handDefinition('left'));
     $this->rightHand = (new GameObject('rightHand'))->define($handDefinition('right'));
+
+    $this->define(function ($player) {
+      $this->subscribe("Player", function ($sender, $queue, $message) use ($player) {
+        if (!is_a($sender, "\game\Player")) {
+          $player->setLocation($message['newLocation']);
+        }
+      });
+    });
   }
 
   /**
