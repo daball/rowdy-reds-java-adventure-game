@@ -958,9 +958,9 @@ GameBuilder::newGame($gameName)
         $shieldResolver = $puzzle->resolve("shield");
         $crossbowResolver = $puzzle->resolve("crossbow");
 
-        $initCode = 'dragon = new Dragon("dragon", 1000);'
-                  . 'me = new Player("player", 100);'
-                  . 'salve = new Salve(7, 50);'
+        $initCode = 'dragon = new Dragon("Dragon", 1000);'
+                  . 'me = new Player("Rowdy Red", 100);'
+                  . 'healingSalve = new Salve(7, 50);'
                   ;
         //init sword
         if ($swordResolver->result()
@@ -968,18 +968,18 @@ GameBuilder::newGame($gameName)
           //   || $swordResolver->resolve()->getContainer()->getName() == 'rightHand')
             )
             //init standard issue sword
-            $initCode .= 'sword = new Weapon("sword", 45, 0, me);';
+            $initCode .= 'sword = new Weapon("sword", 45, 0, me); magicSword=sword;';
         //init magic sword
         else if ($magicSwordResolver->result()
           // && ($magicSwordResolver->resolve()->getContainer()->getName() == 'leftHand'
           //   || $magicSwordResolver->resolve()->getContainer()->getName() == 'rightHand')
           )
             //init ass kicking sword
-            $initCode .= 'sword = new Weapon("sword", 75, 0, me);';
+            $initCode .= 'sword = new Weapon("sword", 75, 0, me); magicSword=sword;';
         //init no sword
         else
             //init no sword, just an empty fist
-            $initCode .= 'sword = new Weapon("sword", 1, 0, me);';
+            $initCode .= 'sword = new Weapon("sword", 1, 0, me); magicSword=sword;';
         //init shield
         if ($shieldResolver->result()
           // && ($shieldResolver->resolve()->getContainer()->getName() == 'leftHand'

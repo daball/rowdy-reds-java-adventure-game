@@ -9,6 +9,7 @@ public class DragonFightTester {
     Player me = new Player("Rowdy Red", 100);
     Salve salve = new Salve(7, 50);
     Weapon sword = new Weapon("sword", 75, 0, me);
+    Weapon magicSword = sword;
     Shield shield = new Shield(0.91, 0.80);
     Weapon crossbow = new Weapon("crossbow", 40, 35, me);
 
@@ -23,7 +24,7 @@ public class DragonFightTester {
         me.attack(dragon, crossbow);
       }
       else {
-        me.attack(dragon, sword);
+        me.attack(dragon, magicSword);
       }
     }
   }

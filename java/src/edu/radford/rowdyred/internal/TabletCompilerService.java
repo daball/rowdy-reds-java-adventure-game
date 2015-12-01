@@ -71,6 +71,7 @@ public class TabletCompilerService {
       + "public Player me;"
       + "public Salve salve;"
       + "public Weapon sword;"
+      + "public Weapon magicSword;"
       + "public Shield shield;"
       + "public Weapon crossbow;"
       + "public String key = \"efsdg908hn3rv0tyobri7oirgfoli\";"
