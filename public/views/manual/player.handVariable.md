@@ -8,20 +8,20 @@
 
 ### Description
 
-Examples of hand Variable are leftHand, or rightHand.
+Left or Right?
 
 ### Syntax:
 
 	handVariable = gameObject;
 
-### Parameters
+### Variables
 
 <dl>
   <dt>handVariable:</dt>
-  <dd>Consist of left or right hand.</dd>
+  <dd>Choose a hand.</dd>
 </dl>
 
 <dl>
   <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dd>Consist of game items.</dd>
 </dl>

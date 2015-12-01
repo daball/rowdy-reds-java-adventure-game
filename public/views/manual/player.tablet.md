@@ -8,11 +8,11 @@
 
 ### Description
 
-Player can use tablet to run multiple lines of Java block code, in order to solve a puzzle in a room. 
+Time to play a game.
 
 ### Syntax:
 
-	me.equip(Tablet);
+	me.equip{Tablet};
 
 ### Parameters
 
@@ -22,11 +22,11 @@ Player can use tablet to run multiple lines of Java block code, in order to solv
 </dl>
 
 <dl>
-  <dt>equip:</dt>
-  <dd>Assign player with some object.</dd>
+  <dt>equip{}:</dt>
+  <dd>Assign player with some game items.</dd>
 </dl>
 
 <dl>
   <dt>tablet:</dt>
-  <dd>To run multiple lines of Java block code.</dd>
+  <dd>Item equipped.</dd>
 </dl>

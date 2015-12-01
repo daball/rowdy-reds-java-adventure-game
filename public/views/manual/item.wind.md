@@ -4,24 +4,24 @@
   <li class="active">Wind Lamp</li>
 </ol>
 
-## lamp.wind
+## wind lamp
 
 ### Description
 
-When player enters a dark room and holding a lamp. Use this command to light the lamp and illuminate a room.
+To light the lamp and illuminate a room.
 
 ### Syntax
 
-	lamp.wind();
+	handVariable.wind{};
 
 ### Parameters
 
 <dl>
-  <dt>lamp:</dt>
-  <dd>Consist of a game object.</dd>
+  <dt>handVariable:</dt>
+  <dd>Choose a hand.</dd>
 </dl>
 
 <dl>
-  <dt>wind():</dt>
+  <dt>wind{}:</dt>
   <dd>Charge lamp to produce light.</dd>
 </dl>

@@ -1,11 +1,11 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/game">Game Items</a></li>
-<li class="active">Lamb Chop</li>
+<li class="active">Shield</li>
 </ol>
 
-## lambChop
+## shield
 
 ### Description
 
-A tasty morsel. 
+Protection for your safety.
