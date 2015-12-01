@@ -1,11 +1,12 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/game">Game Items</a></li>
-<li class="active">Lamb Chop</li>
+<li class="active">Arrows</li>
 </ol>
 
-## lambChop
+## arrows
 
 ### Description
 
-A tasty morsel. 
+Arrows are for protection.
+

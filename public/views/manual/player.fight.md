@@ -12,7 +12,7 @@ Time to fight the Dragon. I hope your up for the challenge.
 
 ### Syntax:
 
-	me.fight(dragon);
+	me.fight{dragon};
 
 ### Parameters
 
@@ -22,7 +22,7 @@ Time to fight the Dragon. I hope your up for the challenge.
 </dl>
 
 <dl>
-  <dt>fight:</dt>
+  <dt>fight{}:</dt>
   <dd>Method to fight.</dd>
 </dl>
 

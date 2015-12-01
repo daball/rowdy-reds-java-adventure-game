@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
-  <li><a href="#/docs/game">Game Items</a></li>
+  <li><a href="#/docs/equipment">Player Equipment</a></li>
   <li class="active">Backpack Assignment</li>
 </ol>
 

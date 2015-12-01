@@ -8,31 +8,31 @@
 
 ### Description
 
-The capability to unlock a locked door, or footlocker.
+Unlock Containers.
 
 ### Syntax
 
-	gameobject.unlock(handvariable);
-	footLocker.unlock(handVariable);
+	gameItems.unlock{handvariable};
+	footLocker.unlock{handVariable};
 
 ### Parameters
 
 <dl>
-  <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dt>gameItems:</dt>
+  <dd>Consist of game items.</dd>
 </dl>
 
 <dl>
-  <dt>unlock:</dt>
-  <dd>Unlocks any door.</dd>
+  <dt>unlock{}:</dt>
+  <dd>Unlocks any container.</dd>
 </dl>
 
 <dl>
   <dt>handVariable:</dt>
-  <dd>Consist of left or right hand.</dd>
+  <dd>Choose a hand.</dd>
 </dl>
 
 <dl>
   <dt>footLocker:</dt>
-  <dd>Consist of a game object.</dd>
+  <dd>Consist of a game item.</dd>
 </dl>

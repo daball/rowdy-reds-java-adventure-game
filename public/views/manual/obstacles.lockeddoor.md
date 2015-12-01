@@ -8,25 +8,4 @@
 
 ### Description
 
-When encountering a locked door. You need to have the correct key, and type the correct java code to open the door.
-
-### Syntax
-
-    gameobject.unlock(handVariable);
-
-### Parameters
-
-<dl>
-  <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
-</dl>
-
-<dl>
-  <dt>unlock:</dt>
-  <dd>Unlocks any door.</dd>
-</dl>
-
-<dl>
-  <dt>handVariable:</dt>
-  <dd>Consist of left or right hand.</dd>
-</dl>
+How do I open this locked door?
