@@ -9,12 +9,12 @@ public class Tablet {
 	}
 
 	public void checkBed(Bed bed) {
-		if (bed.isTooHard()) 
+		//if (bed.isTooHard()) 
 			me.doNothing();
-		else if (bed.isTooSoft())
+		//else if (bed.isTooSoft())
 			me.doNothing();
-		else
-			me.sleep(bed);
+		//else
+			//me.sleep(bed);
 	}
 	
 	public void fight(Dragon dragon) {

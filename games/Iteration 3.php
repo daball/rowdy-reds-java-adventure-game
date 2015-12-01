@@ -459,13 +459,30 @@ $observatory = array(
 );
 $bedchambers = array(
   'name'         => "Master Bedchambers",
-  'description'  => "You are in a lavishly decorated bedroom.  A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room.",
+  'description'  => "You are in a lavishly decorated bedroom. A four poster bed covered with crushed velvet blankets and plush pillows sit toward the middle of the room. " .
+                    "Everything here is beautiful and luxurious, except for a tacky poster and some crappy old computer with a small note taped to the monitor.",
   'imageUrl'     => "masterBedchambers.jpg",
   'items'       => array(
     'doorsPoster2'    => array(
       'type'                    => 'note',
       'name'                    => "poster",
       'description'             => "A curious poster it is.  It's for the band \"The Doors\" for the album titled \"Other Voices\"",
+    ),
+    'combinationNote'    => array(
+      'type'                    => 'note',
+      'name'                    => "note",
+      'description'             => "The note reads:\n\n" .
+                                "I, the master of the house, have written down this confounded combination so I will not forget it!\n" . 
+                                "//  Take c1 and add 143 to it and put that answer into c1\n" .
+                                "//  Then, take c1, multiply it by three and subtract seventy-seven and put that answer in c2\n" .
+                                "//  Next, multiply c1 and c2 together and put that answer in c3.\n" .
+                                "//  Then, divide c2 in half and put that into c2\n" .
+                                "//  Next, subtract c1 from c2 and put that answer into c2\n" .
+                                "//  Finally, add all three combinations together, and put the answer in c3\n" .
+                                "//  Remember to open(c1, c2, c3); on the safe!\n\n" .                                
+                                "It is certainly a good thing I wrote this down, because no one will ever figure it out, except for me, since " .
+                                "I'm the only one who has this note!  The stupid butler apparently thinks he's the head of security and made me " .
+                                "use this idiotic policy all this because I had combination 1 2 3 4 5 on my luggage.  Note to self: fire the butler.\n",
     ),
   ),
 );
