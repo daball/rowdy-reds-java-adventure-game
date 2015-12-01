@@ -21,6 +21,8 @@ s
 e
 e
 equip(tablet);
+
+
 w
 w
 w
@@ -40,6 +42,35 @@ rightHand.wind();
 tablet.solveChessPuzzle();
 d
 equip(backpack);
+
+u
+lamp.wind();
+s
+s
+s
+equip(crystalCloak);
+n
+e
+n
+e
+n
+e
+n
+u
+backpack[0]=rightHand;
+leftHand=new Key("Other Voices");
+westDoor.unlock(leftHand);
+leftHand=new Key("Strange Days");
+northDoor.unlock(leftHand);
+leftHand=new Key("Full Circle");
+eastDoor.unlock(leftHand);
+rightHand=magicSword;
+d
+s
+w
+w
+backpack[1]=healingSalve;
+
 e
 s
 tablet.raisePortcullis();

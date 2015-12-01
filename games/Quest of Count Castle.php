@@ -581,6 +581,12 @@ $infirmary = array(
   'name'         => "Infirmary",
   'description'  => "You are in an infirmary. After large epic battles this room would be care for the injured and dying.",
   'imageUrl'     => "infirmary.jpg",
+  'items'       => array(
+     'healingSalve'      => array(
+      'type'                    => "generalObject",
+      'name'                    => "healingSalve",
+      'description'             => "It is a jar of Wierdy Beardy's Magical Convoluted Enchanted Healing Salve. " .
+                                   "It says, \"Guaranteed to work in a pinch! At least until it's all gone...\"",
 );
 $pantryStorage = array(
   'name'         => "Pantry Storage Room",
