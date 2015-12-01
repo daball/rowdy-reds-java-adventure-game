@@ -28,6 +28,8 @@ module app.game {
         else {
           this.games = games.games;
           this.isLoading = false;
+          if (this.games.length == 1)
+            this.playGame(this.games[0]);
         }
       });
     }

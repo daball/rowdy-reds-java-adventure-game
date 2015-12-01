@@ -22,6 +22,8 @@ var app;
                     else {
                         _this.games = games.games;
                         _this.isLoading = false;
+                        if (_this.games.length == 1)
+                            _this.playGame(_this.games[0]);
                     }
                 });
             };
