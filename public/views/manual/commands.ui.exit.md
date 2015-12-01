@@ -13,7 +13,7 @@ Exit the game to the main menu.
 ### Syntax
 
     EXIT
-    System.exit(exitCode);
+    System.exit{exitCode};
 
 ### Parameters
 

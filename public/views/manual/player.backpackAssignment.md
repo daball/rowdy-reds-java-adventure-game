@@ -9,20 +9,20 @@
 
 ### Description
 
-Assigns object to backpack, backpack can hold up to 5 items. 
+Assignable array object.
 
 ### Syntax:
 
-	backpack[0] = gameobject;
+	backpack{0} = gameobject;
 
-### Parameters
+### Array
 
 <dl>
-  <dt>backpack:</dt>
+  <dt>backpack{0}:</dt>
   <dd>Consist of a game object.</dd>
 </dl>
 
 <dl>
   <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dd>Consist of game items.</dd>
 </dl>

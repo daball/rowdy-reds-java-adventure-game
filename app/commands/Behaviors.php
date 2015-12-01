@@ -89,12 +89,13 @@ Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*new\s+([\w\d$_.\[\]]+)\s*\(([\w\d\s$_
       $yoursOrTheirs = "your";
   }
 
-  //pre-assignment check
+  //pre-instantiation check
   if (!$key->hasComponent('Assignable'))
     return $source->getName() . " is not an assignable item.";
   if (!$target->hasComponent('Container'))
     return $target->getName() . " is no place for " . insertAOrAn($source->getName()) . ".";
 
+  GameState::getInstance()->incrementMoves();
   return "You have instantianted a new $cls called $keyName with the secret $secret.  "
         . $target->getComponent("Container")->setItemAt($index, $key)
         . $key->getComponent('Assignable')->assignTo($target, $index);
@@ -185,6 +186,7 @@ Router::route('/^\s*([\w\d$_.\[\]]+)\s*=\s*([\w\d$_.\[\]]+)\s*;\s*$/', function 
   if (!$target->hasComponent('Container'))
     return $target->getName() . " is no place for " . insertAOrAn($source->getName()) . ".";
   //perform assignment
+  GameState::getInstance()->incrementMoves();
   return $source->getComponent('Assignable')->assignTo($target, $index);
 });
 
@@ -224,9 +226,10 @@ Router::route('/^\s*(?:me\s*.\s*){0,1}equip\s*\(\s*([\w$_]*[\w\d$_\.]*)\s*\)\s*;
   }
   //pre-assignment check
   if (!$item->hasComponent('Equippable'))
-    return "$item is not an equippable item.";
+    return "You cannot wear " . insertAOrAn($item->getName()) . ".  You might try carrying it instead.";
 
   //perform equip
+  GameState::getInstance()->incrementMoves();
   return GameState::getInstance()->getPlayer()->equipItem($item);
 });
 
@@ -234,11 +237,13 @@ Router::route('/^\s*(?:me\s*.\s*){0,1}equip\s*\(\s*([\w$_]*[\w\d$_\.]*)\s*\)\s*;
 
 //inspect|look object || [me.]inspect(object);
 Router::route(array(
+    '/^\s*(?:(?:read)|(?:look at))\s+(.+)$/i',
     '/^(?:me\s*.\s*){0,1}\s*(?:inspect\s*\(\s*)([\w$_]*[\w\d$_]*)(?:\s*\)\s*;\s*)$/',
-    '/^\s*(?:(?:inspect)|(?:look))(.*)$/i',
+    '/^\s*(?:(?:inspect)|(?:look))\s+(.*)$/i',
+    '/^\s*(?:(?:inspect)|(?:look))$/i',
     '/^\s*System\s*.\s*out\s*.\s*print(?:ln){0,1}\s*\(\s*([\w$_]+[\w\d$_]*)\s*\)\s*;\s*$/',
   ), function ($command, $code, $pattern, $matches) {
-  $provided = $matches[1];
+  $provided = isset($matches[1]) ? $matches[1] : "";
   if ($provided == "") $provided = 'room';
   $resolver = Resolver::what($provided, Resolver::ANY, false);
   $resolution = $resolver->resolve();
@@ -445,10 +450,23 @@ Router::route('/^\s*tablet\s*.\s*([A-Za-z$_]{1}[A-Za-z0-9$_]*)\s*\((.*)\)\s*;$/'
     $output = $compiler->invoke($methodName, $parameters);
   }
   catch (\JavaException $e) {
-    return "There was a problem executing your Java tablet code.\n" . $e->toString();
+    $consoleOutput = $compiler->getConsoleOutput();
+    if ($consoleOutput) $consoleOutput .= "\n";
+    if (!java_instanceof($e->getCause(), java("edu.radford.rowdyred.puzzles.CharacterDeadException")))
+      return $consoleOutput
+        . "There was a problem executing your Java tablet code.\n"
+        . java_values($e->getCause()->toString());
   }
   if ($room->hasComponent("Puzzle")) {
+    GameState::getInstance()->incrementMoves();
     $output = $room->getComponent("Puzzle")->solve($instance) . "  " . $output;
   }
+  $consoleOutput = $compiler->getConsoleOutput();
+  if ($consoleOutput) $consoleOutput .= "\n";
+  $output =  $consoleOutput . $output;
+  if (!$output) $output = "Your code executed, but did not return a value or print to the standard output stream.  There are no puzzles in the room that need to be solved.";
+  if (GameState::getInstance()->getPlayerRoom()->getName() != $room->getName())
+    $output .= "\n" . GameState::getInstance()->inspectRoom();
+  $compiler->clean();
   return $output;
 });

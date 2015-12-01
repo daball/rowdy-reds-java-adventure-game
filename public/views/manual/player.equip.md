@@ -8,11 +8,11 @@
 
 ### Description
 
-Pick up backpack to store other objects inside.
+Equip player equipment.
 
 ### Syntax:
 
-    me.equip(backpack);
+    me.equip{backpack};
 
 ### Parameters
 
@@ -22,12 +22,12 @@ Pick up backpack to store other objects inside.
 </dl>
 
 <dl>
-  <dt>equip:</dt>
-  <dd>Assign player with some object.</dd>
+  <dt>equip{}:</dt>
+  <dd>Assign player with some player equipment.</dd>
 </dl>
 
 
 <dl>
   <dt>backpack:</dt>
-  <dd>Consist of a game object.</dd>
+  <dd>Consist of player equipment.</dd>
 </dl>

@@ -8,20 +8,20 @@
 
 ### Description
 
-Open the door to a room.
+Open container.
 
 ### Syntax
 
-    gameobject.open();
+    gameItems.open{};
 
 ### Parameters
 
 <dl>
-  <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dt>gameItems:</dt>
+  <dd>Consist of game items.</dd>
 </dl>
 
 <dl>
-  <dt>open:</dt>
-  <dd>Opens any door.</dd>
+  <dt>open{}:</dt>
+  <dd>Open container.</dd>
 </dl>

@@ -187,10 +187,11 @@ function assembleLockableContainer($roomDefinition, $room, $item) {
     $inspector->popEventHandler('inspect');
     $inspector->onInspect(function ($inspector) use ($item) {
       if ($inspector->getParent()->getComponent("Openable")->isOpened()) {
+        $output = "";
         $items = $inspector->getParent()->getComponent('Container')->getAllItems();
         $saItems = array();
         foreach($items as $value) { array_push($saItems, insertAOrAn($value->getName())); }
-        if (count($roomItems) > 0) {
+        if (count($items) > 0) {
           $sItems = natural_language_join($saItems);
           $output .= "  You see here $sItems.";
         }
@@ -288,7 +289,9 @@ function assembleBackpack($roomDefinition, $room, $item) {
       $inspector->onInspect(function ($inspector) use ($item, $initialOnInspect) {
         $container = $inspector->getParent()->getComponent("Container");
         $output = "";
-        foreach ($container->getAllItems() as $key => $value) {
+        //foreach ($container->getAllItems() as $key => $value) {
+        for ($key = 0; $key < $container->countItems(); $key++) {
+          $value = isset($container->getAllItems()[$key]) ? $container->getAllItems()[$key] : null;
           $output .= "  backpack[$key] = ";
           if ($value) $output .= $value->getName() . ";";
           else $output .= "null;";
@@ -417,7 +420,7 @@ class GameBuilder
     // }
     return $this;
   }
-  
+
   public function oneWayConnectRoom($roomName1, $room1Direction, $roomName2)
   {
     if (is_array($roomName1)) $roomName1 = $roomName1['name'];

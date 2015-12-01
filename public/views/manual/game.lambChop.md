@@ -1,27 +1,11 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/game">Game Items</a></li>
-<li class="active">LambChop</li>
+<li class="active">Lamb Chop</li>
 </ol>
 
 ## lambChop
 
 ### Description
 
-Add lamb chop to hand you are referring too. 
-
-### Syntax:
-
-	handVariable = lambChop;
-
-### Parameters
-
-<dl>
-  <dt>handVariable:</dt>
-  <dd>Consist of left or right hand.</dd>
-</dl>
-
-<dl>
-  <dt>lambChop:</dt>
-  <dd>Consist of a game object.</dd>
-</dl>
+A tasty morsel. 

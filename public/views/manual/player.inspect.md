@@ -12,7 +12,7 @@ Gives a description of an object.
 
 ### Syntax:
 
-	me.inspect(gameobject);
+	me.inspect{gameobject};
 
 ### Parameters
 
@@ -22,11 +22,11 @@ Gives a description of an object.
 </dl>
 
 <dl>
-  <dt>inspect:</dt>
-  <dd>The current room, and/or game object.</dd>
+  <dt>inspect{}:</dt>
+  <dd>The current room, and/or game items.</dd>
 </dl>
 
 <dl>
   <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dd>Consist of game items.</dd>
 </dl>

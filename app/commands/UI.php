@@ -11,7 +11,7 @@ use \engine\GameEngine;
 use \engine\GameState;
 
 //exit command
-Router::route('/^\s*(exit)\s*$/i', function ($command, $code, $pattern, $matches) {
+Router::route('/^\s*(exit|System.exit\(\d+\);)\s*$/i', function ($command, $code, $pattern, $matches) {
   $gameState = GameState::getInstance();
   $gameState->isExiting(true);
   return "Thank you for playing!\nWelcome back!";

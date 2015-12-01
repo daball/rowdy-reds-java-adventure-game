@@ -28,6 +28,10 @@ class TabletCompilerService {
     return $this->javaCompilerService->compile($constructorCode, $sourceCode);
   }
 
+  public function clean() {
+    return $this->javaCompilerService->clean();
+  }
+
   public function invoke($methodName, $parameters) {
     return $this->javaCompilerService->invokeMethod($methodName, $parameters);
   }
@@ -38,5 +42,9 @@ class TabletCompilerService {
 
   public function getClass() {
     return $this->javaCompilerService->compiledClass;
+  }
+
+  public function getConsoleOutput() {
+    return java_values($this->javaCompilerService->getConsoleOutput());
   }
 }

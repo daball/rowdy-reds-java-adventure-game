@@ -10,8 +10,9 @@ The player types commands followed by the `Enter` key in order to play the game.
 
 - [Commands](#/docs/commands)
 - [Rooms](#/docs/rooms)
-- [Obstacles](#/docs/obstacles)
 - [Game Items](#/docs/game)
+- [Obstacles](#/docs/obstacles)
+- [Puzzles](#/docs/puzzles)
 - [Player Equipment](#/docs/equipment)
 - [Player Properties](#/docs/properties)
 - [Player Behaviors](#/docs/player)

@@ -17,17 +17,17 @@ class GeneralObject extends GameObject
 {
   public function __construct($name) {
     parent::__construct($name);
-    $this->define(function ($key) {
+    $this->define(function ($generalObject) {
       $assignable = new Assignable();
-      $key->addComponent($assignable);
+      $generalObject->addComponent($assignable);
     });
-    $this->define(function ($generalobject) {
+    $this->define(function ($generalObject) {
       $inspector = new Inspector();
       $inspector->popEventHandler('inspect');
       $inspector->onInspect(function ($inspector) {
         return "You have something you don't know what it is.";
       });
-      $generalobject->addComponent($inspector);
+      $generalObject->addComponent($inspector);
     });
   }
 }

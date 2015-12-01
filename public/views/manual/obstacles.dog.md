@@ -8,20 +8,4 @@
 
 ### Description
 
-When encountering the dog, feed the dog the lamb chop so you can access the next room.
-
-### Syntax
-
-    bowl = handVariable;
-
-### Parameters
-
-<dl>
-  <dt>bowl:</dt>
-  <dd>Is a game object.</dd>
-</dl>
-
-<dl>
-  <dt>handVariable:</dt>
-  <dd>Consists of left or right hand.</dd>
-</dl>
+A furious dog is looming around somewhere.

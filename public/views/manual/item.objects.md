@@ -1,37 +1,37 @@
 <ol class="breadcrumb">
   <li><a href="#/docs/contents">User Manual</a></li>
   <li><a href="#/docs/item">Item Behaviors</a></li>
-  <li class="active">Game Objects</li>
+  <li class="active">Game Items</li>
 </ol>
 
-## game objects
+## game items
 
 ### Description
 
-Game Objects consist of a `rustyKey`, `brassKey`, `lamp`, `bowl`, `healingSalve`, `sword`, `sheild`, `footlocker`, `handle`, `lambChop`, `knife`, `cupboard`, `clothCloak`, `crystalCloak`, `backpack`, `goldKey`, `crossbow`, `chest`, `arrows`, `door`. 
+Game Objects consist of game items. 
 
 ### Syntax
 
-	gameobject.open(); 
-	leftHand = gameobject 
-	rightHand = gameobject 
-	gameobject.unlock(handvarible);
+	gameItems.open{}; 
+	leftHand = gameItems;
+	rightHand = gameItems;
+	gameItems.unlock{handvarible};
 
 ### Parameters
 
 <dl>
-  <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dt>gameItems:</dt>
+  <dd>Consist of game items.</dd>
 </dl>
 
 <dl>
-  <dt>unlock:</dt>
-  <dd>Unlocks any door.</dd>
+  <dt>unlock{}:</dt>
+  <dd>Unlocks any container.</dd>
 </dl>
 
 <dl>
   <dt>handVariable:</dt>
-  <dd>Consist of left or right hand.</dd>
+  <dd>Choose a hand.</dd>
 </dl>
 
 <dl>
@@ -45,6 +45,6 @@ Game Objects consist of a `rustyKey`, `brassKey`, `lamp`, `bowl`, `healingSalve`
 </dl>
 
 <dl>
-  <dt>open:</dt>
-  <dd>Opens any door.</dd>
+  <dt>open{}:</dt>
+  <dd>Opens any container.</dd>
 </dl>

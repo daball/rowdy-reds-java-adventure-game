@@ -13,13 +13,13 @@ Gives a description of an room, and an object.
 ### Syntax:
 
 	inspect
-	inspect();
-	me.inspect(object);
+	inspect{};
+	me.inspect{object};
 
 ### Parameters
 
 <dl>
-  <dt>inspect:</dt>
+  <dt>inspect{}:</dt>
   <dd>Gives description of room.</dd>
 </dl>
 

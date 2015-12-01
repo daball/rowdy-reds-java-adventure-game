@@ -13,10 +13,10 @@ Assigns object to player's left hand.
 
 ### Syntax
 
-    leftHand = gameObject;
-    me.leftHand = gameObject;
+    leftHand = gameItems;
+    me.leftHand = gameItems;
 
-### Parameters
+### Variables
 
 <dl>
   <dt>leftHand:</dt>
@@ -30,5 +30,5 @@ Assigns object to player's left hand.
 
 <dl>
   <dt>gameobject:</dt>
-  <dd>Consist of a rustyKey, brassKey, lamp, bowl, healingSalve, sword, sheild, footlocker, handle, lambChop, knife, cupboard, clothCloak, crystalCloak, backpack, goldKey, crossbow, chest, and arrows.</dd>
+  <dd>Consist of game items.</dd>
 </dl>

@@ -5,5 +5,7 @@
 
 ## Player Equipment
 
-- [Crystal Cloak](#/docs/equipment.cloak)
+- [Cloth Cloak](#/docs/equipment.clothCloak)
 - [Tablet](#/docs/equipment.tablet)
+- [Backpack](#/docs/equipment.backpack)
+

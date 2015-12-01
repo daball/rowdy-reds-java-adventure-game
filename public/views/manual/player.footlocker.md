@@ -12,21 +12,21 @@ Unlocks the foot locker, assuming you have the correct key in your hand.
 
 ### Syntax:
 
-	footLocker.unlock(handVariable);
+	footLocker.unlock{handVariable};
 
 ### Parameters
 
 <dl>
   <dt>footLocker:</dt>
-  <dd>Consist of a game object.</dd>
+  <dd>Consist of a game items.</dd>
 </dl>
 
 <dl>
-  <dt>unlock:</dt>
+  <dt>unlock{}:</dt>
   <dd>Unlocks any door.</dd>
 </dl>
 
 <dl>
   <dt>handVariable:</dt>
-  <dd>Consist of left or right hand.</dd>
+  <dd>Choose a hand.</dd>
 </dl>
