@@ -289,7 +289,9 @@ function assembleBackpack($roomDefinition, $room, $item) {
       $inspector->onInspect(function ($inspector) use ($item, $initialOnInspect) {
         $container = $inspector->getParent()->getComponent("Container");
         $output = "";
-        foreach ($container->getAllItems() as $key => $value) {
+        //foreach ($container->getAllItems() as $key => $value) {
+        for ($key = 0; $key < $container->countItems(); $key++) {
+          $value = isset($container->getAllItems()[$key]) ? $container->getAllItems()[$key] : null;
           $output .= "  backpack[$key] = ";
           if ($value) $output .= $value->getName() . ";";
           else $output .= "null;";
