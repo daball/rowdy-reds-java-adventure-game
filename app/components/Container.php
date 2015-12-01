@@ -116,7 +116,10 @@ class Container extends BaseComponent
     $item = $this->getItemAt($index);
 
     if ($this->trigger('beforeUnset', array($this, $index, $item))) {
-      unset($this->items[$index]);
+      if ($this->getParent() && $this->getParent()->getName() == "backpack")
+        unset($this->items[$index]);
+      else
+        array_splice($this->items, $index, 1);
       return $this->trigger('unset', array($this, $index, $item));
     }
     else

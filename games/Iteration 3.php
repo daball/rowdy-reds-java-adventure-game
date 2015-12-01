@@ -18,6 +18,7 @@ use \game\Room;
 use \playable\BasicContainer;
 use \playable\Key;
 use \playable\Food;
+use \playable\GeneralObject;
 use \playable\LockedDoor;
 use \playable\Dog;
 use \util\Resolver;
@@ -555,7 +556,7 @@ $eTowerTop = array(
   'puzzleReward' => array(
     'type'        => "generalObject",
     'name'        => "magicSword",
-    'description' => "Beats the shit out of a dragon.",
+    'description' => "It's a magical enchanted sword.  Enscribed on the hilt is the word DRAGONBUSTER.",
   ),
 );
 $infirmary = array(
@@ -710,7 +711,7 @@ $cellarStorage = array(
         ),
       ),
     ),
-  ),  
+  ),
 );
 $limbo = array(
   'name'         => "Limbo",
@@ -855,33 +856,39 @@ GameBuilder::newGame($gameName)
     $container = $room->getComponent("Container");
     $westDoor = $container->findItemByName("westDoor");
     $westDoorInitialOnUnlock = $westDoor->getComponent("Lockable")->popEventHandler('unlock');
-    $westDoor->getComponent("Lockable")->onUnlock(function ($lockable) use ($westDoorInitialOnUnlock) {
+    $westDoor->getComponent("Lockable")->onUnlock(function ($lockable, $keyProvided) use ($westDoorInitialOnUnlock) {
       $lockable->publish("TheDoorsPuzzle", $lockable->getParent()->getName());
-      $westDoorInitialOnUnlock($lockable);
+      return $westDoorInitialOnUnlock($lockable, $keyProvided);
     });
     $eastDoor = $container->findItemByName("eastDoor");
     $eastDoorInitialOnUnlock = $eastDoor->getComponent("Lockable")->popEventHandler('unlock');
-    $eastDoor->getComponent("Lockable")->onUnlock(function ($lockable) use ($eastDoorInitialOnUnlock) {
+    $eastDoor->getComponent("Lockable")->onUnlock(function ($lockable, $keyProvided) use ($eastDoorInitialOnUnlock) {
       $lockable->publish("TheDoorsPuzzle", $lockable->getParent()->getName());
-      $eastDoorInitialOnUnlock($lockable);
+      return $eastDoorInitialOnUnlock($lockable, $keyProvided);
     });
     $northDoor = $container->findItemByName("northDoor");
-    $northDoorInitialOnUnlock = $eastDoor->getComponent("Lockable")->popEventHandler('unlock');
-    $northDoor->getComponent("Lockable")->onUnlock(function ($lockable) use ($northDoorInitialOnUnlock) {
+    $northDoorInitialOnUnlock = $northDoor->getComponent("Lockable")->popEventHandler('unlock');
+    $northDoor->getComponent("Lockable")->onUnlock(function ($lockable, $keyProvided) use ($northDoorInitialOnUnlock) {
       $lockable->publish("TheDoorsPuzzle", $lockable->getParent()->getName());
-      $northDoorInitialOnUnlock($lockable);
+      return $northDoorInitialOnUnlock($lockable, $keyProvided);
     });
-    $doorsToGo = 3;
-    $room->subscribe("TheDoorsPuzzle", function ($sender, $queue, $message) use ($room, $eTowerTop, &$doorsToGo) {
-      $doorsToGo--;
+    $doorsOpened = array();
+    $magicalSword = \game\assembleGeneralObject($eTowerTop, $room, $eTowerTop['puzzleReward']);
+    $room->subscribe("TheDoorsPuzzle", function ($sender, $queue, $message) use ($room, $eTowerTop, $magicalSword, &$doorsOpened) {
+      $doorsOpened[$message] = true;
+      $doorsToGo = 3 - count($doorsOpened);
+      $lockable = $sender;
+      $door = $lockable->getParent();
+      $room = $door->getContainer();
+      $container = $room->getComponent("Container");
       if ($doorsToGo > 0) {
         $room->publish("System.out", "$doorsToGo doors to go.");
       }
       else if ($doorsToGo == 0) {
-        $container = $room->getComponent("Container");
-        $container->insertItem(assembleGeneralObject($eTowerTop, $room, $item));
+        $container->insertItem($magicalSword);
         $room->publish("System.out", "You have solved the puzzle.  What's that you see over there?");
       }
+      $doorsToGo--;
     });
   }))
   ->connectRooms($eTowerBase,       Direction::$u,    $eTowerTop)
@@ -922,8 +929,8 @@ GameBuilder::newGame($gameName)
       });
       $puzzle->popEventHandler('beforeSolve');
       $puzzle->onBeforeSolve(function ($puzzle, $javaTabletInstance) {
-        $resolver = $this->resolve("handle");
-        return (/*$resolver->result() &&*/ java_values($javaTabletInstance->portcullis->isRaised()));
+        $resolver = $puzzle->resolve("handle");
+        return ($resolver->result() && java_values($javaTabletInstance->portcullis->isRaised()));
       });
       $initialOnSolve = $puzzle->popEventHandler('solve');
       $puzzle->onSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnSolve) {
@@ -932,15 +939,18 @@ GameBuilder::newGame($gameName)
         $door = $container->findItemByName("portcullis");
         $lockable = $door->getComponent("Lockable");
         $openable = $door->getComponent("Openable");
+        $collider = $door->getComponent("Collider");
         $lockable->setUnlocked();
         $openable->setOpened();
+        $collider->disableCollisions();
         $room->setImageUrl('portcullis_open.jpg');
-        return $initialOnSolve($puzzle, $javaTabletInstance);
+        return $initialOnSolve($puzzle, $javaTabletInstance) . "  The door is now open.";
       });
       $initialOnRefuseSolve = $puzzle->popEventHandler('refuseSolve');
       $puzzle->onRefuseSolve(function ($puzzle, $javaTabletInstance) use ($portcullis, $initialOnRefuseSolve) {
-        // if (!$resolver->result())
-        //   return "It looks like there is a place for a handle.  You can't possibly turn the crank without a handle.";
+        $resolver = $puzzle->resolve("handle");
+        if (!$resolver->result())
+          return "It looks like there is a place for a handle.  You can't possibly turn the crank without a handle.";
         return $initialOnRefuseSolve($puzzle, $javaTabletInstance);
       });
     }));
@@ -970,8 +980,8 @@ GameBuilder::newGame($gameName)
         $openable = $safe->getComponent("Openable");
         $lockable->setUnlocked();
         $openable->setOpened();
-//        $room->setImageUrl('cellarStorage.jpg');
-        return $initialOnSolve($puzzle, $javaTabletInstance);
+        //$room->setImageUrl('cellarStorage.jpg');
+        return $initialOnSolve($puzzle, $javaTabletInstance) . "  You have cracked the safe.  Take a look inside.";
       });
     }));
   }))

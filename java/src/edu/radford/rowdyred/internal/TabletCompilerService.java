@@ -5,6 +5,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.*;
 import java.nio.file.Paths;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class TabletCompilerService {
   public String phpSessionId;
@@ -91,7 +97,24 @@ public class TabletCompilerService {
         if (method.isAccessible())
           methodsAvailable += "tablet." + method.getName() + "()\n";
         if (method.getName().equals(methodName)) {
-            return method.invoke(this.tabletInstance, parameters);
+          ExecutorService executor = Executors.newSingleThreadExecutor();
+          Future<Object> future = executor.submit(new Callable<Object>() {
+              @Override
+              public Object call() throws Exception {
+                return method.invoke(tabletInstance, parameters);
+              }
+            });
+
+          try {
+            Object val = future.get(750, TimeUnit.MILLISECONDS);
+            executor.shutdownNow();
+            return val;
+          } catch (TimeoutException e) {
+              future.cancel(true);
+              executor.shutdownNow();
+              throw(e);
+          }
+
         }
     }
     return "Method name " + methodName + " not found in class " + this.compiledClass.getSimpleName() + ". Accessible methods:\n" + methodsAvailable;

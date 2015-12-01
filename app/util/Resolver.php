@@ -176,6 +176,8 @@ class Resolver
           return $this->matches()[2];
         case self::PLAYER_BACKPACK_INDEX:
           return $backpack->getComponent("Container")->getItemAt($this->matches()[2]);
+        case self::PLAYER_EQUIPMENT_ITEM:
+          return $this->matches()[2];
         case self::NO_RESULT:
         default:
           return null;

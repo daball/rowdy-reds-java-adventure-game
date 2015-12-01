@@ -224,7 +224,7 @@ Router::route('/^\s*(?:me\s*.\s*){0,1}equip\s*\(\s*([\w$_]*[\w\d$_\.]*)\s*\)\s*;
   }
   //pre-assignment check
   if (!$item->hasComponent('Equippable'))
-    return "$item is not an equippable item.";
+    return "You cannot wear " . insertAOrAn($item->getName()) . ".  You might try carrying it instead.";
 
   //perform equip
   return GameState::getInstance()->getPlayer()->equipItem($item);
@@ -234,11 +234,13 @@ Router::route('/^\s*(?:me\s*.\s*){0,1}equip\s*\(\s*([\w$_]*[\w\d$_\.]*)\s*\)\s*;
 
 //inspect|look object || [me.]inspect(object);
 Router::route(array(
+    '/^\s*(?:(?:read)|(?:look at))\s+(.+)$/i',
     '/^(?:me\s*.\s*){0,1}\s*(?:inspect\s*\(\s*)([\w$_]*[\w\d$_]*)(?:\s*\)\s*;\s*)$/',
-    '/^\s*(?:(?:inspect)|(?:look))(.*)$/i',
+    '/^\s*(?:(?:inspect)|(?:look))\s+(.*)$/i',
+    '/^\s*(?:(?:inspect)|(?:look))$/i',
     '/^\s*System\s*.\s*out\s*.\s*print(?:ln){0,1}\s*\(\s*([\w$_]+[\w\d$_]*)\s*\)\s*;\s*$/',
   ), function ($command, $code, $pattern, $matches) {
-  $provided = $matches[1];
+  $provided = isset($matches[1]) ? $matches[1] : "";
   if ($provided == "") $provided = 'room';
   $resolver = Resolver::what($provided, Resolver::ANY, false);
   $resolution = $resolver->resolve();
