@@ -587,6 +587,8 @@ $infirmary = array(
       'name'                    => "healingSalve",
       'description'             => "It is a jar of Wierdy Beardy's Magical Convoluted Enchanted Healing Salve. " .
                                    "It says, \"Guaranteed to work in a pinch! At least until it's all gone...\"",
+    ),                               
+  ),                                   
 );
 $pantryStorage = array(
   'name'         => "Pantry Storage Room",
