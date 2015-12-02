@@ -523,6 +523,14 @@ $beds = array(
   'name'         => "Odd Bedroom",
   'description'  => "You are in a bedroom with three beds.  A fire crackles in the fireplace, making the room soft, warm, and comfortable.",
   'imageUrl'     => "oddBedroom.jpg",
+  'items'       => array(
+    'goldilocksKey'    => array(
+      'type'                    => 'key',
+      'name'                    => "goldilocksKey",
+      'secret'                  => "goldilocks",
+      'description'             => "It's a gold key.",
+    ),
+  ),
 );
 $wTowerTop = array(
   'name'         => "Top of Western Tower",
@@ -647,7 +655,7 @@ $alcove = array(
       'type'        => "lockedDoor",
       'name'        => "door",
       'direction'   => Direction::$s,
-      'secret'  => "Goldilocks Sleeps",
+      'secret'  => "goldilocks",
     ),
   ),
 );
