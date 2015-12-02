@@ -22,7 +22,6 @@ e
 e
 equip(tablet);
 
-
 w
 w
 w
@@ -82,7 +81,6 @@ leftHand=handle;
 e
 s
 w
-
 
 w
 n
@@ -149,17 +147,13 @@ public void openSafe() {
     safe.open(c1, c2, c3);
 }
 
-public void goldilocks() {
-
-}
-
 public void fightDragon() {
   while (dragon.isAlive()) {
-    if (me.getHealthPoints() <= 30) {
-    me.heal(salve);
+    if (dragon.isInhaling()) {
+      me.block(shield);
     }
-    else if (dragon.isInhaling()) {
-    me.block(shield);
+    else if (me.getHealthPoints() <= 30) {
+      me.heal(healingSalve);
     }
     else if (dragon.isFlying()) {
     me.attack(dragon, crossbow);
