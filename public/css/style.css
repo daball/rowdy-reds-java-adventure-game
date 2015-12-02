@@ -171,7 +171,7 @@ body {
 }
 
 .main-menu {
-	background-image: url('../img/Iteration%202/mainBack.gif') !important;
+	background-image: url('../img/mainBack.gif') !important;
 	background-size:cover;
 	background-repeat: no-repeat;
 	width: 100%;
