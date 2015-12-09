@@ -1,0 +1,108 @@
+<?php
+
+namespace components;
+
+require_once 'BaseComponent.php';
+require_once __DIR__.'/../game/Direction.php';
+
+use \game\Direction;
+
+/**
+ * The FoodConsumer can be assigned to any GameObject that can consume Food.
+ * @author David Ball
+ * @ignore
+ **/
+class FoodConsumer extends BaseComponent
+{
+  /**
+   * @ignore
+   */
+  protected $isHungry = true;
+
+  /**
+   * @ignore
+   */
+  public function __construct() {
+    $this->define(function ($foodConsumer) {
+      $foodConsumer->setHungry(true);
+      $foodConsumer->onBeforeEat(function ($foodConsumer, $food) {
+        return (is_a($food, "\playable\Food"));
+      });
+      $foodConsumer->onEat(function ($foodConsumer, $food) {
+        if ($food) {
+          if ($foodConsumer && $foodConsumer->getParent())
+            return "The " . $foodConsumer->getParent()->getName() . " ate the " . $food->getName() . ".";
+          else
+            return "The food consumer ate the " . $food->getName() . ".";
+        }
+        else if ($foodConsumer && $foodConsumer->getParent())
+          return "You didn't send any food to the " . $foodConsumer->getParent()->getName() . ".";
+        else
+          return "Something is wrong with the food and the food consumer.";
+      });
+      $foodConsumer->onRefuseEat(function ($foodConsumer, $food) {
+        if ($food) {
+          if ($foodConsumer && $foodConsumer->getParent())
+            return "The " . $foodConsumer->getParent()->getName() . " did not eat the " . $food->getName() . ".";
+          else
+            return "The food consumer did not eat the " . $food->getName() . ".";
+        }
+        else if ($foodConsumer && $foodConsumer->getParent())
+          return "You didn't send any food to the " . $foodConsumer->getParent()->getName() . ".";
+        else
+          return "Something is wrong with the food and the food consumer.";
+      });
+    });
+  }
+
+  /**
+   * @ignore
+   */
+  public function isHungry() {
+    return $this->isHungry;
+  }
+
+  /**
+   * @ignore
+   */
+  public function setHungry($isHungry) {
+    $this->isHungry = $isHungry;
+    return $this->isHungry();
+  }
+
+  /**
+   * @ignore
+   */
+  public function eat($food) {
+    if ($this->trigger('beforeEat', array($this, $food))) {
+      $this->setHungry(false);
+      $foodsContainer = $food->getContainer();
+      if ($foodsContainer)
+        $foodsContainer->getComponent('Container')->removeItem($food);
+      $output = $this->trigger('eat', array($this, $food));
+      return $output;
+    }
+    return $this->trigger('refuseEat', array($this, $food));
+  }
+
+  /**
+   * @ignore
+   */
+  public function onBeforeEat($closure=null) {
+    return $this->on("beforeEat", $closure);
+  }
+
+  /**
+   * @ignore
+   */
+  public function onEat($closure=null) {
+    return $this->on("eat", $closure);
+  }
+
+  /**
+   * @ignore
+   */
+  public function onRefuseEat($closure=null) {
+    return $this->on("refuseEat", $closure);
+  }
+}

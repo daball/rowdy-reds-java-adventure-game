@@ -1,0 +1,124 @@
+<?php
+
+namespace components;
+
+require_once 'BaseComponent.php';
+require_once __DIR__.'/../playable/Key.php';
+
+use \playable\Key;
+
+/**
+ * The Lockable
+ * @author David Ball
+ * @ignore
+ **/
+class Lockable extends BaseComponent
+{
+  protected $locked = true;
+  protected $secret = null;
+
+  public function __construct($secret) {
+    $this->define(function ($lockable) use ($secret) {
+      $lockable->setSecret($secret);
+      //This defines the logic for locking/unlocking an object
+      $lockLogic = function ($lockable, $keyProvided) {
+        return ($lockable->getSecret() == $keyProvided->getSecret());
+      };
+      $lockable->onBeforeLock($lockLogic);
+      $lockable->onBeforeUnlock($lockLogic);
+
+      $lockable->onLock(function ($lockable, $keyProvided) {
+        if ($lockable->getParent()
+          && $lockable->getParent()->hasComponent('Openable'))
+          $lockable->getParent()->getComponent('Openable')->close();
+        return "You turned the key and the object locks.";
+      });
+      $lockable->onRefuseLock(function ($lockable, $keyProvided) {
+        return "You insert the key, but it doesn't fit the lock.";
+      });
+      $lockable->onUnlock(function ($lockable, $keyProvided) {
+        if ($lockable->getParent()
+          && $lockable->getParent()->hasComponent('Openable'))
+          $lockable->getParent()->getComponent('Openable')->open();
+        return "You turned the key and the object unlocks.";
+      });
+      $lockable->onRefuseUnlock(function ($lockable, $keyProvided) {
+        return "You insert the key, but it doesn't fit the lock.";
+      });
+    });
+  }
+
+  /* Property Getter/Setter */
+
+  public function setSecret($secret) {
+    $this->secret = $secret;
+    return $this->getSecret();
+  }
+
+  public function getSecret() {
+    return $this->secret;
+  }
+
+  public function setLocked() {
+    $this->locked = true;
+  }
+
+  public function setUnlocked() {
+    $this->locked = false;
+  }
+
+  /* Public API for Component */
+
+  public function lock(Key $key) {
+    if ($this->trigger('beforeLock', array($this, $key))) {
+      $this->setLocked();
+      return $this->trigger('lock', array($this, $key));
+    }
+    else
+      return $this->trigger('refuseLock', array($this, $key));
+  }
+
+  public function unlock(Key $key) {
+    if ($this->trigger('beforeUnlock', array($this, $key))) {
+      $this->setUnlocked();
+      return $this->trigger('unlock', array($this, $key));
+    }
+    else
+      return $this->trigger('refuseUnlock', array($this, $key));
+  }
+
+  public function isLocked() {
+    return $this->locked;
+  }
+
+  public function isUnlocked() {
+    return !$this->isLocked();
+  }
+
+  /* Event Closure Registration Functions */
+
+  public function onBeforeLock($closure=null) {
+    return $this->on("beforeLock", $closure);
+  }
+
+  public function onLock($closure=null) {
+    return $this->on("lock", $closure);
+  }
+
+  public function onRefuseLock($closure=null) {
+    return $this->on("refuseLock", $closure);
+  }
+
+  public function onBeforeUnlock($closure=null) {
+    return $this->on("beforeUnlock", $closure);
+  }
+
+  public function onUnlock($closure=null) {
+    return $this->on("unlock", $closure);
+  }
+
+  public function onRefuseUnlock($closure=null) {
+    return $this->on("refuseUnlock", $closure);
+  }
+}
+

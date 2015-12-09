@@ -1,0 +1,15 @@
+<div class="modal-rowdyred">
+  <div class="modal-header">
+    <h3 class="modal-title">
+      <span class="glyphicon glyphicon-exclamation-sign float-right" aria-hidden="true"></span>
+      Game Service Error
+    </h3>
+  </div>
+  <div class="modal-body">
+    <p>An error occurred in the game service application.</p>
+    <p ng-bind-html="vm.error"></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary radfordred inverted" type="button" ng-click="vm.ok()">OK</button>
+  </div>
+</div>

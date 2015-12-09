@@ -1,0 +1,43 @@
+<?php
+
+namespace playable;
+
+require_once "OpenableContainer.php";
+
+class UnlockableContainer extends OpenableContainer
+{
+  public function __construct($name, $key) {
+    parent::__construct($name);
+    //implement lockable
+    $this->define(function ($unlockableContainer) use ($name, $key) {
+      $lockable = new Lockable($key);
+      $lockable->onLock(function ($lockable) {
+      });
+      $lockable->onRefuseLock(function ($lockable) {
+      });
+      $lockable->onUnlock(function ($lockable) {
+      });
+      $lockable->onRefuseUnlock(function ($lockable) {
+      });
+      $unlockableContainer->addComponent($lockable);
+    });
+    //override Door
+    $this->define(function ($lockedDoor) use ($name, $direction, $key) {
+      $lockedDoor->getComponent('Inspector')->onInspect(function ($inspector) {
+        $door = $inspector->getParent();
+        $lockable = $door->getComponent('Lockable');
+        $openable = $door->getComponent('Openable');
+        if ($lockable->isLocked()) {
+          return "This is a locked container.";
+        }
+        else {
+          if ($openable->isOpened())
+            return "This is an unlocked container.";
+          else
+            return "This is an unlocked container, but it is closed.";
+        }
+      });
+    });
+  }
+}
+

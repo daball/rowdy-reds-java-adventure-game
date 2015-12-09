@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+# You can specify the test suite by passing it in as the first parameter.
+SUITE="unit"
+if [ -z "$1" ]
+then
+  SUITE="unit"
+else
+  SUITE="$1"
+fi
+../vendor/phpunit/phpunit/phpunit --colors --verbose --configuration ../phpunit.xml --testsuite "$SUITE" --coverage-html ../public/test-results/unit

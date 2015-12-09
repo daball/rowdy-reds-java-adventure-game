@@ -1,0 +1,19 @@
+<?php
+
+namespace util;
+
+require_once __DIR__.'/../../vendor/autoload.php';
+
+use \Opis\Closure\SerializableClosure;
+
+trait TDefine
+{
+  /**
+   * @ignore
+   **/
+  public function define($definitionFn) {
+    $definitionFn($this);
+    return $this;
+  }
+}
+

@@ -1,0 +1,70 @@
+<nav class="navbar navbar-fixed-top navbar-radfordred">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">Rowdy Red's Java Adventures
+                <span ng-if="!vm.game.roomName">&raquo; {{vm.gameName}}</span>
+                <span ng-if="vm.game.roomName">&raquo; {{vm.game.gameName}}</span>
+                <span ng-show="vm.isLoading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid no-space game-container pad-bottom">
+  <div class="row disableMargins">
+    <div class="col-xs-6 no-space" style="height:100%;background: url('./img/{{vm.game.gameName}}/{{vm.game.imageUrl}}');background-size:cover;overflow:hidden;"></div>
+    <div class="col-xs-6 no-space">
+      <div class="row consoleHistory disableMargins" ng-class="{commandLineSelected: vm.selectedTab=='commandLine',
+                                                                tabletCodeSelected: vm.selectedTab=='tabletCode'}">
+        <div class="col-sm-12 no-space">
+          <div ui-ace="vm.consoleHistoryAceOption" ng-model="vm.game.consoleHistory" readonly></div>
+        </div>
+      </div>
+      <div class="row disableMargins tabs" ng-class="{'tabs-shown': vm.playerHasEquipped(vm.game.player.equipment, 'tablet'),
+                                                      commandLineSelected: vm.selectedTab=='commandLine',
+                                                      tabletCodeSelected: vm.selectedTab=='tabletCode'}">
+        <div class="commandLine col-sm-12 no-space" ng-show="vm.selectedTab=='commandLine'">
+          <div ui-ace="vm.commandLineAceOption" ng-model="vm.commandLine"
+          ng-readonly="vm.isLoading"></div>
+        </div>
+        <div class="tabletCode col-sm-12 no-space" ng-show="vm.playerHasEquipped(vm.game.player.equipment, 'tablet')
+                                                            && vm.selectedTab=='tabletCode'">
+          <div ui-ace="vm.tabletCodeAceOption" ng-model="vm.tabletCode"
+          ng-readonly="vm.isLoading"></div>
+        </div>
+        <nav class="navbar navbar-rowdyblack navbar-fixed-bottom" ng-show="vm.playerHasEquipped(vm.game.player.equipment, 'tablet')">
+          <div class="container-fluid">
+            <div class="btn-group">
+              <label class="btn btn-sm btn-primary radfordred" ng-model="vm.selectedTab" ng-click="vm.showCommandLine()" uib-btn-radio="'commandLine'"><code><small>&gt;_</small></code> Command Line</label>
+              <label class="btn btn-sm btn-primary radfordred" ng-model="vm.selectedTab" ng-click="vm.showTabletCode()" uib-btn-radio="'tabletCode'"><code><small>&lt;/&gt;</small></code> Tablet Code</label>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-fixed-bottom rowdyblack">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+              <span ng-if="vm.game.roomName">{{vm.game.roomName}} |</span>
+              <span ng-if="vm.game.obviousDirections">Obvious Directions:
+                <span ng-repeat="D in vm.game.obviousDirections">{{D}}</span>
+                |
+              </span>
+              <span ng-if="vm.game.player.leftHand">LH {{vm.game.player.leftHand}} |</span>
+              <span ng-if="vm.game.player.rightHand">RH {{vm.game.player.rightHand}} |</span>
+              <span ng-if="vm.game.player.equipment.length">Equipped:
+                <span ng-repeat="equipped in vm.game.player.equipment">
+                  {{equipped}}
+                  <span ng-show="!$last">:</span>
+                </span> |
+              </span>
+              <span ng-if="vm.game.moves">{{vm.game.moves}} Moves |</span>
+              <span ng-if="vm.game.commandHistory">{{vm.game.commandHistory.length}} Commands</span>
+            </div>
+        </div>
+    </div>
+</nav>

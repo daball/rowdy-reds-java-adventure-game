@@ -1,0 +1,165 @@
+reset
+n
+n
+w
+w
+s
+leftHand=rustyKey;
+n
+e
+e
+s
+e
+e
+door.unlock(leftHand);
+e
+n
+leftHand=lambChop;
+n
+rightHand=brassKey;
+s
+e
+e
+equip(tablet);
+
+w
+w
+w
+n
+e
+footLocker.unlock(rightHand);
+rightHand=lamp;
+w
+s
+w
+s
+w
+n
+bowl=leftHand;
+n
+rightHand.wind();
+tablet.solveChessPuzzle();
+d
+equip(backpack);
+
+u
+lamp.wind();
+s
+s
+s
+equip(crystalCloak);
+n
+e
+n
+e
+n
+e
+n
+u
+backpack[0]=rightHand;
+leftHand=new Key("Other Voices");
+westDoor.unlock(leftHand);
+leftHand=new Key("Strange Days");
+northDoor.unlock(leftHand);
+leftHand=new Key("Full Circle");
+eastDoor.unlock(leftHand);
+rightHand=magicSword;
+d
+s
+w
+w
+backpack[1]=healingSalve;
+e
+s
+s
+e
+e
+n
+n
+w
+leftHand=handle;
+e
+s
+w
+
+w
+n
+u
+s
+s
+w
+tablet.goldilocks();
+backpack[2]=new Key("Goldilocks Sleeps");
+e
+n
+n
+d
+s
+s
+w
+n
+n
+lamp.wind();
+d
+e
+s
+tablet.raisePortcullis();
+s
+leftHand=shield;
+n
+n
+e
+s
+tablet.openSafe();
+backpack[3]=crossbow;
+
+n
+w
+w
+w
+door.unlock(goldilocksSleepsKey);
+s
+tablet.fightDragon();
+
+
+
+
+//Solutions in tablet:
+
+public void solveChessPuzzle() {
+  for (int i = 1; i <= 8; i++)
+    chessBoard.stepOnRank(i);
+}
+
+public void raisePortcullis() {
+  crank.setHandle(handle);
+  while (!portcullis.isRaised()) {
+    crank.turn();
+  }
+}
+
+public void openSafe() {
+    c1 = c1 + 143;
+    c2 = c1 * 3 - 77;
+    c3 = c1 * c2;
+    c2 = c2 / 2 - c1;
+    c3 += c1 + c2;
+    safe.open(c1, c2, c3);
+}
+
+public void fightDragon() {
+  while (dragon.isAlive()) {
+    if (dragon.isInhaling()) {
+      me.block(shield);
+    }
+    else if (me.getHealthPoints() <= 30) {
+      me.heal(healingSalve);
+    }
+    else if (dragon.isFlying()) {
+    me.attack(dragon, crossbow);
+    }
+    else {
+    me.attack(dragon, sword);
+    }
+  }
+}

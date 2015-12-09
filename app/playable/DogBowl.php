@@ -1,0 +1,33 @@
+<?php
+
+namespace playable;
+
+require_once "BasicContainer.php";
+
+class DogBowl extends BasicContainer
+{
+  protected $dog = null;
+
+  public function __construct($name, $dog) {
+    parent::__construct();
+    $this->dog = $dog;
+    $this->onSetItem(function ($itemName, $item) {
+      if (is_a($item, 'Food')) {
+        $dog = GameState::getInstance()->getPlayerRoom()->getItem($this->dog);
+        $output = $dog->eat($item);
+        if (GameState::getInstance()->getPlayerRoom()->directions->n->obstacleItem === $this->dog)
+          GameState::getInstance()->getPlayerRoom()->directions->n->obstacleItem = null;
+        else if (GameState::getInstance()->getPlayerRoom()->directions->s->obstacleItem === $this->dog)
+          GameState::getInstance()->getPlayerRoom()->directions->s->obstacleItem = null;
+        else if (GameState::getInstance()->getPlayerRoom()->directions->e->obstacleItem === $this->dog)
+          GameState::getInstance()->getPlayerRoom()->directions->e->obstacleItem = null;
+        else if (GameState::getInstance()->getPlayerRoom()->directions->w->obstacleItem === $this->dog)
+          GameState::getInstance()->getPlayerRoom()->directions->w->obstacleItem = null;
+        return $output;
+      }
+      else {
+        return "You added the $itemName to the dog bowl, but nothing happened.";
+      }
+    });
+  }
+}

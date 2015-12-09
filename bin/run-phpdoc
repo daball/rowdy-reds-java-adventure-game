@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+../vendor/phpdocumentor/phpdocumentor/bin/phpdoc -c ../phpdoc.xml

@@ -1,1 +1,0 @@
-../vendor/phpunit/phpunit/phpunit --colors --verbose --configuration ../phpunit.xml --testsuite unit --coverage-html ../test-results/unit

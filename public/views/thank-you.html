@@ -1,0 +1,39 @@
+<nav class="navbar navbar-fixed-top navbar-radfordred">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">Rowdy Red's Java Adventures <span ng-if="vm.gameName">&raquo; {{vm.gameName}}</span> <small class="subtitle">Brought to you by Team Combat Clones at Radford University.</small></div>
+        </div>
+    </div>
+</nav>
+
+<div class="main-menu">
+  <div class="jumbotron semi-transparent">
+    <div class="container">
+      <h1>Thank you for playing!</h1>
+      <p>We hope you enjoyed playing Rowdy Red's Java Adventures.</p>
+      <p>Share this game with your friends on social media!</p>
+      <p>
+        <!-- Facebook -->
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script><div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count"></div>
+
+        <!-- Twitter -->
+        <a href="https://twitter.com/intent/tweet?button_hashtag=RowdyRed" class="twitter-hashtag-button">Tweet #RowdyRed</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+        <!-- Google+ -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <g:plus action="share"></g:plus>
+      </p>
+      <p>
+        <a ng-click="vm.goHome()" role="button" class="btn btn-primary btn-lg">Play again &raquo;</a>
+      </p>
+    </div>
+  </div>
+</div>

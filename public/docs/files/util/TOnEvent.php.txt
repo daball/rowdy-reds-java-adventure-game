@@ -1,0 +1,79 @@
+<?php
+
+namespace util;
+
+require_once __DIR__.'/../../vendor/autoload.php';
+require_once 'PubSubMessageQueue.php';
+
+use \Opis\Closure\SerializableClosure;
+
+trait TOnEvent
+{
+  /**
+   * @ignore
+   **/
+  protected $events;
+
+  /**
+   * @ignore
+   **/
+  public function on($event, $closure=null) {
+    if (!isset($this->events))
+      $this->events = array();
+    if (!array_key_exists($event, $this->events))
+      $this->events[$event] = array();
+    if ($closure) {
+      array_push($this->events[$event], new SerializableClosure($closure));
+      if (is_a($this, "\components\BaseComponent")) {
+        if ($this->getParent())
+          $gameObject = $this->getParent()->getName();
+        else
+          $gameObject = "unknown";
+        $component = get_class($this);
+        PubSubMessageQueue::publish($this, 'Logger', "OnEvent: Registered on($event) callback for component $component in game object $gameObject.");
+      }
+    }
+    return $this->events[$event];
+  }
+
+  public function popEventHandler($event) {
+    if (!isset($this->events))
+      return null;
+    if (!array_key_exists($event, $this->events))
+      return null;
+    return array_pop($this->events[$event]);
+  }
+
+  /**
+   * @ignore
+   **/
+  public function trigger($event, $data) {
+    if (!isset($this->events))
+      return null;
+    if (!array_key_exists($event, $this->events))
+      return null;
+    $output = null;
+    if (is_a($this, "\components\BaseComponent")) {
+      if ($this->getParent())
+        $gameObject = $this->getParent()->getName();
+      else
+        $gameObject = "unknown";
+      $component = get_class($this);
+      PubSubMessageQueue::publish($this, 'Logger', "OnEvent: Event $event component $component in game object $gameObject triggered.");
+    }
+    for ($e = 0; $e < count($this->events[$event]); $e++) {
+      $closure = $this->events[$event][$e];
+      $output = call_user_func_array($closure, $data);
+      if (is_a($this, "\components\BaseComponent")) {
+        if ($this->getParent())
+          $gameObject = $this->getParent()->getName();
+        else
+          $gameObject = "unknown";
+        $component = get_class($this);
+        PubSubMessageQueue::publish($this, 'Logger', "OnEvent: Event $event component $component in game object $gameObject dispatched event to event handler $e in the chain. It returned: $output");
+      }
+    }
+    return $output;
+  }
+}
+

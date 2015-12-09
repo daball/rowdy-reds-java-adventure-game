@@ -1,0 +1,36 @@
+<?php
+
+namespace playable;
+
+require_once __DIR__.'/../game/GameObject.php';
+require_once __DIR__.'/../components/Inspector.php';
+require_once __DIR__.'/../components/Container.php';
+
+use \game\GameObject;
+use \components\Container;
+use \components\Inspector;
+
+/**
+ * A BasicContainer game object stores items. It does so by implementing a
+ * Container component.
+ **/
+class BasicContainer extends GameObject
+{
+  public function __construct($name) {
+    parent::__construct($name);
+    $this->define(function ($basicContainer) {
+      $container = new Container();
+      $basicContainer->addComponent($container);
+
+      $inspector = new Inspector();
+      $inspector->popEventHandler('inspect');
+      $inspector->onInspect(function ($inspector) {
+        $container = $inspector->getParent()->getComponent('Container');
+        $output = "This is just a basic container.";
+        $items = $container->getAllItems();
+        return $output;
+      });
+      $basicContainer->addComponent($inspector);
+    });
+  }
+}

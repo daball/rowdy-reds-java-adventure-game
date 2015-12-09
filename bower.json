@@ -1,0 +1,35 @@
+{
+  "name": "rowdy-red",
+  "version": "0.0.3",
+  "authors": [
+    "David A. Ball <david@daball.me>",
+    "Richard Hay <rhay@email.radford.edu>",
+    "Brittany Lester <blester12@email.radford.edu>",
+    "Sean Rider <srider4@email.radford.edu>",
+    "Steven Tanner <stanner3@email.radford.edu>",
+    "Brandon Wilcox <bwilcox3@email.radford.edu>"
+  ],
+  "description": "ITEC 471-472 at Radford University.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tmp",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.7",
+    "angular-animate": "~1.4.7",
+    "angular-bootstrap": "~0.14.3",
+    "angular-mocks": "~1.4.7",
+    "angular-resource": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "angular-ui": "~0.4.0",
+    "angular-ui-ace": "~0.2.3",
+    "bootstrap": "~3.3.5",
+    "ng-showdown": "~1.1.0"
+  }
+}
