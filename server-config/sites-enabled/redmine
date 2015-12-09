@@ -1,0 +1,55 @@
+# https://gist.github.com/jbradach/31ad6d9c84c3be3b5730
+
+upstream puma_redmine {
+  server unix:/home/redmine/redmine-3.1/tmp/sockets/redmine.sock fail_timeout=0;
+  #server 127.0.0.1:3000;
+}
+
+## Redirects all HTTP traffic to the HTTPS host
+server {
+  ## Either remove "default_server" from the listen line below,
+  ## or delete the /etc/nginx/sites-enabled/default file. This will cause gitlab
+  ## to be served if you visit any address that your server responds to, eg.
+  ## the ip address of the server (http://x.x.x.x/)
+  listen 0.0.0.0:80;
+  #listen [::]:80 ipv6only=on;
+  server_name bugs.daball.me;
+  server_tokens off;
+  return 301 https://$server_name$request_uri;
+  access_log  /var/log/nginx/redmine_access.log;
+  error_log   /var/log/nginx/redmine_error.log;
+}
+
+server {
+  listen 0.0.0.0:443;
+  #listen [::]:443 ipv6only=on;
+  server_name bugs.daball.me;
+  server_tokens off;
+
+  access_log  /var/log/nginx/redmine_access.log;
+  error_log   /var/log/nginx/redmine_error.log;
+
+  ssl on;
+  ssl_protocols SSLv3 TLSv1;
+  ssl_certificate /etc/nginx/ssl/redmine.crt;
+  ssl_certificate_key /etc/nginx/ssl/redmine.key;
+
+  client_max_body_size       100m;
+  client_body_buffer_size    128k;
+
+  root /home/redmine/redmine-3.1/public;
+
+  location / {
+    try_files $uri/index.html $uri.html $uri @ruby;
+  }
+
+  location @ruby {
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_redirect off;
+    proxy_read_timeout 300;
+    proxy_pass http://puma_redmine;
+  }
+}

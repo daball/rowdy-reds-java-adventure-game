@@ -1,0 +1,39 @@
+ server {
+        listen 0.0.0.0:80;
+        #listen [::]:80 ipv6only=on;
+        server_name myadmin.daball.me;
+        server_tokens off;
+        return 301 https://$server_name$request_uri;
+
+        access_log  /var/log/nginx/phpmyadmin_access.log;
+        error_log   /var/log/nginx/phpmyadmin_error.log;
+ }
+
+ server {
+         listen 0.0.0.0:443;
+         #listen [::]:443 ipv6only=on;
+         server_name myadmin.daball.me;
+         server_tokens off;
+
+         ssl on;
+         ssl_protocols SSLv3 TLSv1;
+         ssl_certificate /etc/nginx/ssl/redmine.crt;
+         ssl_certificate_key /etc/nginx/ssl/redmine.key;
+
+         #server_name     myadmin.daball.me;
+         access_log  /var/log/nginx/phpmyadmin_access.log;
+         error_log   /var/log/nginx/phpmyadmin_error.log;
+ 
+         location / {
+                 root    /srv/http/phpMyAdmin;
+                 index   index.html index.htm index.php;
+         }
+ 
+         location ~ \.php$ {
+                 root            /srv/http/phpMyAdmin;
+                 fastcgi_pass    unix:/var/run/php5-fpm.sock;
+                 fastcgi_index   index.php;
+                 fastcgi_param   SCRIPT_FILENAME  /srv/http/phpMyAdmin/$fastcgi_script_name;
+                 include         fastcgi_params;
+         }
+ }

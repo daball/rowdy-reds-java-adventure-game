@@ -1,0 +1,109 @@
+#!/usr/bin/php
+<?php
+
+putenv("GIT_DIR");
+putenv("HOME=/home/git");
+
+class PostReceiveHook {
+  public $repoName = "summer-iii-2015-itec-471-group-2";
+  public $gitlabRepo = "/home/git/repositories/combat-clones/summer-iii-2015-itec-471-group-2.git";
+  public $githubRepo = "git@github.com:daball/summer-iii-2015-itec-471-group-2.git";
+
+  public function my_exec($command) {
+    $eol = "\n";
+    $output = "";
+    $aoutput = array();
+    $code = null;
+    echo "$eol+ $command$eol";
+    flush();
+    $output = exec($command, $aoutput, $code);
+    echo "$output$eol";
+    //echo "error code: $code$eol";
+    flush();
+    return $code;
+  }
+
+  public function publishGitToWebServer($branch, $path) {
+    $eol = "\n";
+    if (is_dir($path. '/' . $this->repoName) === FALSE) {
+      echo "WARN: Path $path does not exist. Performing git clone...$eol";
+      $this->my_exec("mkdir -p $path");
+      chdir($path);
+      $this->my_exec("git clone --local " . $this->gitlabRepo . " -b \"$branch\" --single-branch " . $path . '/' . $this->repoName);
+    }
+    else {
+      echo "INFO: Path $path exists. Performing git pull...$eol";
+      chdir($path . '/' . $this->repoName);
+      $this->my_exec("git reset --hard HEAD");
+      $this->my_exec("git pull");
+    }
+    chdir($path . '/' . $this->repoName);
+    //$this->my_exec("git reset --hard HEAD");
+    //$this->my_exec("composer --working-dir=Game update");
+    //$this->my_exec("composer --working-dir=Game install");
+    $this->my_exec("sudo chown git:www-data -R $path");
+    $this->my_exec("sudo chmod u+rw -R $path");
+    $this->my_exec("sudo chmod g+rw -R $path");
+
+    //now deploy the java portion
+    $warfileOut = "/var/lib/tomcat7/webapps/" . pathinfo($path, PATHINFO_BASENAME) . ".war";
+    $warfileIn = $path . "/" . $this->repoName . "/java/bin/deploy/CustomJavaBridge.war";
+    //step 1: remove the existing war file, this will cause tomcat to undeploy the app
+    $this->my_exec("sudo rm $warfileOut");
+    //step 2: copy the same war file, this will cause tomcat to deploy the app
+    $this->my_exec("sudo cp -T $warfileIn $warfileOut");
+    //step 3: chown the war file, tomcat should own it
+    $this->my_exec("sudo chown tomcat7:tomcat7 $warfileOut");
+    //step 4: create cache folder for tabletservice
+    mkdir($path . "/" . $this->repoName . "/__player_tablet_cache");
+    $this->my_exec("sudo chown -R tomcat7:tomcat7 " . $path . "/" . $this->repoName . "/__player_tablet_cache");
+  }
+
+  public function publishGitlabToGithub() {
+    $eol = "\n";
+    echo "Mirroring Gitlab to Github$eol";
+    chdir($this->gitlabRepo);
+    $this->my_exec("git push --repo " . $this->githubRepo . " --mirror");
+  }
+
+  public function __construct($branchPaths) {
+    $eol = "\n";
+
+    echo "**** START POST-RECEIVE HOOK ****$eol$eol";
+
+    if(ini_get('safe_mode')){
+      echo "INFO: PHP running in safe mode.$eol$eol";
+    } else {
+      echo "INFO: PHP not running in safe mode.$eol$eol";
+    }
+
+    foreach ($branchPaths as $branch => $path) {
+      echo "INFO: Start processing $branch at $path.$eol";
+      flush();
+      $this->publishGitToWebServer($branch, $path);
+      echo "INFO: Finish processing $branch at $path.$eol$eol";
+      flush();
+    }
+
+    $this->publishGitlabToGithub();
+
+    echo "Remember your URLs:$eol$eol";
+
+    echo "  -> Gitlab GUI @ http://gitlab.daball.me$eol";
+    echo "  -> Github GUI @ https://github.com$eol$eol";
+
+    echo "  -> Development URL in master branch @ http://codecombat-dev.daball.me$eol";
+    echo "  -> Staging URL in staging branch @ http://codecombat-staging.daball.me$eol";
+    echo "  -> Production URL in production branch @ http://codecombat.daball.me$eol$eol";
+
+    echo "**** FINISH POST-RECEIVE HOOK ****$eol";
+  }
+}
+
+new PostReceiveHook(array(
+  'master' => '/srv/http/cc-development',
+  'staging' => '/srv/http/cc-staging',
+  'production' => '/srv/http/cc-production',
+));
+
+exit(0);

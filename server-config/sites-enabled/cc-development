@@ -1,0 +1,45 @@
+server {
+       listen 0.0.0.0:80;
+       #listen [::]:80 ipv6only=on;
+       server_name codecombat-dev.daball.me;
+       server_tokens off;
+       return 301 http://rowdyred-dev.daball.me$request_uri;
+
+       #access_log  /var/log/nginx/phpmyadmin_access.log;
+       #error_log   /var/log/nginx/phpmyadmin_error.log;
+}
+
+server {
+       listen 80;
+       listen [::]:80;
+
+       server_name rowdyred-dev.daball.me;
+
+       root /srv/http/cc-development/summer-iii-2015-itec-471-group-2/public;
+
+        # Add index.php to the list if you are using PHP
+        index index.php index.html index.htm index.nginx-debian.html;
+
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+        }
+
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        location ~ \.php$ {
+        #        include snippets/fastcgi-php.conf;
+        #
+        #       # With php5-cgi alone:
+        #       fastcgi_pass 127.0.0.1:9000;
+        #       # With php5-fpm:
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_index index.php;
+                include fastcgi_params;
+		fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+                fastcgi_param APPLICATION_ENV development;
+        }
+}
+

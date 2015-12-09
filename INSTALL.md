@@ -137,6 +137,7 @@ Destination file names:
 Assuming you installed to `/srv/http` and did everything else just like we did, you can simply issue:
 
 `sudo cp /srv/http/java/deploy/CustomJavaBridge.war /var/lib/tomcat7/webapps/cc-production.war`
+
 `sudo chown tomcat7:tomcat7 /var/lib/tomcat7/webapps/cc-production.war`
 
 ## Set APPLICATION_ENV variable on web server
@@ -158,13 +159,14 @@ Reload your server config. `sudo service nginx reload` for example.
 
 ## I've Added Some Cheat Sheets
 
-All of the relevant server configuration we used has been added to the `server-config` folder, just for your convenience.
+All of the relevant server configuration we used has been added to the [server-config](server-config) folder, just for your convenience.
 
 ## Cross Your Fingers
 
 If it doesn't work, call me, email me. Seriously, I can write about how to install this all day, but I think you should now know most of the dirty details at this point.
 
 David Ball
+
 http://www.daball.me/go/resume/
 
 ## Our Installation Environment
