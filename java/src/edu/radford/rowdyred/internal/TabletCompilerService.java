@@ -99,19 +99,19 @@ public class TabletCompilerService {
     String methodsAvailable = "";
     for (int m = 0; m < methods.length; m++) {
         final Method method = methods[m];
-        if (method.isAccessible())
-          methodsAvailable += "tablet." + method.getName() + "()\n";
+        methodsAvailable += "tablet." + method.getName() + "()\n";
         if (method.getName().equals(methodName)) {
           ExecutorService executor = Executors.newSingleThreadExecutor();
           Future<Object> future = executor.submit(new Callable<Object>() {
+              private SecurityManager initialSecurityManager;
+
               @Override
               public Object call() throws Exception {
                 outputCapturer.start();
+                initialSecurityManager = System.getSecurityManager();
+//                System.setSecurityManager(new TabletSecurityManager());
                 try {
                   Object done = method.invoke(tabletInstance, parameters);
-                  System.out.flush();
-                  System.err.flush();
-                  consoleOutput = outputCapturer.stop();
                   return done;
                 } catch (InvocationTargetException e) {
                   if (e.getCause() != null)
@@ -121,36 +121,33 @@ public class TabletCompilerService {
                 } catch (Exception e) {
                   throw e;
                 }
+                finally {
+//                  System.out.flush();
+//                  System.err.flush();
+//                  consoleOutput = outputCapturer.stop();
+                  System.setSecurityManager(initialSecurityManager);
+                }
               }
             });
 
           try {
             Object val = future.get(750, TimeUnit.MILLISECONDS);
-            executor.shutdownNow();
             return val;
           } catch (TimeoutException e) {
-              System.out.flush();
-              System.err.flush();
-              consoleOutput = outputCapturer.stop();
-              future.cancel(true);
               executor.shutdownNow();
               throw(e);
           } catch (ExecutionException e) {
-            System.out.flush();
-            System.err.flush();
-            consoleOutput = outputCapturer.stop();
-            future.cancel(true);
-            executor.shutdownNow();
             if (e.getCause() != null)
               throw(e.getCause());
             throw (e);
           } catch (Exception e) {
+            throw(e);
+          } finally {
             System.out.flush();
             System.err.flush();
             consoleOutput = outputCapturer.stop();
             future.cancel(true);
             executor.shutdownNow();
-            throw(e);
           }
 
         }
