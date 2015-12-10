@@ -48,7 +48,7 @@ These are not presumably required in production.
 
 We have tested all components on Ubuntu Server 14.04.3 LTS on Amazon Web Services/EC2.
 
-In could presumably work in Windows, however, pay close attention to security settings. It has never been tested to work.
+It could presumably work in Windows, however, pay close attention to security settings. It has never been tested to work.
 
 ## Install Java Runtime
 
@@ -109,9 +109,13 @@ Be sure your web server is setup to serve files out of the `./public` folder. No
 You need to make sure you have a `__player_tablet_cache` directory within the root folder of the base installation folder. If you deployed to `/srv/http` then it will be at `/srv/http/__player_tablet_cache`. This folder needs to be owned by Tomcat. On our server, Tomcat 7 runs as the user `tomcat7`. You might try something like:
 
 `sudo chown -R tomcat7:tomcat7 /srv/http/__player_tablet_cache`
+
 `sudo chmod u+rwx /srv/http/__player_tablet_cache`
+
 `sudo chmod g+rwx /srv/http/__player_tablet_cache`
+
 `sudo chmod a+x /srv/http`
+
 `sudo chmod a+x /srv`
 
 We stored the Java and Java class folders within the PHP context because there is no easy way to determine the JEE context folder from within Tomcat. So since PHP could easily identify its own path, we used it instead. Hard-coded paths are generally bad for business.
