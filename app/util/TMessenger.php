@@ -17,7 +17,7 @@ trait TMessenger {
     else {
       //late binding to GameState, ie, wait for GameState to become available
       $oneAndDone = false;
-      PubSubMessageQueue::subscribe("GameState", function ($sender, $queue, $message) use (&$oneAndDone, $queue, $subscriber) {
+      PubSubMessageQueue::subscribe("GameState", function ($sender, $queueName, $message) use (&$oneAndDone, $queue, $subscriber) {
         if ($message == "ready") {
           $gameState = GameState::getInstance();
           $gameState->persistentSubscribe($queue, $subscriber);
