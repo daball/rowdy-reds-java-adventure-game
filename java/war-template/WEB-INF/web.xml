@@ -28,6 +28,22 @@
     <servlet>
         <servlet-name>PhpCGIServlet</servlet-name>
         <servlet-class>php.java.servlet.fastcgi.FastCGIServlet</servlet-class>
+        <init-param>
+            <param-name>prefer_system_php_exec</param-name>
+            <param-value>Off</param-value>
+        </init-param>
+        <init-param>
+            <param-name>php_fcgi_connection_pool_size</param-name>
+            <param-value>20</param-value>
+        </init-param>
+        <init-param>
+            <param-name>php_fcgi_connection_pool_timeout</param-name>
+            <param-value>5000</param-value>
+        </init-param>
+        <init-param>
+            <param-name>php_fcgi_server</param-name>
+            <param-value>phpapp:9000</param-value>
+        </init-param>
         <load-on-startup>0</load-on-startup>
     </servlet>
 
