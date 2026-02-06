@@ -1,0 +1,37 @@
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "9080:80"
+    volumes:
+      - ../public:/var/www/html:ro
+      - ../app:/var/www/app:ro
+      - ../games:/var/www/games:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - phpapp
+    restart: always
+  phpapp:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.phpapp
+    expose:
+      - "9000"
+    volumes:
+      - ./php.ini:/usr/local/etc/php/php.ini:ro
+      - ../public:/var/www/html:ro
+      - ../app:/var/www/app:ro
+      - ../games:/var/www/games:ro
+    depends_on:
+      - tomcat
+    restart: always
+  tomcat:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.tomcat
+    expose: 
+      - "8080"
+#    ports:
+#      - "9081:8080"
+    restart: always
+    

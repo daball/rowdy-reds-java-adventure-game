@@ -1,0 +1,36 @@
+# Stage 1: Build the WAR file using maven
+FROM maven:3.9.12-eclipse-temurin-11-alpine AS builder
+WORKDIR /app
+
+# Copy the pom.xml and download dependencies
+COPY pom.xml pom.xml
+RUN mvn dependency:go-offline
+
+# Copy the source code and war template
+COPY .classpath .classpath
+COPY .externalToolBuilders/ .externalToolBuilders/
+COPY .settings/ .settings/
+COPY build.xml build.xml
+COPY java/ java/
+COPY target/ target/
+
+# Clean the project to ensure a fresh build
+RUN mvn clean
+
+# Run tests first to ensure they pass
+RUN mvn test
+
+# Build the project (creates JAR then WAR)
+RUN mvn -T 4 package -DskipTests -X
+
+# Stage 2: Deploy WAR to Tomcat
+FROM tomcat:9-jdk11
+
+# Remove default web apps
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Copy the WAR file from the builder stage to Tomcat's webapps directory
+COPY --from=builder /app/java/bin/deploy/CustomJavaBridge.war /usr/local/tomcat/webapps/cc-development.war
+
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
